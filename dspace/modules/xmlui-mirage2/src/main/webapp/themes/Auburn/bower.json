@@ -1,0 +1,19 @@
+{
+    "name": "AUETD",
+    "version": "1.1",
+    "dependencies": {
+        "bootstrap-sass-official": "3.3.0",
+        "modernizr": "2.8.3",
+        "jquery": "~2.1.4",
+        "jquery-ui": "1.11.4",
+        "jqueryuibootstrap": "4f3772cd37b898f456c0126c4b44178ce8d4aad7",
+        "handlebars": "2.0.0",
+        "respond": "1.4.2",
+        "html5shiv": "3.7.2",
+        "holderjs": "2.9.0",
+        "datatables": "1.10.9",
+        "font-awesome": "4.5.0",
+        "select2": "4.0.0"
+    },
+    "devDependencies": {}
+}

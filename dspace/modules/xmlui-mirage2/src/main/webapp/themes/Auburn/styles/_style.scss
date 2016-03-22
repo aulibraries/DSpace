@@ -1,0 +1,797 @@
+/**
+ * The contents of this file are subject to the license and copyright
+ * detailed in the LICENSE and NOTICE files at the root of the source
+ * tree and available online at
+ *
+ * http://www.dspace.org/license/
+ */
+
+/**
+ * You can put your own style in this file.
+ * It will be included in all color schemes
+ */
+ 
+/** Add the Font Awesome CSS file */
+@import "../vendor/font-awesome/css/font-awesome.css";
+
+/** Select2 jQuery plugin CSS file */
+@import "../vendor/select2/dist/css/select2.min.css";
+
+@import "auetd_variables";
+
+//example mixin to set the text-selection style
+@mixin selection {
+    ::-moz-selection { @content; }
+    ::selection { @content; }
+}
+
+@include selection {
+    color: white;
+    background: #F68026;
+}
+
+/** Auburn University CSS */
+@charset "utf-8";
+/*****  Font Import  ******************************************/
+@font-face { font-family: 'Open Sans'; font-style: normal; font-weight: 700; src: local("Open Sans Bold"), local("OpenSans-Bold"), url("//themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzBa1RVmPjeKy21_GQJaLlJI.woff") format("woff"); }
+@font-face { font-family: 'Open Sans'; font-style: italic; font-weight: 700; src: local("Open Sans Bold Italic"), local("OpenSans-BoldItalic"), url("//themes.googleusercontent.com/static/fonts/opensans/v6/PRmiXeptR36kaC0GEAetxoUt79146ZFaIJxILcpzmhI.woff") format("woff"); }
+@font-face { font-family: 'Open Sans'; font-style: italic; font-weight: 400; src: local("Open Sans Italic"), local("OpenSans-Italic"), url("//themes.googleusercontent.com/static/fonts/opensans/v6/xjAJXh38I15wypJXxuGMBtIh4imgI8P11RFo6YPCPC0.woff") format("woff"); }
+@font-face { font-family: 'Open Sans'; font-style: normal; font-weight: 400; src: local("Open Sans"), local("OpenSans"), url("//themes.googleusercontent.com/static/fonts/opensans/v6/u-WUoqrET9fUeobQW7jkRT8E0i7KZn-EPnyo3HZu7kw.woff") format("woff"); }
+/*****  General Page Formatting  ******************************/
+html{background:#fff;}
+body { font-family: "Open Sans", Arial, Verdana, sans-serif; font-size: 13px; }
+body > .container{overflow-x:hidden;}
+a { color: #496e9c; text-decoration: none; }
+a:hover { color: #dd550c; cursor: hand;}
+ol ol { list-style-type: lower-alpha; }
+ol ol ol { list-style-type: lower-roman; }
+ul{margin:0; padding:0 0 0 10px;}
+ul li{background:url("https://cdn.auburn.edu/assets/img/bullet-arrow2.gif") 0 6px no-repeat; list-style:none; margin:5px 0; padding:0 0 0 15px;}
+ul li ul li{background:url("https://cdn.auburn.edu/assets/img/bullet-arrow.gif") 0 6px no-repeat;}
+label {font-weight:normal;}
+/*****  Miscellaneous Styles  *********************************/
+.skip { left: -999em; position: absolute; }
+.to-top {bottom: 25px; position: fixed; right: 10px; z-index: 3000;}
+.to-top a {background-image:url("https://cdn.auburn.edu/assets/img/to-top.png"); background-size: 77px 35px; border-bottom: none; display:inline-block; height: 35px; width: 77px;}
+.to-top a:hover{background-image:url("https://cdn.auburn.edu/assets/img/to-top2.png"); background-size: 77px 35px;}
+/*****  Header Section  ***************************************/
+.header-wrap { background: #03244d; display: block; }
+.header-wrap header { display: block; min-height: 110px; padding: 15px 0 0 0; position: relative; }
+.logo { background-image: url("https://cdn.auburn.edu/assets/img/header-logo-mobile.png"); background-position: center center; background-repeat: no-repeat; background-size:199px 36px; cursor: pointer; height: 36px; margin: 0 auto 15px auto; width: 199px; }
+.logo img { display: none; }
+.menu-icon {color:#fff; display: block; font-size:24px; position: absolute; left: 0; top: 20px; }
+.menu-icon:hover{cursor:pointer;}
+.menu-icon > i{padding:10px;}
+.search-icon { color:#fff; cursor: pointer; display: block; font-size:20px; padding:10px; position: absolute; right: 4px; top: 13px; }
+.header-title { font-size: 12px; }
+.top-links { color: #fff; display: none; padding: 3px 0; text-align: center; }
+.top-links a { color: #fff; padding: 0 3px; }
+.title-area { text-align: center; }
+.main-heading { color:#fff; display: block; font-size: 20px; }
+.sub-heading { color:#fff; display: block; font-size: 16px; padding: 5px 0; }
+.main-heading a, .sub-heading a { color: #fff; }
+.main-heading a:hover, .sub-heading a:hover {text-decoration:none; }
+
+/*****  Search Section  ***************************************/
+.search-form { display: none; padding: 3px 0; }
+.search-box { }
+input.search-field { border-radius: 0; font-size: 12px; line-height: 16px; margin: 10px auto; min-height: 10px; padding: 5px; width: 75%; }
+
+/*****  Navigation Section  ***********************************/
+.navbar li{background:none; margin:0; padding:0;}
+.header-wrap nav { background-color: #dd550c; border:none; border-bottom: 3px solid #f68026; border-radius: 0; margin: 0; min-height:30px; padding: 0; }
+.header-wrap nav .navbar-collapse {padding:0;}
+.header-wrap nav .nav {font-size:0; margin: 0; padding: 0; }
+.header-wrap nav .nav > li{display:block; font-size:14px; margin:0;}
+.header-wrap nav .nav > li > a {background:#dd550c; border-left: 1px solid #f68026; color: #fff; font-size: 12px; margin:0; padding: 10px 20px; text-transform: uppercase; }
+.header-wrap nav .nav > li > a:hover { background: #f68026; color: #fff; text-decoration:none;}
+.header-wrap nav .nav > li:first-child > a{border-left:none;}
+.header-wrap .navbar-brand { color: #fff; display: block; float:none; font-size: 16px; margin: 0; max-width: none; /* padding: 10px 15px; */ text-align:center; }
+.header-wrap .navbar-brand:hover { background: #f68026; cursor: pointer; }
+.header-wrap .navbar-brand span { background: url("https://cdn.auburn.edu/assets/img/glyphicons-halflings-white.png") -310px -117px no-repeat; float: right; height: 20px; width: 20px; }
+.header-wrap .navbar-toggle { border: none; border-radius: 0; padding: 6px 12px; top: 1px; }
+.header-wrap .navbar-toggle:hover, .header-wrap .navbar-toggle:focus { background-color: #f68026; }
+.header-wrap .navbar-nav a:hover { text-decoration:none;}
+.header-wrap .navbar-nav>.open>a,.header-wrap .navbar-nav>.open>a:hover,.header-wrap .navbar-nav>.open>a:focus{background-color:#f68026 !important;color:#fff;outline:0;}
+.header-wrap .dropdown-menu>li.nav-header, .header-wrap .dropdown-menu>li>a{padding:10px 20px;}
+.header-wrap .dropdown-menu>li>a:hover, .header-wrap .dropdown-menu>li>a:focus{background-color:#dd550c !important;color:#fff;outline:0;}
+.header-wrap .navbar-nav > .dropdown > a .caret, .header-wrap .navbar-nav > .open > a .caret, .header-wrap .navbar-nav > .open > a:hover .caret, .header-wrap .navbar-nav > .open > a:focus .caret { border-top-color: #fff; border-bottom-color: #fff; }
+.dropdown a:focus{outline:none;}
+.header-wrap nav .dropdown-menu{background:#f68026; color:#fff;}
+.header-wrap nav .dropdown-menu a{color:#fff;}
+.header-wrap nav .dropdown-menu a:hover{background:#dd550c; color:#fff;}
+
+/*****  Content Section  **************************************/
+.breadcrumb {background:transparent; padding:0;}
+ul.breadcrumb li {background:none; padding:0;} 
+
+/*****  Footer Section  ***************************************/
+.footer-wrap { background:#fff; clear:both; color: #fff; display: block; font-size: 12px; padding: 0; }
+.footer-wrap footer { background: #03244d; display: block; margin: 0; overflow: hidden; padding: 18px 0; text-align:center; }
+.footer-wrap footer a, .footer-wrap footer a:visited { color: #fff; }
+.footer-wrap .subfooter { border-top: #dd550c 5px solid; clear: both; color: #03244d; display: block; padding: 15px 0 10px 0; text-align: center; }
+.footer-wrap .subfooter a, .footer-wrap .subfooter a:hover, .footer-wrap .subfooter a:visited { color: #03244d; }
+.footer-wrap .subfooter a.last { border-right: none; }
+/*****  Bootstrap Overrides  **********************************/
+blockquote, .blockquote{ border-left: 5px solid #eee;font-size:inherit; margin: 0 0 20px; padding: 10px 20px;}
+.carousel-caption{display:none;}
+.container2 .row{margin-left:0; margin-right:0;}
+a.list-group-item.active{background-color:#496e9c; border-color:#496e9c;}
+
+@media(min-width: 768px) {
+/*****  General Page Formatting  ******************************/
+body { background: #fff url("https://cdn.auburn.edu/assets/img/body-background2.png") top center repeat-x; }
+/*****  Miscellaneous Styles  *********************************/
+/*****  Header Section  ***************************************/
+.header-wrap { background: transparent; }
+.header-wrap header { padding: 0; }
+.logo {background-image:none; background-size:203px 75px; height:75px; left: 0; position: absolute; top: 26px; width:203px;}
+.logo img { display: inline;}
+.search-icon { display: none; }
+.header-title { font-size: 10px; }
+.top-links { color: #496e9c; display: block; position: absolute; right: 195px; top: 0; }
+.top-links a { color: #496e9c; }
+.title-area { position: absolute; right: 10px; text-align: right; top: 45px; }
+.main-heading { display: block; font-size: 24px; }
+.sub-heading { display: block; font-size: 16px; padding: 0; }
+/*****  Search Section  ***************************************/
+.search-form { display: block; position: absolute; right: 10px; top: -1px; }
+.search-box { display: inline-block; }
+input.search-field { font-size: 10px; line-height: 14px; height:auto; margin: 0; padding: 0 5px; width: 175px; }
+.search-field::-webkit-input-placeholder, .search-field:-moz-placeholder, .search-field::-moz-placeholder, .search-field:-ms-input-placeholder { font-size:10px; }
+/*****  Navigation Section  ***********************************/
+.header-wrap nav {min-height:30px;}
+.header-wrap nav .collapse{display:block;}
+.header-wrap nav .container, .header-wrap .navbar .container div, .header-wrap .navbar .container div ul.nav {min-height:30px;}
+.header-wrap nav .container .nav-collapse.collapse{display:block !important; height:auto !important;}
+.header-wrap nav .nav.nav--auto { text-align: center; width: 100%; }
+.header-wrap nav .nav > li{display:inline-block;}
+.header-wrap nav .nav > li > a { margin:0; padding: 4px 25px 3px 25px; }
+.header-wrap nav .nav > li:last-child > a { border-right: 1px solid #f68026; padding: 4px 35px 3px 36px; }
+.header-wrap nav .nav.nav--auto > li > a { padding-left: 0; padding-right: 0; }
+.header-wrap .dropdown-menu>li.nav-header, .header-wrap .dropdown-menu>li>a{padding:3px 20px;}
+.header-wrap .dropdown:hover .dropdown-menu {display: block;}
+.container .header-wrap .navbar .nav > li:last-child > a { border-right: none; }
+.header-wrap .navbar-brand { display: none; }
+
+/*****  Footer Section  ***************************************/
+.footer-wrap { background-image: url("https://cdn.auburn.edu/assets/img/footer.png"); background-position: -120px 6px; background-repeat: no-repeat; background-size:1170px 92px; padding: 92px 0 0 0; }
+/*****  Bootstrap Overrides  **********************************/
+/*ul.dropdown-menu li {background: none; padding: 0;}
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {background-color: #f68026; color: #fff;} */
+}
+
+@media(min-width: 992px) {
+/*****  General Page Formatting  ******************************/
+/*****  Miscellaneous Styles  *********************************/
+/*****  Header Section  ***************************************/
+/*****  Search Section  ***************************************/
+/*****  Navigation Section  ***********************************/
+.header-wrap nav .nav > li > a { padding: 4px 42px 3px 43px; }
+.header-wrap nav .nav > li:last-child > a { padding: 4px 54px 3px 54px; }
+.header-wrap nav .nav.nav--auto > li > a { padding-left: 0; padding-right: 0; }
+/*****  Content Section  **************************************/
+/*****  Sidebar Section  **************************************/
+/*****  Footer Section  ***************************************/
+.footer-wrap { background-position: center 6px; }
+/*****  Bootstrap Overrides  **********************************/
+/*.container{width:940px;}*/
+}
+
+@media(min-width: 1200px) {
+/*****  General Page Formatting  ******************************/
+/*****  Miscellaneous Styles  *********************************/
+/*****  Header Section  ***************************************/
+/*****  Search Section  ***************************************/
+/*****  Navigation Section  ***********************************/
+.header-wrap nav .nav > li > a { padding: 4px 62px 3px 62px; }
+.header-wrap nav .nav > li:last-child > a { padding: 4px 71px 3px 72px; }
+.header-wrap nav .nav.nav--auto > li > a { padding-left: 0; padding-right: 0; }
+/*****  Content Section  **************************************/
+/*****  Sidebar Section  **************************************/
+/*****  Footer Section  ***************************************/
+/*****  Bootstrap Overrides  **********************************/
+/*.container{width:1170px;}*/
+}
+
+@media only print {
+.title-area{text-align:right;}
+.sub-heading{border-bottom:1px solid #888; padding-bottom:10px;}
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (min-resolution: 192dpi) {
+    .to-top a 
+    {
+        background-image:url("https://cdn.auburn.edu/assets/img/to-top@2x.png");
+    }
+    .to-top a:hover{
+        background-image:url("https://cdn.auburn.edu/assets/img/to-top2@2x.png");
+    }
+    .logo {
+        background-image: url("https://cdn.auburn.edu/assets/img/header-logo-mobile@2x.png");
+    }
+    .logo img {
+        display: none;
+    }
+}
+@media
+    only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 768px),
+    only screen and (min-resolution: 192dpi) and (min-width: 768px) {
+    .logo {
+        background-image: url("https://cdn.auburn.edu/assets/img/header-logo@2x.png");
+    }
+    .logo img {
+        display: none;
+    }
+    .footer-wrap {
+        background-image: url("https://cdn.auburn.edu/assets/img/footer@2x.png");
+    }
+}
+
+/** ********** AUETD Customizations *************** */
+
+#main-container {
+    .row-offcanvas{
+        background-color: transparent;
+    }
+
+    overflow: hidden;
+
+    #sidebar{
+        background-color: transparent;
+    }
+    @media(max-width: $screen-sm-max) {
+        .active #sidebar {
+            padding-bottom: 99999px;
+            margin-bottom: -99999px + $center-section-padding-bottom;
+        }
+    }
+
+    .horizontal-slider  {
+        //does nothing except force hardware accelerated css animations
+        @include transform(translate3d(0, 0, 0));
+
+        #sidebar {
+            @media(min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+                /*@include box-shadow(inset 2px 2px 1px rgba(0,0,0,.05));*/
+                border-right: none;
+            }
+        }
+    }
+}
+
+
+.main-content {
+    background-color: transparent;
+    padding-top: $center-section-padding-top;
+    padding-bottom: $center-section-padding-bottom;
+    // Huge padding, and equal negative margin (minus the padding we need) fix the column height
+    @media(min-width: $screen-md-min) {
+        padding-bottom: 99999px;
+        margin-bottom: -99999px + $center-section-padding-bottom;
+    }
+}
+
+.trail-wrapper {
+    background-color: transparent !important;
+    border-bottom: none;
+    
+    .breadcrumb {
+        padding: 0;
+        list-style: none;
+        background-color: transparent;
+
+        > li {
+            display: inline-block;
+
+            + li:before {
+                content: "#{$breadcrumb-separator}"; // Unicode space added since inline-block means non-collapsing white-space
+                padding: 0 5px;
+                color: #000;
+            }
+        }
+
+        > .active {
+            color: $brand-primary;
+        }
+    }
+}
+
+a.list-group-item {
+    padding-right: 0;
+
+    &.active {
+        background-color: $brand-primary;
+        border-color: $brand-primary;
+    }
+}
+
+div.list-group-item {
+    &.ds-option
+    {
+        &.selected {
+            padding: 7px 15px;
+            color: #DD550C;
+        }
+    }
+}
+
+.menu-icon-header {
+    color: #fff;
+    font-size:24px;
+    position: absolute;
+    left: 0;
+    top: 20px;
+}
+
+.menu-icon-nav {
+    color: #fff;
+    display: block;
+    font-size: 18px;
+    position: relative;
+    right: -380px;
+}
+
+
+h2.page-header {
+	padding: 9px 0;
+	margin: 0 0 10px 0;
+	border-bottom: 1px solid #eee;
+    font-weight: normal;
+}
+h3.page-header {
+	padding: 9px 0;
+	margin: 0;
+	border: none;
+    font-weight: normal;
+}
+
+/************** Home page Styles *********************/
+
+.frontPageSrchBlock {
+	padding: 30px 0 30px 0;
+    
+    &>span:nth-child(2) {
+        &>form {
+            margin-left: 15px;
+            width: 90%;
+        }
+    }
+}
+
+.searchBlockHdr {
+	display: block;
+	color: #666;
+	font-size: 2.1em;
+	font-weight: 500;
+	margin: 0;
+	padding: 0 0 0 15px;
+}
+
+/** *************** Footer ************** */
+.footer-wrap {
+    footer {
+        p:first-of-type {
+            padding-bottom: 7px;     
+        }
+        
+        a {
+            &.social {
+                background: none;
+                display: inline-block;
+                padding: 4px 0;
+                \width: 32px;
+                height: 32px;
+                font-size: 2em;
+                line-height: 0px;
+                text-decoration: none;
+                text-align: center;
+                vertical-align: center;
+                border-radius: 4px;
+                margin-right: 6px; 
+                
+                @media(max-width: $screen-xs-min) {
+                    padding: 4px 0;
+                    width: 25px;
+                    height: 25px;
+                    font-size: 1.3em;
+                    margin-right: 4px; 
+                }
+            }
+            
+            &.facebook { color: #fff; background-color: #3b5a9b; border-color: #3b5a9b;}
+            &.flickr { color: #fff; background-color: #ff0084; border-color: #ff0084;}
+            &.instagram { color: #fff; background-color: #507ea4; border-color: #507ea4;}
+            &.twitter { color: #fff; background-color: #2baae1; border-color: #2baae1;}
+            &.vimeo { color: #fff; background-color: #40b2dc; border-color: #40b2dc;}
+            &.youtube { color: #fff; background-color: #ff3330; border-color: #ff3330;}
+        }
+        
+        @media(min-width: $screen-sm-min) {
+            padding-top: 15px;
+        }
+    }
+}
+
+/**************** Sidebar Styles ****************/
+
+.sidebar-content {
+    div {
+        &:first-of-type {
+            padding: 0 8px 3px 0;
+        }
+    }
+    
+    a {        
+        &:focus,
+        &:hover {
+            border-left:4px solid $brand-primary;
+            color: $brand-primary;
+            background-color: transparent;
+        }
+    }
+}
+
+.ds-option-set-head {
+    color: #000;
+    min-height: 1px;
+	padding-right: 15px;
+	padding-left: 1px;
+    font-variant: small-caps;
+}
+
+/* ******************** Submission Form Styles ************************ */
+@mixin progress-bar-button-variant($color, $background, $border, $disabled-background, $disabled-border) {
+    color: $color;
+    background-color: $background;
+    border-color: $border;
+
+    &:hover,
+    &:focus,
+    &.focus,
+    &:active,
+    &.active,
+    .open > &.dropdown-toggle {
+        color: $color;
+        background-color: $brand-primary;
+        border-color: #eee;
+    }
+    &:active,
+    &.active,
+    .open > &.dropdown-toggle {
+        background-image: none;
+        color: #333;
+        background-color: #e6e6e6;
+        border-color: #adadad;
+    }
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        &,
+        &:hover,
+        &:focus,
+        &.focus,
+        &:active,
+        &.active {
+            background-color: $disabled-background;
+            border-color: $disabled-border;
+            color: #aaa;
+        }
+    }
+
+    .badge {
+        color: $background;
+        background-color: $color;
+    }
+}
+
+.progress-btn {
+    &.btn-success {
+        @include progress-bar-button-variant($btn-success-color, $progress-btn-success-bg, $progress-btn-success-border, $progress-btn-success-disabled-bg, $progress-btn-success-disabled-border);
+    }
+}
+
+/************** Form Styles ********************/
+
+/* ********* Labels ***************/
+label {
+    font-weight: bold;
+    font-size: 1.1em;
+}    
+
+.control-label {
+    &.required {
+        &:before {
+            content: "*";
+            padding-right: 4px;
+            color: #ff0000;
+            font-weight: normal;
+            font-size: 1em;
+        }
+        &:after {
+            content: "";
+        }
+    }
+}
+
+.ds-form-label {
+    font-size: 1em;
+    font-weight: 700;
+    
+    &.browse-form-label {
+        padding-bottom: 3px;
+    }
+}
+
+.ds-gloss-list-label {
+    font-size: 1em;
+    font-weight: 700;
+    padding-bottom: 3px;
+}
+
+.ds-composite-component {
+    &.control-label {
+        font-size: 1em;
+        font-weight: normal;
+        color: #aaa;
+    }
+}
+
+.checkbox, .radio {
+    >label {
+        margin: 0;
+        font-size: 1em;
+    }
+}
+
+.ds-previous-values {
+    > div {
+        padding: 5px 0 5px 30px;
+        margin-bottom: 5px;
+        
+        &:nth-child(odd) {
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+    }
+    
+    & button {
+        margin-top: 10px;
+    }
+}
+
+.btn-group {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.ds-form-list {
+    & > div {
+        &.ds-form-item {
+            margin-bottom: 7px;
+        }
+        &.ds-form-sublist {
+            margin-bottom: 5px;
+        }
+        &:last-child {
+            margin-top: 15px;
+        }
+    }
+}
+
+.searchActionsBlock {
+	padding-bottom: 20px;
+}
+
+.ds-radio-field {
+	padding-left: 11px;
+}
+
+/*********** End Forms *****************/
+
+/* **************** Browse and Search Results Lists *************************/
+.ds-simple-list, dropdown-menu, .ds-artifact-list, .nav-tabs, .ds-progress-list, .list-unstyled {
+    li {
+        background: none;
+    }
+}
+.ds-artifact-list, .ds-info-list {
+    > li {
+        padding-bottom: 10px;
+        padding-left: 0;
+        padding-right: 8px;
+        
+        &:nth-child(even) {
+            border: 1px solid #eee;
+            background-color: #f9f9f9;
+        }
+    }
+}
+
+.ds-info-list {
+    > div {
+        &.ds-info-row {
+            padding: 10px 0;
+        
+            &:nth-child(even) {
+                border: 1px solid #ddd;
+                background-color: #f9f9f9;
+            }
+            
+            > div {
+                > span {
+                    &.ds-gloss-list-label {
+                        font-weight: normal;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.recent-submission{
+    div {
+        &.row {
+            margin-bottom: 0;
+            padding-bottom: 10px;
+            padding-left: 12px;
+            padding-right: 8px;
+        }
+        &.ds-artifact-item {
+            margin-bottom: 0;
+            
+            &:nth-child(even) {
+                border: 1px solid #eee;
+                background-color: #f9f9f9;
+            }
+        }
+        &.artifact-title {
+            margin-bottom: 3px;
+            margin-top: 7px;
+        }
+        &.author,
+        &.publisher-date
+        {
+            color: #999;
+        }
+    }
+}
+
+#aspect_discovery_SimpleSearch_div_search-results,
+#aspect_artifactbrowser_ConfigurableBrowse_div_browse-by-dateissued-results,
+#aspect_artifactbrowser_ConfigurableBrowse_div_browse-by-title-results,
+#aspect_artifactbrowser_ConfigurableBrowse_div_browse-by-author-results,
+#aspect_artifactbrowser_ConfigurableBrowse_div_browse-by-subject-results {
+
+    .ds-artifact-item {
+        margin-bottom: 7px;
+        padding-bottom: 10px;
+        padding-left: 0;
+        padding-right: 8px;
+        
+        &.even {
+            border: 1px solid #eee;
+            background-color: #f9f9f9;
+        }
+        
+        > div {
+            &.artifact-description {
+                > a {
+                    &:visited {
+                        color: purple;
+                    }
+                }
+
+                > div.artifact-info {
+                    > span {
+                        color: #999;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.pagination {
+    > li {
+        background: none;
+        margin-top: 0;
+        display: inline
+    }
+}
+
+.simple-item-view-description {
+    &> div {
+        padding-right:10px;
+    }
+}
+
+/************** Item Information View Styles *********************/
+.item-view-toggle {
+    padding-top: 15px;
+}
+
+.file-wrapper {
+    margin-bottom: 10px;
+
+    i {
+        &.fa-lock {
+            color: #ff0000;
+        }
+        &.fa-file-pdf-o {
+            color: #496e9c;
+        }
+    }
+    &.pdf-icon {
+        color: #ff0000;
+    }
+}
+
+.pdf_file {
+    > i {
+        &.fa-lock {
+            color: #ff0000;
+        }
+    }
+}
+
+dd, dt {
+    margin-bottom: 3px;
+}
+
+.ds-gloss-list {
+    &> div {
+        &.row {
+            padding-bottom: 5px;
+            & >div {
+                &:first-child {
+                    padding-left: 0;
+                }
+            }
+        }
+    }
+}
+
+
+ul.dropdown-menu {
+    
+    &>li {
+        list-style: none;
+        background: none;
+        
+        &>a {
+            &:focus,
+            &:hover {
+                background-color: #f68026;
+                color: #fff;
+            }
+        }
+    }
+}
+
+/** *********** Control Panel Styles *************** */
+.control-panel-list {
+    border: 1px solid #eee;
+    background-color: #f9f9f9;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    
+    dt {
+        text-align: left;
+        width: 50%;
+    }
+    dd, dt {
+        margin-bottom: 3px;
+    }
+}
+
+/** ************* Select 2 Customizations **************** */
+.select2-container--default .select2-selection--multiple {
+    border-color: $input-border;
+}
+.select2-selection__rendered > li,
+.select2-results__options > li {
+    background: none;
+}
