@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <document xmlns="http://di.tamu.edu/DRI/1.0/" xmlns:i18n="http://apache.org/cocoon/i18n/2.1" version="1.1">
 <body>
-<div id="file.news.div.news" n="news" rend="primary">
-<head>DSpace Repository</head>
-<p>DSpace is a digital service that collects, preserves, and distributes digital material. Repositories are important tools for preserving an organization&apos;s legacy; they facilitate digital preservation and scholarly communication.</p>
+<div id="file.news.div.news" n="news" rend="col-lg-12">
+	<head>AUrora: Auburn University Scholarly Repository</head>
+	<p>Welcome to AUrora, an open-access repository of research and scholarly works by Auburn University faculty members. AUrora supports the outreach mission of Auburn University by making research by Auburn faculty easily accessible to citizens of the state of Alabama and to the general public.</p>
 </div>
+<!--<div id="file.news.div.news.notice" n="news" rend="primary">
+	<p style="color: #FFF!important; font-size: 14px!important; line-height: 20px!important;">NOTICE: The AUrora service will experience brief downtime for maintenance on Thursday, Februray 27th at 8:00 AM.</p>
+</div>-->
 </body>
 <options/>
 <meta>
