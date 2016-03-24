@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE input-forms SYSTEM "input-forms.dtd">
 
+
 <input-forms>
 
  <!-- The form-map maps collection handles to forms. DSpace does not       -->
@@ -12,11 +13,9 @@
  <!-- collection which does not appear in this map will be associated with -->
  <!-- the mapping for handle "default".                                    -->
 
-    <form-map>
-        <name-map collection-handle="default" form-name="traditional" />
-        <name-map collection-handle="123456789/2" form-name="ETD" />
-        <name-map collection-handle="10415/2" form-name="ETD" />
-    </form-map>
+ <form-map>
+   <name-map collection-handle="default" form-name="traditional" />
+ </form-map>
 
 
  <!-- The form-definitions map lays out the detailed definition of all the -->
@@ -35,262 +34,189 @@
  <!-- qualifier name, a repeatable flag, and a text string whose presence  -->
  <!-- serves as a 'this field is required' flag.                           -->
 
-    <form-definitions>
-        <form name="traditional">
-            <page number="1">
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>contributor</dc-element>
-                    <dc-qualifier>author</dc-qualifier>
-                    <repeatable>true</repeatable>
-                    <label>Authors</label>
-                    <input-type>name</input-type>
-                    <hint>Enter the names of the authors of this item below.</hint>
-                    <required></required>
-                </field>
+ <form-definitions>
 
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>title</dc-element>
-                    <dc-qualifier></dc-qualifier>
-                    <repeatable>false</repeatable>
-                    <label>Title</label>
-                    <input-type>onebox</input-type>
-                    <hint>Enter the main title of the item.</hint>
-                    <required>You must enter a main title for this item.</required>
-                </field>
+   <form name="traditional">
+     <page number="1">
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>contributor</dc-element>
+         <dc-qualifier>author</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Authors</label>
+         <input-type>name</input-type>
+         <hint>Enter the names of the authors of this item.</hint>
+         <required></required>
+       </field>
 
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>title</dc-element>
-                    <dc-qualifier>alternative</dc-qualifier>
-                    <repeatable>true</repeatable>
-                    <label>Other Titles</label>
-                    <input-type>onebox</input-type>
-                    <hint>If the item has any alternative titles, please enter them below.</hint>
-                    <required></required>
-                </field>
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>title</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Title</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the main title of the item.</hint>
+         <required>You must enter a main title for this item.</required>
+       </field>
 
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>date</dc-element>
-                    <dc-qualifier>issued</dc-qualifier>
-                    <repeatable>false</repeatable>
-                    <label>Date of Issue</label>
-                    <input-type>date</input-type>
-                    <hint>Please give the date of previous publication or public distribution below.  You can leave out the day and/or month if they aren't applicable.</hint>
-                    <required>You must enter at least the year.</required>
-                </field>
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>title</dc-element>
+         <dc-qualifier>alternative</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Other Titles</label>
+         <input-type>onebox</input-type>
+         <hint>If the item has any alternative titles, please enter them here.</hint>
+         <required></required>
+       </field>
 
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>publisher</dc-element>
-                    <dc-qualifier></dc-qualifier>
-                    <repeatable>false</repeatable>
-                    <label>Publisher</label>
-                    <input-type>onebox</input-type>
-                    <hint>Enter the name of the publisher of the previously issued instance of this item.</hint>
-                    <required></required>
-                </field>
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>date</dc-element>
+         <dc-qualifier>issued</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Date of Issue</label>
+         <input-type>date</input-type>
+         <hint>Please give the date of previous publication or public distribution.
+                        You can leave out the day and/or month if they aren't
+                        applicable.</hint>
+         <required>You must enter at least the year.</required>
+       </field>
 
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>identifier</dc-element>
-                    <dc-qualifier>citation</dc-qualifier>
-                    <repeatable>false</repeatable>
-                    <label>Citation</label>
-                    <input-type>onebox</input-type>
-                    <hint>Enter the standard citation for the previously issued instance of this item.</hint>
-                    <required></required>
-                </field>
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>publisher</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Publisher</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the name of the publisher of the previously issued instance of this item.</hint>
+         <required></required>
+       </field>
 
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>relation</dc-element>
-                    <dc-qualifier>ispartofseries</dc-qualifier>
-                    <repeatable>true</repeatable>
-                    <label>Series/Report No.</label>
-                    <input-type>series</input-type>
-                    <hint>Enter the series and number assigned to this item by your community.</hint>
-                    <required></required>
-                </field>
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>citation</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Citation</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the standard citation for the previously issued instance of this item.</hint>
+         <required></required>
+       </field>
 
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>identifier</dc-element>
-                    <dc-qualifier></dc-qualifier>
-                    <!-- An input-type of qualdrop_value MUST be marked as repeatable -->
-                    <repeatable>true</repeatable>
-                    <label>Identifiers</label>
-                    <input-type value-pairs-name="common_identifiers">qualdrop_value</input-type>
-                    <hint>If the item has any identification numbers or codes associated with
-                    it, please enter the types and the actual numbers or codes below.</hint>
-                    <required></required>
-                </field>
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>ispartofseries</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Series/Report No.</label>
+         <input-type>series</input-type>
+         <hint>Enter the series and number assigned to this item by your community.</hint>
+         <required></required>
+       </field>
 
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>type</dc-element>
-                    <dc-qualifier></dc-qualifier>
-                    <repeatable>true</repeatable>
-                    <label>Type</label>
-                    <input-type value-pairs-name="common_types">dropdown</input-type>
-                    <hint>Select the type(s) of content of the item. To select more than one value in the list, you may have to hold down the "CTRL" or "Shift" key.</hint>
-                    <required></required>
-                </field>
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <!-- An input-type of qualdrop_value MUST be marked as repeatable -->
+         <repeatable>true</repeatable>
+         <label>Identifiers</label>
+         <input-type value-pairs-name="common_identifiers">qualdrop_value</input-type>
+         <hint>If the item has any identification numbers or codes associated with
+it, please enter the types and the actual numbers or codes.</hint>
+         <required></required>
+       </field>
 
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>language</dc-element>
-                    <dc-qualifier>iso</dc-qualifier>
-                    <repeatable>false</repeatable>
-                    <label>Language</label>
-                    <input-type value-pairs-name="common_iso_languages">dropdown</input-type>
-                    <hint>Select the language of the main content of the item.  If the language does not appear in the list below, please select 'Other'.  If the content does not really have a language (for example, if it is a dataset or an image) please select 'N/A'.</hint>
-                    <required></required>
-                </field>
-            </page>
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>type</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Type</label>
+         <input-type value-pairs-name="common_types">dropdown</input-type>
+         <hint>Select the type(s) of content of the item. To select more than one value in the list, you may have to hold down the "CTRL" or "Shift" key.</hint>
+         <required></required>
+       </field>
 
-            <page number="2">
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>subject</dc-element>
-                    <dc-qualifier></dc-qualifier>
-                    <!-- An input-type of twobox MUST be marked as repeatable -->
-                    <repeatable>true</repeatable>
-                    <label>Subject Keywords</label>
-                    <input-type>twobox</input-type>
-                    <hint>Enter appropriate subject keywords or phrases below. </hint>
-                    <required></required>
-                    <vocabulary>srsc</vocabulary>
-                </field>
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>language</dc-element>
+         <dc-qualifier>iso</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Language</label>
+         <input-type value-pairs-name="common_iso_languages">dropdown</input-type>
+         <hint>Select the language of the main content of the item.  If the language does not appear in the list, please select 'Other'.  If the content does not really have a language (for example, if it is a dataset or an image) please select 'N/A'.</hint>
+         <required></required>
+       </field>
+     </page>
 
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>description</dc-element>
-                    <dc-qualifier>abstract</dc-qualifier>
-                    <repeatable>false</repeatable>
-                    <label>Abstract</label>
-                    <input-type>textarea</input-type>
-                    <hint>Enter the abstract of the item below. </hint>
-                    <required></required>
-                </field>
+     <page number="2">
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>subject</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <!-- An input-type of twobox MUST be marked as repeatable -->
+         <repeatable>true</repeatable>
+         <label>Subject Keywords</label>
+         <input-type>twobox</input-type>
+         <hint>Enter appropriate subject keywords or phrases. </hint>
+         <required></required>
+         <vocabulary>srsc</vocabulary>
+       </field>
 
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>description</dc-element>
-                    <dc-qualifier>sponsorship</dc-qualifier>
-                    <repeatable>false</repeatable>
-                    <label>Sponsors</label>
-                    <input-type>textarea</input-type>
-                    <hint>Enter the names of any sponsors and/or funding codes in the box below. </hint>
-                    <required></required>
-                </field>
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>description</dc-element>
+         <dc-qualifier>abstract</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Abstract</label>
+         <input-type>textarea</input-type>
+         <hint>Enter the abstract of the item. </hint>
+         <required></required>
+       </field>
 
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>description</dc-element>
-                    <dc-qualifier></dc-qualifier>
-                    <repeatable>false</repeatable>
-                    <label>Description</label>
-                    <input-type>textarea</input-type>
-                    <hint>Enter any other description or comments in this box. </hint>
-                    <required></required>
-                </field>
-            </page>
-        </form>
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>description</dc-element>
+         <dc-qualifier>sponsorship</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Sponsors</label>
+         <input-type>textarea</input-type>
+         <hint>Enter the names of any sponsors and/or funding codes in the box. </hint>
+         <required></required>
+       </field>
 
-        <form name="one">
-            <page number="1">
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>contributor</dc-element>
-                    <dc-qualifier>author</dc-qualifier>
-                    <repeatable>true</repeatable>
-                    <label>One: Authors</label>
-                    <input-type>name</input-type>
-                    <hint>Enter the names of the authors of this item below.</hint>
-                    <required></required>
-                </field>
-            </page>
-        </form>
-        <form name="ETD">
-            <page number="1">
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>contributor</dc-element>
-                    <dc-qualifier>author</dc-qualifier>
-                    <repeatable>false</repeatable>
-                    <label>Author</label>
-                    <input-type>name</input-type>
-                    <hint>Thesis or Dissertation author.</hint>
-                    <required>Enter your first and last name.</required>
-                </field>
-				<field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>contributor</dc-element>
-                    <dc-qualifier>advisor</dc-qualifier>
-                    <repeatable>false</repeatable>
-                    <label>Committee Chair</label>
-                    <input-type>name</input-type>
-                    <hint>Enter name of the thesis or dissertation committee chair.</hint>
-                    <required>Enter the first and last name of committee chair.</required>
-                </field>
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>contributor</dc-element>
-                    <dc-qualifier>committee</dc-qualifier>
-                    <repeatable>true</repeatable>
-                    <label>Committee Members (Optional)</label>
-                    <input-type>name</input-type>
-                    <hint>Enter one or more of the thesis or dissertation advisers.  Press "Add" to add more names. </hint>
-                    <required></required>
-                </field>
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>title</dc-element>
-                    <dc-qualifier/>
-                    <repeatable>false</repeatable>
-                    <label>Title</label>
-                    <input-type>onebox</input-type>
-                    <hint>Enter the main title of the item.</hint>
-                    <required>You must enter a main title for this item.</required>
-                </field>
-                
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>description</dc-element>
-                    <dc-qualifier>abstract</dc-qualifier>
-                    <repeatable>false</repeatable>
-                    <label>Abstract</label>
-                    <input-type>textarea</input-type>
-                    <hint>Enter the abstract of your Thesis or Dissertation in the box below.</hint>
-                    <required>Please enter the abstract of your thesis or dissertation.</required>
-                </field>
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>type</dc-element>
-                    <dc-qualifier/>
-                    <repeatable>false</repeatable>
-                    <label>Type of Degree</label>
-                    <input-type value-pairs-name="etd_types">list</input-type>
-                    <hint>Select the type of degree: Landscape Thesis, Master's Thesis or PHD Dissertation</hint>
-                    <required>Select a degree type: Landscape Thesis, Master's Thesis or PHD Dissertation</required>
-                </field>
-                
-                <field>
-                    <dc-schema>dc</dc-schema>
-                    <dc-element>subject</dc-element>
-                    <dc-qualifier/>
-                    <repeatable>false</repeatable>
-                    <label>Degree Department</label>
-                    <input-type value-pairs-name="etd_subjects">dropdown</input-type>
-                    <hint>Select one department.</hint>
-                    <required>Please select one department.</required>
-                </field>     
-            </page>
-        </form>
-    </form-definitions>
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>description</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Description</label>
+         <input-type>textarea</input-type>
+         <hint>Enter any other description or comments in this box. </hint>
+         <required></required>
+       </field>
+     </page>
+   </form>
+
+   <form name="one">
+     <page number="1">
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>contributor</dc-element>
+         <dc-qualifier>author</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>One: Authors</label>
+         <input-type>name</input-type>
+         <hint>Enter the names of the authors of this item.</hint>
+         <required></required>
+       </field>
+      </page>
+    </form>
+ </form-definitions>
 
 
  <!-- form-value-pairs populate dropdown and qualdrop-value lists.          -->
@@ -306,535 +232,175 @@
  <!-- element. A UI list displays the displayed-values, but the program     -->
  <!-- stores the associated stored-values in the database.                  -->
 
-    <form-value-pairs>
-        <!-- Value Pairs for Degree Type form element -->
-        <value-pairs value-pairs-name="etd_types" dc-term="type">
-            <pair>
-                <displayed-value>Landscape Thesis</displayed-value>
-                <stored-value>Landscape Thesis</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Master's Thesis</displayed-value>
-                <stored-value>Master's Thesis</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>PhD Dissertation</displayed-value>
-                <stored-value>Dissertation</stored-value>
-            </pair>
-        </value-pairs>
-        
-        <!-- Value Pairs for Department form element -->
-        <value-pairs value-pairs-name="etd_subjects" dc-term="subject">
-            <pair>
-                <displayed-value>----- Agriculture -----</displayed-value>
-		<stored-value> </stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Agricultural Economics and Rural Sociology</displayed-value>
-                <stored-value>Agricultural Economics and Rural Sociology</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Agronomy and Soils</displayed-value>
-                <stored-value>Agronomy and Soils</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Animal Sciences</displayed-value>
-                <stored-value>Animal Sciences</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Biosystems Engineering</displayed-value>
-                <stored-value>Biosystems Engineering</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Entomology and Plant Pathology</displayed-value>
-                <stored-value>Entomology and Plant Pathology</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Fisheries and Allied Aquacultures</displayed-value>
-                <stored-value>Fisheries and Allied Aquacultures</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Horticulture</displayed-value>
-                <stored-value>Horticulture</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Poultry Science</displayed-value>
-                <stored-value>Poultry Science</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>----- Architecture, Design, and Construction -----</displayed-value>
-		<stored-value> </stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Architecture</displayed-value>
-                <stored-value>Architecture</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Interior Architecture</displayed-value>
-                <stored-value>Interior Architecture</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Landscape Architecture</displayed-value>
-                <stored-value>Landscape Architecture</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Community Planning</displayed-value>
-                <stored-value>Community Planning</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Building Science</displayed-value>
-                <stored-value>Building Science</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Industrial Design</displayed-value>
-                <stored-value>Industrial Design</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Graphic Design</displayed-value>
-                <stored-value>Graphic Design</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>----- Business -----</displayed-value>
-		<stored-value> </stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Aviation Management</displayed-value>
-                <stored-value>Aviation Management</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Economics</displayed-value>
-                <stored-value>Economics</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Finance</displayed-value>
-                <stored-value>Finance</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Management</displayed-value>
-                <stored-value>Management</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Marketing</displayed-value>
-                <stored-value>Marketing</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Supply Chain Management</displayed-value>
-                <stored-value>Supply Chain Management</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>----- Education -----</displayed-value>
-		<stored-value> </stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Counseling Psychology</displayed-value>
-                <stored-value>Counseling Psychology</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Curriculum and Teaching</displayed-value>
-                <stored-value>Curriculum and Teaching</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Education Foundation, Leadership, and Technology</displayed-value>
-                <stored-value>Education Foundation, Leadership, and Technology</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Kinesiology</displayed-value>
-                <stored-value>Kinesiology</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Rehabilitation and Special Education</displayed-value>
-                <stored-value>Rehabilitation and Special Education</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>----- Engineering -----</displayed-value>
-		<stored-value> </stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Aerospace Engineering</displayed-value>
-                <stored-value>Aerospace Engineering</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Biosystems Engineering</displayed-value>
-                <stored-value>Biosystems Engineering</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Chemical Engineering</displayed-value>
-                <stored-value>Chemical Engineering</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Civil Engineering</displayed-value>
-                <stored-value>Civil Engineering</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Computer Science</displayed-value>
-                <stored-value>Computer Science</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Electrical Engineering</displayed-value>
-                <stored-value>Electrical Engineering</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Environmental Science</displayed-value>
-                <stored-value>Environmental Science</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Industrial and Systems Engineering</displayed-value>
-                <stored-value>Industrial and Systems Engineering</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Materials Engineering</displayed-value>
-                <stored-value>Materials Engineering</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Mechanical Engineering</displayed-value>
-                <stored-value>Mechanical Engineering</stored-value>
-            </pair>
-            <!--<pair>
-                <displayed-value>Polymer and Fiber Engineering</displayed-value>
-                <stored-value>Polymer and Fiber Engineering</stored-value>
-            </pair>-->
-            <pair>
-                <displayed-value>Wireless Engineering</displayed-value>
-                <stored-value>Wireless Engineering</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>----- Forestry and Wildlife Sciences -----</displayed-value>
-		<stored-value> </stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Biometry</displayed-value>
-                <stored-value>Biometry</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Forest Biology</displayed-value>
-                <stored-value>Forest Biology</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Forest Economics and Policy</displayed-value>
-                <stored-value>Forest Economics and Policy</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Forest Engineering</displayed-value>
-                <stored-value>Forest Engineering</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>----- Human Sciences -----</displayed-value>
-		<stored-value> </stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Consumer Affairs</displayed-value>
-                <stored-value>Consumer Affairs</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Human Development and Family Studies</displayed-value>
-                <stored-value>Human Development and Family Studies</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Nutrition and Food Science</displayed-value>
-                <stored-value>Nutrition and Food Science</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>----- Liberal Arts ------</displayed-value>
-		<stored-value> </stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Fine Arts</displayed-value>
-                <stored-value>Fine Arts</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Art</displayed-value>
-                <stored-value>Art</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Music</displayed-value>
-                <stored-value>Music</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Theatre</displayed-value>
-                <stored-value>Theatre</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Humanities</displayed-value>
-                <stored-value>Humanities</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>English</displayed-value>
-                <stored-value>English</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Foreign Language and Literature</displayed-value>
-                <stored-value>Foreign Language and Literature</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>History</displayed-value>
-                <stored-value>History</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Philosophy</displayed-value>
-                <stored-value>Philosophy</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Religious Studies</displayed-value>
-                <stored-value>Religious Studies</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Communications</displayed-value>
-                <stored-value>Communications</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Communication Disorders</displayed-value>
-                <stored-value>Communication Disorders</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Communication and Journalism</displayed-value>
-                <stored-value>Communication and Journalism</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Social Sciences</displayed-value>
-                <stored-value>Social Sciences</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Political Science</displayed-value>
-                <stored-value>Political Science</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Psychology</displayed-value>
-                <stored-value>Psychology</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Sociology</displayed-value>
-                <stored-value>Sociology</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Anthropology</displayed-value>
-                <stored-value>Anthropology</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Social Work</displayed-value>
-                <stored-value>Social Work</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>----- Pharmacy -----</displayed-value>
-                <stored-value> </stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Pharmacal Sciences</displayed-value>
-                <stored-value>Pharmacal Sciences</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Pharmacy Care Systems</displayed-value>
-                <stored-value>Pharmacy Care Systems</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>----- Sciences and Mathematics -----</displayed-value>
-		<stored-value> </stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Biological Sciences</displayed-value>
-                <stored-value>Biological Sciences</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Biomedical Sciences</displayed-value>
-                <stored-value>Biomedical Sciences</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Chemistry and Biochemistry</displayed-value>
-                <stored-value>Chemistry and Biochemistry</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Geology and Geography</displayed-value>
-                <stored-value>Geology and Geography</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Mathematics and Statistics</displayed-value>
-                <stored-value>Mathematics and Statistics</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Physics</displayed-value>
-                <stored-value>Physics</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>----- Veterinary Medicine -----</displayed-value>
-		<stored-value> </stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Veterinary Anatomy, Physiology, and Pharmacology</displayed-value>
-                <stored-value>Veterinary Anatomy, Physiology, and Pharmacology</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Pathobiology</displayed-value>
-                <stored-value>Pathobiology</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Veterinary Clinical Sciences</displayed-value>
-                <stored-value>Veterinary Clinical Sciences</stored-value>
-            </pair>
-        </value-pairs>
-        <!-- End ETD Form Value Pairs -->
+ <form-value-pairs>
+   <value-pairs value-pairs-name="common_identifiers" dc-term="identifier">
+     <pair>
+       <displayed-value>ISSN</displayed-value>
+       <stored-value>issn</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Other</displayed-value>
+       <stored-value>other</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>ISMN</displayed-value>
+       <stored-value>ismn</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Gov't Doc #</displayed-value>
+       <stored-value>govdoc</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>URI</displayed-value>
+       <stored-value>uri</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>ISBN</displayed-value>
+       <stored-value>isbn</stored-value>
+     </pair>
+   </value-pairs>
 
-        <value-pairs value-pairs-name="common_identifiers" dc-term="identifier">
-            <pair>
-                <displayed-value>ISSN</displayed-value>
-                <stored-value>issn</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Other</displayed-value>
-                <stored-value>other</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>ISMN</displayed-value>
-                <stored-value>ismn</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Gov't Doc #</displayed-value>
-                <stored-value>govdoc</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>URI</displayed-value>
-                <stored-value>uri</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>ISBN</displayed-value>
-                <stored-value>isbn</stored-value>
-            </pair>
-        </value-pairs>
+   <value-pairs value-pairs-name="common_types" dc-term="type">
+     <pair>
+       <displayed-value>Animation</displayed-value>
+       <stored-value>Animation</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Article</displayed-value>
+       <stored-value>Article</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Book</displayed-value>
+       <stored-value>Book</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Book chapter</displayed-value>
+       <stored-value>Book chapter</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Dataset</displayed-value>
+       <stored-value>Dataset</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Learning Object</displayed-value>
+       <stored-value>Learning Object</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Image</displayed-value>
+       <stored-value>Image</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Image, 3-D</displayed-value>
+       <stored-value>Image, 3-D</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Map</displayed-value>
+       <stored-value>Map</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Musical Score</displayed-value>
+       <stored-value>Musical Score</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Plan or blueprint</displayed-value>
+       <stored-value>Plan or blueprint</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Preprint</displayed-value>
+       <stored-value>Preprint</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Presentation</displayed-value>
+       <stored-value>Presentation</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Recording, acoustical</displayed-value>
+       <stored-value>Recording, acoustical</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Recording, musical</displayed-value>
+       <stored-value>Recording, musical</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Recording, oral</displayed-value>
+       <stored-value>Recording, oral</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Software</displayed-value>
+       <stored-value>Software</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Technical Report</displayed-value>
+       <stored-value>Technical Report</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Thesis</displayed-value>
+       <stored-value>Thesis</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Video</displayed-value>
+       <stored-value>Video</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Working Paper</displayed-value>
+       <stored-value>Working Paper</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Other</displayed-value>
+       <stored-value>Other</stored-value>
+     </pair>
+   </value-pairs>
 
-        <value-pairs value-pairs-name="common_types" dc-term="type">
-            <pair>
-                <displayed-value>Animation</displayed-value>
-                <stored-value>Animation</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Article</displayed-value>
-                <stored-value>Article</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Book</displayed-value>
-                <stored-value>Book</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Book chapter</displayed-value>
-                <stored-value>Book chapter</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Dataset</displayed-value>
-                <stored-value>Dataset</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Learning Object</displayed-value>
-                <stored-value>Learning Object</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Image</displayed-value>
-                <stored-value>Image</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Image, 3-D</displayed-value>
-                <stored-value>Image, 3-D</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Map</displayed-value>
-                <stored-value>Map</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Musical Score</displayed-value>
-                <stored-value>Musical Score</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Plan or blueprint</displayed-value>
-                <stored-value>Plan or blueprint</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Preprint</displayed-value>
-                <stored-value>Preprint</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Presentation</displayed-value>
-                <stored-value>Presentation</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Recording, acoustical</displayed-value>
-                <stored-value>Recording, acoustical</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Recording, musical</displayed-value>
-                <stored-value>Recording, musical</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Recording, oral</displayed-value>
-                <stored-value>Recording, oral</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Software</displayed-value>
-                <stored-value>Software</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Technical Report</displayed-value>
-                <stored-value>Technical Report</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Thesis</displayed-value>
-                <stored-value>Thesis</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Video</displayed-value>
-                <stored-value>Video</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Working Paper</displayed-value>
-                <stored-value>Working Paper</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Other</displayed-value>
-                <stored-value>Other</stored-value>
-            </pair>
-        </value-pairs>
+   <!-- default language order: (from dspace 1.2.1)
+        "en_US", "en", "es", "de", "fr", "it", "ja", "zh", "other", ""
+     -->
+   <value-pairs value-pairs-name="common_iso_languages" dc-term="language_iso">
+     <pair>
+       <displayed-value>N/A</displayed-value>
+       <stored-value></stored-value>
+     </pair>
+     <pair>
+       <displayed-value>English (United States)</displayed-value>
+       <stored-value>en_US</stored-value>
+      </pair>
+     <pair>
+       <displayed-value>English</displayed-value>
+       <stored-value>en</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Spanish</displayed-value>
+       <stored-value>es</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>German</displayed-value>
+       <stored-value>de</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>French</displayed-value>
+       <stored-value>fr</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Italian</displayed-value>
+       <stored-value>it</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Japanese</displayed-value>
+       <stored-value>ja</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Chinese</displayed-value>
+       <stored-value>zh</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Turkish</displayed-value>
+       <stored-value>tr</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>(Other)</displayed-value>
+       <stored-value>other</stored-value>
+     </pair>
+   </value-pairs>
 
-        <!--
-            default language order: (from dspace 1.2.1)
-            "en_US", "en", "es", "de", "fr", "it", "ja", "zh", "other", ""
-        -->
-        <value-pairs value-pairs-name="common_iso_languages" dc-term="language_iso">
-            <pair>
-                <displayed-value>N/A</displayed-value>
-                <stored-value></stored-value>
-            </pair>
-            <pair>
-                <displayed-value>English (United States)</displayed-value>
-                <stored-value>en_US</stored-value>
-             </pair>
-            <pair>
-                <displayed-value>English</displayed-value>
-                <stored-value>en</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Spanish</displayed-value>
-                <stored-value>es</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>German</displayed-value>
-                <stored-value>de</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>French</displayed-value>
-                <stored-value>fr</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Italian</displayed-value>
-                <stored-value>it</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Japanese</displayed-value>
-                <stored-value>ja</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Chinese</displayed-value>
-                <stored-value>zh</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>(Other)</displayed-value>
-                <stored-value>other</stored-value>
-            </pair>
-        </value-pairs>
-    </form-value-pairs>
+ </form-value-pairs>
+
 </input-forms>
