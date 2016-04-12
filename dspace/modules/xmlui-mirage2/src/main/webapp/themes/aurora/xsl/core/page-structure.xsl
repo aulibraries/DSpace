@@ -320,139 +320,138 @@
                 <div class="title-area">
                     <img class="visible-print" src="//cdn.auburn.edu/assets/img/header-logo-print.png" height="48" width="245" alt="Auburn University Logo"/>
                     <div class="main-heading hidden-print">
-						<a>
-							<xsl:attribute name="href">
-								<xsl:choose>
-									<xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker') or contains($serverName, 'dstest')">
-										<xsl:text>/aurora/</xsl:text>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:text>/</xsl:text>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:attribute>
+                        <a>
+                            <xsl:attribute name="href">
+                                <xsl:choose>
+                                    <xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker') or contains($serverName, 'dstest')">
+                                        <xsl:text>/aurora/</xsl:text>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:text>/</xsl:text>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:attribute>
                             <xsl:text>AUrora</xsl:text>
                         </a>
-					</div>
-					<div class="sub-heading hidden-print">
-						<xsl:text>Development/Testing System</xsl:text>
-						<xsl:choose>
-							<xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker')">
-								<xsl:text> (Local)</xsl:text>
-							</xsl:when>
-							<xsl:when test="contains($serverName, 'dstest')">
-								<xsl:text> (DSTest)</xsl:text>
-							</xsl:when>
-							<xsl:otherwise></xsl:otherwise>
-						</xsl:choose>
-					</div>
+                    </div>
+                    <div class="sub-heading hidden-print">
+                        <xsl:choose>
+                            <xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker')">
+                                <xsl:text>Development/Testing System (Local)</xsl:text>
+                            </xsl:when>
+                            <xsl:when test="contains($serverName, 'dstest')">
+                                <xsl:text>Development/Testing System (DSTest)</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise></xsl:otherwise>
+                        </xsl:choose>
+                    </div>
                 </div>
             </div>
         </header>
-		<xsl:call-template name="buildHeaderNav"/>
+        <xsl:call-template name="buildHeaderNav"/>
 	</xsl:template>
 	
 	<xsl:template name="buildHeaderNav">
         <a href="#content" class="skip">Skip to Main Content</a>
         <nav id="nav-section" class="navbar hidden-print" role="navigation">
-			<div class="container-fluid">
-				<div class="navbar-brand collapsed" data-toggle="collapse" data-target=".navbar-ex1-collapse"> Main Navigation<span>&#160;</span></div>
-				<div class="collapse navbar-collapse navbar-ex1-collapse">
-					<ul class="nav navbar-nav">
-						<li>
-							<a>
-								<xsl:attribute name="href">
-									<xsl:choose>
-										<xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker') or contains($serverName, 'dstest')">
-											<xsl:text>/aurora/</xsl:text>
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:text>/</xsl:text>
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:attribute>
-								<xsl:attribute name="title">
-									<xsl:text>AUrora Home</xsl:text>
-								</xsl:attribute>
-								<xsl:text>AUrora Home</xsl:text>
-							</a>
-						</li>
-						<li>
-							<a>
-								<xsl:attribute name="href">
-									<xsl:choose>
-										<xsl:when test="contains($serverName, 'aucompbiker') or contains($serverName, 'localhost')">
-											<xsl:text>http://localhost:8080/aurora/faqs.html</xsl:text>
-										</xsl:when>
-										<xsl:when test="contains($serverName, 'aurora.auburn')">
-											<xsl:text>https://aurora.auburn.edu/faqs.html</xsl:text>
-										</xsl:when>
-										<xsl:when test="contains($serverName, 'dstest.lib')">
-											<xsl:text>https://dstest.lib.auburn.edu/aurora/faqs.html</xsl:text>
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:text>#</xsl:text>
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:attribute>
-								<xsl:attribute name="title">
-									<xsl:text>FAQs</xsl:text>
-								</xsl:attribute>
-							   <xsl:text>FAQs</xsl:text>
-							</a>
-						</li>
-						<li>
-							<a>
-								<xsl:attribute name="href">
-									<xsl:choose>
-										<xsl:when test="contains($serverName, 'aucompbiker') or contains($serverName, 'localhost')">
-											<xsl:text>http://localhost:8080/aurora/liaisons.html</xsl:text>
-										</xsl:when>
-										<xsl:when test="contains($serverName, 'aurora.auburn')">
-											<xsl:text>https://aurora.auburn.edu/liaisons.html</xsl:text>
-										</xsl:when>
-										<xsl:when test="contains($serverName, 'dstest.lib')">
-											<xsl:text>https://dstest.lib.auburn.edu/aurora/liaisons.html</xsl:text>
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:text>#</xsl:text>
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:attribute>
-								<xsl:attribute name="title">
-									<xsl:text>Subject Librarians/Departmental Liaisons</xsl:text>
-								</xsl:attribute>
-								<xsl:text>Subject Librarians/Departmental Liaisons</xsl:text>
-							</a>
-						</li>
-						<li>
-							<a>
-								<xsl:attribute name="href">
-									<xsl:choose>
-										<xsl:when test="contains($serverName, 'aurora.aucompbiker') or contains($serverName, 'localhost')">
-											<xsl:text>http://localhost:8080/aurora/contact.html</xsl:text>
-										</xsl:when>
-										<xsl:when test="contains($serverName, 'aurora.auburn')">
-											<xsl:text>https://aurora.auburn.edu/contact.html</xsl:text>
-										</xsl:when>
-										<xsl:when test="contains($serverName, 'dstest.lib')">
-											<xsl:text>https://dstest.lib.auburn.edu/aurora/contact.html</xsl:text>
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:text>#</xsl:text>
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:attribute>
-								<xsl:attribute name="title">
-									<xsl:text>Contact</xsl:text>
-								</xsl:attribute>
-								<xsl:text>Contact</xsl:text>
-							</a>
-						</li>
-					</ul>
-					<div class="menu-icon-nav hidden-print hidden-xs hidden-md hidden-lg" data-toggle="offcanvas"><i class="fa fa-reorder"></i></div>
-				</div>
-			</div>
+            <div class="container-fluid">
+                <div class="navbar-brand collapsed" data-toggle="collapse" data-target=".navbar-ex1-collapse"> Main Navigation<span>&#160;</span></div>
+                <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a>
+                                <xsl:attribute name="href">
+                                    <xsl:choose>
+                                        <xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker') or contains($serverName, 'dstest')">
+                                            <xsl:text>/aurora/</xsl:text>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:text>/</xsl:text>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:attribute>
+                                <xsl:attribute name="title">
+                                    <xsl:text>AUrora Home</xsl:text>
+                                </xsl:attribute>
+                                <xsl:text>AUrora Home</xsl:text>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <xsl:attribute name="href">
+                                    <xsl:choose>
+                                        <xsl:when test="contains($serverName, 'aucompbiker') or contains($serverName, 'localhost')">
+                                            <xsl:text>http://localhost:8080/aurora/faqs.html</xsl:text>
+                                        </xsl:when>
+                                        <xsl:when test="contains($serverName, 'aurora.auburn')">
+                                            <xsl:text>https://aurora.auburn.edu/faqs.html</xsl:text>
+                                        </xsl:when>
+                                        <xsl:when test="contains($serverName, 'dstest.lib')">
+                                            <xsl:text>https://dstest.lib.auburn.edu/aurora/faqs.html</xsl:text>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:text>#</xsl:text>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:attribute>
+                                <xsl:attribute name="title">
+                                    <xsl:text>FAQs</xsl:text>
+                                </xsl:attribute>
+                               <xsl:text>FAQs</xsl:text>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <xsl:attribute name="href">
+                                    <xsl:choose>
+                                        <xsl:when test="contains($serverName, 'aucompbiker') or contains($serverName, 'localhost')">
+                                            <xsl:text>http://localhost:8080/aurora/liaisons.html</xsl:text>
+                                        </xsl:when>
+                                        <xsl:when test="contains($serverName, 'aurora.auburn')">
+                                            <xsl:text>https://aurora.auburn.edu/liaisons.html</xsl:text>
+                                        </xsl:when>
+                                        <xsl:when test="contains($serverName, 'dstest.lib')">
+                                            <xsl:text>https://dstest.lib.auburn.edu/aurora/liaisons.html</xsl:text>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:text>#</xsl:text>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:attribute>
+                                <xsl:attribute name="title">
+                                    <xsl:text>Subject Librarians/Departmental Liaisons</xsl:text>
+                                </xsl:attribute>
+                                <xsl:text>Subject Librarians/Departmental Liaisons</xsl:text>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <xsl:attribute name="href">
+                                    <xsl:choose>
+                                        <xsl:when test="contains($serverName, 'aurora.aucompbiker') or contains($serverName, 'localhost')">
+                                            <xsl:text>http://localhost:8080/aurora/contact.html</xsl:text>
+                                        </xsl:when>
+                                        <xsl:when test="contains($serverName, 'aurora.auburn')">
+                                            <xsl:text>https://aurora.auburn.edu/contact.html</xsl:text>
+                                        </xsl:when>
+                                        <xsl:when test="contains($serverName, 'dstest.lib')">
+                                            <xsl:text>https://dstest.lib.auburn.edu/aurora/contact.html</xsl:text>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:text>#</xsl:text>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:attribute>
+                                <xsl:attribute name="title">
+                                    <xsl:text>Contact</xsl:text>
+                                </xsl:attribute>
+                                <xsl:text>Contact</xsl:text>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="menu-icon-nav hidden-print hidden-xs hidden-md hidden-lg" data-toggle="offcanvas"><i class="fa fa-reorder"></i></div>
+                </div>
+            </div>
         </nav>
     </xsl:template>
 
