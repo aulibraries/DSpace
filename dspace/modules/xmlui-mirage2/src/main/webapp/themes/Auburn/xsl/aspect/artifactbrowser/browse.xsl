@@ -56,33 +56,32 @@
     </xsl:template>
 
     <xsl:template match="dri:p[dri:field/@id='aspect.artifactbrowser.ConfigurableBrowse.field.starts_with'
-									or dri:field/@id='aspect.discovery.SearchFacetFilter.field.starts_with'
-									or dri:field/@id='aspect.administrative.WithdrawnItems.field.starts_with'
-									or dri:field/@id='aspect.administrative.PrivateItems.field.starts_with']">
+                            or dri:field/@id='aspect.discovery.SearchFacetFilter.field.starts_with'
+                            or dri:field/@id='aspect.administrative.WithdrawnItems.field.starts_with'
+                            or dri:field/@id='aspect.administrative.PrivateItems.field.starts_with']">
         <div class="row">
             <div class="col-xs-12 col-sm-6">
                 <p class="input-group">
-					<xsl:apply-templates select="dri:field[@id='aspect.artifactbrowser.ConfigurableBrowse.field.starts_with'
-																			or @id='aspect.discovery.SearchFacetFilter.field.starts_with'
-																			or @id='aspect.administrative.WithdrawnItems.field.starts_with'
-																			or @id='aspect.administrative.PrivateItems.field.starts_with']"/>
+                    <xsl:apply-templates select="dri:field[@id='aspect.artifactbrowser.ConfigurableBrowse.field.starts_with'
+                                                        or @id='aspect.discovery.SearchFacetFilter.field.starts_with'
+                                                        or @id='aspect.administrative.WithdrawnItems.field.starts_with'
+                                                        or @id='aspect.administrative.PrivateItems.field.starts_with']"/>
 
-					<span class="input-group-btn">
-						<xsl:apply-templates select="dri:field[@id='aspect.artifactbrowser.ConfigurableBrowse.field.submit'
-																				or @id='aspect.discovery.SearchFacetFilter.field.submit' 
-																				or @id='aspect.administrative.WithdrawnItems.field.submit' 
-																				or @id='aspect.administrative.PrivateItems.field.submit']"/>
-					</span>
+                    <span class="input-group-btn">
+                        <xsl:apply-templates select="dri:field[@id='aspect.artifactbrowser.ConfigurableBrowse.field.submit'
+                                                            or @id='aspect.discovery.SearchFacetFilter.field.submit' 
+                                                            or @id='aspect.administrative.WithdrawnItems.field.submit' 
+                                                            or @id='aspect.administrative.PrivateItems.field.submit']"/>
+                    </span>
                 </p>
             </div>
         </div>
-
     </xsl:template>
 
     <xsl:template match="dri:field[@id='aspect.artifactbrowser.ConfigurableBrowse.field.starts_with'
-												 or @id='aspect.discovery.SearchFacetFilter.field.starts_with'
-												 or @id='aspect.administrative.WithdrawnItems.field.starts_with'
-												 or @id='aspect.administrative.PrivateItems.field.starts_with']">
+                                or @id='aspect.discovery.SearchFacetFilter.field.starts_with'
+                                or @id='aspect.administrative.WithdrawnItems.field.starts_with'
+                                or @id='aspect.administrative.PrivateItems.field.starts_with']">
         <input>
             <xsl:call-template name="fieldAttributes"/>
             <xsl:attribute name="value">

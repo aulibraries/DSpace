@@ -33,8 +33,9 @@
     <xsl:output indent="yes"/>
 
     <xsl:template match="dri:field[@id='aspect.artifactbrowser.ConfigurableBrowse.field.starts_with'
-							or @id='aspect.discovery.SearchFacetFilter.field.starts_with'
-							or @id='aspect.administrative.WithdrawnItems.field.starts_with' or @id='aspect.administrative.PrivateItems.field.starts_with']">
+                                or @id='aspect.discovery.SearchFacetFilter.field.starts_with'
+                                or @id='aspect.administrative.WithdrawnItems.field.starts_with' 
+                                or @id='aspect.administrative.PrivateItems.field.starts_with']">
         <field>
             <xsl:call-template name="copy-attributes"/>
             <xsl:attribute name="placeholder">
@@ -47,7 +48,7 @@
     <xsl:template match="dri:div[@id='aspect.artifactbrowser.ConfigurableBrowse.div.browse-navigation'
 							or @id='aspect.administrative.PrivateItems.div.browse-navigation'
 							or @id='aspect.administrative.WithdrawnItems.div.browse-navigation' or @id='aspect.discovery.SearchFacetFilter.div.filter-navigation']">
-		<div rend="browse-navigation-wrapper hidden-print">
+        <div rend="browse-navigation-wrapper hidden-print">
             <div>
                 <xsl:call-template name="copy-attributes"/>
                 <xsl:choose>
@@ -69,15 +70,15 @@
         </div>
     </xsl:template>
 	
-	<xsl:template match="dri:field[@id='aspect.artifactbrowser.ConfigurableBrowse.field.submit']">
-		<field>
-			 <xsl:call-template name="copy-attributes"/>
-			 <xsl:attribute name="rend">
-				<xsl:text>search-icon</xsl:text>
-			 </xsl:attribute>
-			 <xsl:apply-templates />
-		</field>
-	</xsl:template>
+    <xsl:template match="dri:field[@id='aspect.artifactbrowser.ConfigurableBrowse.field.submit']">
+        <field>
+            <xsl:call-template name="copy-attributes"/>
+            <xsl:attribute name="rend">
+                   <xsl:text>search-icon</xsl:text>
+            </xsl:attribute>
+            <xsl:apply-templates />
+        </field>
+    </xsl:template>
 	
     <xsl:template match="dri:list[@rend='alphabet']">
         <xsl:variable name="current-value">
@@ -86,7 +87,7 @@
             <xsl:value-of select="$page-meta/dri:metadata[@element='request'][@qualifier='queryString']"/>
         </xsl:variable>
         <field type="select" rend="alphabet-select visible-xs">
-			<xsl:for-each select="dri:item/dri:xref">
+            <xsl:for-each select="dri:item/dri:xref">
                 <option returnValue="{@target}">
                     <xsl:value-of select="."/>
                 </option>
@@ -112,9 +113,9 @@
     </xsl:template>
 
     <xsl:template match="dri:div[@id = 'aspect.artifactbrowser.ConfigurableBrowse.div.browse-controls'
-    or @id='aspect.administrative.WithdrawnItems.div.browse-controls'
-    or @id='aspect.administrative.PrivateItems.div.browse-controls'
-    or @id='aspect.discovery.SearchFacetFilter.div.browse-controls']">
+                            or @id='aspect.administrative.WithdrawnItems.div.browse-controls'
+                            or @id='aspect.administrative.PrivateItems.div.browse-controls'
+                            or @id='aspect.discovery.SearchFacetFilter.div.browse-controls']">
         <div>
             <xsl:call-template name="copy-attributes"/>
                 <xsl:attribute name="rend">
@@ -165,14 +166,14 @@
 	
 	<!-- Custom template -->
 	<!-- Alters a dri:div's @rend attribute value if the dri:div node's @n attribute contains the word 'results'. -->
-	<xsl:template match="dri:div[contains(@n, 'results')]">
-		<div>
+    <xsl:template match="dri:div[contains(@n, 'results')]">
+        <div>
             <xsl:call-template name="copy-attributes"/>
-			<xsl:attribute name="rend">
-				<xsl:text>primary browse-results</xsl:text>
-			</xsl:attribute>
-			<xsl:apply-templates />
-		</div>
-	</xsl:template>
+            <xsl:attribute name="rend">
+                    <xsl:text>primary browse-results</xsl:text>
+            </xsl:attribute>
+            <xsl:apply-templates />
+        </div>
+    </xsl:template>
 	
 </xsl:stylesheet>

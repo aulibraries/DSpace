@@ -317,54 +317,54 @@
     <!-- The header (distinct from the HTML head element) contains the title, subtitle, login box and various
         placeholders for header images -->
     <xsl:template name="buildHeader">
-		<header role="banner">
-			<div class="logo hidden-print" onclick="window.location='http://www.auburn.edu'" title="AU Homepage" aria-label="Auburn University Homepage"><img src="//cdn.auburn.edu/assets/img/header-logo.png" alt="Auburn University Homepage" height="75" width="203"></img></div>
-			<div class="menu-icon-header hidden-print hidden-sm hidden-md hidden-lg" data-toggle="offcanvas"><i class="fa fa-reorder"></i></div>
-			<div class="search-icon hidden-print"><i class="fa fa-search"></i></div>
-			<div class="header-title">
-				<div class="top-links hidden-print"><a href="http://www.auburn.edu/main/sitemap.php">A-Z Index</a> | <a href="http://www.auburn.edu/map">Map</a> | <a href="http://www.auburn.edu/main/auweb_campus_directory.html" class="lastTopLink">People Finder</a></div>
-				<form action="https://search.auburn.edu" class="search-form form-group hidden-print" method="get">
-					<div class="search-box"><input type="text" name="q" id="q" role="search" accesskey="q" tabindex="1" class="search-field form-control" placeholder="Search AU..." value=""/></div>
-					<input type="hidden" name="cx" value="006456623919840955604:pinevfah6qm"/>
-					<input type="hidden" name="ie" value="utf-8"/>
-					<label for="q" class="form-control" style=" position:absolute; left:-9999px; visibility:hidden;">Enter your search terms</label>
-				</form>
-				<div class="title-area"><img class="visible-print" src="//cdn.auburn.edu/assets/img/header-logo-print.png" height="48" width="245" alt="Auburn University Logo"></img>
-					<div class="main-heading hidden-print">
-						<a>
-							<xsl:attribute name="href">
-								<xsl:choose>
-									<xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker') or contains($serverName, 'dstest')">
-										<xsl:text>/auetd/</xsl:text>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:text>/</xsl:text>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:attribute>
+        <header role="banner">
+            <div class="logo hidden-print" onclick="window.location='http://www.auburn.edu'" title="AU Homepage" aria-label="Auburn University Homepage"><img src="//cdn.auburn.edu/assets/img/header-logo.png" alt="Auburn University Homepage" height="75" width="203"></img></div>
+            <div class="menu-icon-header hidden-print hidden-sm hidden-md hidden-lg" data-toggle="offcanvas"><i class="fa fa-reorder"></i></div>
+            <div class="search-icon hidden-print"><i class="fa fa-search"></i></div>
+            <div class="header-title">
+                <div class="top-links hidden-print"><a href="http://www.auburn.edu/main/sitemap.php">A-Z Index</a> | <a href="http://www.auburn.edu/map">Map</a> | <a href="http://www.auburn.edu/main/auweb_campus_directory.html" class="lastTopLink">People Finder</a></div>
+                <form action="https://search.auburn.edu" class="search-form form-group hidden-print" method="get">
+                    <div class="search-box"><input type="text" name="q" id="q" role="search" accesskey="q" tabindex="1" class="search-field form-control" placeholder="Search AU..." value=""/></div>
+                    <input type="hidden" name="cx" value="006456623919840955604:pinevfah6qm"/>
+                    <input type="hidden" name="ie" value="utf-8"/>
+                    <label for="q" class="form-control" style=" position:absolute; left:-9999px; visibility:hidden;">Enter your search terms</label>
+                </form>
+                <div class="title-area"><img class="visible-print" src="//cdn.auburn.edu/assets/img/header-logo-print.png" height="48" width="245" alt="Auburn University Logo"></img>
+                    <div class="main-heading hidden-print">
+                        <a>
+                            <xsl:attribute name="href">
+                                    <xsl:choose>
+                                        <xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker') or contains($serverName, 'dstest')">
+                                            <xsl:text>/auetd/</xsl:text>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:text>/</xsl:text>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                            </xsl:attribute>
                             <xsl:text>Electronic Theses and Dissertations</xsl:text>
                         </a>
-					</div>
-					<div class="sub-heading hidden-print">
-						<xsl:text>Development/Testing System</xsl:text>
-						<xsl:choose>
-							<xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker')">
-								<xsl:text> (Local)</xsl:text>
-							</xsl:when>
-							<xsl:when test="contains($serverName, 'dstest')">
-								<xsl:text> (DSTest)</xsl:text>
-							</xsl:when>
-							<xsl:otherwise></xsl:otherwise>
-						</xsl:choose>
-					</div>
-				</div>
-			</div>
-		</header>
-		<xsl:call-template name="buildHeaderNav"/>
+                    </div>
+                    <div class="sub-heading hidden-print">
+                        <xsl:text>Development/Testing System</xsl:text>
+                        <xsl:choose>
+                            <xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker')">
+                                <xsl:text> (Local)</xsl:text>
+                            </xsl:when>
+                            <xsl:when test="contains($serverName, 'dstest')">
+                                <xsl:text> (DSTest)</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise></xsl:otherwise>
+                        </xsl:choose>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <xsl:call-template name="buildHeaderNav"/>
     </xsl:template>
 	
-	<xsl:template name="buildHeaderNav">
-		<a href="#content" class="skip">Skip to Main Content</a>
+    <xsl:template name="buildHeaderNav">
+        <a href="#content" class="skip">Skip to Main Content</a>
         <nav id="nav-section" class="navbar hidden-print" role="navigation">
             <div class="container-fluid">
                 <div class="navbar-brand collapsed" data-toggle="collapse" data-target=".navbar-ex1-collapse">
@@ -522,17 +522,14 @@
         <xsl:if test="$ccLicenseName and $ccLicenseUri and contains($ccLicenseUri, 'creativecommons')">
             <div about="{$handleUri}" class="row">
             <div class="col-sm-3 col-xs-12">
-                <a rel="license"
-                   href="{$ccLicenseUri}"
-                   alt="{$ccLicenseName}"
-                   title="{$ccLicenseName}"
-                        >
+                <a rel="license" href="{$ccLicenseUri}" alt="{$ccLicenseName}" title="{$ccLicenseName}">
                     <xsl:call-template name="cc-logo">
                         <xsl:with-param name="ccLicenseName" select="$ccLicenseName"/>
                         <xsl:with-param name="ccLicenseUri" select="$ccLicenseUri"/>
                     </xsl:call-template>
                 </a>
-            </div> <div class="col-sm-8">
+            </div> 
+            <div class="col-sm-8">
                 <span>
                     <i18n:text>xmlui.dri2xhtml.METS-1.0.cc-license-text</i18n:text>
                     <xsl:value-of select="$ccLicenseName"/>
@@ -597,36 +594,25 @@
     <!-- Like the header, the footer contains various miscellaneous text, links, and image placeholders -->
     <xsl:template name="buildFooter">
         <footer>
-			<p style="font-size:11px; text-align:center;">Auburn University Libraries | 231 Mell Street | Auburn, Alabama 36849 | (334) 844-4500 or (800) 446-0387  | <script type="text/javascript">emailE='auburn.edu'; emailE=('libwebm' + '@' + emailE); document.write('<a href="mailto:'+emailE+'">' + emailE + '</a>');</script>
-				<!--<br />
-                <br />
-                <img src="//www.lib.auburn.edu/images/png/socialnetworking2.png" border="0" usemap="#MapSocialNetworking" />
-                <map name="MapSocialNetworking">
-                    <area shape="rect" coords="1,1,34,32" href="https://twitter.com/aulibraries" alt="Follow The Libraries on Twitter" title="Follow The Libraries on Twitter" target="_blank"/>
-                    <area shape="rect" coords="40,1,71,34" href="https://www.flickr.com/photos/aulibraries" alt="Follow the Auburn Libraries on Flickr" title="Follow the Auburn Libraries on Flickr" target="_blank"/>
-                    <area shape="rect" coords="79,1,111,31" href="https://www.facebook.com/auburnlibraries" alt="Follow the Auburn Libraries on Facebook" title="Follow the Auburn Libraries on Facebook" target="_blank"/>
-                    <area shape="rect" coords="121,3,153,29" href="https://instagram.com/aulibraries" title="Follow the Auburn Libraries on Instagram" target="_blank" />
-                </map> -->
-			</p>
-			<p class="social"><a href="https://twitter.com/aulibraries" class="social twitter" alt="Follow The Libraries on Twitter" title="Follow The Libraries on Twitter" target="_blank"><i class="fa fa-twitter"></i></a> <a href="https://www.flickr.com/photos/aulibraries" class="social flickr" alt="Follow the Auburn Libraries on Flickr" title="Follow the Auburn Libraries on Flickr" target="_blank"><i class="fa fa-flickr"></i></a> <a href="https://www.facebook.com/auburnlibraries" class="social facebook" alt="Follow the Auburn Libraries on Facebook" title="Follow the Auburn Libraries on Facebook" target="_blank"><i class="fa fa-facebook"></i></a> <a href="https://instagram.com/aulibraries" class="social instagram" title="Follow the Auburn Libraries on Instagram" target="_blank"><i class="fa fa-instagram"></i></a><a href="https://vimeo.com/aulibraries" class="social vimeo" title="Follow the Auburn Libraries on Vimeo" target="_blank"><i class="fa fa-vimeo"></i></a> <a href="https://www.youtube.com/user/auburnlibraries" class="social youtube" alt="Follow the Auburn Libraries on YouTube" title="Follow the Auburn Libraries on YouTube" target="_blank"><i class="fa fa-youtube"></i></a>
-            </p>
-			<!--Invisible link to HTML sitemap (for search engines) -->
-			<a class="hidden">
-				<xsl:attribute name="href">
-					<xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='contextPath'][not(@qualifier)]"/>
-					<xsl:text>/htmlmap</xsl:text>
-				</xsl:attribute>
-				<xsl:text>&#160;</xsl:text>
-			</a>
+            <p style="font-size:11px; text-align:center;">Auburn University Libraries | 231 Mell Street | Auburn, Alabama 36849 | (334) 844-4500 or (800) 446-0387  | <script type="text/javascript">emailE='auburn.edu'; emailE=('libwebm' + '@' + emailE); document.write('<a href="mailto:'+emailE+'">' + emailE + '</a>');</script></p>
+            <p class="social"><a href="https://twitter.com/aulibraries" class="social twitter" alt="Follow The Libraries on Twitter" title="Follow The Libraries on Twitter" target="_blank"><i class="fa fa-twitter"></i></a> <a href="https://www.flickr.com/photos/aulibraries" class="social flickr" alt="Follow the Auburn Libraries on Flickr" title="Follow the Auburn Libraries on Flickr" target="_blank"><i class="fa fa-flickr"></i></a> <a href="https://www.facebook.com/auburnlibraries" class="social facebook" alt="Follow the Auburn Libraries on Facebook" title="Follow the Auburn Libraries on Facebook" target="_blank"><i class="fa fa-facebook"></i></a> <a href="https://instagram.com/aulibraries" class="social instagram" title="Follow the Auburn Libraries on Instagram" target="_blank"><i class="fa fa-instagram"></i></a><a href="https://vimeo.com/aulibraries" class="social vimeo" title="Follow the Auburn Libraries on Vimeo" target="_blank"><i class="fa fa-vimeo"></i></a> <a href="https://www.youtube.com/user/auburnlibraries" class="social youtube" alt="Follow the Auburn Libraries on YouTube" title="Follow the Auburn Libraries on YouTube" target="_blank"><i class="fa fa-youtube"></i></a></p>
+            <!--Invisible link to HTML sitemap (for search engines) -->
+            <a class="hidden">
+                <xsl:attribute name="href">
+                    <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='contextPath'][not(@qualifier)]"/>
+                    <xsl:text>/htmlmap</xsl:text>
+                </xsl:attribute>
+                <xsl:text>&#160;</xsl:text>
+            </a>
         </footer>
-		<div class="subfooter" role="contentinfo">
-			<p><span>Auburn University |</span> <span>Auburn, Alabama 36849 |</span> <span>(334) 844-4000  |</span> <span><script type="text/javascript">emailE='auburn.edu'; emailE=('webmaster' + '@' + emailE); document.write('<a href="mailto:' + emailE + '">' + emailE + '</a>');</script></span></p>
-			<p><span><a href="http://www.auburn.edu/websitefeedback/">Website Feedback</a> |</span> <span><a href="http://www.auburn.edu/privacy/">Privacy</a> |</span> <span><a href="http://www.auburn.edu/oit/it_policies/copyright_regulations.php">Copyright &#169; <script type="text/javascript">date = new Date(); document.write(date.getFullYear());</script></a></span></p>
-		</div>
+        <div class="subfooter" role="contentinfo">
+            <p><span>Auburn University |</span> <span>Auburn, Alabama 36849 |</span> <span>(334) 844-4000  |</span> <span><script type="text/javascript">emailE='auburn.edu'; emailE=('webmaster' + '@' + emailE); document.write('<a href="mailto:' + emailE + '">' + emailE + '</a>');</script></span></p>
+            <p><span><a href="http://www.auburn.edu/websitefeedback/">Website Feedback</a> |</span> <span><a href="http://www.auburn.edu/privacy/">Privacy</a> |</span> <span><a href="http://www.auburn.edu/oit/it_policies/copyright_regulations.php">Copyright &#169; <script type="text/javascript">date = new Date(); document.write(date.getFullYear());</script></a></span></p>
+        </div>
     </xsl:template>
 
     <!--
-            The meta, body, options elements; the three top-level elements in the schema
+        The meta, body, options elements; the three top-level elements in the schema
     -->
     <!--
         The template to handle the dri:body element. It simply creates the ds-body div and applies
@@ -642,30 +628,30 @@
             </xsl:if>
 
             <!-- Check for the custom pages -->
-			<xsl:choose>
-				<xsl:when test="$request-uri=''">
-					<xsl:choose>
-						<xsl:when test="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='dspace'][@qualifier='version'] = 3.3">  
-							<xsl:apply-templates select="*[not(@id='file.news.div.news')][not(@id='aspect.artifactbrowser.CommunityBrowser.div.comunity-browser')][not(@id='aspect.artifactbrowser.FrontPageSearch.div.front-page-search')][not(@id='aspect.discovery.SiteRecentSubmissions.div.site-home')]" />
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:apply-templates select="*[not(@id='file.news.div.news')][not(@id='aspect.artifactbrowser.CommunityBrowser.div.comunity-browser')][not(@id='aspect.discovery.SiteRecentSubmissions.div.site-home')]" />
-						</xsl:otherwise>
-					</xsl:choose>
-					<!--<xsl:apply-templates select="dri:div[@id='file.news.div.news']" /> -->
-					<xsl:call-template name="newsfeed" />
-					<xsl:call-template name="FrontPageSearch"/>
-					<xsl:call-template name="specialMessage"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:apply-templates />
-				</xsl:otherwise>
-			</xsl:choose>
+            <xsl:choose>
+                <xsl:when test="$request-uri=''">
+                    <xsl:choose>
+                        <xsl:when test="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='dspace'][@qualifier='version'] = 3.3">  
+                            <xsl:apply-templates select="*[not(@id='file.news.div.news')][not(@id='aspect.artifactbrowser.CommunityBrowser.div.comunity-browser')][not(@id='aspect.artifactbrowser.FrontPageSearch.div.front-page-search')][not(@id='aspect.discovery.SiteRecentSubmissions.div.site-home')]" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:apply-templates select="*[not(@id='file.news.div.news')][not(@id='aspect.artifactbrowser.CommunityBrowser.div.comunity-browser')][not(@id='aspect.discovery.SiteRecentSubmissions.div.site-home')]" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <!--<xsl:apply-templates select="dri:div[@id='file.news.div.news']" /> -->
+                    <xsl:call-template name="newsfeed" />
+                    <xsl:call-template name="FrontPageSearch"/>
+                    <xsl:call-template name="specialMessage"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates />
+                </xsl:otherwise>
+            </xsl:choose>
         </div>
     </xsl:template>
 	
-	<!-- Display the main news div contents on the front page -->
-	 <xsl:template match="dri:div[@id='file.news.div.news']">
+    <!-- Display the main news div contents on the front page -->
+    <xsl:template match="dri:div[@id='file.news.div.news']">
         <xsl:apply-templates select="dri:head" />
         <div class="row">
             <div>
@@ -680,10 +666,10 @@
         </div>
     </xsl:template>
 	
-	<!-- 
-		There is a '<a>' HTML tag in the file.news.div.news div that the system
-		scrubs and thus 
-	-->
+    <!-- 
+        There is a '<a>' HTML tag in the file.news.div.news div that the system
+        scrubs and thus 
+    -->
     <xsl:template match="dri:div[@id='file.news.div.news']/dri:p/dri:a">
         <a href="#" onclick="window.open('https://libanswers.com/chati.php?k=46e359161925724&amp;w=1&amp;d=0&amp;i=809&amp;r=http%3A%2F%2Faskalibrarian.auburn.edu%2F&amp;sr=0', 'libchat', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width=300, height=400');return false;">online text-chat</a>
     </xsl:template>
@@ -733,15 +719,15 @@
         </div>
     </xsl:template>
 	
-	<xsl:template name="newsfeed">
-		<h2 class="ds-div-head page-header">Welcome to AUETD</h2>
-		<div class="row">
-			<div id="file_news_div_news" class="ds-static-div col-lg-12">
-				<p class="ds-paragraph">Welcome to AUETD, Auburn University's database of Master's theses and Ph.D. dissertations. The database contains a PDF version of every thesis or dissertation successfully defended at Auburn since the Fall 2005 semester.</p>
-				<p class="ds-paragraph">Auburn University librarians are available to answer questions about searching the AUETD database via <a onclick="window.open('https://libanswers.com/chati.php?k=46e359161925724&amp;w=1&amp;d=0&amp;i=809&amp;r=http%3A%2F%2Faskalibrarian.auburn.edu%2F&amp;sr=0', 'libchat', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width=300, height=400');return false;" href="#">online text-chat</a>.</p>
-			</div>
-		</div>
-	</xsl:template>
+    <xsl:template name="newsfeed">
+        <h2 class="ds-div-head page-header">Welcome to AUETD</h2>
+        <div class="row">
+            <div id="file_news_div_news" class="ds-static-div col-lg-12">
+                <p class="ds-paragraph">Welcome to AUETD, Auburn University's database of Master's theses and Ph.D. dissertations. The database contains a PDF version of every thesis or dissertation successfully defended at Auburn since the Fall 2005 semester.</p>
+                <p class="ds-paragraph">Auburn University librarians are available to answer questions about searching the AUETD database via <a onclick="window.open('https://libanswers.com/chati.php?k=46e359161925724&amp;w=1&amp;d=0&amp;i=809&amp;r=http%3A%2F%2Faskalibrarian.auburn.edu%2F&amp;sr=0', 'libchat', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width=300, height=400');return false;" href="#">online text-chat</a>.</p>
+            </div>
+        </div>
+    </xsl:template>
 
     <!-- Currently the dri:meta element is not parsed directly. Instead, parts of it are referenced from inside
         other elements (like reference). The blank template below ends the execution of the meta branch -->
@@ -821,13 +807,13 @@
         <!-- Add a google analytics script if the key is present -->
         <xsl:if test="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='google'][@qualifier='analytics']">
             <script><xsl:text>
-                  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-                  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-                  ga('create', '</xsl:text><xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='google'][@qualifier='analytics']"/><xsl:text>', '</xsl:text><xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='serverName']"/><xsl:text>');
-                  ga('send', 'pageview');
+                ga('create', '</xsl:text><xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='google'][@qualifier='analytics']"/><xsl:text>', '</xsl:text><xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='serverName']"/><xsl:text>');
+                ga('send', 'pageview');
            </xsl:text></script>
         </xsl:if>
     </xsl:template>

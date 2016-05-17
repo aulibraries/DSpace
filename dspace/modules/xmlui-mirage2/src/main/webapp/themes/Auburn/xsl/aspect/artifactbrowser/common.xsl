@@ -38,10 +38,10 @@
 
     <xsl:output indent="yes"/>
 
-<!-- These templates are devoted to handling the referenceSet and reference elements. Although they are considered
-    structural elements, neither of the two contains actual content. Instead, references contain references
-    to object metadata under objectMeta, while referenceSets group references together.
--->
+    <!-- These templates are devoted to handling the referenceSet and reference elements. Although they are considered
+        structural elements, neither of the two contains actual content. Instead, references contain references
+        to object metadata under objectMeta, while referenceSets group references together.
+    -->
 
 
     <!-- Starting off easy here, with a summaryList -->
@@ -63,7 +63,6 @@
         Since this approach creates strong coupling between the set and the objects it contains, and we
         have tried to avoid that, we use the "pioneer" method. -->
 
-
     <!-- First, the detail list case -->
     <xsl:template match="dri:referenceSet[@type = 'detailList']" priority="2">
         <xsl:apply-templates select="dri:head"/>
@@ -71,7 +70,6 @@
             <xsl:apply-templates select="*[not(name()='head')]" mode="detailList"/>
         </ul>
     </xsl:template>
-
 
     <!-- Next up is the summary view case that at this point applies only to items, since communities and
         collections do not have two separate views. -->
@@ -87,9 +85,6 @@
         <xsl:apply-templates select="dri:head"/>
         <xsl:apply-templates select="*[not(name()='head')]" mode="detailView"/>
     </xsl:template>
-
-
-
 
     <!-- Summarylist case. This template used to apply templates to the "pioneer" object (the first object
         in the set) and let it figure out what to do. This is no longer the case, as everything has been
@@ -121,7 +116,6 @@
             </img>
         </div>
     </xsl:template>
-
 
     <xsl:template match="dri:referenceSet[@id='aspect.artifactbrowser.ItemViewer.referenceSet.collection-viewer']/dri:reference" mode="summaryView">
         <!-- simplified check to verify whether access rights are available in METS -->
@@ -165,9 +159,6 @@
     <xsl:template match="mets:METS[mets:dmdSec/mets:mdWrap[@OTHERMDTYPE='DIM']][@LABEL='DSpace Collection']" mode="itemPageSummaryList">
         <xsl:call-template name="collectionItemPageSummaryList-DIM"/>
     </xsl:template>
-
-
-
 
     <!-- The following options can be appended to the external metadata URL to request specific
         sections of the METS document:

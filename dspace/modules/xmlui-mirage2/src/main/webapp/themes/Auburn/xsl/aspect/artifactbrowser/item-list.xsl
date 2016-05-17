@@ -72,8 +72,8 @@
             </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates select="./mets:dmdSec/mets:mdWrap[@OTHERMDTYPE='DIM']/mets:xmlData/dim:dim" mode="itemSummaryList-DIM-metadata">
-					<xsl:with-param name="href" select="$href"/>
-				</xsl:apply-templates>
+                    <xsl:with-param name="href" select="$href"/>
+                </xsl:apply-templates>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -83,184 +83,37 @@
     <xsl:template match="dim:dim" mode="itemSummaryList-DIM-metadata">
         <xsl:param name="href"/>
         <div class="col-sm-12 artifact-description">
+            <xsl:element name="a">
+                <xsl:attribute name="href">
+                    <xsl:value-of select="$href"/>
+                </xsl:attribute>
+                <h4>
+                    <xsl:choose>
+                        <xsl:when test="dim:field[@element='title']">
+                            <xsl:value-of select="dim:field[@element='title'][1]/node()"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <i18n:text>xmlui.dri2xhtml.METS-1.0.no-title</i18n:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
 
-			<xsl:element name="a">
-				<xsl:attribute name="href">
-					<xsl:value-of select="$href"/>
-				</xsl:attribute>
-				<h4>
-					<xsl:choose>
-						<xsl:when test="dim:field[@element='title']">
-							<xsl:value-of select="dim:field[@element='title'][1]/node()"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<i18n:text>xmlui.dri2xhtml.METS-1.0.no-title</i18n:text>
-						</xsl:otherwise>
-					</xsl:choose>
-
-					<span class="Z3988">
-						<xsl:attribute name="title">
-							<xsl:call-template name="renderCOinS"/>
-						</xsl:attribute>
-						&#xFEFF; <!-- non-breaking space to force separating the end tag -->
-					</span>
-				</h4>
-			</xsl:element>
+                    <span class="Z3988">
+                        <xsl:attribute name="title">
+                            <xsl:call-template name="renderCOinS"/>
+                        </xsl:attribute>
+                        &#xFEFF; <!-- non-breaking space to force separating the end tag -->
+                    </span>
+                </h4>
+            </xsl:element>
             <div class="artifact-info">
                 <span class="author">
                     <small>
-						<xsl:choose>
-							<xsl:when test="dim:field[@element='contributor'][@qualifier='author']">
-								<xsl:for-each select="dim:field[@element='contributor'][@qualifier='author']">
-									<span>
-									  <xsl:if test="@authority">
-										<xsl:attribute name="class"><xsl:text>ds-dc_contributor_author-authority</xsl:text></xsl:attribute>
-									  </xsl:if>
-									  <xsl:copy-of select="node()"/>
-									</span>
-									<xsl:if test="count(following-sibling::dim:field[@element='contributor'][@qualifier='author']) != 0">
-										<xsl:text>; </xsl:text>
-									</xsl:if>
-								</xsl:for-each>
-							</xsl:when>
-							<xsl:when test="dim:field[@element='creator']">
-								<xsl:for-each select="dim:field[@element='creator']">
-									<xsl:copy-of select="node()"/>
-									<xsl:if test="count(following-sibling::dim:field[@element='creator']) != 0">
-										<xsl:text>; </xsl:text>
-									</xsl:if>
-								</xsl:for-each>
-							</xsl:when>
-							<xsl:when test="dim:field[@element='contributor']">
-								<xsl:for-each select="dim:field[@element='contributor']">
-									<xsl:copy-of select="node()"/>
-									<xsl:if test="count(following-sibling::dim:field[@element='contributor']) != 0">
-										<xsl:text>; </xsl:text>
-									</xsl:if>
-								</xsl:for-each>
-							</xsl:when>
-							<xsl:otherwise>
-								<i18n:text>xmlui.dri2xhtml.METS-1.0.no-author</i18n:text>
-							</xsl:otherwise>
-						</xsl:choose>
-                    </small>
-                </span>
-                <xsl:text> </xsl:text>
-                <xsl:if test="dim:field[@element='date' and @qualifier='accessioned']">
-	                <span class="publisher-date">
-						<small>
-							<xsl:text>(</xsl:text>
-							<xsl:if test="dim:field[@element='publisher']">
-								<span class="publisher">
-									<xsl:copy-of select="dim:field[@element='publisher']/node()"/>
-								</span>
-								<xsl:text>, </xsl:text>
-							</xsl:if>
-							<span class="date">
-								<xsl:value-of select="substring(dim:field[@element='date' and @qualifier='accessioned']/node(),1,10)"/>
-							</span>
-							<xsl:text>)</xsl:text>
-						</small>
-					</span>
-                </xsl:if>
-            </div>
-            <xsl:if test="dim:field[@element = 'description' and @qualifier='abstract']">
-                <xsl:variable name="abstract" select="dim:field[@element = 'description' and @qualifier='abstract']/node()"/>
-                <div class="artifact-abstract">
-                    <xsl:value-of select="util:shortenString($abstract, 220, 10)"/>
-                </div>
-            </xsl:if>
-        </div>
-    </xsl:template>
-
-    <xsl:template name="itemDetailList-DIM">
-        <xsl:call-template name="itemSummaryList-DIM"/>
-    </xsl:template>
-
-
-    <xsl:template match="mets:fileSec" mode="artifact-preview">
-        <xsl:param name="href"/>
-        <div class="thumbnail artifact-preview">
-            <a class="image-link" href="{$href}">
-                <xsl:choose>
-                    <xsl:when test="mets:fileGrp[@USE='THUMBNAIL']">
-                        <img class="img-responsive img-thumbnail" alt="xmlui.mirage2.item-list.thumbnail" i18n:attr="alt">
-                            <xsl:attribute name="src">
-                                <xsl:value-of
-                                        select="mets:fileGrp[@USE='THUMBNAIL']/mets:file/mets:FLocat[@LOCTYPE='URL']/@xlink:href"/>
-                            </xsl:attribute>
-                        </img>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <img class="img-thumbnail" alt="xmlui.mirage2.item-list.thumbnail" i18n:attr="alt">
-                            <xsl:attribute name="data-src">
-                                <xsl:text>holder.js/100%x</xsl:text>
-                                <xsl:value-of select="$thumbnail.maxheight"/>
-                                <xsl:text>/text:No Thumbnail</xsl:text>
-                            </xsl:attribute>
-                        </img>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </a>
-        </div>
-    </xsl:template>
-
-
-
-
-    <!--
-        Rendering of a list of items (e.g. in a search or
-        browse results page)
-
-        Author: art.lowel at atmire.com
-        Author: lieven.droogmans at atmire.com
-        Author: ben at atmire.com
-        Author: Alexey Maslov
-
-    -->
-
-
-
-        <!-- Generate the info about the item from the metadata section -->
-        <xsl:template match="dim:dim" mode="itemSummaryList-DIM">
-            <xsl:variable name="itemWithdrawn" select="@withdrawn" />
-            <div class="artifact-description">
-                <div class="artifact-title">
-                    <xsl:element name="a">
-                        <xsl:attribute name="href">
-                            <xsl:choose>
-                                <xsl:when test="$itemWithdrawn">
-                                    <xsl:value-of select="ancestor::mets:METS/@OBJEDIT" />
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="ancestor::mets:METS/@OBJID" />
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:attribute>
-                        <xsl:choose>
-                            <xsl:when test="dim:field[@element='title']">
-                                <xsl:value-of select="dim:field[@element='title'][1]/node()"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <i18n:text>xmlui.dri2xhtml.METS-1.0.no-title</i18n:text>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:element>
-                </div>
-                <span class="Z3988">
-                    <xsl:attribute name="title">
-                        <xsl:call-template name="renderCOinS"/>
-                    </xsl:attribute>
-                    &#xFEFF; <!-- non-breaking space to force separating the end tag -->
-                </span>
-                <div class="artifact-info">
-                    <span class="author">
                         <xsl:choose>
                             <xsl:when test="dim:field[@element='contributor'][@qualifier='author']">
                                 <xsl:for-each select="dim:field[@element='contributor'][@qualifier='author']">
                                     <span>
                                         <xsl:if test="@authority">
-                                            <xsl:attribute name="class"><xsl:text>ds-dc_contributor_author-authority</xsl:text></xsl:attribute>
+                                          <xsl:attribute name="class"><xsl:text>ds-dc_contributor_author-authority</xsl:text></xsl:attribute>
                                         </xsl:if>
                                         <xsl:copy-of select="node()"/>
                                     </span>
@@ -289,10 +142,12 @@
                                 <i18n:text>xmlui.dri2xhtml.METS-1.0.no-author</i18n:text>
                             </xsl:otherwise>
                         </xsl:choose>
-                    </span>
-                    <xsl:text> </xsl:text>
-                    <xsl:if test="dim:field[@element='date' and @qualifier='issued'] or dim:field[@element='publisher']">
-                        <span class="publisher-date">
+                    </small>
+                </span>
+                <xsl:text> </xsl:text>
+                <xsl:if test="dim:field[@element='date' and @qualifier='accessioned']">
+                    <span class="publisher-date">
+                        <small>
                             <xsl:text>(</xsl:text>
                             <xsl:if test="dim:field[@element='publisher']">
                                 <span class="publisher">
@@ -301,13 +156,151 @@
                                 <xsl:text>, </xsl:text>
                             </xsl:if>
                             <span class="date">
-                                <xsl:value-of select="substring(dim:field[@element='date' and @qualifier='issued']/node(),1,10)"/>
+                                <xsl:value-of select="substring(dim:field[@element='date' and @qualifier='accessioned']/node(),1,10)"/>
                             </span>
                             <xsl:text>)</xsl:text>
-                        </span>
-                    </xsl:if>
-                </div>
+                        </small>
+                    </span>
+                </xsl:if>
             </div>
-        </xsl:template>
+            <xsl:if test="dim:field[@element = 'description' and @qualifier='abstract']">
+                <xsl:variable name="abstract" select="dim:field[@element = 'description' and @qualifier='abstract']/node()"/>
+                <div class="artifact-abstract">
+                    <xsl:value-of select="util:shortenString($abstract, 220, 10)"/>
+                </div>
+            </xsl:if>
+        </div>
+    </xsl:template>
+
+    <xsl:template name="itemDetailList-DIM">
+        <xsl:call-template name="itemSummaryList-DIM"/>
+    </xsl:template>
+
+    <xsl:template match="mets:fileSec" mode="artifact-preview">
+        <xsl:param name="href"/>
+        <div class="thumbnail artifact-preview">
+            <a class="image-link" href="{$href}">
+                <xsl:choose>
+                    <xsl:when test="mets:fileGrp[@USE='THUMBNAIL']">
+                        <img class="img-responsive img-thumbnail" alt="xmlui.mirage2.item-list.thumbnail" i18n:attr="alt">
+                            <xsl:attribute name="src">
+                                <xsl:value-of
+                                        select="mets:fileGrp[@USE='THUMBNAIL']/mets:file/mets:FLocat[@LOCTYPE='URL']/@xlink:href"/>
+                            </xsl:attribute>
+                        </img>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <img class="img-thumbnail" alt="xmlui.mirage2.item-list.thumbnail" i18n:attr="alt">
+                            <xsl:attribute name="data-src">
+                                <xsl:text>holder.js/100%x</xsl:text>
+                                <xsl:value-of select="$thumbnail.maxheight"/>
+                                <xsl:text>/text:No Thumbnail</xsl:text>
+                            </xsl:attribute>
+                        </img>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </a>
+        </div>
+    </xsl:template>
+
+    <!--
+        Rendering of a list of items (e.g. in a search or
+        browse results page)
+
+        Author: art.lowel at atmire.com
+        Author: lieven.droogmans at atmire.com
+        Author: ben at atmire.com
+        Author: Alexey Maslov
+
+    -->
+
+    <!-- Generate the info about the item from the metadata section -->
+    <xsl:template match="dim:dim" mode="itemSummaryList-DIM">
+        <xsl:variable name="itemWithdrawn" select="@withdrawn" />
+        <div class="artifact-description">
+            <div class="artifact-title">
+                <xsl:element name="a">
+                    <xsl:attribute name="href">
+                        <xsl:choose>
+                            <xsl:when test="$itemWithdrawn">
+                                <xsl:value-of select="ancestor::mets:METS/@OBJEDIT" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="ancestor::mets:METS/@OBJID" />
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <xsl:choose>
+                        <xsl:when test="dim:field[@element='title']">
+                            <xsl:value-of select="dim:field[@element='title'][1]/node()"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <i18n:text>xmlui.dri2xhtml.METS-1.0.no-title</i18n:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:element>
+            </div>
+            <span class="Z3988">
+                <xsl:attribute name="title">
+                    <xsl:call-template name="renderCOinS"/>
+                </xsl:attribute>
+                &#xFEFF; <!-- non-breaking space to force separating the end tag -->
+            </span>
+            <div class="artifact-info">
+                <span class="author">
+                    <xsl:choose>
+                        <xsl:when test="dim:field[@element='contributor'][@qualifier='author']">
+                            <xsl:for-each select="dim:field[@element='contributor'][@qualifier='author']">
+                                <span>
+                                    <xsl:if test="@authority">
+                                        <xsl:attribute name="class"><xsl:text>ds-dc_contributor_author-authority</xsl:text></xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:copy-of select="node()"/>
+                                </span>
+                                <xsl:if test="count(following-sibling::dim:field[@element='contributor'][@qualifier='author']) != 0">
+                                    <xsl:text>; </xsl:text>
+                                </xsl:if>
+                            </xsl:for-each>
+                        </xsl:when>
+                        <xsl:when test="dim:field[@element='creator']">
+                            <xsl:for-each select="dim:field[@element='creator']">
+                                <xsl:copy-of select="node()"/>
+                                <xsl:if test="count(following-sibling::dim:field[@element='creator']) != 0">
+                                    <xsl:text>; </xsl:text>
+                                </xsl:if>
+                            </xsl:for-each>
+                        </xsl:when>
+                        <xsl:when test="dim:field[@element='contributor']">
+                            <xsl:for-each select="dim:field[@element='contributor']">
+                                <xsl:copy-of select="node()"/>
+                                <xsl:if test="count(following-sibling::dim:field[@element='contributor']) != 0">
+                                    <xsl:text>; </xsl:text>
+                                </xsl:if>
+                            </xsl:for-each>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <i18n:text>xmlui.dri2xhtml.METS-1.0.no-author</i18n:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </span>
+                <xsl:text> </xsl:text>
+                <xsl:if test="dim:field[@element='date' and @qualifier='issued'] or dim:field[@element='publisher']">
+                    <span class="publisher-date">
+                        <xsl:text>(</xsl:text>
+                        <xsl:if test="dim:field[@element='publisher']">
+                            <span class="publisher">
+                                <xsl:copy-of select="dim:field[@element='publisher']/node()"/>
+                            </span>
+                            <xsl:text>, </xsl:text>
+                        </xsl:if>
+                        <span class="date">
+                            <xsl:value-of select="substring(dim:field[@element='date' and @qualifier='issued']/node(),1,10)"/>
+                        </span>
+                        <xsl:text>)</xsl:text>
+                    </span>
+                </xsl:if>
+            </div>
+        </div>
+    </xsl:template>
 
 </xsl:stylesheet>

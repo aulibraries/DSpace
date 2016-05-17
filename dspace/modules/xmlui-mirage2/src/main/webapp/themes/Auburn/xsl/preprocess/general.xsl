@@ -24,11 +24,11 @@
 -->
 
 <xsl:stylesheet
-                xmlns="http://di.tamu.edu/DRI/1.0/"
-                xmlns:dri="http://di.tamu.edu/DRI/1.0/"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
-                xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
-                exclude-result-prefixes="xsl dri i18n">
+        xmlns="http://di.tamu.edu/DRI/1.0/"
+        xmlns:dri="http://di.tamu.edu/DRI/1.0/"
+        xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
+        xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+        exclude-result-prefixes="xsl dri i18n">
 
     <xsl:output indent="yes"/>
 
@@ -58,8 +58,7 @@
                 <xsl:value-of select="substring-before($text,$replace)"/>
                 <xsl:value-of select="$by"/>
                 <xsl:call-template name="string-replace-all">
-                    <xsl:with-param name="text"
-                                    select="substring-after($text,$replace)"/>
+                    <xsl:with-param name="text" select="substring-after($text,$replace)"/>
                     <xsl:with-param name="replace" select="$replace"/>
                     <xsl:with-param name="by" select="$by"/>
                 </xsl:call-template>
@@ -203,6 +202,5 @@
 
     <!--remove the static jquery loader, Mirage 2 already contains jquery-->
     <xsl:template match="dri:metadata[@element='javascript'][@qualifier='static'][text() = 'loadJQuery.js']"/>
-
-
+    
 </xsl:stylesheet>

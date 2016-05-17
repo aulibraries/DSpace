@@ -537,45 +537,45 @@
         <xsl:choose>
             <!-- TODO: this has changed dramatically (see form3.xml) -->
             <xsl:when test="@type= 'select'">
-				<select>
-					<xsl:call-template name="fieldAttributes"/>
-					<xsl:apply-templates/>
-				</select>
+                <select>
+                    <xsl:call-template name="fieldAttributes"/>
+                    <xsl:apply-templates/>
+                </select>
             </xsl:when>
             <xsl:when test="@type= 'textarea'">
-				<textarea>
-					<xsl:call-template name="fieldAttributes"/>
-					<xsl:attribute name="onkeydown">event.cancelBubble=true;</xsl:attribute>
+                <textarea>
+                    <xsl:call-template name="fieldAttributes"/>
+                    <xsl:attribute name="onkeydown">event.cancelBubble=true;</xsl:attribute>
 
-					<!--
-						if the cols and rows attributes are not defined we need to call
-						the templates for them since they are required attributes in strict xhtml
-					 -->
-					<xsl:choose>
-						<xsl:when test="not(./dri:params[@cols])">
-							<xsl:call-template name="textAreaCols"/>
-						</xsl:when>
-					</xsl:choose>
-					<xsl:choose>
-						<xsl:when test="not(./dri:params[@rows])">
-							<xsl:call-template name="textAreaRows"/>
-						</xsl:when>
-					</xsl:choose>
-					
-					<xsl:apply-templates />
-					
-					<xsl:choose>
-						<xsl:when test="./dri:value[@type='raw']">
-							<xsl:copy-of select="./dri:value[@type='raw']/node()"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:copy-of select="./dri:value[@type='default']/node()"/>
-						</xsl:otherwise>
-					</xsl:choose>
-					<xsl:if  test="string-length(./dri:value) &lt; 1">
-						<i18n:text>xmlui.dri2xhtml.default.textarea.value</i18n:text>
-					</xsl:if>
-				</textarea>
+                    <!--
+                        if the cols and rows attributes are not defined we need to call
+                        the templates for them since they are required attributes in strict xhtml
+                     -->
+                    <xsl:choose>
+                        <xsl:when test="not(./dri:params[@cols])">
+                            <xsl:call-template name="textAreaCols"/>
+                        </xsl:when>
+                    </xsl:choose>
+                    <xsl:choose>
+                        <xsl:when test="not(./dri:params[@rows])">
+                            <xsl:call-template name="textAreaRows"/>
+                        </xsl:when>
+                    </xsl:choose>
+
+                    <xsl:apply-templates />
+
+                    <xsl:choose>
+                        <xsl:when test="./dri:value[@type='raw']">
+                            <xsl:copy-of select="./dri:value[@type='raw']/node()"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:copy-of select="./dri:value[@type='default']/node()"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:if  test="string-length(./dri:value) &lt; 1">
+                        <i18n:text>xmlui.dri2xhtml.default.textarea.value</i18n:text>
+                    </xsl:if>
+                </textarea>
 
                 <!-- add place to store authority value -->
                 <xsl:if test="dri:params/@authorityControlled">
@@ -651,16 +651,16 @@
             </xsl:when>
             <!-- text, password, file, and hidden types are handled the same.
                 Buttons: added the xsl:if check which will override the type attribute button
-                    with the value 'submit'. No reset buttons for now...
+                with the value 'submit'. No reset buttons for now...
             -->
             <xsl:when test="@type='button'">
                 <button>
                     <xsl:call-template name="fieldAttributes"/>
                     <xsl:attribute name="type">submit</xsl:attribute>
                     <xsl:choose>
-						<xsl:when test="@rend='search-icon' or @n='submit_search'">
-							<span class="glyphicon glyphicon-search" aria-hidden="true"/>
-						</xsl:when>
+                        <xsl:when test="@rend='search-icon' or @n='submit_search'">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"/>
+                        </xsl:when>
                         <xsl:when test="dri:value/i18n:text">
                             <xsl:apply-templates select="dri:value/*"/>
                         </xsl:when>
@@ -671,34 +671,34 @@
                 </button>
             </xsl:when>
             <xsl:otherwise>
-				<input>
-					<xsl:call-template name="fieldAttributes"/>
-					<!--
-						Adds the data-buttonText attribute to the input form field if the field's type
-						property is set to file. The data-buttonText attribute's value is a simple space.
-						Adding this attribute and value combination removes the bootstrap-filestyle default
-						button text, Choose File, from the action button.
-					-->
-					<xsl:if test="@type='file'">
-						<xsl:attribute name="data-buttonText">
-							<xsl:text> </xsl:text>
-						</xsl:attribute>
-					</xsl:if>
-					<xsl:attribute name="value">
-						<xsl:choose>
-							<xsl:when test="./dri:value[@type='raw']">
-								<xsl:value-of select="./dri:value[@type='raw']"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="./dri:value[@type='default']"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:attribute>
-					<xsl:if test="dri:value/i18n:text">
-						<xsl:attribute name="i18n:attr">value</xsl:attribute>
-					</xsl:if>
-					<xsl:apply-templates/>
-				</input>
+                <input>
+                    <xsl:call-template name="fieldAttributes"/>
+                    <!--
+                        Adds the data-buttonText attribute to the input form field if the field's type
+                        property is set to file. The data-buttonText attribute's value is a simple space.
+                        Adding this attribute and value combination removes the bootstrap-filestyle default
+                        button text, Choose File, from the action button.
+                    -->
+                    <xsl:if test="@type='file'">
+                        <xsl:attribute name="data-buttonText">
+                            <xsl:text> </xsl:text>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:attribute name="value">
+                        <xsl:choose>
+                            <xsl:when test="./dri:value[@type='raw']">
+                                <xsl:value-of select="./dri:value[@type='raw']"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="./dri:value[@type='default']"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <xsl:if test="dri:value/i18n:text">
+                            <xsl:attribute name="i18n:attr">value</xsl:attribute>
+                    </xsl:if>
+                    <xsl:apply-templates/>
+                </input>
                 <xsl:variable name="confIndicatorID" select="concat(@id,'_confidence_indicator')"/>
                 <xsl:if test="dri:params/@authorityControlled">
                     <xsl:variable name="confidence">
@@ -784,63 +784,63 @@
                 <xsl:apply-templates select="dri:field" mode="compositeComponent"/>
 
                 <xsl:if test="dri:params/@choicesPresentation = 'lookup' or contains(dri:params/@operations,'add') or dri:params/@choicesPresentation = 'suggest' or dri:params/@choicesPresentation = 'authorLookup'">
-					<div class="col-xs-2">
-						<xsl:attribute name="class">
-							<xsl:choose>
-								<xsl:when test="dri:params/@choicesPresentation = 'lookup'">
-									<xsl:text>col-xs-3 col-sm-2</xsl:text>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:text>col-xs-2</xsl:text>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:attribute>
-						<xsl:if test="dri:field/dri:label">
-							<label>
-								<xsl:attribute name="class">
-									<xsl:text>control-label</xsl:text>
-									<xsl:if test="dri:field/@required = 'yes'">
-										<xsl:text> required</xsl:text>
-									</xsl:if>
-								</xsl:attribute>
-								<xsl:text>&#160;</xsl:text>
-							</label>
-						</xsl:if>
-						<div class="clearfix">
-							<xsl:if test="contains(dri:params/@operations,'add')">
-								<button type="submit" name="{concat('submit_',@n,'_add')}" class="ds-button-field btn btn-default pull-right ds-add-button">
-									<xsl:if test="dri:params/@choicesPresentation = 'lookup'">
-										<xsl:attribute name="style">
-											<xsl:text>display:none;</xsl:text>
-										</xsl:attribute>
-									</xsl:if>
-									<!-- Make invisible if we have choice-lookup operation that provides its own Add. -->
-									<i18n:text>xmlui.mirage2.forms.instancedCompositeFields.add</i18n:text>
-								</button>
-							</xsl:if>
-							<xsl:choose>
-								<!-- insert choice mechansim and/or Add button here -->
-								<xsl:when test="dri:params/@choicesPresentation = 'suggest'">
-									<xsl:message terminate="yes">
-										<i18n:text>xmlui.mirage2.forms.instancedCompositeFields.noSuggestionError</i18n:text>
-									</xsl:message>
-								</xsl:when>
-								<!-- lookup popup includes its own Add button if necessary. -->
-								<xsl:when test="dri:params/@choicesPresentation = 'lookup'">
-									<xsl:call-template name="addLookupButton">
-										<xsl:with-param name="isName" select="'true'"/>
-										<xsl:with-param name="confIndicator" select="$confidenceIndicatorID"/>
-									</xsl:call-template>
-								</xsl:when>
-								<xsl:when test="dri:params/@choicesPresentation = 'authorLookup'">
-									<xsl:call-template name="addLookupButtonAuthor">
-										<xsl:with-param name="isName" select="'true'"/>
-										<xsl:with-param name="confIndicator" select="$confidenceIndicatorID"/>
-									</xsl:call-template>
-								</xsl:when>
-							</xsl:choose>
-						</div>
-					</div>
+                    <div class="col-xs-2">
+                        <xsl:attribute name="class">
+                            <xsl:choose>
+                                <xsl:when test="dri:params/@choicesPresentation = 'lookup'">
+                                    <xsl:text>col-xs-3 col-sm-2</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>col-xs-2</xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:attribute>
+                        <xsl:if test="dri:field/dri:label">
+                            <label>
+                                <xsl:attribute name="class">
+                                    <xsl:text>control-label</xsl:text>
+                                    <xsl:if test="dri:field/@required = 'yes'">
+                                        <xsl:text> required</xsl:text>
+                                    </xsl:if>
+                                </xsl:attribute>
+                                <xsl:text>&#160;</xsl:text>
+                            </label>
+                        </xsl:if>
+                        <div class="clearfix">
+                            <xsl:if test="contains(dri:params/@operations,'add')">
+                                <button type="submit" name="{concat('submit_',@n,'_add')}" class="ds-button-field btn btn-default pull-right ds-add-button">
+                                    <xsl:if test="dri:params/@choicesPresentation = 'lookup'">
+                                        <xsl:attribute name="style">
+                                            <xsl:text>display:none;</xsl:text>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <!-- Make invisible if we have choice-lookup operation that provides its own Add. -->
+                                    <i18n:text>xmlui.mirage2.forms.instancedCompositeFields.add</i18n:text>
+                                </button>
+                            </xsl:if>
+                            <xsl:choose>
+                                <!-- insert choice mechansim and/or Add button here -->
+                                <xsl:when test="dri:params/@choicesPresentation = 'suggest'">
+                                    <xsl:message terminate="yes">
+                                        <i18n:text>xmlui.mirage2.forms.instancedCompositeFields.noSuggestionError</i18n:text>
+                                    </xsl:message>
+                                </xsl:when>
+                                <!-- lookup popup includes its own Add button if necessary. -->
+                                <xsl:when test="dri:params/@choicesPresentation = 'lookup'">
+                                    <xsl:call-template name="addLookupButton">
+                                        <xsl:with-param name="isName" select="'true'"/>
+                                        <xsl:with-param name="confIndicator" select="$confidenceIndicatorID"/>
+                                    </xsl:call-template>
+                                </xsl:when>
+                                <xsl:when test="dri:params/@choicesPresentation = 'authorLookup'">
+                                    <xsl:call-template name="addLookupButtonAuthor">
+                                        <xsl:with-param name="isName" select="'true'"/>
+                                        <xsl:with-param name="confIndicator" select="$confidenceIndicatorID"/>
+                                    </xsl:call-template>
+                                </xsl:when>
+                            </xsl:choose>
+                        </div>
+                    </div>
                 </xsl:if>
                 <!-- place to store authority value -->
                 <xsl:if test="dri:params/@authorityControlled">
@@ -956,7 +956,7 @@
                         </xsl:message>
                     </xsl:when>
                     
-					<!-- lookup popup includes its own Add button if necessary. -->
+                    <!-- lookup popup includes its own Add button if necessary. -->
                     <xsl:when test="dri:params/@choicesPresentation = 'lookup'">
                         <xsl:call-template name="addLookupButton">
                             <xsl:with-param name="isName" select="'true'"/>
@@ -1037,30 +1037,30 @@
                 </xsl:if>
             </xsl:attribute>
             <p>
-				<xsl:choose>
-					<xsl:when test="@type = 'checkbox'  or @type='radio'">
-						<xsl:apply-templates select="." mode="normalField"/>
-						<xsl:if test="dri:label">
-							<br/>
-							<xsl:apply-templates select="dri:label" mode="compositeComponent"/>
-						</xsl:if>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:if test="../dri:field/dri:label">
-							<label class="ds-composite-component control-label" for="{translate(@id, '.', '_')}">
-								<xsl:choose>
-									<xsl:when test="dri:label">
-										<xsl:apply-templates select="dri:label" mode="compositeComponent"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:text>&#160;</xsl:text>
-									</xsl:otherwise>
-								</xsl:choose>
-							</label>
-						</xsl:if>
-						<xsl:apply-templates select="." mode="normalField"/>
-					</xsl:otherwise>
-				</xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="@type = 'checkbox'  or @type='radio'">
+                        <xsl:apply-templates select="." mode="normalField"/>
+                        <xsl:if test="dri:label">
+                            <br/>
+                            <xsl:apply-templates select="dri:label" mode="compositeComponent"/>
+                        </xsl:if>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:if test="../dri:field/dri:label">
+                            <label class="ds-composite-component control-label" for="{translate(@id, '.', '_')}">
+                                <xsl:choose>
+                                    <xsl:when test="dri:label">
+                                        <xsl:apply-templates select="dri:label" mode="compositeComponent"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:text>&#160;</xsl:text>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </label>
+                        </xsl:if>
+                        <xsl:apply-templates select="." mode="normalField"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </p>
         </div>
     </xsl:template>
@@ -1105,9 +1105,9 @@
                 <xsl:if test="contains(dri:params/@operations,'delete') and dri:instance">
                     <!-- Delete buttons should be named "submit_[field]_delete" so that we can ignore errors from required fields when simply removing values-->
                     <p>
-						<button type="submit" name="{concat('submit_',@n,'_delete')}" class="ds-button-field btn btn-default ds-delete-button">
-							<i18n:text>xmlui.mirage2.forms.nonCompositeFieldSet.remove</i18n:text>
-						</button>
+                        <button type="submit" name="{concat('submit_',@n,'_delete')}" class="ds-button-field btn btn-default ds-delete-button">
+                            <i18n:text>xmlui.mirage2.forms.nonCompositeFieldSet.remove</i18n:text>
+                        </button>
                     </p>
                 </xsl:if>
                 <!-- Behind the scenes, add hidden fields for every instance set. This is to make sure that
@@ -1200,14 +1200,14 @@
     <xsl:template match="dri:*[count(dri:field) > 1 and dri:field[@type='button'] and count(dri:field[not(@type='button' or @type='')]) = 0 and not(preceding-sibling::*[1][local-name()='label'])]" priority="5">
         <div>
             <xsl:call-template name="standardAttributes">
-				<xsl:with-param name="class">
-					<xsl:text>btn-group</xsl:text>
-				</xsl:with-param>
-			</xsl:call-template>
-			<xsl:apply-templates/>
-            <!-- <p class="btn-group">
-				<xsl:apply-templates/>
-            </p> -->
+                <xsl:with-param name="class">
+                    <xsl:text>btn-group</xsl:text>
+                </xsl:with-param>
+            </xsl:call-template>
+            <xsl:apply-templates/>
+        <!--<p class="btn-group">
+                <xsl:apply-templates/>
+            </p>-->
         </div>
     </xsl:template>
 
@@ -1290,23 +1290,23 @@
         <xsl:call-template name="standardAttributes">
             <xsl:with-param name="class">
                 <xsl:text>ds-</xsl:text><xsl:value-of select="@type"/><xsl:text>-field </xsl:text>
-				<xsl:choose>
-					<xsl:when test="@type='button'">
-						<xsl:text>btn</xsl:text>
-						<xsl:if test="not(contains(@rend, 'btn-'))">
-							<xsl:text> btn-default</xsl:text>
-						</xsl:if>
-					</xsl:when>
-					<xsl:when test="@type='file'">
-						<xsl:text> filestyle </xsl:text>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:text>form-control </xsl:text>
-					</xsl:otherwise>
-				</xsl:choose>
-				<xsl:if test="dri:error or parent::node()[@type='composite']/dri:error">
-					<xsl:text>input-with-feedback </xsl:text>
-				</xsl:if>
+                    <xsl:choose>
+                            <xsl:when test="@type='button'">
+                                <xsl:text>btn</xsl:text>
+                                <xsl:if test="not(contains(@rend, 'btn-'))">
+                                    <xsl:text> btn-default</xsl:text>
+                                </xsl:if>
+                            </xsl:when>
+                            <xsl:when test="@type='file'">
+                                <xsl:text> filestyle </xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>form-control </xsl:text>
+                            </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:if test="dri:error or parent::node()[@type='composite']/dri:error">
+                        <xsl:text>input-with-feedback </xsl:text>
+                    </xsl:if>
             </xsl:with-param>
             <xsl:with-param name="placeholder">
                 <xsl:if test="@placeholder">
@@ -1362,10 +1362,10 @@
 
     <xsl:template match="dri:list[@rend='horizontalVanilla'][@n='selectlist']/dri:item/dri:figure[contains(@source,'Reference/images/information.png')]">
         <a href="javascript:void(0)" class="information">
-			<xsl:attribute name="title">
-				<xsl:value-of select="@title"/>
-			</xsl:attribute>
-			<span class="glyphicon glyphicon-info-sign btn-xs active"/>
+            <xsl:attribute name="title">
+                <xsl:value-of select="@title"/>
+            </xsl:attribute>
+            <span class="glyphicon glyphicon-info-sign btn-xs active"/>
         </a>
     </xsl:template>
 

@@ -121,31 +121,31 @@
     </xsl:template>
 
     <xsl:template name="standardAttributes">
-		<xsl:param name="class"/>
-		<xsl:param name="placeholder"/>
-		<xsl:if test="@id">
-			<xsl:attribute name="id">
-				<xsl:value-of select="translate(@id,'.','_')"/>
-			</xsl:attribute>
-		</xsl:if>
-		<xsl:attribute name="class">
-			<xsl:value-of select="normalize-space($class)"/>
-			<xsl:if test="@rend">
-				<xsl:choose>
-					<xsl:when test="not(contains(@rend, 'search-icon'))">
-						<xsl:text> </xsl:text>
-						<xsl:value-of select="@rend"/>
-					</xsl:when>
-					<xsl:otherwise></xsl:otherwise>
-				</xsl:choose>
-			</xsl:if>
-		</xsl:attribute>
-		<xsl:if test="string-length($placeholder)>0">
-			<xsl:attribute name="placeholder">
-				<xsl:value-of select="$placeholder"/>
-			</xsl:attribute>
-			<xsl:attribute name="i18n:attr">placeholder</xsl:attribute>
-		</xsl:if>
+        <xsl:param name="class"/>
+        <xsl:param name="placeholder"/>
+        <xsl:if test="@id">
+            <xsl:attribute name="id">
+                <xsl:value-of select="translate(@id,'.','_')"/>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:attribute name="class">
+            <xsl:value-of select="normalize-space($class)"/>
+            <xsl:if test="@rend">
+                <xsl:choose>
+                    <xsl:when test="not(contains(@rend, 'search-icon'))">
+                        <xsl:text> </xsl:text>
+                        <xsl:value-of select="@rend"/>
+                    </xsl:when>
+                    <xsl:otherwise></xsl:otherwise>
+                </xsl:choose>
+            </xsl:if>
+        </xsl:attribute>
+        <xsl:if test="string-length($placeholder)>0">
+            <xsl:attribute name="placeholder">
+                <xsl:value-of select="$placeholder"/>
+            </xsl:attribute>
+            <xsl:attribute name="i18n:attr">placeholder</xsl:attribute>
+        </xsl:if>
     </xsl:template>
 	
 </xsl:stylesheet>

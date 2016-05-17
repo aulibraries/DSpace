@@ -405,40 +405,40 @@
         </div>
     </xsl:template>
 	
-	<xsl:template match="dri:div[contains(@id, 'div.browse-controls')]//dri:field[@type='select']" mode="browseControls">
-		<li class="dropdown-header">
-			<xsl:apply-templates select="../preceding-sibling::*[1]/i18n:text"/>
-		</li>
-		<xsl:apply-templates select="dri:option" mode="browseControl-Option"/>
-	</xsl:template>
-	
-	<xsl:template match="dri:option" mode="browseControl-Option">
-		<li>
-			<a href="#" data-returnvalue="{@returnValue}" data-name="{../@n}">
-				<span aria-hidden="true">
-					<xsl:attribute name="class">
-						<xsl:text>glyphicon glyphicon-ok btn-xs</xsl:text>
-						<xsl:choose>
-							<xsl:when test="@returnValue = ../dri:value/@option">
-								<xsl:text> active</xsl:text>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:text> invisible</xsl:text>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:attribute>
-				</span>
-				<xsl:choose>
-					<xsl:when test="i18n:text">
-						<xsl:apply-templates select="i18n:text"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="."/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</a>
-		</li>
-	</xsl:template>
+    <xsl:template match="dri:div[contains(@id, 'div.browse-controls')]//dri:field[@type='select']" mode="browseControls">
+            <li class="dropdown-header">
+                    <xsl:apply-templates select="../preceding-sibling::*[1]/i18n:text"/>
+            </li>
+            <xsl:apply-templates select="dri:option" mode="browseControl-Option"/>
+    </xsl:template>
+
+    <xsl:template match="dri:option" mode="browseControl-Option">
+        <li>
+            <a href="#" data-returnvalue="{@returnValue}" data-name="{../@n}">
+                <span aria-hidden="true">
+                    <xsl:attribute name="class">
+                        <xsl:text>glyphicon glyphicon-ok btn-xs</xsl:text>
+                        <xsl:choose>
+                            <xsl:when test="@returnValue = ../dri:value/@option">
+                                <xsl:text> active</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text> invisible</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                </span>
+                <xsl:choose>
+                    <xsl:when test="i18n:text">
+                        <xsl:apply-templates select="i18n:text"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="."/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </a>
+        </li>
+    </xsl:template>
 	
     <xsl:template name="renderGearButton">
         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
