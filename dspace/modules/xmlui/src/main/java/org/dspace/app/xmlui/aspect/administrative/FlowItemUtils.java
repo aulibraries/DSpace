@@ -11,9 +11,12 @@ package org.dspace.app.xmlui.aspect.administrative;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Locale;
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.cocoon.environment.Request;
 import org.apache.cocoon.servlet.multipart.Part;
@@ -38,6 +41,8 @@ import org.dspace.content.authority.Choices;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
+import org.dspace.core.Email;
+import org.dspace.core.I18nUtil;
 import org.dspace.core.LogManager;
 import org.dspace.curate.Curator;
 import org.dspace.embargo.ETDEmbargoSetter;
@@ -961,7 +966,22 @@ public class FlowItemUtils
         log.debug(LogManager.getHeader(context, "Adding Provenance Metadata Field", " Message: "+prov.toString()));
 
         CreateProvenanceMessage(context, prov, item);
-
+        
+        /**
+         * Email whenever an item's embargo information has been altered.
+         */
+        try {
+            Locale defaultLocale = I18nUtil.getDefaultLocale();
+            Email email = Email.getEmail(I18nUtil.getEmailFilename(defaultLocale, "embargo_edit_notify"));
+            email.addRecipient(ConfigurationManager.getProperty("embargo_alter_notify_email"));
+            email.addArgument(item.getName());
+            email.addArgument(ConfigurationManager.getProperty("dspace.url") + "/mydspace");
+            email.send();
+        }
+        catch (MessagingException e)
+        {
+            log.warn(LogManager.getHeader(context, "notifyofembargoalteration", MessageFormat.format("cannot email user, reason = {1}", e.getMessage())));
+        }
         /**
          * End Custom Code Section
          */
@@ -969,7 +989,7 @@ public class FlowItemUtils
         //Step 3:
         // Save our changes
         bitstream.update();
-        context.commit();
+        context.commit();   
 
         result.setContinue(true);
         result.setOutcome(true);
