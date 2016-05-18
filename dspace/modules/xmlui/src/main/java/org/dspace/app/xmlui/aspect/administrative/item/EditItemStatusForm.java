@@ -180,6 +180,13 @@ public class EditItemStatusForm extends AbstractDSpaceTransformer {
 		    addNotAllowedButton(itemInfo.addItem(), "submit_authorization", T_submit_authorizations);
 		}
 
+        /**
+         * New feature
+         * 
+         * Adds a new label and button to the list of actions on this item status form.
+         * The purpose of the new button is to provide a shortcut to the Edit Bitstream form
+         * screen.
+         */
         itemInfo.addLabel(T_label_edit_embargo);
         try
         {
