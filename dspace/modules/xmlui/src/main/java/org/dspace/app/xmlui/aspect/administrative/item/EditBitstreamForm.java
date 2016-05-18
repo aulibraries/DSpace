@@ -207,7 +207,7 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
      * @throws org.dspace.authorize.AuthorizeException
      */
     private void addEmbargoFieldSection(DSpaceObject dso, List form, int errorFlag)
-            throws SQLException, WingException, IOException, AuthorizeException
+        throws SQLException, WingException, IOException, AuthorizeException
     {
         String embargoStatus = null;
         String embargoType = null;
