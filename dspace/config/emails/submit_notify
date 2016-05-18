@@ -1,0 +1,13 @@
+# Item Receipt Notification email message
+#
+# {0}  Title of submission
+# {1}  link to 'my AUETD' page
+#
+Subject: AUETD: Submission Received Notification 
+
+Thank you for submitting "{0}". Please visit your "My AUETD" page for 
+updates on the status of your submission:  {1}
+
+Many thanks!
+
+Auburn University Graduate School
