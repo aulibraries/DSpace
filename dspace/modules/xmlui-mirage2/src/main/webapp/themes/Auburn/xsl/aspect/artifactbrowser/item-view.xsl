@@ -119,6 +119,7 @@
                     </div>
                     <xsl:call-template name="itemSummaryView-DIM-date"/>
                     <xsl:call-template name="itemSummaryView-DIM-authors"/>
+                    <xsl:call-template name="itemSummaryView-DIM-type"/>
                     <xsl:call-template name="itemSummaryView-DIM-subject"/>
                     <xsl:choose>
                         <xsl:when test="not(contains($document//dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='URI']/node(), 'workflow')) and
@@ -481,79 +482,96 @@
         </div>
     </xsl:template>
 
-	<xsl:template name="itemSummaryView-DIM-embargostatus">
-            <xsl:if test="dim:field[@element='embargo' and @qualifier='status' and descendant::text()]">
-                <div class="simple-item-view word-break item-page-field-wrapper table">
-                    <h5>Restriction Status</h5>
-                     <xsl:choose>
-                        <xsl:when test="dim:field[@qualifier='status']/node() != ''">
-                            <xsl:copy-of select="dim:field[@qualifier='status']/node()" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            &#160;
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </div>
-            </xsl:if>
-	</xsl:template>
+    <xsl:template name="itemSummaryView-DIM-embargostatus">
+        <xsl:if test="dim:field[@element='embargo' and @qualifier='status' and descendant::text()]">
+            <div class="simple-item-view word-break item-page-field-wrapper table">
+                <h5>Restriction Status</h5>
+                <xsl:choose>
+                    <xsl:when test="dim:field[@qualifier='status']/node() != ''">
+                        <xsl:copy-of select="dim:field[@qualifier='status']/node()" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        &#160;
+                    </xsl:otherwise>
+                </xsl:choose>
+            </div>
+        </xsl:if>
+    </xsl:template>
 
-	<xsl:template name="itemSummaryView-DIM-enddate">
-            <xsl:if test="dim:field[@element='embargo' and @qualifier='enddate' and descendant::text()]">
-                <div class="simple-item-view-date word-break item-page-field-wrapper table">
-                    <h5>Date Available</h5>
-                    <xsl:choose>
-                            <xsl:when test="dim:field[@qualifier='enddate']/node() != ''">
-                                <xsl:call-template name="formatDate">
-                                    <xsl:with-param name="tempDate" select="dim:field[@qualifier='enddate']/node()" />
-                                </xsl:call-template>
+    <xsl:template name="itemSummaryView-DIM-enddate">
+        <xsl:if test="dim:field[@element='embargo' and @qualifier='enddate' and descendant::text()]">
+            <div class="simple-item-view-date word-break item-page-field-wrapper table">
+                <h5>Date Available</h5>
+                <xsl:choose>
+                    <xsl:when test="dim:field[@qualifier='enddate']/node() != ''">
+                        <xsl:call-template name="formatDate">
+                            <xsl:with-param name="tempDate" select="dim:field[@qualifier='enddate']/node()" />
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        &#160;
+                    </xsl:otherwise>
+                </xsl:choose>
+            </div>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="itemSummaryView-DIM-rights">
+        <xsl:if test="dim:field[@element='rights' and descendant::text()]">
+            <div class="simple-item-view word-break item-page-field-wrapper table">
+                <h5>Restriction Type</h5>
+                <xsl:choose>
+                    <xsl:when test="dim:field[@element='rights']/node() != ''">
+                        <xsl:choose>
+                            <xsl:when test="dim:field[@element='rights']/node() = 'EMBARGO_NOT_AUBURN'">
+                                <xsl:text>Auburn University Users</xsl:text>
                             </xsl:when>
-                            <xsl:otherwise>
-                                &#160;
-                            </xsl:otherwise>
-                    </xsl:choose>
-                </div>
-            </xsl:if>
-	</xsl:template>
+                            <xsl:when test="dim:field[@element='rights']/node() = 'EMBARGO_GLOBAL'">
+                                <xsl:text>Full</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise/>
+                        </xsl:choose>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        &#160;
+                    </xsl:otherwise>
+                </xsl:choose>
+            </div>
+        </xsl:if>
+    </xsl:template> <!---->
 
-	<xsl:template name="itemSummaryView-DIM-rights">
-            <xsl:if test="dim:field[@element='rights' and descendant::text()]">
-                <div class="simple-item-view word-break item-page-field-wrapper table">
-                    <h5>Restriction Type</h5>
-                    <xsl:choose>
-                        <xsl:when test="dim:field[@element='rights']/node() != ''">
-                            <xsl:choose>
-                                <xsl:when test="dim:field[@element='rights']/node() = 'EMBARGO_NOT_AUBURN'">
-                                    <xsl:text>Auburn University Users</xsl:text>
-                                </xsl:when>
-                                <xsl:when test="dim:field[@element='rights']/node() = 'EMBARGO_GLOBAL'">
-                                    <xsl:text>Full</xsl:text>
-                                </xsl:when>
-                                <xsl:otherwise/>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            &#160;
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </div>
-            </xsl:if>
-	</xsl:template> <!---->
-
-	<xsl:template name="itemSummaryView-DIM-subject">
-            <xsl:if test="dim:field[@element='subject' and descendant::text()]">
-                <div class="simple-item-view-date word-break item-page-field-wrapper table">
-                    <h5>Department</h5>
-                    <span>
-                        <xsl:for-each select="dim:field[@element='subject']">
-                            <xsl:copy-of select="./node()"/>
-                            <xsl:if test="count(following-sibling::dim:field[@element='subject']) != 0">
-                                <br/>
-                            </xsl:if>
-                        </xsl:for-each>
-                    </span>
-                </div>
-            </xsl:if>
-	</xsl:template>
+    <xsl:template name="itemSummaryView-DIM-subject">
+        <xsl:if test="dim:field[@element='subject' and descendant::text()]">
+            <div class="simple-item-view-date word-break item-page-field-wrapper table">
+                <h5>Department</h5>
+                <span>
+                    <xsl:for-each select="dim:field[@element='subject']">
+                        <xsl:copy-of select="./node()"/>
+                        <xsl:if test="count(following-sibling::dim:field[@element='subject']) != 0">
+                            <br/>
+                        </xsl:if>
+                    </xsl:for-each>
+                </span>
+            </div>
+        </xsl:if>
+    </xsl:template>
+    
+    <xs:template name="itemSummaryView-DIM-type">
+        <xsl:if test="dim:field[@element='type' and descendant::text()]">
+            <div class="simple-item-view-date word-break item-page-field-wrapper table">
+                <h5>Type</h5>
+                <xsl:choose>
+                    <xsl:when test="dim:field[@qualifier='type']/node() != ''">
+                        <xsl:copy-of select="dim:field[@qualifier='type']/node()" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        &#160;
+                    </xsl:otherwise>
+                </xsl:choose>
+            </div>
+        </xsl:if>
+    </xsl:template>
+        
 
     <xsl:template match="dim:dim" mode="itemDetailView-DIM">
         <xsl:call-template name="itemSummaryView-DIM-title"/>
