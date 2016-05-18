@@ -556,7 +556,7 @@
         </xsl:if>
     </xsl:template>
     
-    <xs:template name="itemSummaryView-DIM-type">
+    <xsl:template name="itemSummaryView-DIM-type">
         <xsl:if test="dim:field[@element='type' and descendant::text()]">
             <div class="simple-item-view-date word-break item-page-field-wrapper table">
                 <h5>Type</h5>
