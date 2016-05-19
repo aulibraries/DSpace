@@ -1,11 +1,11 @@
-# Item Receipt Notification email message
+# Item Embargo Edit Notification email message
 #
 # {0}  Title of submission
 # {1}  link to 'my AUETD' page
 #
 Subject: AUETD: Item Embargo Alteration Notification 
 
-Embargo information of item "{0}" has been altered. Please visit your "My AUETD" page to
-view the item's new information:  {1}
+Embargo information of item "{0}" has been modified. Please visit your "My AUETD" page to
+view the item's new information: {1}
 
 Auburn University Graduate School
