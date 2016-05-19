@@ -777,7 +777,11 @@ public class FlowItemUtils
         ETDEmbargoSetter.generateETDEmbargoPolicies(context, DateTime.parse(liftDate).toDate(), b, type, collection);
     }
 
-
+    private static String getMyDSpaceLink()
+    {
+        return ConfigurationManager.getProperty("dspace.url") + "/mydspace";
+    }
+    
     /**
     * Update a bitstream's metadata.
     *
@@ -864,7 +868,8 @@ public class FlowItemUtils
 
         if (bitstreamName != null && !bitstream.getName().equals(bitstreamName))
         {
-            prov.append("Bitstream's File Name - Previous: ").append(bitstream.getName()).append(" New: ").append(bitstreamName).append("\n");
+            prov.append("Bitstream's File Name - Previous: ").append(bitstream.getName()).append("\n")
+                .append("Bitstream's File Name - New: ").append(bitstreamName).append("\n");
         }
 
         /**
@@ -930,18 +935,22 @@ public class FlowItemUtils
 
             if(_submittedDateDT.isAfter(prevEndDate))
             {
-                prov.append("dc.embargo.enddate - Previous: ").append(dft.print(prevEndDate)).append(" New: ").append(dft.print(_submittedDateDT)).append("\n");
-                prov.append("dc.embargo.length - Previous: ").append(prevLength).append(" New: ").append(EmbargoManager.getEmbargoLengthMDV(context, item)).append("\n");
+                prov.append("dc.embargo.enddate - Previous: ").append(dft.print(prevEndDate)).append("\n")
+                    .append("dc.embargo.enddate - New: ").append(dft.print(_submittedDateDT)).append("\n");
+                prov.append("dc.embargo.length - Previous: ").append(prevLength).append("\n")
+                    .append("dc.embargo.length - New: ").append(EmbargoManager.getEmbargoLengthMDV(context, item)).append("\n");
             }
 
             if(!prevStatus.equals(EmbargoManager.getEmbargoStatusMDV(context, item)))
             {
-                prov.append("dc.embargo.status - Previous: ").append(prevStatus).append(" New: ").append(EmbargoManager.getEmbargoStatusMDV(context, item)).append("\n");
+                prov.append("dc.embargo.status - Previous: ").append(prevStatus).append("\n")
+                    .append("dc.embargo.status - New: ").append(EmbargoManager.getEmbargoStatusMDV(context, item)).append("\n");
             }
 
             if(!prevRights.equals(EmbargoManager.getEmbargoRightsMDV(context, item)))
             {
-                prov.append("dc.rights - Previous: ").append(prevRights).append(" New: ").append(EmbargoManager.getEmbargoRightsMDV(context, item));
+                prov.append("dc.rights - Previous: ").append(prevRights).append("\n")
+                    .append("dc.rights - New: ").append(EmbargoManager.getEmbargoRightsMDV(context, item));
             }
         }
         else if(embargoCreationAnswer == 1 || embargoCreationAnswer == 0)
@@ -957,10 +966,13 @@ public class FlowItemUtils
             EmbargoManager.removeEmbargoRightsMDV(context, item);
             ETDEmbargoSetter.setEmbargoStatusMDV(context, item, 0, false);
 
-           prov.append("dc.embargo.enddate - Previous: ").append(dft.print(prevEndDate)).append(" New: Deleted").append("\n")
-                .append("dc.embargo.length - Previous: ").append(prevLength).append(" New: Deleted").append("\n")
-                .append("dc.rights - Previous: ").append(prevRights).append(" New: Deleted").append("\n")
-                .append("dc.embargo.status - Previous: ").append(prevStatus).append(" New: ").append(EmbargoManager.getEmbargoStatusMDV(context, item));
+            prov.append("dc.embargo.enddate - Previous: ").append(dft.print(prevEndDate)).append(" New: Deleted").append("\n")
+                .append("dc.embargo.length - Previous: ").append(prevLength)
+                .append("dc.embargo.length - New: Deleted").append("\n")
+                .append("dc.rights - Previous: ").append(prevRights)
+                .append("dc.rights -  New: Deleted").append("\n")
+                .append("dc.embargo.status - Previous: ").append(prevStatus)
+                .append("dc.embargo.status - New: ").append(EmbargoManager.getEmbargoStatusMDV(context, item));
         }
 
         log.debug(LogManager.getHeader(context, "Adding Provenance Metadata Field", " Message: "+prov.toString()));
@@ -968,14 +980,15 @@ public class FlowItemUtils
         CreateProvenanceMessage(context, prov, item);
         
         /**
-         * Email whenever an item's embargo information has been altered.
+         * Send an email to a specified address whenever an item's embargo information has been altered.
          */
         try {
             Locale defaultLocale = I18nUtil.getDefaultLocale();
             Email email = Email.getEmail(I18nUtil.getEmailFilename(defaultLocale, "embargo_edit_notify"));
-            email.addRecipient(ConfigurationManager.getProperty("embargo_alter_notify_email"));
             email.addArgument(item.getName());
-            email.addArgument(ConfigurationManager.getProperty("dspace.url") + "/mydspace");
+            email.addArgument(getMyDSpaceLink());
+            email.addRecipient(ConfigurationManager.getProperty("embargo_alter_notify_email"));
+            log.debug(LogManager.getHeader(context, "getMyDSpaceLink", "Value returned by getMyDSpaceLink = "+ getMyDSpaceLink()));
             email.send();
         }
         catch (MessagingException e)
@@ -1577,4 +1590,6 @@ public class FlowItemUtils
             provMDV.create(context);
         }
     }
+    
+    
 }
