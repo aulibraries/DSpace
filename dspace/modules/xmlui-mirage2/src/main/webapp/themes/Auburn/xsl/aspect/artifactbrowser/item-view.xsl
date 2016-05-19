@@ -559,10 +559,10 @@
     <xsl:template name="itemSummaryView-DIM-type">
         <xsl:if test="dim:field[@element='type' and descendant::text()]">
             <div class="simple-item-view-date word-break item-page-field-wrapper table">
-                <h5>Type</h5>
+                <h5>Type of Degree</h5>
                 <xsl:choose>
-                    <xsl:when test="dim:field[@qualifier='type']/node() != ''">
-                        <xsl:copy-of select="dim:field[@qualifier='type']/node()" />
+                    <xsl:when test="dim:field[@element='type']/node() != ''">
+                        <xsl:copy-of select="dim:field[@element='type']/node()" />
                     </xsl:when>
                     <xsl:otherwise>
                         &#160;
