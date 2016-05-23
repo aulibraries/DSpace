@@ -986,9 +986,11 @@ public class FlowItemUtils
             Locale defaultLocale = I18nUtil.getDefaultLocale();
             Email email = Email.getEmail(I18nUtil.getEmailFilename(defaultLocale, "embargo_edit_notify"));
             email.addArgument(item.getName());
+            email.addArgument(EmbargoManager.getEmbargoEndDateMDV(context, item));
+            email.addArgument(EmbargoManager.getEmbargoRightsMDV(context, item));
             email.addArgument(getMyDSpaceLink());
+            //email.addArgument("1");
             email.addRecipient(ConfigurationManager.getProperty("embargo_alter_notify_email"));
-            log.debug(LogManager.getHeader(context, "getMyDSpaceLink", "Value returned by getMyDSpaceLink = "+ getMyDSpaceLink()));
             email.send();
         }
         catch (MessagingException e)
