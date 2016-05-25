@@ -1,20 +1,39 @@
 # Item Embargo Modification Notification email message
 #
 # {0}  Title of submission
-# {1}  New embargo ending date information
-# {2}  New dc.rights metadata information
-# {3}  link to 'My AUETD' page
+# {1}  Previous embargo status
+# {2}  New embargo status
+# {3}  Previous embargo ending date 
+# {4}  New embargo ending date information
+# {5}  Previous embargo length
+# {6}  New embargo length
+# {7}  Previous rights info
+# {8}  New rights info
+# {9}  link to 'AUETD' home page
 #
 Subject: AUETD: Item Embargo Modification Notification 
 
 Embargo information of item "{0}" has been modified. 
 
-Changes to item include:
+Changes to the embargo metadata information include:
 
-dc.embargo.enddate: {1}
-dc.rights: {2}
+Status:
+  Old Value: {1}
+  New Value: {2}
+  
+End Date: 
+  Old Value: {3}
+  New Value: {4}
 
-Please visit your "My AUETD" page to view the item's new information: 
-{3}.
+Embargo Length:
+  Old Value: {5}
+  New Value: {6}
+
+Rights: 
+  Old Value: {7}
+  New Value: {8}
+
+Please visit the link below to view the item: 
+{9}.
 
 Auburn University Graduate School

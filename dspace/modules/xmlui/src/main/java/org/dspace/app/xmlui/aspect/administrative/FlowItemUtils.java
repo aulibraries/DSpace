@@ -20,6 +20,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.cocoon.environment.Request;
 import org.apache.cocoon.servlet.multipart.Part;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dspace.app.util.Util;
 import org.dspace.app.xmlui.utils.UIException;
@@ -779,7 +780,7 @@ public class FlowItemUtils
 
     private static String getMyDSpaceLink()
     {
-        return ConfigurationManager.getProperty("dspace.url") + "/mydspace";
+        return ConfigurationManager.getProperty("dspace.url");
     }
     
     /**
@@ -803,11 +804,12 @@ public class FlowItemUtils
     public static FlowResult processEditBitstream(Context context, String itemID, String bitstreamID, String bitstreamName,
                                                     String primary, String description, String formatID,
                                                     String userFormat, Request request)
-            throws SQLException, IOException, AuthorizeException
+        throws SQLException, IOException, AuthorizeException
     {
         FlowResult result = new FlowResult();
         result.setContinue(false);
         DateTimeFormatter dft = DateTimeFormat.forPattern("yyyy-MM-dd");
+        DateTimeFormatter dft2 = DateTimeFormat.forPattern("MM-dd-yyyy");
 
         int bsID = 0;
         int _itemID = 0;
@@ -850,6 +852,9 @@ public class FlowItemUtils
         String prevLength = null;
         String prevRights = null;
         DateTime prevEndDate = null;
+        String enddate = null;
+        String rights = null;
+        String length = null;
 
         if(_itemID > 0)
         {
@@ -903,6 +908,8 @@ public class FlowItemUtils
 
             // Get the submitted date, convert it to a DateTime object instance
             _submittedDateDT = new DateTime(_submittedDateStr);
+            
+            enddate = dft2.print(_submittedDateDT);
 
             // If the submitted date is in the past then log an error,
             // stop further processing and return the user to the
@@ -939,19 +946,39 @@ public class FlowItemUtils
                     .append("dc.embargo.enddate - New: ").append(dft.print(_submittedDateDT)).append("\n");
                 prov.append("dc.embargo.length - Previous: ").append(prevLength).append("\n")
                     .append("dc.embargo.length - New: ").append(EmbargoManager.getEmbargoLengthMDV(context, item)).append("\n");
+                
+                length = EmbargoManager.getEmbargoLengthMDV(context, item);
             }
 
-            if(!prevStatus.equals(EmbargoManager.getEmbargoStatusMDV(context, item)))
+            if(StringUtils.isBlank(prevStatus))
             {
-                prov.append("dc.embargo.status - Previous: ").append(prevStatus).append("\n")
+                prov.append("dc.embargo.status - Previous: Deleted").append("\n")
                     .append("dc.embargo.status - New: ").append(EmbargoManager.getEmbargoStatusMDV(context, item)).append("\n");
             }
-
-            if(!prevRights.equals(EmbargoManager.getEmbargoRightsMDV(context, item)))
+            else 
             {
-                prov.append("dc.rights - Previous: ").append(prevRights).append("\n")
+                if(!StringUtils.equals(EmbargoManager.getEmbargoStatusMDV(context, item), prevStatus))
+                {
+                    prov.append("dc.embargo.status - Previous: ").append(prevStatus).append("\n")
+                        .append("dc.embargo.status - New: ").append(EmbargoManager.getEmbargoStatusMDV(context, item)).append("\n");
+                }
+            }
+            
+            if(StringUtils.isBlank(prevRights))
+            {
+                prov.append("dc.rights - Previous: Deleted").append("\n")
                     .append("dc.rights - New: ").append(EmbargoManager.getEmbargoRightsMDV(context, item));
             }
+            else 
+            {
+                if(StringUtils.equals(EmbargoManager.getEmbargoRightsMDV(context, item), prevRights))
+                {
+                    prov.append("dc.rights - Previous: ").append(prevRights).append("\n")
+                        .append("dc.rights - New: ").append(EmbargoManager.getEmbargoRightsMDV(context, item));
+                }
+            }
+            
+            rights = EmbargoManager.getEmbargoRightsMDV(context, item);
         }
         else if(embargoCreationAnswer == 1 || embargoCreationAnswer == 0)
         {
@@ -966,13 +993,18 @@ public class FlowItemUtils
             EmbargoManager.removeEmbargoRightsMDV(context, item);
             ETDEmbargoSetter.setEmbargoStatusMDV(context, item, 0, false);
 
-            prov.append("dc.embargo.enddate - Previous: ").append(dft.print(prevEndDate)).append(" New: Deleted").append("\n")
-                .append("dc.embargo.length - Previous: ").append(prevLength)
+            prov.append("dc.embargo.enddate - Previous: ").append(dft.print(prevEndDate)).append("\n")
+                .append("dc.embargo.enddate - New: Deleted").append("\n")
+                .append("dc.embargo.length - Previous: ").append(prevLength).append("\n")
                 .append("dc.embargo.length - New: Deleted").append("\n")
-                .append("dc.rights - Previous: ").append(prevRights)
+                .append("dc.rights - Previous: ").append(prevRights).append("\n")
                 .append("dc.rights -  New: Deleted").append("\n")
-                .append("dc.embargo.status - Previous: ").append(prevStatus)
+                .append("dc.embargo.status - Previous: ").append(prevStatus).append("\n")
                 .append("dc.embargo.status - New: ").append(EmbargoManager.getEmbargoStatusMDV(context, item));
+            
+            length = "Deleted";
+            enddate = "Deleted";
+            rights = "Deleted";
         }
 
         log.debug(LogManager.getHeader(context, "Adding Provenance Metadata Field", " Message: "+prov.toString()));
@@ -986,10 +1018,52 @@ public class FlowItemUtils
             Locale defaultLocale = I18nUtil.getDefaultLocale();
             Email email = Email.getEmail(I18nUtil.getEmailFilename(defaultLocale, "embargo_edit_notify"));
             email.addArgument(item.getName());
-            email.addArgument(EmbargoManager.getEmbargoEndDateMDV(context, item));
-            email.addArgument(EmbargoManager.getEmbargoRightsMDV(context, item));
-            email.addArgument(getMyDSpaceLink());
-            //email.addArgument("1");
+            
+            // Previous Embargo Status
+            if(StringUtils.isBlank(prevStatus))
+            {
+                email.addArgument("N/A");
+            }
+            else
+            {
+                email.addArgument(prevStatus);
+            }
+            email.addArgument(EmbargoManager.getEmbargoStatusMDV(context, item));  // New Embargo Status
+            
+            // Previous Embargo End Date
+            if(prevEndDate.isEqualNow())
+            {
+                email.addArgument("N/A");
+            }
+            else
+            {
+                email.addArgument(dft2.print(prevEndDate));
+            }
+            email.addArgument(enddate); // New Embargo End Date
+            
+            // Previous Embargo Length
+            if(StringUtils.isBlank(prevLength))
+            {
+                email.addArgument("N/A");
+            }
+            else
+            {
+                email.addArgument(prevLength);
+            }
+            email.addArgument(length);  // New Embargo Length
+            
+            // Previous Embargo Rights
+            if(StringUtils.isBlank(prevRights))
+            {
+                email.addArgument("N/A");
+            }
+            else
+            {
+                email.addArgument(prevRights);
+            }
+            email.addArgument(rights); // New Embargo Rights
+            
+            email.addArgument(getMyDSpaceLink()+"/"+item.getHandle());
             email.addRecipient(ConfigurationManager.getProperty("embargo_alter_notify_email"));
             email.send();
         }
