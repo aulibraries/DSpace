@@ -1031,7 +1031,7 @@ public class FlowItemUtils
             email.addArgument(EmbargoManager.getEmbargoStatusMDV(context, item));  // New Embargo Status
             
             // Previous Embargo End Date
-            if(prevEndDate.isEqualNow())
+            if(StringUtils.equals(dft.print(DateTime.now()), dft.print(prevEndDate)))
             {
                 email.addArgument("N/A");
             }
