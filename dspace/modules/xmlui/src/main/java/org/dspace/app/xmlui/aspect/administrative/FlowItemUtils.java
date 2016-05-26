@@ -49,6 +49,8 @@ import org.dspace.curate.Curator;
 import org.dspace.embargo.ETDEmbargoSetter;
 import org.dspace.embargo.EmbargoManager;
 import static org.dspace.embargo.EmbargoManager.getMetadataFieldID;
+import org.dspace.eperson.EPerson;
+import org.dspace.eperson.Group;
 import org.dspace.handle.HandleManager;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -1015,57 +1017,68 @@ public class FlowItemUtils
          * Send an email to a specified address whenever an item's embargo information has been altered.
          */
         try {
+            EPerson[] epa = Group.allMembers(context, Group.findByName(context, ConfigurationManager.getProperty("embargo_admin_group")));
             Locale defaultLocale = I18nUtil.getDefaultLocale();
-            Email email = Email.getEmail(I18nUtil.getEmailFilename(defaultLocale, "embargo_edit_notify"));
-            email.addArgument(item.getName());
             
-            // Previous Embargo Status
-            if(StringUtils.isBlank(prevStatus))
+            for(EPerson ep : epa)
             {
-                email.addArgument("N/A");
+                String recipientEmail = null;
+                
+                if(ep.getID() != 1)  // don't send the email to system's main administrator account (lib_dspaceadmin@examail.auburn.edu)
+                {
+                    recipientEmail = ep.getEmail();
+                }
+                Email email = Email.getEmail(I18nUtil.getEmailFilename(defaultLocale, "embargo_edit_notify"));
+                email.addArgument(item.getName());
+
+                // Previous Embargo Status
+                if(StringUtils.isBlank(prevStatus))
+                {
+                    email.addArgument("N/A");
+                }
+                else
+                {
+                    email.addArgument(prevStatus);
+                }
+                email.addArgument(EmbargoManager.getEmbargoStatusMDV(context, item));  // New Embargo Status
+
+                // Previous Embargo End Date
+                if(StringUtils.equals(dft.print(DateTime.now()), dft.print(prevEndDate)))
+                {
+                    email.addArgument("N/A");
+                }
+                else
+                {
+                    email.addArgument(dft2.print(prevEndDate));
+                }
+                email.addArgument(enddate); // New Embargo End Date
+
+                // Previous Embargo Length
+                if(StringUtils.isBlank(prevLength))
+                {
+                    email.addArgument("N/A");
+                }
+                else
+                {
+                    email.addArgument(prevLength);
+                }
+                email.addArgument(length);  // New Embargo Length
+
+                // Previous Embargo Rights
+                if(StringUtils.isBlank(prevRights))
+                {
+                    email.addArgument("N/A");
+                }
+                else
+                {
+                    email.addArgument(prevRights);
+                }
+                email.addArgument(rights); // New Embargo Rights
+
+                email.addArgument(getMyDSpaceLink()+"/"+item.getHandle());
+                email.addRecipient(recipientEmail);
+                email.send();
             }
-            else
-            {
-                email.addArgument(prevStatus);
-            }
-            email.addArgument(EmbargoManager.getEmbargoStatusMDV(context, item));  // New Embargo Status
-            
-            // Previous Embargo End Date
-            if(StringUtils.equals(dft.print(DateTime.now()), dft.print(prevEndDate)))
-            {
-                email.addArgument("N/A");
-            }
-            else
-            {
-                email.addArgument(dft2.print(prevEndDate));
-            }
-            email.addArgument(enddate); // New Embargo End Date
-            
-            // Previous Embargo Length
-            if(StringUtils.isBlank(prevLength))
-            {
-                email.addArgument("N/A");
-            }
-            else
-            {
-                email.addArgument(prevLength);
-            }
-            email.addArgument(length);  // New Embargo Length
-            
-            // Previous Embargo Rights
-            if(StringUtils.isBlank(prevRights))
-            {
-                email.addArgument("N/A");
-            }
-            else
-            {
-                email.addArgument(prevRights);
-            }
-            email.addArgument(rights); // New Embargo Rights
-            
-            email.addArgument(getMyDSpaceLink()+"/"+item.getHandle());
-            email.addRecipient(ConfigurationManager.getProperty("embargo_alter_notify_email"));
-            email.send();
         }
         catch (MessagingException e)
         {
