@@ -910,8 +910,6 @@ public class FlowItemUtils
 
             // Get the submitted date, convert it to a DateTime object instance
             _submittedDateDT = new DateTime(_submittedDateStr);
-            
-            enddate = dft2.print(_submittedDateDT);
 
             // If the submitted date is in the past then log an error,
             // stop further processing and return the user to the
@@ -948,8 +946,6 @@ public class FlowItemUtils
                     .append("dc.embargo.enddate - New: ").append(dft.print(_submittedDateDT)).append("\n");
                 prov.append("dc.embargo.length - Previous: ").append(prevLength).append("\n")
                     .append("dc.embargo.length - New: ").append(EmbargoManager.getEmbargoLengthMDV(context, item)).append("\n");
-                
-                length = EmbargoManager.getEmbargoLengthMDV(context, item);
             }
 
             if(StringUtils.isBlank(prevStatus))
@@ -980,6 +976,8 @@ public class FlowItemUtils
                 }
             }
             
+            enddate = dft2.print(_submittedDateDT);
+            length = EmbargoManager.getEmbargoLengthMDV(context, item);
             rights = EmbargoManager.getEmbargoRightsMDV(context, item);
         }
         else if(embargoCreationAnswer == 1 || embargoCreationAnswer == 0)
@@ -1004,8 +1002,8 @@ public class FlowItemUtils
                 .append("dc.embargo.status - Previous: ").append(prevStatus).append("\n")
                 .append("dc.embargo.status - New: ").append(EmbargoManager.getEmbargoStatusMDV(context, item));
             
-            length = "Deleted";
             enddate = "Deleted";
+            length = "Deleted";
             rights = "Deleted";
         }
 
