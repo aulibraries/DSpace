@@ -1087,7 +1087,7 @@ public class FlowItemUtils
                 }
                 email.addArgument(rights); // New Embargo Rights
 
-                email.addArgument(getMyDSpaceLink()+"/"+item.getHandle());
+                email.addArgument(getMyDSpaceLink()+"/handle/"+item.getHandle());
                 email.addRecipient(recipientEmail);
                 email.send();
             }
