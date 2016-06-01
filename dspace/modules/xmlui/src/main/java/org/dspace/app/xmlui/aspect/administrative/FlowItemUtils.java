@@ -992,6 +992,20 @@ public class FlowItemUtils
             EmbargoManager.removeEmbargoLengthMDV(context, item);
             EmbargoManager.removeEmbargoRightsMDV(context, item);
             ETDEmbargoSetter.setEmbargoStatusMDV(context, item, 0, false);
+            
+            for(Bundle bndl : item.getBundles(Constants.CONTENT_BUNDLE_NAME))
+            {
+                for(ResourcePolicy bsRP : bndl.getBitstreamPolicies())
+                {
+                    bsRP.setAction(Constants.READ);
+                    bsRP.setRpType(ResourcePolicy.TYPE_INHERITED);
+                    bsRP.setStartDate(null);
+                    bsRP.setEndDate(null);
+                    bsRP.update();
+
+                    item.updateLastModified();
+                }
+            }
 
             prov.append("dc.embargo.enddate - Previous: ").append(dft.print(prevEndDate)).append("\n")
                 .append("dc.embargo.enddate - New: Deleted").append("\n")
