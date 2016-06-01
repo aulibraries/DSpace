@@ -124,13 +124,20 @@
                     <xsl:choose>
                         <xsl:when test="not(contains($document//dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='URI']/node(), 'workflow')) and
                         not(contains($document//dri:body/dri:div/dri:referenceSet/@id, 'administrative.item.ViewItem'))">
+                            <!-- If the status of the item is set to EMBARGOED then check for a timestamp value and determine if the current timestamp
+                                    is greater than the item's embargo ending date (formatted as a timestamp). Otherwise don't print anything. -->
                             <xsl:choose>
-                                <xsl:when test="$endDateTs != ''">
-                                    <xsl:if test="$endDateTs &gt; $currentTs">
-                                        <xsl:call-template name="itemSummaryView-DIM-embargostatus"/>
-                                        <xsl:call-template name="itemSummaryView-DIM-rights"/>
-                                        <xsl:call-template name="itemSummaryView-DIM-enddate"/>
-                                    </xsl:if>
+                                <xsl:when test="dim:field[@qualifier='status']/node() = 'EMBARGOED'">
+                                    <xsl:choose>
+                                        <xsl:when test="$endDateTs != ''">
+                                            <xsl:if test="$endDateTs &gt; $currentTs">
+                                                <xsl:call-template name="itemSummaryView-DIM-embargostatus"/>
+                                                <xsl:call-template name="itemSummaryView-DIM-rights"/>
+                                                <xsl:call-template name="itemSummaryView-DIM-enddate"/>
+                                            </xsl:if>
+                                        </xsl:when>
+                                        <xsl:otherwise/>
+                                    </xsl:choose>
                                 </xsl:when>
                                 <xsl:otherwise/>
                             </xsl:choose>
@@ -204,12 +211,10 @@
                     <xsl:variable name="src">
                         <xsl:choose>
                             <xsl:when test="/mets:METS/mets:fileSec/mets:fileGrp[@USE='THUMBNAIL']/mets:file[@GROUPID=../../mets:fileGrp[@USE='CONTENT']/mets:file[@GROUPID=../../mets:fileGrp[@USE='THUMBNAIL']/mets:file/@GROUPID][1]/@GROUPID]">
-                                <xsl:value-of
-                                        select="/mets:METS/mets:fileSec/mets:fileGrp[@USE='THUMBNAIL']/mets:file[@GROUPID=../../mets:fileGrp[@USE='CONTENT']/mets:file[@GROUPID=../../mets:fileGrp[@USE='THUMBNAIL']/mets:file/@GROUPID][1]/@GROUPID]/mets:FLocat[@LOCTYPE='URL']/@xlink:href"/>
+                                <xsl:value-of select="/mets:METS/mets:fileSec/mets:fileGrp[@USE='THUMBNAIL']/mets:file[@GROUPID=../../mets:fileGrp[@USE='CONTENT']/mets:file[@GROUPID=../../mets:fileGrp[@USE='THUMBNAIL']/mets:file/@GROUPID][1]/@GROUPID]/mets:FLocat[@LOCTYPE='URL']/@xlink:href"/>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:value-of
-                                        select="//mets:fileSec/mets:fileGrp[@USE='THUMBNAIL']/mets:file/mets:FLocat[@LOCTYPE='URL']/@xlink:href"/>
+                                <xsl:value-of select="//mets:fileSec/mets:fileGrp[@USE='THUMBNAIL']/mets:file/mets:FLocat[@LOCTYPE='URL']/@xlink:href"/>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
@@ -641,12 +646,12 @@
         </xsl:choose>
     </xsl:template>
 
-   <xsl:template match="mets:fileGrp[@USE='LICENSE']">
+    <xsl:template match="mets:fileGrp[@USE='LICENSE']">
         <xsl:param name="context"/>
         <xsl:param name="primaryBitstream" select="-1"/>
-            <xsl:apply-templates select="mets:file">
-                <xsl:with-param name="context" select="$context"/>
-            </xsl:apply-templates>
+        <xsl:apply-templates select="mets:file">
+            <xsl:with-param name="context" select="$context"/>
+        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="mets:file">
@@ -706,7 +711,7 @@
                         </img> -->
                 <!-- </a> -->
             </div>
-           <div class="col-sm-10 col-sm-pull-3">
+            <div class="col-sm-10 col-sm-pull-3">
                 <dl class="file-metadata dl-horizontal">
                     <dt>
                         <i18n:text>xmlui.dri2xhtml.METS-1.0.item-files-name</i18n:text>
