@@ -66,20 +66,20 @@ import org.joda.time.format.DateTimeFormatter;
 public class FlowItemUtils
 {
 
-	/** Language Strings */
-	private static final Message T_metadata_updated = new Message("default","The Item's metadata was successfully updated.");
-	private static final Message T_metadata_added = new Message("default","New metadata was added.");
-	private static final Message T_item_withdrawn = new Message("default","The item has been withdrawn.");
+    /** Language Strings */
+    private static final Message T_metadata_updated = new Message("default","The Item's metadata was successfully updated.");
+    private static final Message T_metadata_added = new Message("default","New metadata was added.");
+    private static final Message T_item_withdrawn = new Message("default","The item has been withdrawn.");
     private static final Message T_item_public = new Message("default","The item is now public.");
     private static final Message T_item_private = new Message("default","The item is now private.");
-	private static final Message T_item_reinstated = new Message("default","The item has been reinstated.");
-	private static final Message T_item_moved = new Message("default","The item has been moved.");
-	private static final Message T_item_move_destination_not_found = new Message("default","The selected destination collection could not be found.");
-	private static final Message T_bitstream_added = new Message("default","The new bitstream was successfully uploaded.");
-	private static final Message T_bitstream_failed = new Message("default","Error while uploading file.");
-	private static final Message T_bitstream_updated = new Message("default","The bitstream has been updated.");
-	private static final Message T_bitstream_delete = new Message("default","The selected bitstreams have been deleted.");
-	private static final Message T_bitstream_order = new Message("default","The bitstream order has been successfully altered.");
+    private static final Message T_item_reinstated = new Message("default","The item has been reinstated.");
+    private static final Message T_item_moved = new Message("default","The item has been moved.");
+    private static final Message T_item_move_destination_not_found = new Message("default","The selected destination collection could not be found.");
+    private static final Message T_bitstream_added = new Message("default","The new bitstream was successfully uploaded.");
+    private static final Message T_bitstream_failed = new Message("default","Error while uploading file.");
+    private static final Message T_bitstream_updated = new Message("default","The bitstream has been updated.");
+    private static final Message T_bitstream_delete = new Message("default","The selected bitstreams have been deleted.");
+    private static final Message T_bitstream_order = new Message("default","The bitstream order has been successfully altered.");
 
     /**
      * Custom constant strings
@@ -102,156 +102,155 @@ public class FlowItemUtils
     public static ETDEmbargoSetter embargosetter = new ETDEmbargoSetter();
 
 
-	/**
-	 * Resolve the given identifier to an item. The identifier may be either an
-	 * internal ID or a handle. If an item is found then the result the internal
-	 * ID of the item will be placed in the result "itemID" parameter.
-	 *
-	 * If the identifier was unable to be resolved to an item then the "identifier"
-	 * field is placed in error.
-	 *
-	 * @param context The current DSpace context.
-	 * @param identifier An Internal ID or a handle
-	 * @return A flow result
+    /**
+     * Resolve the given identifier to an item. The identifier may be either an
+     * internal ID or a handle. If an item is found then the result the internal
+     * ID of the item will be placed in the result "itemID" parameter.
+     *
+     * If the identifier was unable to be resolved to an item then the "identifier"
+     * field is placed in error.
+     *
+     * @param context The current DSpace context.
+     * @param identifier An Internal ID or a handle
+     * @return A flow result
      * @throws java.sql.SQLException
-	 */
-	public static FlowResult resolveItemIdentifier(Context context, String identifier) throws SQLException
-	{
-		FlowResult result = new FlowResult();
-		result.setContinue(false);
+     */
+    public static FlowResult resolveItemIdentifier(Context context, String identifier) throws SQLException
+    {
+        FlowResult result = new FlowResult();
+        result.setContinue(false);
 
-		//		Check whether it's a handle or internal id (by check ing if it has a slash inthe string)
-		if (identifier.contains("/"))
-		{
-			DSpaceObject dso = HandleManager.resolveToObject(context, identifier);
+        //		Check whether it's a handle or internal id (by check ing if it has a slash inthe string)
+        if (identifier.contains("/"))
+        {
+            DSpaceObject dso = HandleManager.resolveToObject(context, identifier);
 
-			if (dso != null && dso.getType() == Constants.ITEM)
-			{
-				result.setParameter("itemID", dso.getID());
-				result.setParameter("type", Constants.ITEM);
-				result.setContinue(true);
-				return result;
-			}
-		}
-		else
-		{
-
-			Item item = null;
-			try
+            if (dso != null && dso.getType() == Constants.ITEM)
             {
-				item = Item.find(context, Integer.valueOf(identifier));
-			}
+                result.setParameter("itemID", dso.getID());
+                result.setParameter("type", Constants.ITEM);
+                result.setContinue(true);
+                return result;
+            }
+        }
+        else
+        {
+
+            Item item = null;
+            try
+            {
+                item = Item.find(context, Integer.valueOf(identifier));
+            }
             catch (NumberFormatException e)
             {
-				// ignoring the exception
-			}
+                // ignoring the exception
+            }
 
-			if (item != null)
-			{
-				result.setParameter("itemID", item.getID());
-				result.setParameter("type", Constants.ITEM);
-				result.setContinue(true);
-				return result;
-			}
-		}
+                if (item != null)
+                {
+                    result.setParameter("itemID", item.getID());
+                    result.setParameter("type", Constants.ITEM);
+                    result.setContinue(true);
+                    return result;
+                }
+            }
 
-		result.addError("identifier");
-		return result;
-	}
+            result.addError("identifier");
+            return result;
+    }
 
-	/**
-	 * Process the request parameters to update the item's metadata and remove any selected bitstreams.
-	 *
-	 * Each metadata entry will have three fields "name_X", "value_X", and "language_X" where X is an
-	 * integer that relates all three of the fields together. The name parameter stores the metadata name
-	 * that is used by the entry (i.e schema_element_qualifier). The value and language paramaters are user
-	 * inputed fields. If the optional parameter "remove_X" is given then the metadata value is removed.
-	 *
-	 * To support AJAX operations on this page an aditional parameter is considered, the "scope". The scope
-	 * is the set of metadata entries that are being updated during this request. It the metadata name,
-	 * schema_element_qualifier, only fields that have this name are considered! If all fields are to be
-	 * considered then scope should be set to "*".
-	 *
-	 * When creating an AJAX query include all the name_X, value_X, language_X, and remove_X for the fields
-	 * in the set, and then set the scope parameter to be the metadata field.
-	 *
-	 * @param context The current DSpace context
-	 * @param itemID  internal item id
-	 * @param request the Cocoon request
-	 * @return A flow result
+    /**
+     * Process the request parameters to update the item's metadata and remove any selected bitstreams.
+     *
+     * Each metadata entry will have three fields "name_X", "value_X", and "language_X" where X is an
+     * integer that relates all three of the fields together. The name parameter stores the metadata name
+     * that is used by the entry (i.e schema_element_qualifier). The value and language paramaters are user
+     * inputed fields. If the optional parameter "remove_X" is given then the metadata value is removed.
+     *
+     * To support AJAX operations on this page an aditional parameter is considered, the "scope". The scope
+     * is the set of metadata entries that are being updated during this request. It the metadata name,
+     * schema_element_qualifier, only fields that have this name are considered! If all fields are to be
+     * considered then scope should be set to "*".
+     *
+     * When creating an AJAX query include all the name_X, value_X, language_X, and remove_X for the fields
+     * in the set, and then set the scope parameter to be the metadata field.
+     *
+     * @param context The current DSpace context
+     * @param itemID  internal item id
+     * @param request the Cocoon request
+     * @return A flow result
      *
      * @throws java.sql.SQLException
      * @throws org.dspace.authorize.AuthorizeException
      * @throws org.dspace.app.xmlui.utils.UIException
      * @throws java.io.IOException
-	 */
-	public static FlowResult processEditItem(Context context, int itemID, Request request)
+     */
+    public static FlowResult processEditItem(Context context, int itemID, Request request)
         throws SQLException, AuthorizeException, UIException, IOException
-	{
-		FlowResult result = new FlowResult();
-		result.setContinue(false);
+    {
+        FlowResult result = new FlowResult();
+        result.setContinue(false);
 
-		Item item = Item.find(context, itemID);
+        Item item = Item.find(context, itemID);
 
 
-		// STEP 1:
-		// Clear all metadata within the scope
-		// Only metadata values within this scope will be considered. This
-		// is so ajax request can operate on only a subset of the values.
-		String scope = request.getParameter("scope");
-		if ("*".equals(scope))
-		{
-			item.clearMetadata(Item.ANY, Item.ANY, Item.ANY, Item.ANY);
-		}
-		else
-		{
-			String[] parts = parseName(scope);
-			item.clearMetadata(parts[0],parts[1],parts[2],Item.ANY);
-		}
+        // STEP 1:
+        // Clear all metadata within the scope
+        // Only metadata values within this scope will be considered. This
+        // is so ajax request can operate on only a subset of the values.
+        String scope = request.getParameter("scope");
+        if ("*".equals(scope))
+        {
+            item.clearMetadata(Item.ANY, Item.ANY, Item.ANY, Item.ANY);
+        }
+        else
+        {
+            String[] parts = parseName(scope);
+            item.clearMetadata(parts[0],parts[1],parts[2],Item.ANY);
+        }
 
-		// STEP 2:
-		// First determine all the metadata fields that are within
-		// the scope parameter
-		ArrayList<Integer> indexes = new ArrayList<>();
-		Enumeration parameters = request.getParameterNames();
-		while(parameters.hasMoreElements())
-		{
+        // STEP 2:
+        // First determine all the metadata fields that are within
+        // the scope parameter
+        ArrayList<Integer> indexes = new ArrayList<>();
+        Enumeration parameters = request.getParameterNames();
+        while(parameters.hasMoreElements())
+        {
+            // Only consider the name_ fields
+            String parameterName = (String) parameters.nextElement();
+            if (parameterName.startsWith("name_"))
+            {
+                // Check if the name is within the scope
+                String parameterValue = request.getParameter(parameterName);
+                if ("*".equals(scope) || scope.equals(parameterValue))
+                {
+                    // Extract the index from the name.
+                    String indexString = parameterName.substring("name_".length());
+                    Integer index = Integer.valueOf(indexString);
+                    indexes.add(index);
+                }
+            }
+        }
 
-			// Only consider the name_ fields
-			String parameterName = (String) parameters.nextElement();
-			if (parameterName.startsWith("name_"))
-			{
-				// Check if the name is within the scope
-				String parameterValue = request.getParameter(parameterName);
-				if ("*".equals(scope) || scope.equals(parameterValue))
-				{
-					// Extract the index from the name.
-					String indexString = parameterName.substring("name_".length());
-					Integer index = Integer.valueOf(indexString);
-					indexes.add(index);
-				}
-			}
-		}
-
-		// STEP 3:
-		// Iterate over all the indexes within the scope and add them back in.
-		for (Integer index=1; index <= indexes.size(); ++index)
-		{
-			String name = request.getParameter("name_"+index);
-			String value = request.getParameter("value_"+index);
+        // STEP 3:
+        // Iterate over all the indexes within the scope and add them back in.
+        for (Integer index=1; index <= indexes.size(); ++index)
+        {
+            String name = request.getParameter("name_"+index);
+            String value = request.getParameter("value_"+index);
             String authority = request.getParameter("value_"+index+"_authority");
             String confidence = request.getParameter("value_"+index+"_confidence");
-			String lang = request.getParameter("language_"+index);
-			String remove = request.getParameter("remove_"+index);
+            String lang = request.getParameter("language_"+index);
+            String remove = request.getParameter("remove_"+index);
 
-			// the user selected the remove checkbox.
-			if (remove != null)
+            // the user selected the remove checkbox.
+            if (remove != null)
             {
                 continue;
             }
 
-			// get the field's name broken up
-			String[] parts = parseName(name);
+            // get the field's name broken up
+            String[] parts = parseName(name);
 
             // probe for a confidence value
             int iconf = Choices.CF_UNSET;
@@ -265,114 +264,114 @@ public class FlowItemUtils
                 iconf = Choices.CF_NOVALUE;
             }
             item.addMetadata(parts[0], parts[1], parts[2], lang, value, authority, iconf);
-		}
+        }
 
-		item.update();
-		context.commit();
+        item.update();
+        context.commit();
 
-		result.setContinue(true);
+        result.setContinue(true);
 
-		result.setOutcome(true);
-		result.setMessage(T_metadata_updated);
+        result.setOutcome(true);
+        result.setMessage(T_metadata_updated);
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * Process the request paramaters to add a new metadata entry for the item.
-	 *
-	 * @param context The current DSpace context
-	 * @param itemID  internal item id
-	 * @param request the Cocoon request
-	 * @return A flow result
+    /**
+     * Process the request paramaters to add a new metadata entry for the item.
+     *
+     * @param context The current DSpace context
+     * @param itemID  internal item id
+     * @param request the Cocoon request
+     * @return A flow result
      * @throws java.sql.SQLException
      * @throws org.dspace.authorize.AuthorizeException
      * @throws org.dspace.app.xmlui.utils.UIException
      * @throws java.io.IOException
-	 */
-	public static FlowResult processAddMetadata(Context context, int itemID, Request request)
+     */
+    public static FlowResult processAddMetadata(Context context, int itemID, Request request)
         throws SQLException, AuthorizeException, UIException, IOException
-	{
-		FlowResult result = new FlowResult();
-		result.setContinue(false);
+    {
+        FlowResult result = new FlowResult();
+        result.setContinue(false);
 
-		Item item = Item.find(context, itemID);
+        Item item = Item.find(context, itemID);
 
-		String fieldID = request.getParameter("field");
-		String value = request.getParameter("value");
-		String language = request.getParameter("language");
+        String fieldID = request.getParameter("field");
+        String value = request.getParameter("value");
+        String language = request.getParameter("language");
 
-		MetadataField field = MetadataField.find(context,Integer.valueOf(fieldID));
-		MetadataSchema schema = MetadataSchema.find(context,field.getSchemaID());
+        MetadataField field = MetadataField.find(context,Integer.valueOf(fieldID));
+        MetadataSchema schema = MetadataSchema.find(context,field.getSchemaID());
 
-		item.addMetadata(schema.getName(), field.getElement(), field.getQualifier(), language, value);
+        item.addMetadata(schema.getName(), field.getElement(), field.getQualifier(), language, value);
 
-		item.update();
-		context.commit();
+        item.update();
+        context.commit();
 
-		result.setContinue(true);
+        result.setContinue(true);
 
-		result.setOutcome(true);
-		result.setMessage(T_metadata_added);
+        result.setOutcome(true);
+        result.setMessage(T_metadata_added);
 
-		return result;
-	}
+        return result;
+    }
 
 
-	/**
-	 * Withdraw the specified item, this method assumes that the action has been confirmed.
-	 *
-	 * @param context The DSpace context
-	 * @param itemID The id of the to-be-withdrawn item.
-	 * @return A result object
+    /**
+     * Withdraw the specified item, this method assumes that the action has been confirmed.
+     *
+     * @param context The DSpace context
+     * @param itemID The id of the to-be-withdrawn item.
+     * @return A result object
      * @throws java.sql.SQLException
      * @throws org.dspace.authorize.AuthorizeException
      * @throws java.io.IOException
-	 */
-	public static FlowResult processWithdrawItem(Context context, int itemID)
+     */
+    public static FlowResult processWithdrawItem(Context context, int itemID)
         throws SQLException, AuthorizeException, IOException
-	{
-		FlowResult result = new FlowResult();
-		result.setContinue(false);
+    {
+        FlowResult result = new FlowResult();
+        result.setContinue(false);
 
-		Item item = Item.find(context, itemID);
-		item.withdraw();
-		context.commit();
+        Item item = Item.find(context, itemID);
+        item.withdraw();
+        context.commit();
 
-		result.setContinue(true);
+        result.setContinue(true);
         result.setOutcome(true);
         result.setMessage(T_item_withdrawn);
 
-		return result;
-	}
+        return result;
+    }
 
 
-	/**
-	 * Reinstate the specified item, this method assumes that the action has been confirmed.
-	 *
-	 * @param context The DSpace context
-	 * @param itemID The id of the to-be-reinstated item.
-	 * @return A result object
+    /**
+     * Reinstate the specified item, this method assumes that the action has been confirmed.
+     *
+     * @param context The DSpace context
+     * @param itemID The id of the to-be-reinstated item.
+     * @return A result object
      * @throws java.sql.SQLException
      * @throws org.dspace.authorize.AuthorizeException
      * @throws java.io.IOException
-	 */
-	public static FlowResult processReinstateItem(Context context, int itemID)
+     */
+    public static FlowResult processReinstateItem(Context context, int itemID)
         throws SQLException, AuthorizeException, IOException
-	{
-		FlowResult result = new FlowResult();
-		result.setContinue(false);
+    {
+        FlowResult result = new FlowResult();
+        result.setContinue(false);
 
-		Item item = Item.find(context, itemID);
-		item.reinstate();
-		context.commit();
+        Item item = Item.find(context, itemID);
+        item.reinstate();
+        context.commit();
 
-		result.setContinue(true);
+        result.setContinue(true);
         result.setOutcome(true);
         result.setMessage(T_item_reinstated);
 
-		return result;
-	}
+        return result;
+    }
 
 
     /**
@@ -458,97 +457,97 @@ public class FlowItemUtils
 
         if(AuthorizeManager.isAdmin(context, item))
         {
-          //Add an action giving this user *explicit* admin permissions on the item itself.
-          //This ensures that the user will be able to call item.update() even if he/she
-          // moves it to a Collection that he/she doesn't administer.
-          if (item.canEdit())
-          {
-              AuthorizeManager.authorizeAction(context, item, Constants.WRITE);
-          }
+            //Add an action giving this user *explicit* admin permissions on the item itself.
+            //This ensures that the user will be able to call item.update() even if he/she
+            // moves it to a Collection that he/she doesn't administer.
+            if (item.canEdit())
+            {
+                AuthorizeManager.authorizeAction(context, item, Constants.WRITE);
+            }
 
-          Collection destination = Collection.find(context, collectionID);
-          if (destination == null)
-          {
-              result.setOutcome(false);
-              result.setContinue(false);
-              result.setMessage(T_item_move_destination_not_found);
-              return result;
-          }
+            Collection destination = Collection.find(context, collectionID);
+            if (destination == null)
+            {
+                result.setOutcome(false);
+                result.setContinue(false);
+                result.setMessage(T_item_move_destination_not_found);
+                return result;
+            }
 
-          Collection owningCollection = item.getOwningCollection();
-          if (destination.equals(owningCollection))
-          {
-              // nothing to do
-              result.setOutcome(false);
-              result.setContinue(false);
-              return result;
-          }
+            Collection owningCollection = item.getOwningCollection();
+            if (destination.equals(owningCollection))
+            {
+                // nothing to do
+                result.setOutcome(false);
+                result.setContinue(false);
+                return result;
+            }
 
-          // note: an item.move() method exists, but does not handle several cases:
-          // - no preexisting owning collection (first arg is null)
-          // - item already in collection, but not an owning collection
-          //   (works, but puts item in collection twice)
+            // note: an item.move() method exists, but does not handle several cases:
+            // - no preexisting owning collection (first arg is null)
+            // - item already in collection, but not an owning collection
+            //   (works, but puts item in collection twice)
 
-          // Don't re-add the item to a collection it's already in.
-          boolean alreadyInCollection = false;
-          for (Collection collection : item.getCollections())
-          {
-              if (collection.equals(destination))
-              {
-                  alreadyInCollection = true;
-                  break;
-              }
-          }
+            // Don't re-add the item to a collection it's already in.
+            boolean alreadyInCollection = false;
+            for (Collection collection : item.getCollections())
+            {
+                if (collection.equals(destination))
+                {
+                    alreadyInCollection = true;
+                    break;
+                }
+            }
 
-          // Remove item from its owning collection and add to the destination
-          if (!alreadyInCollection)
-          {
-              destination.addItem(item);
-          }
+            // Remove item from its owning collection and add to the destination
+            if (!alreadyInCollection)
+            {
+                destination.addItem(item);
+            }
 
-          if (owningCollection != null)
-          {
-              owningCollection.removeItem(item);
-          }
+            if (owningCollection != null)
+            {
+                owningCollection.removeItem(item);
+            }
 
-          item.setOwningCollection(destination);
+            item.setOwningCollection(destination);
 
-          // Inherit policies of destination collection if required
-          if (inherit)
-          {
-              item.inheritCollectionDefaultPolicies(destination);
-          }
+            // Inherit policies of destination collection if required
+            if (inherit)
+            {
+                item.inheritCollectionDefaultPolicies(destination);
+            }
 
-          item.update();
-          context.commit();
+            item.update();
+            context.commit();
 
-          result.setOutcome(true);
-          result.setContinue(true);
-          result.setMessage(T_item_moved);
+            result.setOutcome(true);
+            result.setContinue(true);
+            result.setMessage(T_item_moved);
         }
 
         return result;
     }
 
 
-	/**
-	 * Permanently delete the specified item, this method assumes that
-	 * the action has been confirmed.
-	 *
-	 * @param context The DSpace context
-	 * @param itemID The id of the to-be-deleted item.
-	 * @return A result object
+    /**
+     * Permanently delete the specified item, this method assumes that
+     * the action has been confirmed.
+     *
+     * @param context The DSpace context
+     * @param itemID The id of the to-be-deleted item.
+     * @return A result object
      * @throws java.sql.SQLException
      * @throws org.dspace.authorize.AuthorizeException
      * @throws java.io.IOException
-	 */
-	public static FlowResult processDeleteItem(Context context, int itemID)
+     */
+    public static FlowResult processDeleteItem(Context context, int itemID)
         throws SQLException, AuthorizeException, IOException
-	{
-		FlowResult result = new FlowResult();
-		result.setContinue(false);
+    {
+        FlowResult result = new FlowResult();
+        result.setContinue(false);
 
-		Item item = Item.find(context, itemID);
+        Item item = Item.find(context, itemID);
 
         Collection[] collections = item.getCollections();
 
@@ -566,8 +565,8 @@ public class FlowItemUtils
 
         result.setContinue(true);
 
-		return result;
-	}
+        return result;
+    }
 
     /**
     * Add a new bitstream to the item. The bundle, bitstream (aka file), and description
@@ -1127,7 +1126,7 @@ public class FlowItemUtils
     *
     */
     public static FlowResult processDeleteBitstreams(Context context, int itemID, String[] bitstreamIDs)
-            throws SQLException, AuthorizeException, IOException, UIException
+        throws SQLException, AuthorizeException, IOException, UIException
     {
         FlowResult result = new FlowResult();
         result.setContinue(false);
@@ -1189,105 +1188,105 @@ public class FlowItemUtils
         return result;
     }
 
-	/**
-	 * Add a new bitstream to the item. The bundle, bitstream (aka file), and description
-	 * will be used to create a new bitstream. If the format needs to be adjusted then they
-	 * will need to access the edit bitstream form after it has been uploaded.
-	 *
-	 * @param context The DSpace content
-	 * @param itemID The item to add a new bitstream too
-	 * @param request The request.
-	 * @return A flow result
+    /**
+     * Add a new bitstream to the item. The bundle, bitstream (aka file), and description
+     * will be used to create a new bitstream. If the format needs to be adjusted then they
+     * will need to access the edit bitstream form after it has been uploaded.
+     *
+     * @param context The DSpace content
+     * @param itemID The item to add a new bitstream too
+     * @param request The request.
+     * @return A flow result
      * @throws java.sql.SQLException
      * @throws org.dspace.authorize.AuthorizeException
      * @throws java.io.IOException
-	 */
-	/*public static FlowResult processAddBitstream(Context context, int itemID, Request request)
-        throws SQLException, AuthorizeException, IOException
-	{
-		FlowResult result = new FlowResult();
-		result.setContinue(false);
+     */
+    /*public static FlowResult processAddBitstream(Context context, int itemID, Request request)
+    throws SQLException, AuthorizeException, IOException
+    {
+        FlowResult result = new FlowResult();
+        result.setContinue(false);
 
-		// Upload a new file
-		Item item = Item.find(context, itemID);
+        // Upload a new file
+        Item item = Item.find(context, itemID);
 
 
-		Object object = request.get("file");
-		Part filePart = null;
-		if (object instanceof Part)
+        Object object = request.get("file");
+        Part filePart = null;
+        if (object instanceof Part)
         {
             filePart = (Part) object;
         }
 
-		if (filePart != null && filePart.getSize() > 0)
-		{
-			InputStream is = filePart.getInputStream();
+        if (filePart != null && filePart.getSize() > 0)
+        {
+            InputStream is = filePart.getInputStream();
 
-			String bundleName = request.getParameter("bundle");
+            String bundleName = request.getParameter("bundle");
 
-			Bitstream bitstream;
-			Bundle[] bundles = item.getBundles(bundleName);
-			if (bundles.length < 1)
-			{
-				// set bundle's name to ORIGINAL
-				bitstream = item.createSingleBitstream(is, bundleName);
+            Bitstream bitstream;
+            Bundle[] bundles = item.getBundles(bundleName);
+            if (bundles.length < 1)
+            {
+                // set bundle's name to ORIGINAL
+                bitstream = item.createSingleBitstream(is, bundleName);
 
-				// set the permission as defined in the owning collection
-				Collection owningCollection = item.getOwningCollection();
-				if (owningCollection != null)
-				{
-				    Bundle bnd = bitstream.getBundles()[0];
-				    bnd.inheritCollectionDefaultPolicies(owningCollection);
-				}
-			}
-			else
-			{
-				// we have a bundle already, just add bitstream
-				bitstream = bundles[0].createBitstream(is);
-			}
+                // set the permission as defined in the owning collection
+                Collection owningCollection = item.getOwningCollection();
+                if (owningCollection != null)
+                {
+                    Bundle bnd = bitstream.getBundles()[0];
+                    bnd.inheritCollectionDefaultPolicies(owningCollection);
+                }
+            }
+            else
+            {
+                // we have a bundle already, just add bitstream
+                bitstream = bundles[0].createBitstream(is);
+            }
 
-			// Strip all but the last filename. It would be nice
-			// to know which OS the file came from.
-			String name = filePart.getUploadName();
+            // Strip all but the last filename. It would be nice
+            // to know which OS the file came from.
+            String name = filePart.getUploadName();
 
-			while (name.indexOf('/') > -1)
-			{
-				name = name.substring(name.indexOf('/') + 1);
-			}
+            while (name.indexOf('/') > -1)
+            {
+                name = name.substring(name.indexOf('/') + 1);
+            }
 
-			while (name.indexOf('\\') > -1)
-			{
-				name = name.substring(name.indexOf('\\') + 1);
-			}
+            while (name.indexOf('\\') > -1)
+            {
+                name = name.substring(name.indexOf('\\') + 1);
+            }
 
-			bitstream.setName(name);
-			bitstream.setSource(filePart.getUploadName());
-			bitstream.setDescription(request.getParameter("description"));
+            bitstream.setName(name);
+            bitstream.setSource(filePart.getUploadName());
+            bitstream.setDescription(request.getParameter("description"));
 
-			// Identify the format
-			BitstreamFormat format = FormatIdentifier.guessFormat(context, bitstream);
-			bitstream.setFormat(format);
+            // Identify the format
+            BitstreamFormat format = FormatIdentifier.guessFormat(context, bitstream);
+            bitstream.setFormat(format);
 
-			// Update to DB
-			bitstream.update();
-			item.update();
+            // Update to DB
+            bitstream.update();
+            item.update();
 
             processAccessFields(context, request, item.getOwningCollection(), bitstream);
 
-			context.commit();
+            context.commit();
 
-			result.setContinue(true);
-	        result.setOutcome(true);
-	        result.setMessage(T_bitstream_added);
-		}
-		else
-		{
-			result.setContinue(false);
-	        result.setOutcome(false);
-	        result.setMessage(T_bitstream_failed);
-		}
-		return result;
-	}*/
+            result.setContinue(true);
+            result.setOutcome(true);
+            result.setMessage(T_bitstream_added);
+        }
+        else
+        {
+            result.setContinue(false);
+            result.setOutcome(false);
+            result.setMessage(T_bitstream_failed);
+        }
+        return result;
+    }*/
 
     /**
      *
@@ -1316,165 +1315,165 @@ public class FlowItemUtils
     }*/
 
 
-	/**
-	 * Update a bitstream's metadata.
-	 *
-	 * @param context The DSpace content
-	 * @param itemID The item to which the bitstream belongs
-	 * @param bitstreamID The bitstream being updated.
+    /**
+     * Update a bitstream's metadata.
+     *
+     * @param context The DSpace content
+     * @param itemID The item to which the bitstream belongs
+     * @param bitstreamID The bitstream being updated.
      * @param bitstreamName
-	 * @param description The new description of the bitstream
+     * @param description The new description of the bitstream
      * @param primary
-	 * @param formatID The new format ID of the bitstream
-	 * @param userFormat Any user supplied formats.
+     * @param formatID The new format ID of the bitstream
+     * @param userFormat Any user supplied formats.
      * @param request
      *
-	 * @return A flow result object.
+     * @return A flow result object.
      * @throws java.sql.SQLException
      * @throws org.dspace.authorize.AuthorizeException
-	 */
-	/*public static FlowResult processEditBitstream(Context context, int itemID, int bitstreamID, String bitstreamName,
-                                                  String primary, String description, int formatID, String userFormat,
-                                                  Request request)
+     */
+    /*public static FlowResult processEditBitstream(Context context, int itemID, int bitstreamID, String bitstreamName,
+                                                    String primary, String description, int formatID, String userFormat,
+                                                    Request request)
         throws SQLException, AuthorizeException
-	{
-		FlowResult result = new FlowResult();
-		result.setContinue(false);
+    {
+        FlowResult result = new FlowResult();
+        result.setContinue(false);
 
-		Bitstream bitstream = Bitstream.find(context, bitstreamID);
-		BitstreamFormat currentFormat = bitstream.getFormat();
+        Bitstream bitstream = Bitstream.find(context, bitstreamID);
+        BitstreamFormat currentFormat = bitstream.getFormat();
 
-		//Step 1:
-		// Update the bitstream's description and name
-		if (description != null)
-		{
-			bitstream.setDescription(description);
-		}
+        //Step 1:
+        // Update the bitstream's description and name
+        if (description != null)
+        {
+                bitstream.setDescription(description);
+        }
 
         if (bitstreamName != null)
         {
             bitstream.setName(bitstreamName);
         }
 
-		//Step 2:
-		// Check if the primary bitstream status has changed
-		Bundle[] bundles = bitstream.getBundles();
-		if (bundles != null && bundles.length > 0)
-		{
-			if (bitstreamID == bundles[0].getPrimaryBitstreamID())
-			{
-				// currently the bitstream is primary
-				if ("no".equals(primary))
-				{
-					// However the user has removed this bitstream as a primary bitstream.
-					bundles[0].unsetPrimaryBitstreamID();
-					bundles[0].update();
-				}
-			}
-			else
-			{
-				// currently the bitstream is non-primary
-				if ("yes".equals(primary))
-				{
-					// However the user has set this bitstream as primary.
-					bundles[0].setPrimaryBitstreamID(bitstreamID);
-					bundles[0].update();
-				}
-			}
-		}
+        //Step 2:
+        // Check if the primary bitstream status has changed
+        Bundle[] bundles = bitstream.getBundles();
+        if (bundles != null && bundles.length > 0)
+        {
+            if (bitstreamID == bundles[0].getPrimaryBitstreamID())
+            {
+                // currently the bitstream is primary
+                if ("no".equals(primary))
+                {
+                    // However the user has removed this bitstream as a primary bitstream.
+                    bundles[0].unsetPrimaryBitstreamID();
+                    bundles[0].update();
+                }
+            }
+            else
+            {
+                // currently the bitstream is non-primary
+                if ("yes".equals(primary))
+                {
+                    // However the user has set this bitstream as primary.
+                    bundles[0].setPrimaryBitstreamID(bitstreamID);
+                    bundles[0].update();
+                }
+            }
+        }
 
 
-		//Step 2:
-		// Update the bitstream's format
-		if (formatID > 0)
-		{
-			if (currentFormat == null || currentFormat.getID() != formatID)
-			{
-				BitstreamFormat newFormat = BitstreamFormat.find(context, formatID);
-				if (newFormat != null)
-				{
-					bitstream.setFormat(newFormat);
-				}
-			}
-		}
-		else
-		{
-			if (userFormat != null && userFormat.length() > 0)
-			{
-				bitstream.setUserFormatDescription(userFormat);
-			}
-		}
+        //Step 2:
+        // Update the bitstream's format
+        if (formatID > 0)
+        {
+            if (currentFormat == null || currentFormat.getID() != formatID)
+            {
+                BitstreamFormat newFormat = BitstreamFormat.find(context, formatID);
+                if (newFormat != null)
+                {
+                    bitstream.setFormat(newFormat);
+                }
+            }
+        }
+        else
+        {
+            if (userFormat != null && userFormat.length() > 0)
+            {
+                bitstream.setUserFormatDescription(userFormat);
+            }
+        }
 
-		//Step 3:
-		// Save our changes
-		bitstream.update();
-		context.commit();
+        //Step 3:
+        // Save our changes
+        bitstream.update();
+        context.commit();
 
         processAccessFields(context, request, ((Item)bitstream.getParentObject()).getOwningCollection(), bitstream);
 
 
         result.setContinue(true);
-	     result.setOutcome(true);
-	     result.setMessage(T_bitstream_updated);
+        result.setOutcome(true);
+        result.setMessage(T_bitstream_updated);
 
 
-		return result;
-	}*/
+        return result;
+    }*/
 
-	/**
-	 * Delete the given bitstreams from the bundle and item. If there are no more bitstreams
-	 * left in a bundle then also remove it.
-	 *
-	 * @param context Current dspace content
-	 * @param itemID The item id from which to remove bitstreams
-	 * @param bitstreamIDs A bundleID slash bitstreamID pair of bitstreams to be removed.
+    /**
+     * Delete the given bitstreams from the bundle and item. If there are no more bitstreams
+     * left in a bundle then also remove it.
      *
-	 * @return A flow result
+     * @param context Current dspace content
+     * @param itemID The item id from which to remove bitstreams
+     * @param bitstreamIDs A bundleID slash bitstreamID pair of bitstreams to be removed.
+     *
+     * @return A flow result
      * @throws java.sql.SQLException
      * @throws org.dspace.authorize.AuthorizeException
      * @throws java.io.IOException
-	 */
-	/*public static FlowResult processDeleteBitstreams(Context context, int itemID, String[] bitstreamIDs)
-        throws SQLException, AuthorizeException, IOException, UIException
-	{
-		FlowResult result = new FlowResult();
-		result.setContinue(false);
+     */
+    /*public static FlowResult processDeleteBitstreams(Context context, int itemID, String[] bitstreamIDs)
+    throws SQLException, AuthorizeException, IOException, UIException
+    {
+        FlowResult result = new FlowResult();
+        result.setContinue(false);
 
-		Item item = Item.find(context, itemID);
+        Item item = Item.find(context, itemID);
 
-		for (String id : bitstreamIDs)
-		{
-			String[] parts = id.split("/");
+        for (String id : bitstreamIDs)
+        {
+            String[] parts = id.split("/");
 
-			if (parts.length != 2)
-                        {
-				throw new UIException("Unable to parse id into bundle and bitstream id: "+id);
-                        }
+            if (parts.length != 2)
+            {
+                throw new UIException("Unable to parse id into bundle and bitstream id: "+id);
+            }
 
-			int bundleID = Integer.valueOf(parts[0]);
-			int bitstreamID = Integer.valueOf(parts[1]);
+            int bundleID = Integer.valueOf(parts[0]);
+            int bitstreamID = Integer.valueOf(parts[1]);
 
-			Bundle bundle = Bundle.find(context, bundleID);
-			Bitstream bitstream = Bitstream.find(context,bitstreamID);
+            Bundle bundle = Bundle.find(context, bundleID);
+            Bitstream bitstream = Bitstream.find(context,bitstreamID);
 
-			bundle.removeBitstream(bitstream);
+            bundle.removeBitstream(bitstream);
 
-			if (bundle.getBitstreams().length == 0)
-			{
-				item.removeBundle(bundle);
-			}
-		}
+            if (bundle.getBitstreams().length == 0)
+            {
+                item.removeBundle(bundle);
+            }
+        }
 
-		item.update();
+        item.update();
 
-		context.commit();
+        context.commit();
 
-		result.setContinue(true);
-		result.setOutcome(true);
-		result.setMessage(T_bitstream_delete);
+        result.setContinue(true);
+        result.setOutcome(true);
+        result.setMessage(T_bitstream_delete);
 
-		return result;
-	}*/
+        return result;
+    }*/
 
     /**
      *
@@ -1564,26 +1563,26 @@ public class FlowItemUtils
      *
      */
     public static FlowResult processCurateItem(Context context, int itemID, Request request)
-            throws AuthorizeException, IOException, SQLException, Exception
-	{
-        String task = request.getParameter("curate_task");
-		Curator curator = FlowCurationUtils.getCurator(task);
-        try
+        throws AuthorizeException, IOException, SQLException, Exception
+    {
+    String task = request.getParameter("curate_task");
+            Curator curator = FlowCurationUtils.getCurator(task);
+    try
+    {
+        Item item = Item.find(context, itemID);
+        if (item != null)
         {
-            Item item = Item.find(context, itemID);
-            if (item != null)
-            {
-                //Call curate(context,ID) to ensure a Task Performer (Eperson) is set in Curator
-                curator.curate(context, item.getHandle());
-            }
-            return FlowCurationUtils.getRunFlowResult(task, curator, true);
+            //Call curate(context,ID) to ensure a Task Performer (Eperson) is set in Curator
+            curator.curate(context, item.getHandle());
         }
-        catch (Exception e)
-        {
-            curator.setResult(task, e.getMessage());
-            return FlowCurationUtils.getRunFlowResult(task, curator, false);
-		}
-	}
+        return FlowCurationUtils.getRunFlowResult(task, curator, true);
+    }
+    catch (Exception e)
+    {
+        curator.setResult(task, e.getMessage());
+        return FlowCurationUtils.getRunFlowResult(task, curator, false);
+            }
+    }
 
     /**
      * queues curation tasks
@@ -1598,7 +1597,7 @@ public class FlowItemUtils
      */
     public static FlowResult processQueueItem(Context context, int itemID, Request request)
         throws AuthorizeException, IOException, SQLException, Exception
-	{
+    {
         String task = request.getParameter("curate_task");
         Curator curator = FlowCurationUtils.getCurator(task);
         String objId = String.valueOf(itemID);
@@ -1623,45 +1622,45 @@ public class FlowItemUtils
         }
 
         return FlowCurationUtils.getQueueFlowResult(task, status, objId, taskQueueName);
-	}
+    }
 
 
-	/**
-	 * Parse the given name into three parts, divided by an _. Each part should represent the
-	 * schema, element, and qualifier. You are guaranteed that if no qualifier was supplied the
-	 * third entry is null.
-	 *
-	 * @param name The name to be parsed.
-	 * @return An array of name parts.
+    /**
+     * Parse the given name into three parts, divided by an _. Each part should represent the
+     * schema, element, and qualifier. You are guaranteed that if no qualifier was supplied the
+     * third entry is null.
+     *
+     * @param name The name to be parsed.
+     * @return An array of name parts.
      *
      * @throws org.dspace.app.xmlui.utils.UIException
-	 */
-	private static String[] parseName(String name)
+     */
+    private static String[] parseName(String name)
         throws UIException
-	{
-		String[] parts = new String[3];
+    {
+        String[] parts = new String[3];
 
-		String[] split = name.split("_");
+        String[] split = name.split("_");
 
-		if (split.length == 2)
+        if (split.length == 2)
         {
-			parts[0] = split[0];
-			parts[1] = split[1];
-			parts[2] = null;
-		}
+            parts[0] = split[0];
+            parts[1] = split[1];
+            parts[2] = null;
+        }
         else if (split.length == 3)
         {
-			parts[0] = split[0];
-			parts[1] = split[1];
-			parts[2] = split[2];
-		}
+            parts[0] = split[0];
+            parts[1] = split[1];
+            parts[2] = split[2];
+        }
         else
         {
-			throw new UIException("Unable to parse metedata field name: "+name);
-		}
+            throw new UIException("Unable to parse metedata field name: "+name);
+        }
 
-		return parts;
-	}
+        return parts;
+    }
 
     private static void CreateProvenanceMessage(Context context, StringBuilder provSB, Item item)
         throws AuthorizeException, IOException, SQLException
@@ -1691,6 +1690,4 @@ public class FlowItemUtils
             provMDV.create(context);
         }
     }
-    
-    
 }
