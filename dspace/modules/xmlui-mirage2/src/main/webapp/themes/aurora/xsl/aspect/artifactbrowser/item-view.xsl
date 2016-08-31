@@ -104,27 +104,33 @@
 
 
     <xsl:template match="dim:dim" mode="itemSummaryView-DIM">
+        <xsl:variable name="collectionID">
+            <xsl:copy-of select="substring-after($document//dri:meta/dri:pageMeta/dri:metadata[@element='focus'][@qualifier='container']/node(), ':')"/>
+        </xsl:variable>
         <div class="item-summary-view-metadata">
             <xsl:call-template name="itemSummaryView-DIM-title"/>
             <div class="row">
                 <div class="col-sm-4">
                     <div class="row">
-                        <!-- <div class="col-xs-6 col-sm-12">
+                        <!--<div class="col-xs-6 col-sm-12">
                             <xsl:call-template name="itemSummaryView-DIM-thumbnail"/>
-                        </div> -->
+                        </div>-->
                         <div class="col-xs-6 col-sm-12">
                             <xsl:call-template name="itemSummaryView-DIM-file-section"/>
                         </div>
                     </div>
                     <xsl:call-template name="itemSummaryView-DIM-date"/>
                     <xsl:call-template name="itemSummaryView-DIM-authors"/>
+                    <xsl:if test="$collectionID = '11200/8' or $collectionID = '11200/44653'">
+                        <xsl:call-template name="itemSummaryView-DIM-language"/>
+                    </xsl:if>
                     <xsl:if test="$ds_item_view_toggle_url != ''">
                         <xsl:call-template name="itemSummaryView-show-full"/>
                     </xsl:if>
                 </div>
                 <div class="col-sm-8">
                     <xsl:call-template name="itemSummaryView-DIM-description"/>
-                    <xsl:call-template name="itemSummaryView-DIM-abstract"/>
+                    <xsl:call-template name="itemSummaryView-DIM-abstract" />
                     <xsl:call-template name="itemSummaryView-DIM-URI"/>
                     <xsl:call-template name="itemSummaryView-collections"/>
                 </div>
@@ -148,7 +154,6 @@
                                     <br/>
                                 </xsl:if>
                             </xsl:if>
-
                         </xsl:for-each>
                     </p>
                 </div>
@@ -206,13 +211,13 @@
             <div class="simple-item-view-description item-page-field-wrapper table">
                 <h5 class="visible-xs"><i18n:text>xmlui.dri2xhtml.METS-1.0.item-description</i18n:text></h5>
                 <xsl:choose>
-					<xsl:when test="dim:field[@element='description'][not(@qualifier)]/node() != ''">
-						<xsl:copy-of select="dim:field[@element='description'][not(@qualifier)]/node()" />
-					</xsl:when>
-					<xsl:otherwise>
-						&#160;
-					</xsl:otherwise>
-				</xsl:choose>
+                    <xsl:when test="dim:field[@element='description'][not(@qualifier)]/node() != ''">
+                        <xsl:copy-of select="dim:field[@element='description'][not(@qualifier)]/node()" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        &#160;
+                    </xsl:otherwise>
+                </xsl:choose>
             </div>
         </xsl:if>
     </xsl:template>
@@ -302,7 +307,51 @@
     </xsl:template>
 
     <xsl:template name="itemSummaryView-DIM-date">
-        <xsl:if test="dim:field[@element='date' and @qualifier='issued' and descendant::text()]">
+        <xsl:variable name="collectionID">
+            <xsl:copy-of select="substring-after($document//dri:meta/dri:pageMeta/dri:metadata[@element='focus'][@qualifier='container']/node(), ':')"/>
+        </xsl:variable>
+        <div class="simple-item-view-date word-break item-page-field-wrapper table">
+            <h5>
+                <i18n:text>xmlui.dri2xhtml.METS-1.0.item-date</i18n:text>
+            </h5>
+            <xsl:choose>
+                <xsl:when test="$collectionID = '11200/8' or $collectionID = '11200/48653'">
+                    <xsl:for-each select="dim:field[@element='date' and @qualifier='created']">
+                        <xsl:copy-of select="substring(./node(),1,10)"/>
+                        <xsl:if test="count(following-sibling::dim:field[@element='date' and @qualifier='created']) != 0">
+                            to
+                        </xsl:if>
+                    </xsl:for-each>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:choose>
+                        <xsl:when test="dim:field[@element='date' and @qualifier='issued' and descendant::text()]">
+                            <xsl:for-each select="dim:field[@element='date' and @qualifier='issued']">
+                                <xsl:copy-of select="substring(./node(),1,10)"/>
+                                <xsl:if test="count(following-sibling::dim:field[@element='date' and @qualifier='issued']) != 0">
+                                    <br/>
+                                </xsl:if>
+                            </xsl:for-each>
+                        </xsl:when>
+                        <xsl:when test="dim:field[@element='date' and @qualifier='created' and descendant::text()]">
+                            <xsl:for-each select="dim:field[@element='date' and @qualifier='created']">
+                                <xsl:copy-of select="substring(./node(),1,10)"/>
+                                <xsl:if test="count(following-sibling::dim:field[@element='date' and @qualifier='created']) != 0">
+                                    <br/>
+                                </xsl:if>
+                            </xsl:for-each>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:for-each select="dim:field[@element='date' and @qualifier='accessioned']">
+                                <xsl:copy-of select="substring(./node(),1,10)"/>
+                            </xsl:for-each>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    
+                </xsl:otherwise>
+            </xsl:choose>
+        </div>
+        <!--<xsl:if test="dim:field[@element='date' and @qualifier='issued' and descendant::text()]">
             <div class="simple-item-view-date word-break item-page-field-wrapper table">
                 <h5>
                     <i18n:text>xmlui.dri2xhtml.METS-1.0.item-date</i18n:text>
@@ -314,7 +363,18 @@
                     </xsl:if>
                 </xsl:for-each>
             </div>
-        </xsl:if>
+        </xsl:if>-->
+    </xsl:template>
+    
+    <xsl:template name="itemSummaryView-DIM-language">
+        <div class="simple-item-view-lang word-break item-page-field-wrapper-table">
+            <h5>
+                Language
+            </h5>
+            <xsl:if test="dim:field[@element='language' and descendant::text()]">
+                <xsl:value-of select="dim:field[@element='language'][not(@qualifier)]/node()"/>
+            </xsl:if>
+        </div>
     </xsl:template>
 
     <xsl:template name="itemSummaryView-show-full">
@@ -349,25 +409,25 @@
                     </h5>
 
                     <xsl:variable name="label-1">
-                            <xsl:choose>
-                                <xsl:when test="confman:getProperty('mirage2.item-view.bitstream.href.label.1')">
-                                    <xsl:value-of select="confman:getProperty('mirage2.item-view.bitstream.href.label.1')"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:text>label</xsl:text>
-                                </xsl:otherwise>
-                            </xsl:choose>
+                        <xsl:choose>
+                            <xsl:when test="confman:getProperty('mirage2.item-view.bitstream.href.label.1')">
+                                <xsl:value-of select="confman:getProperty('mirage2.item-view.bitstream.href.label.1')"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>label</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </xsl:variable>
 
                     <xsl:variable name="label-2">
-                            <xsl:choose>
-                                <xsl:when test="confman:getProperty('mirage2.item-view.bitstream.href.label.2')">
-                                    <xsl:value-of select="confman:getProperty('mirage2.item-view.bitstream.href.label.2')"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:text>title</xsl:text>
-                                </xsl:otherwise>
-                            </xsl:choose>
+                        <xsl:choose>
+                            <xsl:when test="confman:getProperty('mirage2.item-view.bitstream.href.label.2')">
+                                <xsl:value-of select="confman:getProperty('mirage2.item-view.bitstream.href.label.2')"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>title</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </xsl:variable>
 
                     <xsl:for-each select="//mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL' or @USE='LICENSE']/mets:file">
@@ -482,26 +542,26 @@
     </xsl:template>
 
     <xsl:template match="dim:field" mode="itemDetailView-DIM">
-            <tr>
-                <xsl:attribute name="class">
-                    <xsl:text>ds-table-row </xsl:text>
-                    <xsl:if test="(position() div 2 mod 2 = 0)">even </xsl:if>
-                    <xsl:if test="(position() div 2 mod 2 = 1)">odd </xsl:if>
-                </xsl:attribute>
-                <td class="label-cell">
-                    <xsl:value-of select="./@mdschema"/>
+        <tr>
+            <xsl:attribute name="class">
+                <xsl:text>ds-table-row </xsl:text>
+                <xsl:if test="(position() div 2 mod 2 = 0)">even </xsl:if>
+                <xsl:if test="(position() div 2 mod 2 = 1)">odd </xsl:if>
+            </xsl:attribute>
+            <td class="label-cell">
+                <xsl:value-of select="./@mdschema"/>
+                <xsl:text>.</xsl:text>
+                <xsl:value-of select="./@element"/>
+                <xsl:if test="./@qualifier">
                     <xsl:text>.</xsl:text>
-                    <xsl:value-of select="./@element"/>
-                    <xsl:if test="./@qualifier">
-                        <xsl:text>.</xsl:text>
-                        <xsl:value-of select="./@qualifier"/>
-                    </xsl:if>
-                </td>
-            <td class="word-break">
-              <xsl:copy-of select="./node()"/>
+                    <xsl:value-of select="./@qualifier"/>
+                </xsl:if>
             </td>
-                <td><xsl:value-of select="./@language"/></td>
-            </tr>
+        <td class="word-break">
+          <xsl:copy-of select="./node()"/>
+        </td>
+            <td><xsl:value-of select="./@language"/></td>
+        </tr>
     </xsl:template>
 
     <!-- don't render the item-view-toggle automatically in the summary view, only when it gets called -->
