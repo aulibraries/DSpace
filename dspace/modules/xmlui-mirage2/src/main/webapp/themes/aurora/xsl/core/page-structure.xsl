@@ -722,7 +722,7 @@
                         <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='search'][@qualifier='simpleURL']"/>
                     </xsl:attribute>
                     <div class="form-group">
-                        <label class="control-label col-sm-4 frontPageSrchFormLabel" for="aspect_artifactbrowser_FrontPageSearch_field_query">Search AUETD</label>
+                        <label class="control-label col-sm-4 frontPageSrchFormLabel" for="aspect_artifactbrowser_FrontPageSearch_field_query">Search AUrora</label>
                         <div class="col-sm-6">
                             <div class="input-group">
                                 <input id="aspect_artifactbrowser_FrontPageSearch_field_query" class="ds-text-field form-control" name="query" type="text" placeholder="xmlui.general.search.placeholder.aurora_placeholder" i18n:attr="placeholder" value=""/>

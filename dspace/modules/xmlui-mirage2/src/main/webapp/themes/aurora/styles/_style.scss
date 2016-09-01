@@ -333,6 +333,7 @@ h3.page-header {
 /************** Home page Styles *********************/
 
 .frontPageSrchBlock {
+    display: block;
     padding: 30px 0 30px 0;
         
     @media(min-width: $screen-sm-min) {
@@ -352,7 +353,7 @@ h3.page-header {
     font-size: 2.1em;
     font-weight: 500;
     text-align: left;
-    padding: 0 0 0 30px;
+    padding: 0 0 0 15px;
 }
 
 .searchBlockHdr {
