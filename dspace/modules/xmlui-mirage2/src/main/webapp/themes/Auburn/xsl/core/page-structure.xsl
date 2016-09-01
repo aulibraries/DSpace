@@ -319,7 +319,7 @@
     <xsl:template name="buildHeader">
         <header role="banner">
             <div class="logo hidden-print" onclick="window.location='http://www.auburn.edu'" title="AU Homepage" aria-label="Auburn University Homepage"><img src="//cdn.auburn.edu/assets/img/header-logo.png" alt="Auburn University Homepage" height="75" width="203"></img></div>
-            <div class="menu-icon-header hidden-print hidden-sm hidden-md hidden-lg" data-toggle="offcanvas"><i class="fa fa-reorder"></i></div>
+            <div class="menu-icon-header hidden-print hidden-sm hidden-md hidden-lg" data-toggle="offcanvas"><i class="fa fa-reorder" title="Open the main navigation menu"></i></div>
             <div class="search-icon hidden-print"><i class="fa fa-search"></i></div>
             <div class="header-title">
                 <div class="top-links hidden-print"><a href="http://www.auburn.edu/main/sitemap.php">A-Z Index</a> | <a href="http://www.auburn.edu/map">Map</a> | <a href="http://www.auburn.edu/main/auweb_campus_directory.html" class="lastTopLink">People Finder</a></div>
@@ -385,7 +385,7 @@
                             </xsl:attribute>AUETD Home</a></li>
                         <li><a href="http://www.grad.auburn.edu/" title="Graduate School" target="_blank">Graduate School</a></li>
                     </ul>
-					<div class="menu-icon-nav hidden-print hidden-xs hidden-md hidden-lg" data-toggle="offcanvas"><i class="fa fa-reorder"></i></div>
+                    <div class="menu-icon-nav hidden-print hidden-xs hidden-md hidden-lg" data-toggle="offcanvas"><i class="fa fa-reorder" title="Open a navigation menu"></i></div>
                 </div>
             </div>
         </nav>
@@ -595,7 +595,7 @@
     <xsl:template name="buildFooter">
         <footer>
             <p style="font-size:11px; text-align:center;">Auburn University Libraries | 231 Mell Street | Auburn, Alabama 36849 | (334) 844-4500 or (800) 446-0387  | <script type="text/javascript">emailE='auburn.edu'; emailE=('libwebm' + '@' + emailE); document.write('<a href="mailto:'+emailE+'">' + emailE + '</a>');</script></p>
-            <p class="social"><a href="https://twitter.com/aulibraries" class="social twitter" alt="Follow The Libraries on Twitter" title="Follow The Libraries on Twitter" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a> <a href="https://www.flickr.com/photos/aulibraries" class="social flickr" alt="Follow the Auburn Libraries on Flickr" title="Follow the Auburn Libraries on Flickr" target="_blank"><i class="fa fa-flickr" aria-hidden="true"></i></a> <a href="https://www.facebook.com/auburnlibraries" class="social facebook" alt="Follow the Auburn Libraries on Facebook" title="Follow the Auburn Libraries on Facebook" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a> <a href="https://instagram.com/aulibraries" class="social instagram" title="Follow the Auburn Libraries on Instagram" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a><a href="https://vimeo.com/aulibraries" class="social vimeo" title="Follow the Auburn Libraries on Vimeo" target="_blank"><i class="fa fa-vimeo" aria-hidden="true"></i></a> <a href="https://www.youtube.com/user/auburnlibraries" class="social youtube" alt="Follow the Auburn Libraries on YouTube" title="Follow the Auburn Libraries on YouTube" target="_blank"><i class="fa fa-youtube" aria-hidden="true"></i></a></p>
+            <p class="social"><a href="https://twitter.com/aulibraries" class="social twitter" aria-label="Follow The Libraries on Twitter" alt="Follow The Libraries on Twitter" title="Follow The Libraries on Twitter" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a> <a href="https://www.flickr.com/photos/aulibraries" class="social flickr" aria-label="Follow The Libraries on Flickr" alt="Follow the Auburn Libraries on Flickr" title="Follow the Auburn Libraries on Flickr" target="_blank"><i class="fa fa-flickr" aria-hidden="true"></i></a> <a href="https://www.facebook.com/auburnlibraries" class="social facebook" aria-label="Follow The Libraries on Facebook" alt="Follow the Auburn Libraries on Facebook" title="Follow the Auburn Libraries on Facebook" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a> <a href="https://instagram.com/aulibraries" class="social instagram" aria-label="Follow The Libraries on Instagram" title="Follow the Auburn Libraries on Instagram" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a><a href="https://vimeo.com/aulibraries" class="social vimeo" aria-label="Follow The Libraries on Vimeo" title="Follow the Auburn Libraries on Vimeo" target="_blank"><i class="fa fa-vimeo" aria-hidden="true"></i></a> <a href="https://www.youtube.com/user/auburnlibraries" class="social youtube" alt="Follow the Auburn Libraries on YouTube" aria-label="Follow The Libraries on YouTube" title="Follow the Auburn Libraries on YouTube" target="_blank"><i class="fa fa-youtube" aria-hidden="true"></i></a></p>
             <!--Invisible link to HTML sitemap (for search engines) -->
             <a class="hidden">
                 <xsl:attribute name="href">
@@ -693,7 +693,7 @@
         </div>
     </xsl:template>
 	
-	<xsl:template name="FrontPageSearch">
+    <xsl:template name="FrontPageSearch">
         <div class="row">
             <div id="frontPageSrchBlock" class="col-lg-12 frontPageSrchBlock">
                     <form id="aspect_artifactbrowser_FrontPageSearch_div_front-page-search" class="ds-interactive-div primary" method="post">
@@ -708,7 +708,7 @@
                                     <input id="aspect_artifactbrowser_FrontPageSearch_field_query" class="ds-text-field form-control" name="query" type="text" placeholder="xmlui.general.search.placeholder.auetd_placeholder" i18n:attr="placeholder" value=""/>
                                     <span class="input-group-btn">
                                         <button id="aspect_artifactbrowser_FrontPageSearch_field_submit" class="ds-button-field btn btn-default" name="submit" type="submit">
-                                            <i class="glyphicon glyphicon-search" aria-hidden="true"/>&#160;
+                                            <i class="glyphicon glyphicon-search" aria-hidden="true" title="Click here to submit the search form"/>&#160;
                                         </button>
                                     </span>
                                 </div>

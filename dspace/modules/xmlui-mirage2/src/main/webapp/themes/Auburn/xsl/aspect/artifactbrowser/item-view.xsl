@@ -369,25 +369,25 @@
                     </h5>
 
                     <xsl:variable name="label-1">
-                            <xsl:choose>
-                                <xsl:when test="confman:getProperty('mirage2.item-view.bitstream.href.label.1')">
-                                    <xsl:value-of select="confman:getProperty('mirage2.item-view.bitstream.href.label.1')"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:text>label</xsl:text>
-                                </xsl:otherwise>
-                            </xsl:choose>
+                        <xsl:choose>
+                            <xsl:when test="confman:getProperty('mirage2.item-view.bitstream.href.label.1')">
+                                <xsl:value-of select="confman:getProperty('mirage2.item-view.bitstream.href.label.1')"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>label</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </xsl:variable>
 
                     <xsl:variable name="label-2">
-                            <xsl:choose>
-                                <xsl:when test="confman:getProperty('mirage2.item-view.bitstream.href.label.2')">
-                                    <xsl:value-of select="confman:getProperty('mirage2.item-view.bitstream.href.label.2')"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:text>title</xsl:text>
-                                </xsl:otherwise>
-                            </xsl:choose>
+                        <xsl:choose>
+                            <xsl:when test="confman:getProperty('mirage2.item-view.bitstream.href.label.2')">
+                                <xsl:value-of select="confman:getProperty('mirage2.item-view.bitstream.href.label.2')"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>title</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </xsl:variable>
 
                     <xsl:for-each select="//mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL' or @USE='LICENSE']/mets:file">
@@ -425,6 +425,16 @@
                 </xsl:attribute>
                 <xsl:attribute name="class">
                     <xsl:text>pdf_file</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="aria-label">
+                    <xsl:choose>
+                        <xsl:when test="contains(mets:FLocat[@LOCTYPE='URL']/@xlink:href,'isAllowed=n')">
+                            <xsl:text>Access to this file is restricted.</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>Download </xsl:text> <xsl:value-of select="mets:FLocat[@LOCTYPE='URL']/@xlink:title"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:attribute>
                 <xsl:call-template name="getFileIcon">
                     <xsl:with-param name="mimetype">
@@ -721,13 +731,22 @@
                         <xsl:attribute name="title">
                             <xsl:value-of select="mets:FLocat[@LOCTYPE='URL']/@xlink:title"/>
                         </xsl:attribute>
-                        <!-- <xsl:value-of select="util:shortenString(mets:FLocat[@LOCTYPE='URL']/@xlink:title, 30, 5)"/> -->
                         <a>
                             <xsl:attribute name="href">
                                 <xsl:value-of select="mets:FLocat[@LOCTYPE='URL']/@xlink:href"/>
                             </xsl:attribute>
                             <xsl:attribute name="class">
                                 <xsl:text>pdf-file</xsl:text>
+                            </xsl:attribute>
+                            <xsl:attribute name="aria-label">
+                                <xsl:choose>
+                                    <xsl:when test="contains(mets:FLocat[@LOCTYPE='URL']/@xlink:href,'isAllowed=n')">
+                                        <xsl:text>Access to this file is restricted.</xsl:text>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:text>Download </xsl:text> <xsl:value-of select="mets:FLocat[@LOCTYPE='URL']/@xlink:title"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
                             </xsl:attribute>
                             <xsl:value-of select="mets:FLocat[@LOCTYPE='URL']/@xlink:title"/>
                             <xsl:choose>
