@@ -595,7 +595,7 @@
     <xsl:template name="buildFooter">
         <footer>
             <p style="font-size:11px; text-align:center;">Auburn University Libraries | 231 Mell Street | Auburn, Alabama 36849 | (334) 844-4500 or (800) 446-0387  | <script type="text/javascript">emailE='auburn.edu'; emailE=('libwebm' + '@' + emailE); document.write('<a href="mailto:'+emailE+'">' + emailE + '</a>');</script></p>
-            <p class="social"><a href="https://twitter.com/aulibraries" class="social twitter" alt="Follow The Libraries on Twitter" title="Follow The Libraries on Twitter" target="_blank"><i class="fa fa-twitter"></i></a> <a href="https://www.flickr.com/photos/aulibraries" class="social flickr" alt="Follow the Auburn Libraries on Flickr" title="Follow the Auburn Libraries on Flickr" target="_blank"><i class="fa fa-flickr"></i></a> <a href="https://www.facebook.com/auburnlibraries" class="social facebook" alt="Follow the Auburn Libraries on Facebook" title="Follow the Auburn Libraries on Facebook" target="_blank"><i class="fa fa-facebook"></i></a> <a href="https://instagram.com/aulibraries" class="social instagram" title="Follow the Auburn Libraries on Instagram" target="_blank"><i class="fa fa-instagram"></i></a><a href="https://vimeo.com/aulibraries" class="social vimeo" title="Follow the Auburn Libraries on Vimeo" target="_blank"><i class="fa fa-vimeo"></i></a> <a href="https://www.youtube.com/user/auburnlibraries" class="social youtube" alt="Follow the Auburn Libraries on YouTube" title="Follow the Auburn Libraries on YouTube" target="_blank"><i class="fa fa-youtube"></i></a></p>
+            <p class="social"><a href="https://twitter.com/aulibraries" class="social twitter" alt="Follow The Libraries on Twitter" title="Follow The Libraries on Twitter" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a> <a href="https://www.flickr.com/photos/aulibraries" class="social flickr" alt="Follow the Auburn Libraries on Flickr" title="Follow the Auburn Libraries on Flickr" target="_blank"><i class="fa fa-flickr" aria-hidden="true"></i></a> <a href="https://www.facebook.com/auburnlibraries" class="social facebook" alt="Follow the Auburn Libraries on Facebook" title="Follow the Auburn Libraries on Facebook" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a> <a href="https://instagram.com/aulibraries" class="social instagram" title="Follow the Auburn Libraries on Instagram" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a><a href="https://vimeo.com/aulibraries" class="social vimeo" title="Follow the Auburn Libraries on Vimeo" target="_blank"><i class="fa fa-vimeo" aria-hidden="true"></i></a> <a href="https://www.youtube.com/user/auburnlibraries" class="social youtube" alt="Follow the Auburn Libraries on YouTube" title="Follow the Auburn Libraries on YouTube" target="_blank"><i class="fa fa-youtube" aria-hidden="true"></i></a></p>
             <!--Invisible link to HTML sitemap (for search engines) -->
             <a class="hidden">
                 <xsl:attribute name="href">
@@ -607,7 +607,7 @@
         </footer>
         <div class="subfooter" role="contentinfo">
             <p><span>Auburn University |</span> <span>Auburn, Alabama 36849 |</span> <span>(334) 844-4000  |</span> <span><script type="text/javascript">emailE='auburn.edu'; emailE=('webmaster' + '@' + emailE); document.write('<a href="mailto:' + emailE + '">' + emailE + '</a>');</script></span></p>
-            <p><span><a href="http://www.auburn.edu/websitefeedback/">Website Feedback</a> |</span> <span><a href="http://www.auburn.edu/privacy/">Privacy</a> |</span> <span><a href="http://www.auburn.edu/oit/it_policies/copyright_regulations.php">Copyright &#169; <script type="text/javascript">date = new Date(); document.write(date.getFullYear());</script></a></span></p>
+            <p><span><a href="http://www.auburn.edu/websitefeedback/" alt="Offer feedback on the Auburn University Electronic Theses and Dissertations website here.">Website Feedback</a> |</span> <span><a href="http://www.auburn.edu/privacy/" alt="Read Auburn University's privacy policy.">Privacy</a> |</span> <span><a href="http://www.auburn.edu/oit/it_policies/copyright_regulations.php" alt="Copyright regulations">Copyright &#169; <script type="text/javascript">date = new Date(); document.write(date.getFullYear());</script></a></span></p>
         </div>
     </xsl:template>
 
@@ -696,25 +696,25 @@
 	<xsl:template name="FrontPageSearch">
         <div class="row">
             <div id="frontPageSrchBlock" class="col-lg-12 frontPageSrchBlock">
-                <span class="col-sm-4 searchBlockHdr">
-                    Search AUETD
-                </span>
-                <span class="col-sm-7">
                     <form id="aspect_artifactbrowser_FrontPageSearch_div_front-page-search" class="ds-interactive-div primary" method="post">
                         <xsl:attribute name="action">
                             <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='contextPath']"/>
                             <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='search'][@qualifier='simpleURL']"/>
                         </xsl:attribute>
-                        <p class="input-group">
-                            <input id="aspect_artifactbrowser_FrontPageSearch_field_query" class="ds-text-field form-control" name="query" type="text" placeholder="xmlui.general.search.placeholder.auetd_placeholder" i18n:attr="placeholder" value=""/>
-                            <span class="input-group-btn">
-                                <button id="aspect_artifactbrowser_FrontPageSearch_field_submit" class="ds-button-field btn btn-default" name="submit" type="submit">
-                                    <i class="glyphicon glyphicon-search" aria-hidden="true"/>&#160;
-                                </button>
-                            </span>
-                        </p>
+                        <div class="form-group">
+                            <label class="control-label col-sm-4 frontPageSrchFormLabel" for="aspect_artifactbrowser_FrontPageSearch_field_query">Search AUETD</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input id="aspect_artifactbrowser_FrontPageSearch_field_query" class="ds-text-field form-control" name="query" type="text" placeholder="xmlui.general.search.placeholder.auetd_placeholder" i18n:attr="placeholder" value=""/>
+                                    <span class="input-group-btn">
+                                        <button id="aspect_artifactbrowser_FrontPageSearch_field_submit" class="ds-button-field btn btn-default" name="submit" type="submit">
+                                            <i class="glyphicon glyphicon-search" aria-hidden="true"/>&#160;
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </form>
-                </span>
             </div>
         </div>
     </xsl:template>
