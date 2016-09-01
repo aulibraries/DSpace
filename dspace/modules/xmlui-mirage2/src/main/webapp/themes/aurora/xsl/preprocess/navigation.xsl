@@ -54,6 +54,4 @@
         </head>
     </xsl:template>
 
-
-
 </xsl:stylesheet>

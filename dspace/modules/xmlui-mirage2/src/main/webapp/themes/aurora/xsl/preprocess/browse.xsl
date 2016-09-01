@@ -121,23 +121,18 @@
     <xsl:template match="dri:list[@id='aspect.browseArtifacts.CommunityBrowse.list.community-browse' or @id='aspect.browseArtifacts.CollectionBrowse.list.collection-browse'][dri:head]">
         <div>
             <xsl:call-template name="copy-attributes"/>
-
             <xsl:apply-templates select="dri:head"/>
-
             <p>
                 <xsl:attribute name="rend">
                     <xsl:text> btn-group</xsl:text>
                 </xsl:attribute>
                 <xsl:apply-templates select="*[not(name()='head')]"/>
-
             </p>
-
         </div>
     </xsl:template>
 
     <xsl:template
             match="dri:list[@id='aspect.browseArtifacts.CommunityBrowse.list.community-browse' or @id='aspect.browseArtifacts.CollectionBrowse.list.collection-browse']/dri:item[dri:xref]">
-
         <xref>
             <xsl:call-template name="copy-attributes"/>
             <xsl:attribute name="rend">
@@ -151,10 +146,10 @@
         </xref>
     </xsl:template>
 
-    <xsl:template
-            match="dri:field[@id='aspect.administrative.WithdrawnItems.field.rpp' or @id='aspect.administrative.PrivateItems.field.rpp']/dri:option">
+    <xsl:template match="dri:field[@id='aspect.administrative.WithdrawnItems.field.rpp' or @id='aspect.administrative.PrivateItems.field.rpp']/dri:option">
 
-       <xsl:if test="@returnValue=5 or @returnValue=10 or @returnValue=20 or @returnValue=40 or @returnValue=60
+       <xsl:if test="@returnValue=5 or @returnValue=10 or @returnValue=20 
+                                    or @returnValue=40 or @returnValue=60
                                     or @returnValue=80 or @returnValue=100">
             <option>
                 <xsl:call-template name="copy-attributes"/>

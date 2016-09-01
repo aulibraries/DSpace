@@ -101,8 +101,7 @@
         </xsl:choose>
 
     </xsl:template>
-
-
+    
     <xsl:template match="dim:dim" mode="itemSummaryView-DIM">
         <xsl:variable name="collectionID">
             <xsl:copy-of select="substring-after($document//dri:meta/dri:pageMeta/dri:metadata[@element='focus'][@qualifier='container']/node(), ':')"/>
@@ -610,6 +609,9 @@
                         <xsl:attribute name="href">
                             <xsl:value-of select="mets:FLocat[@LOCTYPE='URL']/@xlink:href"/>
                         </xsl:attribute>
+                        <xsl:attribute name="aria-label">
+                            <xsl:text>View </xsl:text> <xsl:value-of select="mets:FLocat[@LOCTYPE='URL']/@xlink:href"/>
+                        </xsl:attribute>
                         <xsl:choose>
                             <xsl:when test="$context/mets:fileSec/mets:fileGrp[@USE='THUMBNAIL']/mets:file[@GROUPID=current()/@GROUPID]">
                                 <img class="img-thumbnail" alt="Thumbnail">
@@ -722,12 +724,15 @@
             </div>
         </div>
 
-</xsl:template>
+    </xsl:template>
 
     <xsl:template name="view-open">
         <a>
             <xsl:attribute name="href">
                 <xsl:value-of select="mets:FLocat[@LOCTYPE='URL']/@xlink:href"/>
+            </xsl:attribute>
+            <xsl:attribute name="aria-label">
+                <xsl:text>View </xsl:text> <xsl:value-of select="mets:FLocat[@LOCTYPE='URL']/@xlink:href"/>
             </xsl:attribute>
             <i18n:text>xmlui.dri2xhtml.METS-1.0.item-files-viewOpen</i18n:text>
         </a>

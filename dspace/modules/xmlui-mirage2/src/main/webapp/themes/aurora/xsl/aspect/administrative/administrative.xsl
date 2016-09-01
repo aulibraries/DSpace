@@ -48,14 +48,14 @@
                 <xsl:attribute name="enctype">multipart/form-data</xsl:attribute>
             </xsl:if>
             <xsl:attribute name="onsubmit">javascript:tSubmit(this);</xsl:attribute>
-                        <!--For Item Submission process, disable ability to submit a form by pressing 'Enter'-->
-                        <xsl:if test="starts-with(@n,'submit')">
-                                <xsl:attribute name="onkeydown">javascript:return disableEnterKey(event);</xsl:attribute>
+            <!--For Item Submission process, disable ability to submit a form by pressing 'Enter'-->
+            <xsl:if test="starts-with(@n,'submit')">
+                <xsl:attribute name="onkeydown">javascript:return disableEnterKey(event);</xsl:attribute>
             </xsl:if>
-                        <xsl:apply-templates select="dri:list[@rend = 'horizontal']"/>
-                        <div class="pane">
-                            <xsl:apply-templates select="*[not(name()='head' or @rend = 'horizontal')]"/>
-                        </div>
+            <xsl:apply-templates select="dri:list[@rend = 'horizontal']"/>
+            <div class="pane">
+                <xsl:apply-templates select="*[not(name()='head' or @rend = 'horizontal')]"/>
+            </div>
 
         </form>
         <!-- JS to scroll form to DIV parent of "Add" button if jump-to -->

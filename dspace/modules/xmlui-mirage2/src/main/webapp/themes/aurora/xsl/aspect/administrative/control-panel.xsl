@@ -12,52 +12,52 @@
 
     <xsl:output indent="yes"/>
 	
-	<xsl:template match="dri:list[@n='javaOs' or @n='runtime' or @n='cocoon' or @n='dspace']">
-		<xsl:apply-templates select="dri:head" />
-		<div>
-			<xsl:call-template name="standardAttributes">
-				<xsl:with-param name="class">
-					<xsl:text>ds-gloss-list control-panel-list col-lg-12</xsl:text>
-				</xsl:with-param>
-			</xsl:call-template>
-			<xsl:apply-templates select="dri:item" mode="ControlPanelListItem" />
-		</div>
-	</xsl:template>
-	<xsl:template match="dri:list/dri:item" mode="ControlPanelListItem">
-		<div>
-			<xsl:call-template name="standardAttributes">
-				<xsl:with-param name="class">
-					<xsl:text>row ds-gloss-list-row col-lg-12</xsl:text>
-				</xsl:with-param>
-			</xsl:call-template>
-			<xsl:if test="name(preceding-sibling::*[position()=1]) = 'label'">
-				<xsl:apply-templates select="preceding-sibling::*[position()=1]" mode="labeled"/>
-			</xsl:if>
-			<div>
-				<xsl:call-template name="standardAttributes">
-					<xsl:with-param name="class">
-							<xsl:choose>
-								<xsl:when test="child::dri:p/dri:field/@type='text'">
-									<xsl:text>col-sm-8</xsl:text>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:text>col-sm-4</xsl:text>
-								</xsl:otherwise>
-							</xsl:choose>
-					</xsl:with-param>
-				</xsl:call-template>
-				<xsl:apply-templates />
-			</div>
-		</div>
-	</xsl:template>
-	<xsl:template match="dri:list/dri:label" priority="2" mode="labeled">
-		<div>
-			<xsl:call-template name="standardAttributes">
-				<xsl:with-param name="class">
-					<xsl:text>col-sm-4</xsl:text>
-				</xsl:with-param>
-			</xsl:call-template>
-			<xsl:if test="count(./node())>0">
+    <xsl:template match="dri:list[@n='javaOs' or @n='runtime' or @n='cocoon' or @n='dspace']">
+        <xsl:apply-templates select="dri:head" />
+        <div>
+            <xsl:call-template name="standardAttributes">
+                    <xsl:with-param name="class">
+                        <xsl:text>ds-gloss-list control-panel-list col-lg-12</xsl:text>
+                    </xsl:with-param>
+            </xsl:call-template>
+            <xsl:apply-templates select="dri:item" mode="ControlPanelListItem" />
+        </div>
+    </xsl:template>
+    <xsl:template match="dri:list/dri:item" mode="ControlPanelListItem">
+        <div>
+            <xsl:call-template name="standardAttributes">
+                <xsl:with-param name="class">
+                    <xsl:text>row ds-gloss-list-row col-lg-12</xsl:text>
+                </xsl:with-param>
+            </xsl:call-template>
+            <xsl:if test="name(preceding-sibling::*[position()=1]) = 'label'">
+                <xsl:apply-templates select="preceding-sibling::*[position()=1]" mode="labeled"/>
+            </xsl:if>
+            <div>
+                <xsl:call-template name="standardAttributes">
+                    <xsl:with-param name="class">
+                        <xsl:choose>
+                            <xsl:when test="child::dri:p/dri:field/@type='text'">
+                                <xsl:text>col-sm-8</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>col-sm-4</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:with-param>
+                </xsl:call-template>
+                <xsl:apply-templates />
+            </div>
+        </div>
+    </xsl:template>
+    <xsl:template match="dri:list/dri:label" priority="2" mode="labeled">
+        <div>
+            <xsl:call-template name="standardAttributes">
+                <xsl:with-param name="class">
+                    <xsl:text>col-sm-4</xsl:text>
+                </xsl:with-param>
+            </xsl:call-template>
+            <xsl:if test="count(./node())>0">
                 <span>
                     <xsl:attribute name="class">
                         <xsl:text>ds-gloss-list-label </xsl:text>
@@ -67,6 +67,6 @@
                     <xsl:text>:&#160;</xsl:text>
                 </span>
             </xsl:if>
-		</div>
-	</xsl:template>
+        </div>
+    </xsl:template>
 </xsl:stylesheet>

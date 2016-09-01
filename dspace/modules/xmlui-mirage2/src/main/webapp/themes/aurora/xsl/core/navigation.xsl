@@ -44,26 +44,26 @@
     <!-- TODO: figure out why i18n tags break the go button -->
     <xsl:template match="dri:options">
         <!-- <div class="sidebar-content accordion"> -->
-		<div class="word-break hidden-print sidebar-content" id="ds-options">
-			<xsl:choose>
-				<xsl:when test="not(contains(/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='URI'], 'discover'))">
-					<xsl:call-template name="searchFormBlock"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<div class="ds-option-set col-sm-12 list-group" id="ds-search-option">&#160;</div>
-				</xsl:otherwise>
-			</xsl:choose>
+        <div class="word-break hidden-print sidebar-content" id="ds-options">
+            <xsl:choose>
+                <xsl:when test="not(contains(/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='URI'], 'discover'))">
+                    <xsl:call-template name="searchFormBlock"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <div class="ds-option-set col-sm-12 list-group" id="ds-search-option">&#160;</div>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:apply-templates/>
             <!-- DS-984 Add RSS Links to Options Box -->
             <xsl:if test="count(/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='feed']) != 0">
-                <!-- <div> -->
-                    <h2 class="ds-option-set-head h6">
-                        <i18n:text>xmlui.feed.header</i18n:text>
-                    </h2>
-                    <div id="ds-feed-option" class="ds-option-set list-group col-sm-12">
-                        <xsl:call-template name="addRSSLinks"/>
-                    </div>
-                <!-- </div> -->
+            <!-- <div> -->
+                <h2 class="ds-option-set-head h6">
+                    <i18n:text>xmlui.feed.header</i18n:text>
+                </h2>
+                <div id="ds-feed-option" class="ds-option-set list-group col-sm-12">
+                    <xsl:call-template name="addRSSLinks"/>
+                </div>
+            <!-- </div> -->
             </xsl:if>
         </div>
     </xsl:template>
@@ -73,25 +73,25 @@
         <!-- The form, complete with a text box and a button, all built from
             attributes referenced from under pageMeta. -->
             <form id="ds-search-form" class="" method="post">
-				<xsl:attribute name="action">
-					<xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='contextPath']"/>
-					<xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='search'][@qualifier='simpleURL']"/>
-				</xsl:attribute>
-				<fieldset>
-					<div class="input-group">
-						<input class="ds-text-field form-control" type="text" placeholder="xmlui.general.search.placeholder.aurora_placeholder" i18n:attr="placeholder">
-							<xsl:attribute name="name">
-								<xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='search'][@qualifier='queryField']"/>
-							</xsl:attribute>
-						</input>
-						<span class="input-group-btn">
-							<button class="ds-button-field btn btn-default" title="xmlui.general.go" i18n:attr="title">
-								<span class="glyphicon glyphicon-search" aria-hidden="true"/>
-							</button>
-						</span>
-					</div>
-				</fieldset>
-			</form>
+                <xsl:attribute name="action">
+                    <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='contextPath']"/>
+                    <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='search'][@qualifier='simpleURL']"/>
+                </xsl:attribute>
+                <fieldset>
+                    <div class="input-group">
+                        <input class="ds-text-field form-control" type="text" placeholder="xmlui.general.search.placeholder.aurora_placeholder" i18n:attr="placeholder">
+                            <xsl:attribute name="name">
+                                <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='search'][@qualifier='queryField']"/>
+                            </xsl:attribute>
+                        </input>
+                        <span class="input-group-btn">
+                            <button class="ds-button-field btn btn-default" title="Search" i18n:attr="title">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"/>
+                            </button>
+                        </span>
+                    </div>
+                </fieldset>
+            </form>
         </div>
     </xsl:template>
 
@@ -134,63 +134,63 @@
     </xsl:template>
 
     <xsl:template match="dri:options/dri:list[not(@id='aspect.viewArtifacts.Navigation.list.account')]" priority="3">
-		<xsl:if test="count(child::node()) &gt; 0">
-			<xsl:apply-templates select="dri:head" mode="optionHead" />
-			<div>
-				<xsl:call-template name="standardAttributes">
-					<xsl:with-param name="class">ds-option-set list-group col-sm-12</xsl:with-param>
-				</xsl:call-template>
-				<xsl:apply-templates select="dri:item"/>
-				<xsl:apply-templates select="dri:list"/>
-			</div>
-		</xsl:if>
+        <xsl:if test="count(child::node()) &gt; 0">
+            <xsl:apply-templates select="dri:head" mode="optionHead" />
+            <div>
+                <xsl:call-template name="standardAttributes">
+                    <xsl:with-param name="class">ds-option-set list-group col-sm-12</xsl:with-param>
+                </xsl:call-template>
+                <xsl:apply-templates select="dri:item"/>
+                <xsl:apply-templates select="dri:list"/>
+            </div>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="dri:options/dri:list[@id='aspect.viewArtifacts.Navigation.list.account']">
-		<xsl:variable name="viewAccountNav">
-			<xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='nav'][@qualifier='view-account-nav']"/>
-		</xsl:variable>
+        <xsl:variable name="viewAccountNav">
+            <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='nav'][@qualifier='view-account-nav']"/>
+        </xsl:variable>
         <!--<div>
             <xsl:call-template name="standardAttributes">
                 <xsl:with-param name="class">list-group-item ds-option</xsl:with-param>
             </xsl:call-template>
             <a href="#" class="list-group-item ds-option"><xsl:value-of select="$viewAccountNav"/></a>
         </div> -->
-		 <xsl:variable name="pageURI">
-			<xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='URI']"/>
-		</xsl:variable>
-		 <xsl:choose>
-			<xsl:when test="not(contains($pageURI,'login')) and not(contains($pageURI, 'restricted-resource'))">
-				<xsl:if test="count(child::node()) &gt; 0">
-					<xsl:apply-templates select="dri:head" mode="optionHead" />
-					<div>
-						<xsl:call-template name="standardAttributes">
-							<xsl:with-param name="class">list-group col-sm-12</xsl:with-param>
-						</xsl:call-template>
-						<xsl:apply-templates select="dri:item"/>
-						<xsl:apply-templates select="dri:list"/>
-					</div>
-				</xsl:if>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:choose>
-					<xsl:when test="$viewAccountNav = 'true'">
-						<xsl:if test="count(child::node()) &gt; 0">
-							<xsl:apply-templates select="dri:head" mode="optionHead" />
-							<div>
-								<xsl:call-template name="standardAttributes">
-									<xsl:with-param name="class">list-group col-sm-11</xsl:with-param>
-								</xsl:call-template>
-								<xsl:apply-templates select="dri:item"/>
-								<xsl:apply-templates select="dri:list"/>
-							</div>
-						</xsl:if>
-					</xsl:when>
-					<xsl:otherwise/>
-				</xsl:choose>
-			 </xsl:otherwise>
-		</xsl:choose> <!---->
-	</xsl:template>
+        <xsl:variable name="pageURI">
+            <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='URI']"/>
+        </xsl:variable>
+         <xsl:choose>
+            <xsl:when test="not(contains($pageURI,'login')) and not(contains($pageURI, 'restricted-resource'))">
+                <xsl:if test="count(child::node()) &gt; 0">
+                    <xsl:apply-templates select="dri:head" mode="optionHead" />
+                    <div>
+                        <xsl:call-template name="standardAttributes">
+                            <xsl:with-param name="class">list-group col-sm-12</xsl:with-param>
+                        </xsl:call-template>
+                        <xsl:apply-templates select="dri:item"/>
+                        <xsl:apply-templates select="dri:list"/>
+                    </div>
+                </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:choose>
+                    <xsl:when test="$viewAccountNav = 'true'">
+                        <xsl:if test="count(child::node()) &gt; 0">
+                            <xsl:apply-templates select="dri:head" mode="optionHead" />
+                            <div>
+                                <xsl:call-template name="standardAttributes">
+                                    <xsl:with-param name="class">list-group col-sm-11</xsl:with-param>
+                                </xsl:call-template>
+                                <xsl:apply-templates select="dri:item"/>
+                                <xsl:apply-templates select="dri:list"/>
+                            </div>
+                        </xsl:if>
+                    </xsl:when>
+                    <xsl:otherwise/>
+                </xsl:choose>
+             </xsl:otherwise>
+        </xsl:choose> <!---->
+    </xsl:template>
 
     <xsl:template match="dri:options//dri:item">
         <div>

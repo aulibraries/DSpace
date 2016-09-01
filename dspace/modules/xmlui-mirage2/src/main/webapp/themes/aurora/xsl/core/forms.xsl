@@ -660,9 +660,9 @@
                     <xsl:call-template name="fieldAttributes"/>
                     <xsl:attribute name="type">submit</xsl:attribute>
                     <xsl:choose>
-						<xsl:when test="@rend='search-icon' or @n='submit_search'">
-							<span class="glyphicon glyphicon-search" aria-hidden="true"/>
-						</xsl:when>
+                        <xsl:when test="@rend='search-icon' or @n='submit_search'">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"/>
+                        </xsl:when>
                         <xsl:when test="dri:value/i18n:text">
                             <xsl:apply-templates select="dri:value/*"/>
                         </xsl:when>
@@ -675,17 +675,17 @@
             <xsl:otherwise>
                 <input>
                     <xsl:call-template name="fieldAttributes"/>
-					<!--
-						Adds the data-buttonText attribute to the input form field if the field's type
-						property is set to file. The data-buttonText attribute's value is a simple space.
-						Adding this attribute and value combination removes the bootstrap-filestyle default
-						button text, Choose File, from the action button.
-					-->
-					<xsl:if test="@type='file'">
-						<xsl:attribute name="data-buttonText">
-							<xsl:text> </xsl:text>
-						</xsl:attribute>
-					</xsl:if>
+                    <!--
+                            Adds the data-buttonText attribute to the input form field if the field's type
+                            property is set to file. The data-buttonText attribute's value is a simple space.
+                            Adding this attribute and value combination removes the bootstrap-filestyle default
+                            button text, Choose File, from the action button.
+                    -->
+                    <xsl:if test="@type='file'">
+                            <xsl:attribute name="data-buttonText">
+                                    <xsl:text> </xsl:text>
+                            </xsl:attribute>
+                    </xsl:if>
                     <xsl:attribute name="value">
                         <xsl:choose>
                             <xsl:when test="./dri:value[@type='raw']">
@@ -756,8 +756,8 @@
                         <xsl:value-of select="../@n"/>
                     </xsl:attribute>
                     <xsl:attribute name="id">
-						<xsl:value-of select="../@n"/>
-					</xsl:attribute>
+                        <xsl:value-of select="../@n"/>
+                    </xsl:attribute>
                     <xsl:attribute name="type">
                         <xsl:value-of select="../@type"/>
                     </xsl:attribute>
@@ -1267,9 +1267,9 @@
                 </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
-                <!-- If the label is empty and the item contains no field, omit the label. This is to
-                    make the text inside the item (since what else but text can be there?) stretch across
-                    both columns of the list. -->
+            <!-- If the label is empty and the item contains no field, omit the label. This is to
+                make the text inside the item (since what else but text can be there?) stretch across
+                both columns of the list. -->
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -1302,20 +1302,20 @@
                         </xsl:if>
                     </xsl:when>
                     <xsl:when test="@type='file'">
-						<xsl:text> filestyle </xsl:text>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:text>form-control </xsl:text>
-					</xsl:otherwise>
+                        <xsl:text> filestyle </xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>form-control </xsl:text>
+                    </xsl:otherwise>
                 </xsl:choose>
                 <xsl:if test="@rend">
                     <xsl:choose>
-						<xsl:when test="not(contains(@rend, 'search-icon'))">
-							<xsl:text> </xsl:text>
-							<xsl:value-of select="@rend"/>
-						</xsl:when>
-						<xsl:otherwise></xsl:otherwise>
-					</xsl:choose>
+                        <xsl:when test="not(contains(@rend, 'search-icon'))">
+                            <xsl:text> </xsl:text>
+                            <xsl:value-of select="@rend"/>
+                        </xsl:when>
+                        <xsl:otherwise></xsl:otherwise>
+                    </xsl:choose>
                 </xsl:if>
                 <xsl:if test="dri:error or parent::node()[@type='composite']/dri:error">
                     <xsl:text>input-with-feedback </xsl:text>
@@ -1392,7 +1392,7 @@
                         </xsl:attribute>
                         <xsl:text>Creative Commons</xsl:text>
                     </a>
-					<xsl:text>.</xsl:text>
+                    <xsl:text>.</xsl:text>
                 </p>
             </xsl:if>
         </xsl:if>

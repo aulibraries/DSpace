@@ -56,7 +56,7 @@
                     </span>
                 </a>
                 <!--Display community strengths (item counts) if they exist-->
-               <!--<xsl:if test="string-length($data/dim:field[@element='format'][@qualifier='extent'][1]) &gt; 0">
+                <!--<xsl:if test="string-length($data/dim:field[@element='format'][@qualifier='extent'][1]) &gt; 0">
                     <xsl:text> [</xsl:text>
                     <xsl:value-of select="$data/dim:field[@element='format'][@qualifier='extent'][1]"/>
                     <xsl:text>]</xsl:text>
@@ -87,8 +87,8 @@
 	            </xsl:otherwise>
             </xsl:choose>
         </a>
-		<!--Display collection strengths (item counts) if they exist-->
-		<!--<xsl:if test="string-length($data/dim:field[@element='format'][@qualifier='extent'][1]) &gt; 0">
+        <!--Display collection strengths (item counts) if they exist-->
+    <!--<xsl:if test="string-length($data/dim:field[@element='format'][@qualifier='extent'][1]) &gt; 0">
             <xsl:text> [</xsl:text>
             <xsl:value-of select="$data/dim:field[@element='format'][@qualifier='extent'][1]"/>
             <xsl:text>]</xsl:text>
@@ -110,16 +110,16 @@
         <xsl:variable name="data" select="./mets:dmdSec/mets:mdWrap/mets:xmlData/dim:dim"/>
         <a href="{@OBJID}">
             <xsl:choose>
-	            <xsl:when test="string-length($data/dim:field[@element='title'][1]) &gt; 0">
-	                <xsl:value-of select="$data/dim:field[@element='title'][1]"/>
-	            </xsl:when>
-	            <xsl:otherwise>
-	                <i18n:text>xmlui.dri2xhtml.METS-1.0.no-title</i18n:text>
-	            </xsl:otherwise>
+                <xsl:when test="string-length($data/dim:field[@element='title'][1]) &gt; 0">
+                    <xsl:value-of select="$data/dim:field[@element='title'][1]"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <i18n:text>xmlui.dri2xhtml.METS-1.0.no-title</i18n:text>
+                </xsl:otherwise>
             </xsl:choose>
         </a>
-		<!--Display collection strengths (item counts) if they exist-->
-		<!-- <xsl:if test="string-length($data/dim:field[@element='format'][@qualifier='extent'][1]) &gt; 0">
+        <!--Display collection strengths (item counts) if they exist-->
+    <!-- <xsl:if test="string-length($data/dim:field[@element='format'][@qualifier='extent'][1]) &gt; 0">
             <xsl:text> [</xsl:text>
             <xsl:value-of select="$data/dim:field[@element='format'][@qualifier='extent'][1]"/>
             <xsl:text>]</xsl:text>

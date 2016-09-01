@@ -314,8 +314,7 @@
     <xsl:template name="buildHeader">
         <header role="banner">
             <div class="logo hidden-print" onclick="window.location='http://www.auburn.edu'" title="AU Homepage" aria-label="Auburn University Homepage"><img src="{concat($theme-path, 'images/headerLogo_2013.png')}" alt="Auburn University Homepage" height="90" width="220"/></div>
-           <!-- <div class="search-icon hidden-print"><i class="fa fa-search"></i></div> -->
-            <div class="menu-icon-header hidden-print hidden-sm hidden-md hidden-lg" data-toggle="offcanvas"><i class="fa fa-reorder"></i></div>
+            <div class="menu-icon-header hidden-print hidden-sm hidden-md hidden-lg" data-toggle="offcanvas"><i class="fa fa-reorder" aria-hidden="true" title="Open a search form."></i></div>
             <div class="header-title">
                 <div class="title-area">
                     <img class="visible-print" src="//cdn.auburn.edu/assets/img/header-logo-print.png" height="48" width="245" alt="Auburn University Logo"/>
@@ -449,7 +448,7 @@
                             </a>
                         </li>
                     </ul>
-                    <div class="menu-icon-nav hidden-print hidden-xs hidden-md hidden-lg" data-toggle="offcanvas"><i class="fa fa-reorder"></i></div>
+                    <div class="menu-icon-nav hidden-print hidden-xs hidden-md hidden-lg" data-toggle="offcanvas"><i class="fa fa-reorder" aria-hidden="true" title="Open the main navigation menu."></i></div>
                 </div>
             </div>
         </nav>
@@ -700,40 +699,42 @@
     </xsl:template>
 
     <xsl:template match="dri:div[@id='file.news.div.news']">
-		<xsl:apply-templates select="dri:head" />
-		<div class="row">
-			<div>
-				<xsl:call-template name="standardAttributes">
-					<xsl:with-param name="class">
-						<xsl:text>ds-static-div </xsl:text>
-						<!-- <xsl:value-of select="@rend" /> -->
-					</xsl:with-param>
-				</xsl:call-template>
-				<xsl:apply-templates select="*[not(name()='head')]" />
-			</div>
-		</div>
-	</xsl:template>
+        <xsl:apply-templates select="dri:head" />
+        <div class="row">
+            <div>
+                <xsl:call-template name="standardAttributes">
+                    <xsl:with-param name="class">
+                        <xsl:text>ds-static-div </xsl:text>
+                        <!-- <xsl:value-of select="@rend" /> -->
+                    </xsl:with-param>
+                </xsl:call-template>
+                <xsl:apply-templates select="*[not(name()='head')]" />
+            </div>
+        </div>
+    </xsl:template>
 
-	<xsl:template name="FrontPageSearch">
+    <xsl:template name="FrontPageSearch">
         <div class="row">
             <div id="frontPageSrchBlock" class="col-lg-12 frontPageSrchBlock">
-                <span class="col-sm-4 searchBlockHdr">Search AUrora</span>
-                <span class="col-sm-7">
-                    <form id="aspect_artifactbrowser_FrontPageSearch_div_front-page-search" class="ds-interactive-div primary" method="post">
-                        <xsl:attribute name="action">
-                            <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='contextPath']"/>
-                            <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='search'][@qualifier='simpleURL']"/>
-                        </xsl:attribute>
-                        <p class="input-group">
-                            <input id="aspect_artifactbrowser_FrontPageSearch_field_query" class="ds-text-field form-control" name="query" type="text" placeholder="xmlui.general.search.placeholder.aurora_placeholder" i18n:attr="placeholder" value=""/>
-                            <span class="input-group-btn">
-                                <button id="aspect_artifactbrowser_FrontPageSearch_field_submit" class="ds-button-field btn btn-default" name="submit" type="submit">
-                                    <i class="glyphicon glyphicon-search" aria-hidden="true"/>&#160;
-                                </button>
-                            </span>
-                        </p>
-                    </form>
-                </span>
+                <form id="aspect_artifactbrowser_FrontPageSearch_div_front-page-search" class="ds-interactive-div primary" method="post">
+                    <xsl:attribute name="action">
+                        <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='contextPath']"/>
+                        <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='search'][@qualifier='simpleURL']"/>
+                    </xsl:attribute>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 frontPageSrchFormLabel" for="aspect_artifactbrowser_FrontPageSearch_field_query">Search AUETD</label>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <input id="aspect_artifactbrowser_FrontPageSearch_field_query" class="ds-text-field form-control" name="query" type="text" placeholder="xmlui.general.search.placeholder.aurora_placeholder" i18n:attr="placeholder" value=""/>
+                                <span class="input-group-btn">
+                                    <button id="aspect_artifactbrowser_FrontPageSearch_field_submit" class="ds-button-field btn btn-default" name="submit" type="submit">
+                                        <i class="glyphicon glyphicon-search" aria-hidden="true" title="Submit the search form."/>&#160;
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </xsl:template>
