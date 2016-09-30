@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Map;
 import javax.mail.internet.MimeUtility;
 import javax.servlet.http.HttpServletResponse;
@@ -157,6 +158,9 @@ public class BitstreamReader extends AbstractReader implements Recyclable
 
     /** True if bitstream is readable by anonymous users */
     protected boolean isAnonymouslyReadable;
+    
+    /** The last modified date of the item containing the bitstream */
+    private Date itemLastModified = null;
 
     /** Item containing the Bitstream */
     private Item item = null;
@@ -250,6 +254,11 @@ public class BitstreamReader extends AbstractReader implements Recyclable
                     }
                 }
             }
+            
+            if (item != null) 
+            {
+                itemLastModified = item.getLastModified();
+            }
 
             // if initial search was by sequence number and found nothing,
             // then try to find bitstream by name (assuming we have a file name)
@@ -328,7 +337,7 @@ public class BitstreamReader extends AbstractReader implements Recyclable
                 }
                 else
                 {
-                	if(ConfigurationManager.getProperty("request.item.type") == null || ConfigurationManager.getProperty("request.item.type").equalsIgnoreCase("logged"))
+                    if(ConfigurationManager.getProperty("request.item.type") == null || ConfigurationManager.getProperty("request.item.type").equalsIgnoreCase("logged"))
                     {
                         // The user does not have read access to this bitstream. Interrupt this current request
                         // and then forward them to the login page so that they can be authenticated. Once that is
@@ -342,7 +351,6 @@ public class BitstreamReader extends AbstractReader implements Recyclable
                             AuthenticationUtil.interruptRequest(objectModel, AUTH_REQUIRED_HEADER, AUTH_REQUIRED_MESSAGE_NOLOGIN, null);
                         }
 
-
                         // Redirect
                         redictURL += "/login?bitstreamId="+ bitstream.getID();
 
@@ -350,7 +358,7 @@ public class BitstreamReader extends AbstractReader implements Recyclable
                         objectModel.get(HttpEnvironment.HTTP_RESPONSE_OBJECT);
                         httpResponse.sendRedirect(redictURL);
                         return;
-                	}
+                    }
                 }
             }
 
@@ -621,7 +629,7 @@ public class BitstreamReader extends AbstractReader implements Recyclable
         {
             // Check for if-modified-since header -- ONLY if not authenticated
             long modSince = request.getDateHeader("If-Modified-Since");
-            if (modSince != -1 && item != null && item.getLastModified().getTime() < modSince)
+            if (modSince != -1 && itemLastModified != null && itemLastModified.getTime() < modSince)
             {
                 // Item has not been modified since requested date,
                 // hence bitstream has not been, either; return 304
