@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.Map;
 import javax.mail.internet.MimeUtility;
 import javax.servlet.http.HttpServletResponse;
+import jdk.internal.org.objectweb.asm.signature.SignatureVisitor;
 import org.apache.avalon.excalibur.pool.Recyclable;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.cocoon.ProcessingException;
@@ -337,7 +338,7 @@ public class BitstreamReader extends AbstractReader implements Recyclable
                 }
                 else
                 {
-                    if(ConfigurationManager.getProperty("request.item.type") == null || ConfigurationManager.getProperty("request.item.type").equalsIgnoreCase("logged"))
+                    if(StringUtils.isBlank(requestItemType) || "logged".equalsIgnoreCase(requestItemType))
                     {
                         // The user does not have read access to this bitstream. Interrupt this current request
                         // and then forward them to the login page so that they can be authenticated. Once that is
@@ -644,11 +645,11 @@ public class BitstreamReader extends AbstractReader implements Recyclable
         // users in the cache for a response later to anonymous user.
         try
         {
-            if (item != null && (isSpider || ContextUtil.obtainContext(request).getCurrentUser() == null))
+            if (itemLastModified != null && (isSpider || ContextUtil.obtainContext(request).getCurrentUser() == null))
             {
                 // TODO:  Currently just borrow the date of the item, since
                 // we don't have last-mod dates for Bitstreams
-                response.setDateHeader("Last-Modified", item.getLastModified().getTime());
+                response.setDateHeader("Last-Modified", itemLastModified.getTime());
             }
         }
         catch (SQLException e)
@@ -783,6 +784,10 @@ public class BitstreamReader extends AbstractReader implements Recyclable
         this.bitstreamInputStream = null;
         this.bitstreamSize = 0;
         this.bitstreamMimeType = null;
+        this.bitstreamName = null;
+        this.itemLastModified = null;
+        this.tempFile = null;
+        super.recycle();
     }
 
 
