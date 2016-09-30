@@ -118,8 +118,11 @@ public abstract class AbstractAdapter
         {
             return;
         }
-
-        this.sections.addAll(Arrays.asList(sections.split(",")));
+        
+        for (String section : sections.split(","))
+    	{
+            this.sections.add(section);
+    	}
     }
 
     /**
@@ -135,7 +138,10 @@ public abstract class AbstractAdapter
             return;
         }
 
-        this.dmdTypes.addAll(Arrays.asList(dmdTypes.split(",")));
+        for (String dmdType : dmdTypes.split(","))
+    	{
+            this.dmdTypes.add(dmdType);
+    	}
     }
 
     /**
@@ -154,7 +160,10 @@ public abstract class AbstractAdapter
         }
 
         List<String> mdTypeList = new ArrayList<String>();
-        mdTypeList.addAll(Arrays.asList(mdTypes.split(",")));
+        for (String mdType : mdTypes.split(","))
+    	{
+            mdTypeList.add(mdType);
+    	}
 
         this.amdTypes.put(amdSec, mdTypeList);
     }
@@ -216,7 +225,10 @@ public abstract class AbstractAdapter
             return;
         }
 
-        this.fileGrpTypes.addAll(Arrays.asList(fileGrpTypes.split(",")));
+        for (String fileGrpType : fileGrpTypes.split(","))
+    	{
+            this.fileGrpTypes.add(fileGrpType);
+    	}
     }
 
     /**
@@ -232,7 +244,10 @@ public abstract class AbstractAdapter
             return;
         }
 
-        this.structTypes.addAll(Arrays.asList(structTypes.split(",")));
+        for (String structType : structTypes.split(","))
+    	{
+            this.structTypes.add(structType);
+    	}
     }
 
     /**
@@ -284,85 +299,85 @@ public abstract class AbstractAdapter
     public final void renderMETS(ContentHandler contentHandler, LexicalHandler lexicalHandler)
         throws WingException, SAXException, CrosswalkException, IOException, SQLException
     {
-    		this.contentHandler = contentHandler;
-    		this.lexicalHandler = lexicalHandler;
-    		this.namespaces = new NamespaceSupport();
+        this.contentHandler = contentHandler;
+        this.lexicalHandler = lexicalHandler;
+        this.namespaces = new NamespaceSupport();
 
-    		// Declare our namespaces
-    		namespaces.pushContext();
-    		namespaces.declarePrefix("mets", METS.URI);
-    		namespaces.declarePrefix("xlink", XLINK.URI);
-    		namespaces.declarePrefix("xsi", XSI.URI);
-    		namespaces.declarePrefix("dim", DIM.URI);
-    		contentHandler.startPrefixMapping("mets", METS.URI);
-    		contentHandler.startPrefixMapping("xlink", XLINK.URI);
-    		contentHandler.startPrefixMapping("xsi", XSI.URI);
-    		contentHandler.startPrefixMapping("dim", DIM.URI);
+        // Declare our namespaces
+        namespaces.pushContext();
+        namespaces.declarePrefix("mets", METS.URI);
+        namespaces.declarePrefix("xlink", XLINK.URI);
+        namespaces.declarePrefix("xsi", XSI.URI);
+        namespaces.declarePrefix("dim", DIM.URI);
+        contentHandler.startPrefixMapping("mets", METS.URI);
+        contentHandler.startPrefixMapping("xlink", XLINK.URI);
+        contentHandler.startPrefixMapping("xsi", XSI.URI);
+        contentHandler.startPrefixMapping("dim", DIM.URI);
 
-    		// Send the METS element
-    		AttributeMap attributes = new AttributeMap();
-    		attributes.put("ID", getMETSID());
-    		attributes.put("PROFILE", getMETSProfile());
-    		attributes.put("LABEL", getMETSLabel());
-    		String objid = getMETSOBJID();
-    		if (objid != null)
-            {
-                attributes.put("OBJID", objid);
-            }
+        // Send the METS element
+        AttributeMap attributes = new AttributeMap();
+        attributes.put("ID", getMETSID());
+        attributes.put("PROFILE", getMETSProfile());
+        attributes.put("LABEL", getMETSLabel());
+        
+        String objid = getMETSOBJID();
+        if (objid != null)
+        {
+            attributes.put("OBJID", objid);
+        }
 
-            // Include the link for editing the item
-            objid = getMETSOBJEDIT();
-            if (objid != null)
-            {
-                attributes.put("OBJEDIT", objid);
-            }
+        // Include the link for editing the item
+        objid = getMETSOBJEDIT();
+        if (objid != null)
+        {
+            attributes.put("OBJEDIT", objid);
+        }
 
-    		startElement(METS,"METS",attributes);
+        startElement(METS,"METS",attributes);
 
-    		// If the user requested no specific sections then render them all.
-    		boolean all = (sections.isEmpty());
+        // If the user requested no specific sections then render them all.
+        boolean all = (sections.isEmpty());
 
-    		if (all || sections.contains("metsHdr"))
-            {
-                renderHeader();
-            }
-    		if (all || sections.contains("dmdSec"))
-            {
-                renderDescriptiveSection();
-            }
-    		if (all || sections.contains("amdSec"))
-            {
-                renderAdministrativeSection();
-            }
-    		if (all || sections.contains("fileSec"))
-            {
-                renderFileSection();
-            }
-    		if (all || sections.contains("structMap"))
-            {
-                renderStructureMap();
-            }
-    		if (all || sections.contains("structLink"))
-            {
-                renderStructuralLink();
-            }
-    		if (all || sections.contains("behaviorSec"))
-            {
-                renderBehavioralSection();
-            }
+        if (all || sections.contains("metsHdr"))
+        {
+            renderHeader();
+        }
+        if (all || sections.contains("dmdSec"))
+        {
+            renderDescriptiveSection();
+        }
+        if (all || sections.contains("amdSec"))
+        {
+            renderAdministrativeSection();
+        }
+        if (all || sections.contains("fileSec"))
+        {
+            renderFileSection();
+        }
+        if (all || sections.contains("structMap"))
+        {
+            renderStructureMap();
+        }
+        if (all || sections.contains("structLink"))
+        {
+            renderStructuralLink();
+        }
+        if (all || sections.contains("behaviorSec"))
+        {
+            renderBehavioralSection();
+        }
 
-    		// FIXME: this is not a met's section, it should be removed
-    		if (all || sections.contains("extraSec"))
-            {
-                renderExtraSections();
-            }
+        // FIXME: this is not a met's section, it should be removed
+        if (all || sections.contains("extraSec"))
+        {
+            renderExtraSections();
+        }
 
-    		endElement(METS,"METS");
-    		contentHandler.endPrefixMapping("mets");
-    		contentHandler.endPrefixMapping("xlink");
-    		contentHandler.endPrefixMapping("dim");
-    		namespaces.popContext();
-
+        endElement(METS,"METS");
+        contentHandler.endPrefixMapping("mets");
+        contentHandler.endPrefixMapping("xlink");
+        contentHandler.endPrefixMapping("dim");
+        namespaces.popContext();
     }
 
     /**
@@ -373,14 +388,14 @@ public abstract class AbstractAdapter
      * @throws java.io.IOException
      * @throws java.sql.SQLException
      */
-	protected void renderHeader() throws WingException, SAXException, CrosswalkException, IOException, SQLException  {}
-	protected void renderDescriptiveSection() throws WingException, SAXException, CrosswalkException, IOException, SQLException  {}
-	protected void renderAdministrativeSection() throws WingException, SAXException, CrosswalkException, IOException, SQLException  {}
-	protected void renderFileSection() throws WingException, SAXException, CrosswalkException, IOException, SQLException  {}
-	protected void renderStructureMap() throws WingException, SAXException, CrosswalkException, IOException, SQLException  {}
-	protected void renderStructuralLink() throws WingException, SAXException, CrosswalkException, IOException, SQLException  {}
-	protected void renderBehavioralSection() throws WingException, SAXException, CrosswalkException, IOException, SQLException  {}
-	protected void renderExtraSections() throws WingException, SAXException, CrosswalkException, SQLException, IOException {}
+    protected void renderHeader() throws WingException, SAXException, CrosswalkException, IOException, SQLException  {}
+    protected void renderDescriptiveSection() throws WingException, SAXException, CrosswalkException, IOException, SQLException  {}
+    protected void renderAdministrativeSection() throws WingException, SAXException, CrosswalkException, IOException, SQLException  {}
+    protected void renderFileSection() throws WingException, SAXException, CrosswalkException, IOException, SQLException  {}
+    protected void renderStructureMap() throws WingException, SAXException, CrosswalkException, IOException, SQLException  {}
+    protected void renderStructuralLink() throws WingException, SAXException, CrosswalkException, IOException, SQLException  {}
+    protected void renderBehavioralSection() throws WingException, SAXException, CrosswalkException, IOException, SQLException  {}
+    protected void renderExtraSections() throws WingException, SAXException, CrosswalkException, SQLException, IOException {}
 
     /**
      * Generate a METS file element for a given bitstream.
@@ -397,9 +412,9 @@ public abstract class AbstractAdapter
      *            then they should share the same groupID.
      * @throws org.xml.sax.SAXException
      */
-	protected final void renderFile(Item item, Bitstream bitstream, String fileID, String groupID)
+    protected final void renderFile(Item item, Bitstream bitstream, String fileID, String groupID)
         throws SAXException
-	{
+    {
        renderFile(item, bitstream, fileID, groupID, null);
     }
 
@@ -421,10 +436,10 @@ public abstract class AbstractAdapter
      *            to this file
      * @throws org.xml.sax.SAXException
      */
-	protected final void renderFile(Item item, Bitstream bitstream, String fileID, String groupID, String admID)
+    protected final void renderFile(Item item, Bitstream bitstream, String fileID, String groupID, String admID)
         throws SAXException
-	{
-		AttributeMap attributes;
+    {
+        AttributeMap attributes;
 
 		// //////////////////////////////
     	// Determine the file attributes
@@ -453,8 +468,8 @@ public abstract class AbstractAdapter
         }
         if (checksumType != null && checksum != null)
         {
-        	attributes.put("CHECKSUM", checksum);
-        	attributes.put("CHECKSUMTYPE", checksumType);
+            attributes.put("CHECKSUM", checksum);
+            attributes.put("CHECKSUMTYPE", checksumType);
         }
         attributes.put("SIZE", String.valueOf(size));
         startElement(METS,"file",attributes);
@@ -487,7 +502,7 @@ public abstract class AbstractAdapter
         // If we can, append the pretty name of the bitstream to the URL
         try
         {
-        	if (bitstream.getName() != null)
+            if (bitstream.getName() != null)
             {
                 url += Util.encodeBitstreamName(bitstream.getName(), "UTF-8");
             }
@@ -496,8 +511,8 @@ public abstract class AbstractAdapter
         {
             // just ignore it, we don't have to have a pretty
             // name at the end of the URL because the sequence id will
-        	// locate it. However it means that links in this file might
-        	// not work....
+            // locate it. However it means that links in this file might
+            // not work....
         }
 
         url += "?sequence="+bitstream.getSequenceID();
@@ -536,7 +551,7 @@ public abstract class AbstractAdapter
         endElement(METS,"file");
 	}
 
-	/**
+    /**
      *
      * Generate a unique METS id. For consistency, all prefixes should probably
      * end in an underscore, "_".
@@ -564,12 +579,12 @@ public abstract class AbstractAdapter
     	// FIXME add some caching here
     	DisseminationCrosswalk crosswalk = (DisseminationCrosswalk) PluginManager.getNamedPlugin(DisseminationCrosswalk.class, crosswalkName);
 
-	    if (crosswalk == null)
+        if (crosswalk == null)
         {
             throw new WingException("Unable to find named DisseminationCrosswalk: " + crosswalkName);
         }
 
-	    return crosswalk;
+        return crosswalk;
     }
 
     /**
@@ -599,12 +614,12 @@ public abstract class AbstractAdapter
     }
 
     /**
-	 *
-	 * SAX Helper methods
-	 *
-	 */
+     *
+     * SAX Helper methods
+     *
+     */
 
-	/**
+    /**
      * Send the SAX events to start this element.
      *
      * @param namespace
@@ -673,7 +688,6 @@ public abstract class AbstractAdapter
      */
     private AttributesImpl map2sax(Namespace elementNamespace, AttributeMap ... attributeMaps)
     {
-
         AttributesImpl attributes = new AttributesImpl();
         for (AttributeMap attributeMap : attributeMaps)
         {
