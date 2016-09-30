@@ -20,7 +20,6 @@ import java.util.Date;
 import java.util.Map;
 import javax.mail.internet.MimeUtility;
 import javax.servlet.http.HttpServletResponse;
-import jdk.internal.org.objectweb.asm.signature.SignatureVisitor;
 import org.apache.avalon.excalibur.pool.Recyclable;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.cocoon.ProcessingException;
