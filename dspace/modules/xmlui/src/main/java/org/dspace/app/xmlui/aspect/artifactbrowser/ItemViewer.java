@@ -98,15 +98,13 @@ public class ItemViewer extends AbstractDSpaceTransformer implements CacheablePr
 
     private static final Message T_withdrawn = message("xmlui.ArtifactBrowser.ItemViewer.withdrawn");
     
-	/** Cached validity object */
-	private SourceValidity validity = null;
+    /** Cached validity object */
+    private SourceValidity validity = null;
 
-	/** XHTML crosswalk instance */
-	private DisseminationCrosswalk xHTMLHeadCrosswalk = null;
+    /** XHTML crosswalk instance */
+    private DisseminationCrosswalk xHTMLHeadCrosswalk = null;
 
-	private final String sfxFile = ConfigurationManager.getProperty("dspace.dir") + File.separator + "config" + File.separator + "sfx.xml";
-
-	private String sfxQuery = null;
+    private final String sfxFile = ConfigurationManager.getProperty("dspace.dir") + File.separator + "config" + File.separator + "sfx.xml";
 
     private static final Logger log = LoggerFactory.getLogger(ItemViewer.class);
 
@@ -146,17 +144,18 @@ public class ItemViewer extends AbstractDSpaceTransformer implements CacheablePr
 
         if (this.validity == null)
     	{
-	        try {
-	            dso = HandleUtil.obtainHandle(objectModel);
+            try 
+            {
+                dso = HandleUtil.obtainHandle(objectModel);
 
-	            DSpaceValidity validity = new DSpaceValidity();
-	            validity.add(dso);
-	            this.validity =  validity.complete();
-	        }
-	        catch (Exception e)
-	        {
-	            // Ignore all errors and just invalidate the cache.
-	        }
+                DSpaceValidity validity = new DSpaceValidity();
+                validity.add(dso);
+                this.validity =  validity.complete();
+            }
+            catch (Exception e)
+            {
+                // Ignore all errors and just invalidate the cache.
+            }
 
     	}
     	return this.validity;
@@ -211,7 +210,7 @@ public class ItemViewer extends AbstractDSpaceTransformer implements CacheablePr
         String sfxserverUrl = ConfigurationManager.getProperty("sfx.server.url");
         if (sfxserverUrl != null && sfxserverUrl.length() > 0)
         {
-            sfxQuery = "";
+            String sfxQuery = "";
 
             // parse XML file -> XML document will be build
             sfxQuery = SFXFileReader.loadSFXFile(sfxFile, item);
