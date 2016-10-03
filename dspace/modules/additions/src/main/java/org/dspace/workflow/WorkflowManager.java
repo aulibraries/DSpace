@@ -1206,7 +1206,8 @@ public class WorkflowManager
                 String gid = (mygroup != null) ? String.valueOf(mygroup.getID()) : "none";
 
                 log.warn(LogManager.getHeader(c, "notifyGroupofTask", MessageFormat.format("cannot email user "
-                        + "group_id={0} workflow_item_id = {1}: {2}", gid, wi.getID(), e.getMessage())));
+                                                + "group_id={0} workflow_item_id = {1}: {2}", 
+                                                gid, wi.getID(), e.getMessage())));
             }
         }
     }
@@ -1272,13 +1273,17 @@ public class WorkflowManager
         catch (RuntimeException re)
         {
             // log this email error
-            log.warn(LogManager.getHeader(c, "notify_of_reject", MessageFormat.format("cannot email user eperson_id = {0}, eperson_email = {1}, workflow_item_id={2}: {3}", e.getID(), e.getEmail(), wi.getID(), re.getMessage())));
+            log.warn(LogManager.getHeader(c, "notify_of_reject", MessageFormat.format("cannot email user eperson_id = "
+                                            + "{0}, eperson_email = {1}, workflow_item_id={2}: {3}", 
+                                            e.getID(), e.getEmail(), wi.getID(), re.getMessage())));
             throw re;
         }
         catch (SQLException | IOException | MessagingException ex)
         {
             // log this email error
-            log.warn(LogManager.getHeader(c, "notify_of_reject", MessageFormat.format("cannot email user eperson_id={0}, eperson_email={1}, workflow_item_id={2}: {3}", e.getID(), e.getEmail(), wi.getID(), ex.getMessage())));
+            log.warn(LogManager.getHeader(c, "notify_of_reject", MessageFormat.format("cannot email user eperson_id = "
+                                            + "{0}, eperson_email={1}, workflow_item_id={2}: {3}", 
+                                            e.getID(), e.getEmail(), wi.getID(), ex.getMessage())));
         }
     }
 
@@ -1316,7 +1321,8 @@ public class WorkflowManager
         }
         catch (MessagingException e)
         {
-            log.warn(LogManager.getHeader(c, "notifyOfArchive", MessageFormat.format("cannot email user item_id = {0}, reason = {1}", wi.getID(), e.getMessage())));
+            log.warn(LogManager.getHeader(c, "notifyOfArchive", MessageFormat.format("cannot email user item_id = {0}, "
+                + "reason = {1}", wi.getID(), e.getMessage())));
         }
     }
 
