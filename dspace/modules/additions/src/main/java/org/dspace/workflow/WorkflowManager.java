@@ -167,7 +167,8 @@ public class WorkflowManager
         Item myitem = wsi.getItem();
         Collection collection = wsi.getCollection();
 
-        log.info(LogManager.getHeader(c, "start_workflow", MessageFormat.format("workspace_item_id = {0}, item_id = {1}, collection_id = {2}", wsi.getID(), myitem.getID(), collection.getID())));
+        log.info(LogManager.getHeader(c, "start_workflow", MessageFormat.format("workspace_item_id = {0}, item_id = {1},"
+                                        + " collection_id = {2}", wsi.getID(), myitem.getID(), collection.getID())));
 
         // record the start of the workflow w/provenance message
         recordStart(c, myitem);
@@ -336,7 +337,9 @@ public class WorkflowManager
             // FIXME - log the error?
         }
 
-        log.info(LogManager.getHeader(c, "claim_task", MessageFormat.format("workflow_item_id = {0}, item_id = {1}, collection_id = {2}, newowner_id = {3}, old_state = {4}, new_state = {5}", wi.getID(), wi.getItem().getID(), wi.getCollection().getID(), wi.getOwner().getID(), taskstate, wi.getState())));
+        log.info(LogManager.getHeader(c, "claim_task", MessageFormat.format("workflow_item_id = {0}, item_id = {1}, "
+                + "collection_id = {2}, newowner_id = {3}, old_state = {4}, new_state = {5}", wi.getID(), 
+                wi.getItem().getID(), wi.getCollection().getID(), wi.getOwner().getID(), taskstate, wi.getState())));
     }
 
     /**
@@ -395,7 +398,9 @@ public class WorkflowManager
         {
             if (! WorkflowCurator.doCuration(c, wi)) {
                 // don't proceed - either curation tasks queued, or item rejected
-                log.info(LogManager.getHeader(c, "advance_workflow", MessageFormat.format("workflow_item_id = {0}, item_id = {1}, collection_id = {2}, old_state = {3}, doCuration = false", wi.getID(), wi.getItem().getID(), wi.getCollection().getID(), taskstate)));
+                log.info(LogManager.getHeader(c, "advance_workflow", MessageFormat.format("workflow_item_id = {0}, "
+                                + "item_id = {1}, collection_id = {2}, old_state = {3}, doCuration = false", wi.getID(),
+                                wi.getItem().getID(), wi.getCollection().getID(), taskstate)));
                 return archived;
             }
         }
@@ -436,7 +441,9 @@ public class WorkflowManager
             // error handling? shouldn't get here
         }
 
-        log.info(LogManager.getHeader(c, "advance_workflow", MessageFormat.format("workflow_item_id = {0}, item_id = {1}, collection_id = {2}, old_state = {3}, new_state = {4}", wi.getID(), wi.getItem().getID(), wi.getCollection().getID(), taskstate, wi.getState())));
+        log.info(LogManager.getHeader(c, "advance_workflow", MessageFormat.format("workflow_item_id = {0}, item_id = {1}, "
+                            + "collection_id = {2}, old_state = {3}, new_state = {4}", wi.getID(), wi.getItem().getID(), 
+                            wi.getCollection().getID(), taskstate, wi.getState())));
         return archived;
     }
 
@@ -460,32 +467,26 @@ public class WorkflowManager
 
         switch (taskstate)
         {
-        case WFSTATE_STEP1:
+            case WFSTATE_STEP1:
+                // authorize DSpaceActions.STEP1
+                doState(c, wi, WFSTATE_STEP1POOL, e);
+                break;
+            case WFSTATE_STEP2:
+                // authorize DSpaceActions.APPROVE
+                doState(c, wi, WFSTATE_STEP2POOL, e);
+                break;
+            case WFSTATE_STEP3:
+                // authorize DSpaceActions.STEP3
+                doState(c, wi, WFSTATE_STEP3POOL, e);
+                break;
 
-            // authorize DSpaceActions.STEP1
-            doState(c, wi, WFSTATE_STEP1POOL, e);
-
-            break;
-
-        case WFSTATE_STEP2:
-
-            // authorize DSpaceActions.APPROVE
-            doState(c, wi, WFSTATE_STEP2POOL, e);
-
-            break;
-
-        case WFSTATE_STEP3:
-
-            // authorize DSpaceActions.STEP3
-            doState(c, wi, WFSTATE_STEP3POOL, e);
-
-            break;
-
-        // error handling? shouldn't get here
-        // FIXME - what to do with error - log it?
+            // error handling? shouldn't get here
+            // FIXME - what to do with error - log it?
         }
 
-        log.info(LogManager.getHeader(c, "unclaim_workflow", MessageFormat.format("workflow_item_id = {0}, item_id= {1}, collection_id = {2}, old_state = {3}, new_state = {4}", wi.getID(), wi.getItem().getID(), wi.getCollection().getID(), taskstate, wi.getState())));
+        log.info(LogManager.getHeader(c, "unclaim_workflow", MessageFormat.format("workflow_item_id = {0}, item_id= {1}, "
+                                        + "collection_id = {2}, old_state = {3}, new_state = {4}", wi.getID(), 
+                                        wi.getItem().getID(), wi.getCollection().getID(), taskstate, wi.getState())));
     }
 
     /**
@@ -515,7 +516,9 @@ public class WorkflowManager
         // stop workflow regardless of its state
         deleteTasks(c, wi);
 
-        log.info(LogManager.getHeader(c, "abort_workflow", MessageFormat.format("workflow_item_id = {0}, item_id = {1}, collection_id = {2}, eperson_id = {3}", wi.getID(), wi.getItem().getID(), wi.getCollection().getID(), e.getID())));
+        log.info(LogManager.getHeader(c, "abort_workflow", MessageFormat.format("workflow_item_id = {0}, item_id = {1}, "
+                                        + "collection_id = {2}, eperson_id = {3}", wi.getID(), wi.getItem().getID(), 
+                                        wi.getCollection().getID(), e.getID())));
 
         // convert into personal workspace
         returnToWorkspace(c, wi);
@@ -721,13 +724,15 @@ public class WorkflowManager
                                             EPerson actor, int newstate,
         EPerson newOwner, Collection mycollection, int oldState, Group newOwnerGroup)
     {
-        if(newstate == WFSTATE_ARCHIVE || newstate == WFSTATE_STEP1POOL || newstate == WFSTATE_STEP2POOL || newstate == WFSTATE_STEP3POOL)
+        if(newstate == WFSTATE_ARCHIVE || newstate == WFSTATE_STEP1POOL 
+           || newstate == WFSTATE_STEP2POOL || newstate == WFSTATE_STEP3POOL)
         {
             //Clear the newowner variable since this one isn't owned anymore !
             newOwner = null;
         }
 
-        UsageWorkflowEvent usageWorkflowEvent = new UsageWorkflowEvent(c, item, workflowItem, workflowText[newstate], workflowText[oldState], mycollection, actor);
+        UsageWorkflowEvent usageWorkflowEvent = new UsageWorkflowEvent(c, item, workflowItem, 
+                                                    workflowText[newstate], workflowText[oldState], mycollection, actor);
         if(newOwner != null)
         {
             usageWorkflowEvent.setEpersonOwners(newOwner);
@@ -777,12 +782,14 @@ public class WorkflowManager
         Item item = wfi.getItem();
         Collection collection = wfi.getCollection();
 
-        log.info(LogManager.getHeader(c, "archive_item", MessageFormat.format("workflow_item_id = {0}, item_id = {1}, collection_id = {2}", wfi.getID(), item.getID(), collection.getID())));
+        log.info(LogManager.getHeader(c, "archive_item", MessageFormat.format("workflow_item_id = {0}, item_id = {1}, "
+                                        + "collection_id = {2}", wfi.getID(), item.getID(), collection.getID())));
 
         InstallItem.installItem(c, wfi);
 
         // Log the event
-        log.info(LogManager.getHeader(c, "install_item", MessageFormat.format("workflow_id = {0}, item_id = {1}, handle = FIXME", wfi.getID(), item.getID())));
+        log.info(LogManager.getHeader(c, "install_item", MessageFormat.format("workflow_id = {0}, item_id = {1}, "
+                                        + "handle = FIXME", wfi.getID(), item.getID())));
 
         return item;
     }
@@ -914,7 +921,8 @@ public class WorkflowManager
         }
         catch (MessagingException e)
         {
-            log.warn(LogManager.getHeader(c, "notifyOfArchive", MessageFormat.format("cannot email user; item_id = {0}: {1}", i.getID(), e.getMessage())));
+            log.warn(LogManager.getHeader(c, "notifyOfArchive", MessageFormat.format("cannot email user; item_id = {0}:"
+                                            + " {1}", i.getID(), e.getMessage())));
         }
     }
 
@@ -951,7 +959,8 @@ public class WorkflowManager
         wi.update();
 
         //myitem.update();
-        log.info(LogManager.getHeader(c, "return_to_workspace", MessageFormat.format("workflow_item_id = {0}, workspace_item_id = {1}", wfi.getID(), wi.getID())));
+        log.info(LogManager.getHeader(c, "return_to_workspace", MessageFormat.format("workflow_item_id = {0}, "
+                                        + "workspace_item_id = {1}", wfi.getID(), wi.getID())));
 
         // Now remove the workflow object manually from the database
         DatabaseManager.updateQuery(c, "DELETE FROM WorkflowItem WHERE workflow_id=" + wfi.getID());
@@ -998,7 +1007,8 @@ public class WorkflowManager
         String usersName = getEPersonName(e);
 
         // Here's what happened
-        String provDescription = MessageFormat.format("Rejected by {0}, reason: {1} on {2} (GMT) ", usersName, rejection_message, now);
+        String provDescription = MessageFormat.format("Rejected by {0}, reason: {1} on {2} (GMT) ", usersName, 
+                                                                                                rejection_message, now);
 
         // Add to item as a DC field
         myitem.addMetadata("dc", "description", "provenance", "en", provDescription);
@@ -1010,10 +1020,12 @@ public class WorkflowManager
         // notify that it's been rejected
         notifyOfReject(c, wi, e, rejection_message, fp);
 
-        log.info(LogManager.getHeader(c, "reject_workflow", MessageFormat.format("workflow_item_id = {0}, item_id = {1}, collection_id = {2}, eperson_id= {3}, file path={4}",
-                                                                                 wi.getID(), wi.getItem().getID(), wi.getCollection().getID(), e.getID(), fp)));
-        log.debug(LogManager.getHeader(c, "reject_workflow", MessageFormat.format("workflow_item_id = {0}, item_id = {1}, collection_id = {2}, eperson_id= {3}, file path={4}",
-                                                                                 wi.getID(), wi.getItem().getID(), wi.getCollection().getID(), e.getID(), fp)));
+        log.info(LogManager.getHeader(c, "reject_workflow", MessageFormat.format("workflow_item_id = {0}, item_id = {1},"
+            + " collection_id = {2}, eperson_id= {3}, file path={4}", wi.getID(), wi.getItem().getID(), 
+            wi.getCollection().getID(), e.getID(), fp)));
+        log.debug(LogManager.getHeader(c, "reject_workflow", MessageFormat.format("workflow_item_id = {0}, "
+            + "item_id = {1}, collection_id = {2}, eperson_id= {3}, file path={4}", wi.getID(), wi.getItem().getID(), 
+            wi.getCollection().getID(), e.getID(), fp)));
 
         logWorkflowEvent(c, wsi.getItem(), wi, e, WFSTATE_SUBMIT, null, wsi.getCollection(), oldState, null);
 
@@ -1113,7 +1125,8 @@ public class WorkflowManager
         }
         catch (MessagingException e)
         {
-            log.warn(LogManager.getHeader(c, "notifyOfCuration", MessageFormat.format("cannot email users of workflow_item_id {0}: {1}", wi.getID(), e.getMessage())));
+            log.warn(LogManager.getHeader(c, "notifyOfCuration", MessageFormat.format("cannot email users of "
+                                            + "workflow_item_id {0}: {1}", wi.getID(), e.getMessage())));
         }
     }
 
@@ -1192,8 +1205,8 @@ public class WorkflowManager
             {
                 String gid = (mygroup != null) ? String.valueOf(mygroup.getID()) : "none";
 
-                log.warn(LogManager.getHeader(c, "notifyGroupofTask", MessageFormat.format("cannot email user group_id={0} workflow_item_id = {1}: {2}", gid,
-                                                                                            wi.getID(), e.getMessage())));
+                log.warn(LogManager.getHeader(c, "notifyGroupofTask", MessageFormat.format("cannot email user "
+                        + "group_id={0} workflow_item_id = {1}: {2}", gid, wi.getID(), e.getMessage())));
             }
         }
     }
@@ -1284,7 +1297,6 @@ public class WorkflowManager
     public static void notifyOfSubmission(Context c, WorkflowItem wi)
         throws SQLException, IOException, AuthorizeException
     {
-
         try
         {
             // Get submitter
@@ -1392,7 +1404,7 @@ public class WorkflowManager
      * @throws org.dspace.authorize.AuthorizeException
      */
     private static void recordApproval(Context c, WorkflowItem wi, EPerson e)
-            throws SQLException, IOException, AuthorizeException
+        throws SQLException, IOException, AuthorizeException
     {
         Item item = wi.getItem();
 
