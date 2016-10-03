@@ -95,37 +95,37 @@ public class LoginRedirect extends AbstractAction
        
         if(url != null)
         {
-             //log.debug(LogManager.getHeader(ContextUtil.obtainContext(objectModel), "Login Redirect URL", " "+url+"?"+httpRequest.getQueryString()));
+            //log.debug(LogManager.getHeader(ContextUtil.obtainContext(objectModel), "Login Redirect URL", " "+url+"?"+httpRequest.getQueryString()));
 
-             String qStr = httpRequest.getQueryString();
+            String qStr = httpRequest.getQueryString();
 
-             // now we want to check for the force ssl property
-             if (ConfigurationManager.getBooleanProperty("xmlui.force.ssl")) 
-             {
-                 if (!httpRequest.isSecure()) 
-                 {
-                     StringBuilder location = new StringBuilder("https://");
-                     location.append(ConfigurationManager.getProperty("dspace.hostname")).append(url);
-                     location.append(qStr == null ? "" : ("?" + httpRequest.getQueryString()));
+            // now we want to check for the force ssl property
+            if (ConfigurationManager.getBooleanProperty("xmlui.force.ssl")) 
+            {
+                if (!httpRequest.isSecure()) 
+                {
+                    StringBuilder location = new StringBuilder("https://");
+                    location.append(ConfigurationManager.getProperty("dspace.hostname")).append(url);
+                    location.append(qStr == null ? "" : ("?" + httpRequest.getQueryString()));
 
-                     log.debug(LogManager.getHeader(ContextUtil.obtainContext(objectModel), "Login Redirect URL", " Original URL = "+url));
-                     log.debug(LogManager.getHeader(ContextUtil.obtainContext(objectModel), "Login Redirect URL", " Modfied URL = "+location.toString()));
-                     httpResponse.sendRedirect(location.toString());
-                 }
-                 else
-                 {
-                    log.debug(LogManager.getHeader(ContextUtil.obtainContext(objectModel), "Login Redirect URL", " URL = "+url+(qStr == null ? "" : ("?" + httpRequest.getQueryString()))));
-                    httpResponse.sendRedirect(url+(qStr == null ? "" : ("?" + httpRequest.getQueryString())));
-                 }
-             }
-             else
-             {
-                 log.debug(LogManager.getHeader(ContextUtil.obtainContext(objectModel), "Login Redirect URL", " URL = "+url+(qStr == null ? "" : ("?" + httpRequest.getQueryString()))));
-                httpResponse.sendRedirect(url+(qStr == null ? "" : ("?" + httpRequest.getQueryString())));
-             }
+                    log.debug(LogManager.getHeader(ContextUtil.obtainContext(objectModel), "Login Redirect URL", " Original URL = "+url));
+                    log.debug(LogManager.getHeader(ContextUtil.obtainContext(objectModel), "Login Redirect URL", " Modfied URL = "+location.toString()));
+                    httpResponse.sendRedirect(location.toString());
+                }
+                else
+                {
+                   log.debug(LogManager.getHeader(ContextUtil.obtainContext(objectModel), "Login Redirect URL", " URL = "+url+(qStr == null ? "" : ("?" + httpRequest.getQueryString()))));
+                   httpResponse.sendRedirect(url+(qStr == null ? "" : ("?" + httpRequest.getQueryString())));
+                }
+            }
+            else
+            {
+                log.debug(LogManager.getHeader(ContextUtil.obtainContext(objectModel), "Login Redirect URL", " URL = "+url+(qStr == null ? "" : ("?" + httpRequest.getQueryString()))));
+               httpResponse.sendRedirect(url+(qStr == null ? "" : ("?" + httpRequest.getQueryString())));
+            }
         }
 
         return new HashMap();
-	}
+    }
     
 }
