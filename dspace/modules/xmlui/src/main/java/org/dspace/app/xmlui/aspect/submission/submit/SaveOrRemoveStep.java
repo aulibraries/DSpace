@@ -41,7 +41,7 @@ import org.xml.sax.SAXException;
 public class SaveOrRemoveStep extends AbstractStep
 {
 
-	/** Language Strings **/
+    /** Language Strings **/
     protected static final Message T_head = 
         message("xmlui.Submission.submit.SaveOrRemoveStep.head");
     protected static final Message T_info1 = 
@@ -55,13 +55,13 @@ public class SaveOrRemoveStep extends AbstractStep
 	
     
     /**
-	 * Establish our required parameters, abstractStep will enforce these.
-	 */
-	public SaveOrRemoveStep()
-	{
-		this.requireSubmission = true;
-		this.requireStep = true;
-	}
+     * Establish our required parameters, abstractStep will enforce these.
+     */
+    public SaveOrRemoveStep()
+    {
+        this.requireSubmission = true;
+        this.requireStep = true;
+    }
     
     /**
      * 
@@ -73,24 +73,25 @@ public class SaveOrRemoveStep extends AbstractStep
      * @throws java.io.IOException
      * @throws org.dspace.authorize.AuthorizeException 
      */
-	public void addBody(Body body) throws SAXException, WingException,
+    public void addBody(Body body) 
+        throws SAXException, WingException,
 	UIException, SQLException, IOException, AuthorizeException
-	{	
-		Collection collection = submission.getCollection();
-		String actionURL = contextPath + "/handle/"+collection.getHandle() + "/submit/" + knot.getId() + ".continue";
+    {	
+        Collection collection = submission.getCollection();
+        String actionURL = contextPath + "/handle/"+collection.getHandle() + "/submit/" + knot.getId() + ".continue";
 
-		Division div = body.addInteractiveDivision("submit-save-or-cancel",actionURL, Division.METHOD_POST,"primary submission");
-		div.setHead(T_submission_head);
-		//addSubmissionProgressList(div); // Commented out because there's no significant benefit to displaying the progress list bar on this page.
-		
-		List saveOrCancel = div.addList("submit-review", List.TYPE_FORM);
-	
-		saveOrCancel.setHead(T_head);
-		saveOrCancel.addItem(T_info1);
-		
+        Division div = body.addInteractiveDivision("submit-save-or-cancel",actionURL, Division.METHOD_POST,"primary submission");
+        div.setHead(T_submission_head);
+        //addSubmissionProgressList(div); // Commented out because there's no significant benefit to displaying the progress list bar on this page.
+
+        List saveOrCancel = div.addList("submit-review", List.TYPE_FORM);
+
+        saveOrCancel.setHead(T_head);
+        saveOrCancel.addItem(T_info1);
+
         org.dspace.app.xmlui.wing.element.Item actions = saveOrCancel.addItem();
         actions.addButton("submit_back").setValue(T_submit_back);
         actions.addButton("submit_save").setValue(T_submit_save);
-		actions.addButton("submit_remove").setValue(T_submit_remove);
-	}
+        actions.addButton("submit_remove").setValue(T_submit_remove);
+    }
 }

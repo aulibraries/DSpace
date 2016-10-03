@@ -114,10 +114,10 @@ public class UploadWithEmbargoStep extends UploadStep
      */
     @Override
     @SuppressWarnings({"unchecked", "unchecked", "unchecked"})
-    public int doProcessing(Context context,
-            HttpServletRequest request, HttpServletResponse response,
-            SubmissionInfo subInfo) throws ServletException, IOException,
-            SQLException, AuthorizeException
+    public int doProcessing(Context context, HttpServletRequest request, 
+                            HttpServletResponse response, SubmissionInfo subInfo) 
+        throws ServletException, IOException,
+        SQLException, AuthorizeException
     {
         // get button user pressed
         String buttonPressed = Util.getSubmitButton(request, NEXT_BUTTON);
@@ -454,9 +454,9 @@ public class UploadWithEmbargoStep extends UploadStep
      */
     @Override
     public int processUploadFile(Context context, HttpServletRequest request,
-                                    HttpServletResponse response, SubmissionInfo subInfo)
-            throws ServletException, IOException, SQLException,
-            AuthorizeException
+                                HttpServletResponse response, SubmissionInfo subInfo)
+        throws ServletException, IOException, SQLException,
+        AuthorizeException
     {
         boolean formatKnown = true;
         boolean fileOK = false;
@@ -644,7 +644,7 @@ public class UploadWithEmbargoStep extends UploadStep
      * @throws org.dspace.content.NonUniqueMetadataException
      */
     private void processAccessFields(Context context, HttpServletRequest request, SubmissionInfo subInfo, int type, String liftDate)
-            throws AuthorizeException, SQLException, IOException
+        throws AuthorizeException, SQLException, IOException
     {
         DateTimeFormatter dft = DateTimeFormat.forPattern("yyyy-MM-dd");
         Item item = null;

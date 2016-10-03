@@ -50,27 +50,27 @@ import org.xml.sax.SAXException;
 public class EditBitstreamForm extends AbstractDSpaceTransformer
 {
 
-	/** Language strings */
-	private static final Message T_dspace_home = message("xmlui.general.dspace_home");
-	private static final Message T_submit_save = message("xmlui.general.save");
-	private static final Message T_submit_cancel = message("xmlui.general.cancel");
-	private static final Message T_item_trail = message("xmlui.administrative.item.general.item_trail");
+    /** Language strings */
+    private static final Message T_dspace_home = message("xmlui.general.dspace_home");
+    private static final Message T_submit_save = message("xmlui.general.save");
+    private static final Message T_submit_cancel = message("xmlui.general.cancel");
+    private static final Message T_item_trail = message("xmlui.administrative.item.general.item_trail");
 
-	private static final Message T_title = message("xmlui.administrative.item.EditBitstreamForm.title");
-	private static final Message T_trail = message("xmlui.administrative.item.EditBitstreamForm.trail");
-	private static final Message T_head1 = message("xmlui.administrative.item.EditBitstreamForm.head1");
-	private static final Message T_file_label = message("xmlui.administrative.item.EditBitstreamForm.file_label");
-	private static final Message T_primary_label = message("xmlui.administrative.item.EditBitstreamForm.primary_label");
-	private static final Message T_primary_option_yes = message("xmlui.administrative.item.EditBitstreamForm.primary_option_yes");
-	private static final Message T_primary_option_no = message("xmlui.administrative.item.EditBitstreamForm.primary_option_no");
-	private static final Message T_description_label = message("xmlui.administrative.item.EditBitstreamForm.description_label");
-	private static final Message T_description_help = message("xmlui.administrative.item.EditBitstreamForm.description_help");
-	private static final Message T_para1 = message("xmlui.administrative.item.EditBitstreamForm.para1");
-	private static final Message T_format_label = message("xmlui.administrative.item.EditBitstreamForm.format_label");
-	private static final Message T_format_default = message("xmlui.administrative.item.EditBitstreamForm.format_default");
-	private static final Message T_para2 = message("xmlui.administrative.item.EditBitstreamForm.para2");
-	private static final Message T_user_label = message("xmlui.administrative.item.EditBitstreamForm.user_label");
-	private static final Message T_user_help = message("xmlui.administrative.item.EditBitstreamForm.user_help");
+    private static final Message T_title = message("xmlui.administrative.item.EditBitstreamForm.title");
+    private static final Message T_trail = message("xmlui.administrative.item.EditBitstreamForm.trail");
+    private static final Message T_head1 = message("xmlui.administrative.item.EditBitstreamForm.head1");
+    private static final Message T_file_label = message("xmlui.administrative.item.EditBitstreamForm.file_label");
+    private static final Message T_primary_label = message("xmlui.administrative.item.EditBitstreamForm.primary_label");
+    private static final Message T_primary_option_yes = message("xmlui.administrative.item.EditBitstreamForm.primary_option_yes");
+    private static final Message T_primary_option_no = message("xmlui.administrative.item.EditBitstreamForm.primary_option_no");
+    private static final Message T_description_label = message("xmlui.administrative.item.EditBitstreamForm.description_label");
+    private static final Message T_description_help = message("xmlui.administrative.item.EditBitstreamForm.description_help");
+    private static final Message T_para1 = message("xmlui.administrative.item.EditBitstreamForm.para1");
+    private static final Message T_format_label = message("xmlui.administrative.item.EditBitstreamForm.format_label");
+    private static final Message T_format_default = message("xmlui.administrative.item.EditBitstreamForm.format_default");
+    private static final Message T_para2 = message("xmlui.administrative.item.EditBitstreamForm.para2");
+    private static final Message T_user_label = message("xmlui.administrative.item.EditBitstreamForm.user_label");
+    private static final Message T_user_help = message("xmlui.administrative.item.EditBitstreamForm.user_help");
     private static final Message T_filename_label = message("xmlui.administrative.item.EditBitstreamForm.name_label");
     private static final Message T_filename_help = message("xmlui.administrative.item.EditBitstreamForm.name_help");
 
@@ -125,15 +125,15 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
      * @throws org.dspace.app.xmlui.wing.WingException
      */
     @Override
-	public void addPageMeta(PageMeta pageMeta) throws WingException
-	{
-		pageMeta.addMetadata("title").addContent(T_title);
+    public void addPageMeta(PageMeta pageMeta) throws WingException
+    {
+        pageMeta.addMetadata("title").addContent(T_title);
 
-		pageMeta.addTrailLink(contextPath + "/", T_dspace_home);
-		pageMeta.addTrailLink(contextPath + "/admin/item",T_item_trail);
-		pageMeta.addTrail().addContent(T_trail);
+        pageMeta.addTrailLink(contextPath + "/", T_dspace_home);
+        pageMeta.addTrailLink(contextPath + "/admin/item",T_item_trail);
+        pageMeta.addTrail().addContent(T_trail);
         pageMeta.addMetadata("javascript", "static").addContent("static/js/editItemUtil.js");
-	}
+    }
 
     /**
      *
@@ -147,30 +147,30 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
      * @throws org.dspace.authorize.AuthorizeException
      */
     @Override
-	public void addBody(Body body)
+    public void addBody(Body body)
         throws SAXException, WingException,
         UIException, SQLException, IOException,
         AuthorizeException
-	{
+    {
 
         //isAdvancedFormEnabled= ConfigurationManager.getBooleanProperty("webui.submission.restrictstep.enableAdvancedForm", false);
 
-		// Get our parameters
-		int bitstreamID = parameters.getParameterAsInteger("bitstreamID",-1);
+        // Get our parameters
+        int bitstreamID = parameters.getParameterAsInteger("bitstreamID",-1);
 
-		// Get the bitstream and all the various formats
+        // Get the bitstream and all the various formats
         // Administrator is allowed to see internal formats too.
-		Bitstream bitstream = Bitstream.find(context, bitstreamID);
+        Bitstream bitstream = Bitstream.find(context, bitstreamID);
 
-		// File name & url
-		String fileUrl = contextPath + "/bitstream/id/" +bitstream.getID() + "/" + bitstream.getName();
-		String fileName = bitstream.getName();
+        // File name & url
+        String fileUrl = contextPath + "/bitstream/id/" +bitstream.getID() + "/" + bitstream.getName();
+        String fileName = bitstream.getName();
 
-		// DIVISION: main
-		Division div = body.addInteractiveDivision("edit-bitstream", contextPath+"/admin/item", Division.METHOD_MULTIPART, "primary administrative item");
-		div.setHead(T_head1);
+        // DIVISION: main
+        Division div = body.addInteractiveDivision("edit-bitstream", contextPath+"/admin/item", Division.METHOD_MULTIPART, "primary administrative item");
+        div.setHead(T_head1);
 
-		// LIST: edit form
+        // LIST: edit form
         List edit = div.addList("edit-bitstream-list", List.TYPE_FORM);
         edit.addLabel(T_file_label);
         edit.addItem().addXref(fileUrl, fileName);
@@ -190,7 +190,7 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
 
         div.addHidden("administrative-continue").setValue(knot.getId());
         div.addHidden("bitstreamID").setValue(bitstreamID);
-	}
+    }
 
     /**
      *

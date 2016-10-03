@@ -140,12 +140,12 @@ public class Submissions extends AbstractDSpaceTransformer
     public void addPageMeta(PageMeta pageMeta)
         throws SAXException, WingException, UIException,
         SQLException, IOException, AuthorizeException
-	{
-		pageMeta.addMetadata("title").addContent(T_title);
+    {
+        pageMeta.addMetadata("title").addContent(T_title);
 
-		pageMeta.addTrailLink(contextPath + "/",T_dspace_home);
-		pageMeta.addTrailLink(contextPath + "/submissions",T_trail);
-	}
+        pageMeta.addTrailLink(contextPath + "/",T_dspace_home);
+        pageMeta.addTrailLink(contextPath + "/submissions",T_trail);
+    }
 
     /**
      *
@@ -162,7 +162,6 @@ public class Submissions extends AbstractDSpaceTransformer
     public void addBody(Body body) throws SAXException, WingException,
             UIException, SQLException, IOException, AuthorizeException
     {
-
         Division div = body.addInteractiveDivision("submissions", contextPath+"/submissions", Division.METHOD_POST,"primary");
         div.setHead(T_head);
 
@@ -218,59 +217,59 @@ public class Submissions extends AbstractDSpaceTransformer
 
         if (ownedItems.size() > 0)
         {
-        	for (WorkflowItem owned : ownedItems)
-        	{
-        		int workflowItemID = owned.getID();
-        		String collectionUrl = contextPath + "/handle/" + owned.getCollection().getHandle();
-        		String ownedWorkflowItemUrl = contextPath + "/handle/" + owned.getCollection().getHandle() + "/workflow?workflowID=" + workflowItemID;
-        		Metadatum[] titles = owned.getItem().getMetadata("dc", "title", null, Item.ANY);
-        		String collectionName = owned.getCollection().getName();
-        		EPerson submitter = owned.getSubmitter();
-        		String submitterName = submitter.getFullName();
-        		String submitterEmail = submitter.getEmail();
+            for (WorkflowItem owned : ownedItems)
+            {
+                int workflowItemID = owned.getID();
+                String collectionUrl = contextPath + "/handle/" + owned.getCollection().getHandle();
+                String ownedWorkflowItemUrl = contextPath + "/handle/" + owned.getCollection().getHandle() + "/workflow?workflowID=" + workflowItemID;
+                Metadatum[] titles = owned.getItem().getMetadata("dc", "title", null, Item.ANY);
+                String collectionName = owned.getCollection().getName();
+                EPerson submitter = owned.getSubmitter();
+                String submitterName = submitter.getFullName();
+                String submitterEmail = submitter.getEmail();
 
-        		Message state = getWorkflowStateMessage(owned);
+                Message state = getWorkflowStateMessage(owned);
 
-        		Row row = table.addRow();
+                Row row = table.addRow();
 
-        		CheckBox remove = row.addCell().addCheckBox("workflowID");
-	        	remove.setLabel("selected");
-	        	remove.addOption(workflowItemID);
+                CheckBox remove = row.addCell().addCheckBox("workflowID");
+                remove.setLabel("selected");
+                remove.addOption(workflowItemID);
 
-        		// The task description
-	        	row.addCell().addXref(ownedWorkflowItemUrl, state);
+                // The task description
+                row.addCell().addXref(ownedWorkflowItemUrl, state);
 
-        		// The item description
-        		if (titles != null && titles.length > 0)
-        		{
-        			String displayTitle = titles[0].value;
-        			if (displayTitle.length() > 50)
+                // The item description
+                if (titles != null && titles.length > 0)
+                {
+                    String displayTitle = titles[0].value;
+                    if (displayTitle.length() > 50)
                     {
                         displayTitle = displayTitle.substring(0, 50) + " ...";
                     }
-        			row.addCell().addXref(ownedWorkflowItemUrl, displayTitle);
-        		}
-        		else
+                    row.addCell().addXref(ownedWorkflowItemUrl, displayTitle);
+                }
+                else
                 {
                     row.addCell().addXref(ownedWorkflowItemUrl, T_untitled);
                 }
 
-        		// Submitted too
-        		row.addCell().addXref(collectionUrl, collectionName);
+                // Submitted too
+                row.addCell().addXref(collectionUrl, collectionName);
 
-        		// Submitted by
-	        	Cell cell = row.addCell();
-	        	cell.addContent(T_email);
-	        	cell.addXref("mailto:"+submitterEmail,submitterName);
-        	}
+                // Submitted by
+                Cell cell = row.addCell();
+                cell.addContent(T_email);
+                cell.addXref("mailto:"+submitterEmail,submitterName);
+            }
 
-        	Row row = table.addRow();
- 	    	row.addCell(0,5).addButton("submit_return_tasks").setValue(T_w_submit_return);
+            Row row = table.addRow();
+            row.addCell(0,5).addButton("submit_return_tasks").setValue(T_w_submit_return);
         }
         else
         {
-        	Row row = table.addRow();
-        	row.addCell(0,5).addHighlight("italic").addContent(T_w_info2);
+            Row row = table.addRow();
+            row.addCell(0,5).addHighlight("italic").addContent(T_w_info2);
         }
 
         // Tasks in the pool
@@ -286,16 +285,16 @@ public class Submissions extends AbstractDSpaceTransformer
 
         if (pooledItems.size() > 0)
         {
-        	for (WorkflowItem pooled : pooledItems)
-        	{
-        		int workflowItemID = pooled.getID();
-        		String collectionUrl = contextPath + "/handle/" + pooled.getCollection().getHandle();
-        		String pooledItemUrl = contextPath + "/handle/" + pooled.getCollection().getHandle() + "/workflow?workflowID=" + workflowItemID;
-        		Metadatum[] titles = pooled.getItem().getMetadata("dc", "title", null, Item.ANY);
-        		String collectionName = pooled.getCollection().getName();
-        		EPerson submitter = pooled.getSubmitter();
-        		String submitterName = submitter.getFullName();
-        		String submitterEmail = submitter.getEmail();
+            for (WorkflowItem pooled : pooledItems)
+            {
+                int workflowItemID = pooled.getID();
+                String collectionUrl = contextPath + "/handle/" + pooled.getCollection().getHandle();
+                String pooledItemUrl = contextPath + "/handle/" + pooled.getCollection().getHandle() + "/workflow?workflowID=" + workflowItemID;
+                Metadatum[] titles = pooled.getItem().getMetadata("dc", "title", null, Item.ANY);
+                String collectionName = pooled.getCollection().getName();
+                EPerson submitter = pooled.getSubmitter();
+                String submitterName = submitter.getFullName();
+                String submitterEmail = submitter.getEmail();
 
                 String ownerName = null;
                 EPerson wfiOwner = pooled.getOwner();
@@ -312,52 +311,52 @@ public class Submissions extends AbstractDSpaceTransformer
                     }
                 }
 
-        		Message state = getWorkflowStateMessage(pooled);
+                Message state = getWorkflowStateMessage(pooled);
 
-        		Row row = table.addRow();
+                Row row = table.addRow();
 
-        		if(wfiOwner == null)
+                if(wfiOwner == null)
                 {
                     CheckBox remove = row.addCell().addCheckBox("workflowID");
                     remove.setLabel("selected");
                     remove.addOption(workflowItemID);
                 }
 
-        		// The task description
-	        	row.addCell().addXref(pooledItemUrl, state);
+                // The task description
+                row.addCell().addXref(pooledItemUrl, state);
 
-        		// The item description
-        		if (titles != null && titles.length > 0)
-        		{
-        			String displayTitle = titles[0].value;
-        			if (displayTitle.length() > 50)
+                // The item description
+                if (titles != null && titles.length > 0)
+                {
+                    String displayTitle = titles[0].value;
+                    if (displayTitle.length() > 50)
                     {
                         displayTitle = displayTitle.substring(0, 50) + " ...";
                     }
 
-        			row.addCell().addXref(pooledItemUrl, displayTitle);
-        		}
-        		else
+                    row.addCell().addXref(pooledItemUrl, displayTitle);
+                }
+                else
                 {
                     row.addCell().addXref(pooledItemUrl, T_untitled);
                 }
 
-        		// Submitted too
-        		row.addCell().addXref(collectionUrl, collectionName);
+                // Submitted too
+                row.addCell().addXref(collectionUrl, collectionName);
 
-        		// Submitted by
-        		Cell cell = row.addCell();
-	        	cell.addContent(T_email);
-	        	cell.addXref("mailto:"+submitterEmail,submitterName);
+                // Submitted by
+                Cell cell = row.addCell();
+                cell.addContent(T_email);
+                cell.addXref("mailto:"+submitterEmail,submitterName);
 
-        	}
-        	Row row = table.addRow();
- 	    	row.addCell(0,5).addButton("submit_take_tasks").setValue(T_w_submit_take);
+            }
+            Row row = table.addRow();
+            row.addCell(0,5).addButton("submit_take_tasks").setValue(T_w_submit_take);
         }
         else
         {
-        	Row row = table.addRow();
-        	row.addCell(0,5).addHighlight("italic").addContent(T_w_info3);
+            Row row = table.addRow();
+            row.addCell(0,5).addHighlight("italic").addContent(T_w_info3);
         }
 
         // Tasks owned by others
@@ -416,8 +415,8 @@ public class Submissions extends AbstractDSpaceTransformer
         }
         else
         {
-        	Row row = table.addRow();
-        	row.addCell(0,5).addHighlight("italic").addContent(T_w_info2);
+            Row row = table.addRow();
+            row.addCell(0,5).addHighlight("italic").addContent(T_w_info2);
         }
     }
 
@@ -476,32 +475,32 @@ public class Submissions extends AbstractDSpaceTransformer
 
         for (WorkflowItem workflowItem : inprogressItems)
         {
-        	Metadatum[] titles = workflowItem.getItem().getMetadata("dc", "title", null, Item.ANY);
-        	String collectionName = workflowItem.getCollection().getName();
-        	Message state = getWorkflowStateMessage(workflowItem);
+            Metadatum[] titles = workflowItem.getItem().getMetadata("dc", "title", null, Item.ANY);
+            String collectionName = workflowItem.getCollection().getName();
+            Message state = getWorkflowStateMessage(workflowItem);
 
-        	Row row = table.addRow();
+            Row row = table.addRow();
 
-        	// Add the title column
-        	if (titles.length > 0)
-        	{
-        		String displayTitle = titles[0].value;
-    			if (displayTitle.length() > 50)
+            // Add the title column
+            if (titles.length > 0)
+            {
+                String displayTitle = titles[0].value;
+                if (displayTitle.length() > 50)
                 {
                     displayTitle = displayTitle.substring(0, 50) + " ...";
                 }
-        		row.addCellContent(displayTitle);
-        	}
-        	else
+                row.addCellContent(displayTitle);
+            }
+            else
             {
                 row.addCellContent(T_untitled);
             }
 
-        	// Collection name column
-        	row.addCellContent(collectionName);
+            // Collection name column
+            row.addCellContent(collectionName);
 
-        	// Status column
-        	row.addCellContent(state);
+            // Status column
+            row.addCellContent(state);
         }
     }
 
@@ -515,27 +514,27 @@ public class Submissions extends AbstractDSpaceTransformer
      */
     private Message getWorkflowStateMessage(WorkflowItem workflowItem)
     {
-		switch (workflowItem.getState())
-		{
-			case WorkflowManager.WFSTATE_SUBMIT:
-				return T_status_0;
-			case WorkflowManager.WFSTATE_STEP1POOL:
-				return T_status_1;
-    		case WorkflowManager.WFSTATE_STEP1:
-    			return T_status_2;
-    		case WorkflowManager.WFSTATE_STEP2POOL:
-    			return T_status_3;
-    		case WorkflowManager.WFSTATE_STEP2:
-    			return T_status_4;
-    		case WorkflowManager.WFSTATE_STEP3POOL:
-    			return T_status_5;
-    		case WorkflowManager.WFSTATE_STEP3:
-    			return T_status_6;
-    		case WorkflowManager.WFSTATE_ARCHIVE:
-    			return T_status_7;
-   			default:
-   				return T_status_unknown;
-		}
+        switch (workflowItem.getState())
+        {
+            case WorkflowManager.WFSTATE_SUBMIT:
+                return T_status_0;
+            case WorkflowManager.WFSTATE_STEP1POOL:
+                return T_status_1;
+            case WorkflowManager.WFSTATE_STEP1:
+                return T_status_2;
+            case WorkflowManager.WFSTATE_STEP2POOL:
+                return T_status_3;
+            case WorkflowManager.WFSTATE_STEP2:
+                return T_status_4;
+            case WorkflowManager.WFSTATE_STEP3POOL:
+                return T_status_5;
+            case WorkflowManager.WFSTATE_STEP3:
+                return T_status_6;
+            case WorkflowManager.WFSTATE_ARCHIVE:
+                return T_status_7;
+            default:
+                return T_status_unknown;
+        }
     }
 
     /**

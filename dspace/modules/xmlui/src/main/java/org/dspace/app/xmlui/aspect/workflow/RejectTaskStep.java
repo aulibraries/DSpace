@@ -94,14 +94,14 @@ public class RejectTaskStep extends AbstractStep
         SQLException, IOException, AuthorizeException
     {
     	Item item = submission.getItem();
-		Collection collection = submission.getCollection();
-		String actionURL = contextPath + "/handle/"+collection.getHandle() + "/workflow";
+        Collection collection = submission.getCollection();
+        String actionURL = contextPath + "/handle/"+collection.getHandle() + "/workflow";
 
     	Request request = ObjectModelHelper.getRequest(objectModel);
-		String showfull = request.getParameter("showfull");
+        String showfull = request.getParameter("showfull");
 
-		// if the user selected showsimple, remove showfull.
-		if (showfull != null && request.getParameter("showsimple") != null)
+        // if the user selected showsimple, remove showfull.
+        if (showfull != null && request.getParameter("showsimple") != null)
         {
             showfull = null;
         }
@@ -111,9 +111,9 @@ public class RejectTaskStep extends AbstractStep
 
         if (showfull == null)
         {
-	        ReferenceSet referenceSet = div.addReferenceSet("narf",ReferenceSet.TYPE_SUMMARY_VIEW);
-	        referenceSet.addReference(item);
-	        div.addPara().addButton("showfull").setValue(T_showfull);
+            ReferenceSet referenceSet = div.addReferenceSet("narf",ReferenceSet.TYPE_SUMMARY_VIEW);
+            referenceSet.addReference(item);
+            div.addPara().addButton("showfull").setValue(T_showfull);
         }
         else
         {

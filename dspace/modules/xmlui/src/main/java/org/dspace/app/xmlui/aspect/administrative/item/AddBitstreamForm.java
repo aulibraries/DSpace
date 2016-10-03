@@ -47,24 +47,24 @@ import org.xml.sax.SAXException;
  */
 public class AddBitstreamForm extends AbstractDSpaceTransformer
 {
-	/** Language strings */
-	private static final Message T_dspace_home = message("xmlui.general.dspace_home");
-	private static final Message T_submit_cancel = message("xmlui.general.cancel");
-	private static final Message T_item_trail = message("xmlui.administrative.item.general.item_trail");
+    /** Language strings */
+    private static final Message T_dspace_home = message("xmlui.general.dspace_home");
+    private static final Message T_submit_cancel = message("xmlui.general.cancel");
+    private static final Message T_item_trail = message("xmlui.administrative.item.general.item_trail");
 
-	private static final Message T_title = message("xmlui.administrative.item.AddBitstreamForm.title");
-	private static final Message T_trail = message("xmlui.administrative.item.AddBitstreamForm.trail");
-	private static final Message T_head1 = message("xmlui.administrative.item.AddBitstreamForm.head1");
-	private static final Message T_bundle_label = message("xmlui.administrative.item.AddBitstreamForm.bundle_label");
-	private static final Message T_file_label = message("xmlui.administrative.item.AddBitstreamForm.file_label");
-	private static final Message T_file_help = message("xmlui.administrative.item.AddBitstreamForm.file_help");
-	private static final Message T_description_label = message("xmlui.administrative.item.AddBitstreamForm.description_label");
-	private static final Message T_description_help = message("xmlui.administrative.item.AddBitstreamForm.description_help");
-	private static final Message T_submit_upload = message("xmlui.administrative.item.AddBitstreamForm.submit_upload");
+    private static final Message T_title = message("xmlui.administrative.item.AddBitstreamForm.title");
+    private static final Message T_trail = message("xmlui.administrative.item.AddBitstreamForm.trail");
+    private static final Message T_head1 = message("xmlui.administrative.item.AddBitstreamForm.head1");
+    private static final Message T_bundle_label = message("xmlui.administrative.item.AddBitstreamForm.bundle_label");
+    private static final Message T_file_label = message("xmlui.administrative.item.AddBitstreamForm.file_label");
+    private static final Message T_file_help = message("xmlui.administrative.item.AddBitstreamForm.file_help");
+    private static final Message T_description_label = message("xmlui.administrative.item.AddBitstreamForm.description_label");
+    private static final Message T_description_help = message("xmlui.administrative.item.AddBitstreamForm.description_help");
+    private static final Message T_submit_upload = message("xmlui.administrative.item.AddBitstreamForm.submit_upload");
 
-	private static final Message T_no_bundles = message("xmlui.administrative.item.AddBitstreamForm.no_bundles");
+    private static final Message T_no_bundles = message("xmlui.administrative.item.AddBitstreamForm.no_bundles");
 
-	private static final String DEFAULT_BUNDLE_LIST = "ORIGINAL, METADATA, THUMBNAIL, LICENSE, CC-LICENSE";
+    private static final String DEFAULT_BUNDLE_LIST = "ORIGINAL, METADATA, THUMBNAIL, LICENSE, CC-LICENSE";
 
     private boolean isAdvancedFormEnabled=true;
 
@@ -116,8 +116,8 @@ public class AddBitstreamForm extends AbstractDSpaceTransformer
      * @throws WingException
      */
     @Override
-	public void addPageMeta(PageMeta pageMeta) throws WingException
-	{
+    public void addPageMeta(PageMeta pageMeta) throws WingException
+    {
         pageMeta.addMetadata("title").addContent(T_title);
 
         pageMeta.addTrailLink(contextPath + "/", T_dspace_home);
@@ -138,10 +138,10 @@ public class AddBitstreamForm extends AbstractDSpaceTransformer
      * @throws org.dspace.authorize.AuthorizeException
      */
     @Override
-	public void addBody(Body body)
+    public void addBody(Body body)
         throws SAXException, WingException, UIException,
         SQLException, IOException, AuthorizeException
-	{
+    {
         isAdvancedFormEnabled=ConfigurationManager.getBooleanProperty("webui.submission.restrictstep.enableAdvancedForm", false);
 
         int itemID = parameters.getParameterAsInteger("itemID", -1);
@@ -223,7 +223,7 @@ public class AddBitstreamForm extends AbstractDSpaceTransformer
      */
     public boolean addBundleOption(org.dspace.content.Item item, Select select, String bundleName)
         throws SQLException, WingException
-	{
+    {
         Bundle[] bundles = item.getBundles(bundleName);
         if (bundles == null || bundles.length == 0)
         {
@@ -267,7 +267,7 @@ public class AddBitstreamForm extends AbstractDSpaceTransformer
      * @throws org.dspace.app.xmlui.wing.WingException
      */
     private void addEmbargoFieldSection(List form)
-            throws SQLException, WingException
+        throws SQLException, WingException
     {
         String errorString = parameters.getParameter("errors",null);
         ArrayList<String> errors = new ArrayList<>();
@@ -315,5 +315,5 @@ public class AddBitstreamForm extends AbstractDSpaceTransformer
             datefieldDisplayInput.setValue(1);
         }
     }
-
+    
 }

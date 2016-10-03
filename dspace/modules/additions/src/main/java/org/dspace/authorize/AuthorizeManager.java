@@ -181,15 +181,16 @@ public class AuthorizeManager
                 userid = e.getID();
             }
 
-            //            AuthorizeException j = new AuthorizeException("Denied");
-            //            j.printStackTrace();
+            // AuthorizeException j = new AuthorizeException("Denied");
+            // j.printStackTrace();
             // action can be -1 due to a null entry
             String actionText;
 
             if (action == -1)
             {
                 actionText = "null";
-            } else
+            } 
+            else
             {
                 actionText = Constants.actionText[action];
             }
@@ -735,7 +736,8 @@ public class AuthorizeManager
                 if (cachepolicy != null)
                 {
                     policies.add(cachepolicy);
-                } else
+                } 
+                else
                 {
                     policies.add(new ResourcePolicy(c, row));
                 }

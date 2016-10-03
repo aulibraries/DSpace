@@ -54,19 +54,19 @@ public class LoginRedirect extends AbstractAction
      * @throws Exception 
      */
     @Override
-	public Map act(Redirector redirector, SourceResolver resolver, Map objectModel, String source, Parameters parameters)
+    public Map act(Redirector redirector, SourceResolver resolver, Map objectModel, String source, Parameters parameters)
         throws Exception 
     {
-		final HttpServletResponse httpResponse = (HttpServletResponse) objectModel.get(HttpEnvironment.HTTP_RESPONSE_OBJECT);
-		final HttpServletRequest httpRequest = (HttpServletRequest) objectModel.get(HttpEnvironment.HTTP_REQUEST_OBJECT);
-		final Iterator<AuthenticationMethod> authMethods = AuthenticationManager.authenticationMethodIterator();
+        final HttpServletResponse httpResponse = (HttpServletResponse) objectModel.get(HttpEnvironment.HTTP_RESPONSE_OBJECT);
+        final HttpServletRequest httpRequest = (HttpServletRequest) objectModel.get(HttpEnvironment.HTTP_REQUEST_OBJECT);
+        final Iterator<AuthenticationMethod> authMethods = AuthenticationManager.authenticationMethodIterator();
 
         if (authMethods == null)
         {
             throw new IllegalStateException("No explicit authentication methods found when exactly one was expected.");
         }
 
-		AuthenticationMethod authMethod = null;
+        AuthenticationMethod authMethod = null;
 
         while (authMethods.hasNext())
         {

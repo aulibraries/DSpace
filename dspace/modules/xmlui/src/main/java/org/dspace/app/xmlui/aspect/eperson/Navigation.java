@@ -135,32 +135,32 @@ public class Navigation extends AbstractDSpaceTransformer implements CacheablePr
     {
     	if (this.validity == null)
     	{
-    		// Only use the DSpaceValidity object is someone is logged in.
-    		if (context.getCurrentUser() != null)
-    		{
-		        try
+            // Only use the DSpaceValidity object is someone is logged in.
+            if (context.getCurrentUser() != null)
+            {
+                try
                 {
-		            DSpaceValidity validity = new DSpaceValidity();
+                    DSpaceValidity validity = new DSpaceValidity();
 
-		            validity.add(eperson);
+                    validity.add(eperson);
 
-		            Group[] groups = Group.allMemberGroups(context, eperson);
-		            for (Group group : groups)
-		            {
-		            	validity.add(group);
-		            }
+                    Group[] groups = Group.allMemberGroups(context, eperson);
+                    for (Group group : groups)
+                    {
+                        validity.add(group);
+                    }
 
-		            this.validity = validity.complete();
-		        }
-		        catch (SQLException sqle)
-		        {
-		            // Just ignore it and return invalid.
-		        }
-    		}
-    		else
-    		{
-    			this.validity = NOPValidity.SHARED_INSTANCE;
-    		}
+                    this.validity = validity.complete();
+                }
+                catch (SQLException sqle)
+                {
+                    // Just ignore it and return invalid.
+                }
+            }
+            else
+            {
+                    this.validity = NOPValidity.SHARED_INSTANCE;
+            }
     	}
     	return this.validity;
     }

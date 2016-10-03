@@ -49,95 +49,95 @@ import org.xml.sax.SAXException;
  */
 public class LDAPLogin extends AbstractDSpaceTransformer implements CacheableProcessingComponent
 {
-	/** language strings */
-	public static final Message T_title = message("xmlui.EPerson.LDAPLogin.title");
+    /** language strings */
+    public static final Message T_title = message("xmlui.EPerson.LDAPLogin.title");
 
-	public static final Message T_dspace_home = message("xmlui.general.dspace_home");
+    public static final Message T_dspace_home = message("xmlui.general.dspace_home");
 
-	public static final Message T_trail = message("xmlui.EPerson.LDAPLogin.trail");
+    public static final Message T_trail = message("xmlui.EPerson.LDAPLogin.trail");
 
-	public static final Message T_head1 = message("xmlui.EPerson.LDAPLogin.head1");
+    public static final Message T_head1 = message("xmlui.EPerson.LDAPLogin.head1");
 
-	public static final Message T_userName = message("xmlui.EPerson.LDAPLogin.username");
+    public static final Message T_userName = message("xmlui.EPerson.LDAPLogin.username");
 
-	public static final Message T_error_bad_login = message("xmlui.EPerson.LDAPLogin.error_bad_login");
+    public static final Message T_error_bad_login = message("xmlui.EPerson.LDAPLogin.error_bad_login");
 
-	public static final Message T_password = message("xmlui.EPerson.LDAPLogin.password");
+    public static final Message T_password = message("xmlui.EPerson.LDAPLogin.password");
 
-	public static final Message T_submit = message("xmlui.EPerson.LDAPLogin.submit");
+    public static final Message T_submit = message("xmlui.EPerson.LDAPLogin.submit");
 
     private static final Logger log = Logger.getLogger(LDAPLogin.class);
 
-	/**
-	 * Generate the unique caching key. This key must be unique inside the space
-	 * of this component.
-	 */
+    /**
+     * Generate the unique caching key. This key must be unique inside the space
+     * of this component.
+     */
     @Override
-	public Serializable getKey()
+    public Serializable getKey()
     {
-		Request request = ObjectModelHelper.getRequest(objectModel);
-		String previous_username = request.getParameter("username");
+        Request request = ObjectModelHelper.getRequest(objectModel);
+        String previous_username = request.getParameter("username");
 
-		// Get any message parameters
-		HttpSession session = request.getSession();
-		String header = (String) session
-				.getAttribute(AuthenticationUtil.REQUEST_INTERRUPTED_HEADER);
-		String message = (String) session
-				.getAttribute(AuthenticationUtil.REQUEST_INTERRUPTED_MESSAGE);
-		String characters = (String) session
-				.getAttribute(AuthenticationUtil.REQUEST_INTERRUPTED_CHARACTERS);
+        // Get any message parameters
+        HttpSession session = request.getSession();
+        String header = (String) session
+                        .getAttribute(AuthenticationUtil.REQUEST_INTERRUPTED_HEADER);
+        String message = (String) session
+                        .getAttribute(AuthenticationUtil.REQUEST_INTERRUPTED_MESSAGE);
+        String characters = (String) session
+                        .getAttribute(AuthenticationUtil.REQUEST_INTERRUPTED_CHARACTERS);
 
-		// If there is a message or previous email attempt then the page is not
-		// cachable
-		if (header == null && message == null && characters == null
-				&& previous_username == null)
+        // If there is a message or previous email attempt then the page is not
+        // cachable
+        if (header == null && message == null && characters == null
+                        && previous_username == null)
         {
             // cacheable
             return "1";
         }
-		else
+        else
         {
             // Uncachable
             return "0";
         }
-	}
+    }
 
-	/**
-	 * Generate the cache validity object.
-	 */
+    /**
+     * Generate the cache validity object.
+     */
     @Override
-	public SourceValidity getValidity()
+    public SourceValidity getValidity()
     {
-		Request request = ObjectModelHelper.getRequest(objectModel);
-		String previous_username = request.getParameter("username");
+        Request request = ObjectModelHelper.getRequest(objectModel);
+        String previous_username = request.getParameter("username");
 
-		// Get any message parameters
-		HttpSession session = request.getSession();
-		String header = (String) session.getAttribute(AuthenticationUtil.REQUEST_INTERRUPTED_HEADER);
-		String message = (String) session.getAttribute(AuthenticationUtil.REQUEST_INTERRUPTED_MESSAGE);
-		String characters = (String) session.getAttribute(AuthenticationUtil.REQUEST_INTERRUPTED_CHARACTERS);
+        // Get any message parameters
+        HttpSession session = request.getSession();
+        String header = (String) session.getAttribute(AuthenticationUtil.REQUEST_INTERRUPTED_HEADER);
+        String message = (String) session.getAttribute(AuthenticationUtil.REQUEST_INTERRUPTED_MESSAGE);
+        String characters = (String) session.getAttribute(AuthenticationUtil.REQUEST_INTERRUPTED_CHARACTERS);
 
-		// If there is a message or previous email attempt then the page is not
-		// cachable
-		if (header == null && message == null && characters == null	&& previous_username == null)
+        // If there is a message or previous email attempt then the page is not
+        // cachable
+        if (header == null && message == null && characters == null	&& previous_username == null)
         {
             // Always valid
             return NOPValidity.SHARED_INSTANCE;
         }
-		else
+        else
         {
             // invalid
             return null;
         }
-	}
+    }
 
-	/**
-	 * Set the page title and trail.
+    /**
+     * Set the page title and trail.
      * @param pageMeta
      * @throws org.dspace.app.xmlui.wing.WingException
-	 */
+     */
     @Override
-	public void addPageMeta(PageMeta pageMeta)
+    public void addPageMeta(PageMeta pageMeta)
         throws WingException
     {
         Request request = ObjectModelHelper.getRequest(objectModel);
@@ -155,10 +155,10 @@ public class LDAPLogin extends AbstractDSpaceTransformer implements CacheablePro
             }
         }
 
-		pageMeta.addMetadata("title").addContent(T_title);
+        pageMeta.addMetadata("title").addContent(T_title);
 
-		pageMeta.addTrailLink(contextPath + "/", T_dspace_home);
-		pageMeta.addTrail().addContent(T_trail);
+        pageMeta.addTrailLink(contextPath + "/", T_dspace_home);
+        pageMeta.addTrail().addContent(T_trail);
 
         if(bitstreamID > 0)
         {
@@ -181,20 +181,20 @@ public class LDAPLogin extends AbstractDSpaceTransformer implements CacheablePro
         {
             pageMeta.addMetadata("view-account-nav").addContent("true");
         }/**/
-	}
+    }
 
-	/**
-	 * Display the login form.
+    /**
+     * Display the login form.
      * @param body
      * @throws java.sql.SQLException
      * @throws org.xml.sax.SAXException
      * @throws org.dspace.app.xmlui.wing.WingException
-	 */
+     */
     @Override
-	public void addBody(Body body)
+    public void addBody(Body body)
         throws SQLException, SAXException, WingException
     {
-		// Check if the user has previously attempted to login.
+        // Check if the user has previously attempted to login.
         Request request = ObjectModelHelper.getRequest(objectModel);
         HttpSession session = request.getSession();
         String previousUserName = request.getParameter("username");
@@ -217,32 +217,32 @@ public class LDAPLogin extends AbstractDSpaceTransformer implements CacheablePro
             }
         }
 
-		if (header != null || message != null || characters != null)
+        if (header != null || message != null || characters != null)
         {
-			Division reason = body.addDivision("login-reason");
+            Division reason = body.addDivision("login-reason");
 
-			if (header != null)
+            if (header != null)
             {
                 reason.setHead(message(header));
             }
-			else
+            else
             {
                 // Always have a head.
                 reason.setHead("Authentication Required");
             }
 
-			if (message != null)
+            if (message != null)
             {
                 reason.addPara(message(message));
             }
 
-			if (characters != null)
+            if (characters != null)
             {
                 reason.addPara(characters);
             }
-		}
+        }
 
-		if(bitstreamID > 0)
+        if(bitstreamID > 0)
         {
             try
             {
@@ -282,7 +282,7 @@ public class LDAPLogin extends AbstractDSpaceTransformer implements CacheablePro
             Item submit = list.addItem("login-in", null);
             submit.addButton("submit").setValue(T_submit);
         }
-	}
+    }
 
     /**
      *

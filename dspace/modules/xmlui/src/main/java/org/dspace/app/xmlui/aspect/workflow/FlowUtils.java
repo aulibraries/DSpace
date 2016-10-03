@@ -63,10 +63,10 @@ public class FlowUtils {
 
     private static final Logger log = Logger.getLogger(FlowUtils.class);
 
-   	/**
-	 * Update the provided workflowItem to advance to the next workflow
-	 * step. If this was the last thing needed before the item is
-	 * committed to the repository then return true, otherwise false.
+    /**
+     * Update the provided workflowItem to advance to the next workflow
+     * step. If this was the last thing needed before the item is
+     * committed to the repository then return true, otherwise false.
      *
      * @param context
      *      The current DSpace content
@@ -79,14 +79,14 @@ public class FlowUtils {
      * @throws javax.servlet.ServletException
      * @throws org.dspace.authorize.AuthorizeException
      * @throws java.io.IOException
-	 */
-	public static boolean processApproveTask(Context context, String id)
+     */
+    public static boolean processApproveTask(Context context, String id)
         throws SQLException, UIException, ServletException, AuthorizeException, IOException
-	{
-		WorkflowItem workflowItem = findWorkflow(context, id);
-		Item item = workflowItem.getItem();
+    {
+        WorkflowItem workflowItem = findWorkflow(context, id);
+        Item item = workflowItem.getItem();
 
-		// Advance the item along the workflow
+        // Advance the item along the workflow
         WorkflowManager.advance(context, workflowItem, context.getCurrentUser());
 
         // FIXME: This should be a return value from advance()
@@ -98,7 +98,7 @@ public class FlowUtils {
         context.commit();
 
         return handle != null;
-	}
+    }
 
 
 
@@ -117,10 +117,10 @@ public class FlowUtils {
      * @throws org.dspace.authorize.AuthorizeException
      * @throws java.io.IOException
      */
-	public static void processUnclaimTask(Context context, String id)
-        throws SQLException, UIException, ServletException, AuthorizeException, IOException
-	{
-		WorkflowItem workflowItem = findWorkflow(context, id);
+    public static void processUnclaimTask(Context context, String id)
+    throws SQLException, UIException, ServletException, AuthorizeException, IOException
+    {
+        WorkflowItem workflowItem = findWorkflow(context, id);
 
         // Return task to pool
         WorkflowManager.unclaim(context, workflowItem, context.getCurrentUser());
@@ -129,9 +129,9 @@ public class FlowUtils {
 
         // Log this unclaim action
         log.info(LogManager.getHeader(context, "unclaim_workflow", MessageFormat.format("workflow_item_id = {0}, item_id = {1}, collection_id = {2}, new_state = {3}", workflowItem.getID(), workflowItem.getItem().getID(), workflowItem.getCollection().getID(), workflowItem.getState())));
-	}
+    }
 
-	/**
+    /**
      * Claim this task from the pool of unclaimed task so that this user may
      * perform the task by either approving or rejecting it.
      *
@@ -146,10 +146,10 @@ public class FlowUtils {
      * @throws org.dspace.authorize.AuthorizeException
      * @throws java.io.IOException
      */
-	public static void processClaimTask(Context context, String id)
+    public static void processClaimTask(Context context, String id)
         throws SQLException, UIException, ServletException, AuthorizeException, IOException
-	{
-		WorkflowItem workflowItem = findWorkflow(context, id);
+    {
+        WorkflowItem workflowItem = findWorkflow(context, id);
         if(workflowItem.getState() != WorkflowManager.WFSTATE_STEP1POOL &&
                 workflowItem.getState() != WorkflowManager.WFSTATE_STEP2POOL &&
                 workflowItem.getState() != WorkflowManager.WFSTATE_STEP3POOL)
@@ -169,7 +169,7 @@ public class FlowUtils {
                    + "collection_id=" + workflowItem.getCollection().getID()
                    + "newowner_id=" + workflowItem.getOwner().getID()
                    + "new_state=" + workflowItem.getState()));
-	}
+    }
 
     /**
      * Verifies if the currently logged in user has proper rights to perform the workflow task on the item
@@ -224,7 +224,7 @@ public class FlowUtils {
         }
     }
 
-	/**
+    /**
      * Reject the given task for the given reason. If the user did not provide
      * a reason then an error is generated placing that field in error.
      *
@@ -244,12 +244,12 @@ public class FlowUtils {
      * @throws java.io.IOException
      *
      */
-	public static String processRejectTask(Context context, String id, Request request)
+    public static String processRejectTask(Context context, String id, Request request)
         throws SQLException, UIException, ServletException, AuthorizeException, IOException
-	{
-		WorkflowItem workflowItem = findWorkflow(context, id);
+    {
+        WorkflowItem workflowItem = findWorkflow(context, id);
         WorkspaceItem wsi = null;
-		String reason = request.getParameter("reason");
+        String reason = request.getParameter("reason");
         String rejectedFilePath = null;
 
         // uncomment for debugging information
@@ -316,8 +316,9 @@ public class FlowUtils {
 
         // Return no errors.
         return null;
-		/*if (reason != null && reason.length() > 1)
-		{
+        
+        /*if (reason != null && reason.length() > 1)
+        {
             WorkspaceItem wsi = WorkflowManager.reject(context, workflowItem,context.getCurrentUser(), reason);
 
             // Load the Submission Process for the collection this WSI is associated with
@@ -338,16 +339,16 @@ public class FlowUtils {
             // Submission rejected.  Log this information
             log.info(LogManager.getHeader(context, "reject_workflow", MessageFormat.format("workflow_item_id = {0}, item_id = {1}, collection_id = {2}, eperson_id = {3}", wsi.getID(), wsi.getItem().getID(), wsi.getCollection().getID(), context.getCurrentUser().getID())));
 
-			// Return no errors.
-			return null;
-		}
-		else
-		{
-			// If the user did not supply a reason then
-			// place the reason field in error.
-			return "reason";
-		}*/
-	}
+            // Return no errors.
+            return null;
+        }
+        else
+        {
+            // If the user did not supply a reason then
+            // place the reason field in error.
+            return "reason";
+        }*/
+    }
 
     /**
      * Return the workflow identified by the given id, the id should be
@@ -386,7 +387,7 @@ public class FlowUtils {
      * @throws java.io.IOException
      */
     private static String createRejectionTempFile(Context context, HttpServletRequest request)
-            throws IOException, ServletException
+        throws IOException, ServletException
     {
         String filePath = null;
         File tempFile;

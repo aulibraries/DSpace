@@ -41,7 +41,9 @@ public class DateUntilFilter extends DSpaceFilter
     public boolean isShown(DSpaceItem item)
     {
         if (item.getDatestamp().compareTo(date) <= 0)
+        {
             return true;
+        }
         return false;
     }
 

@@ -258,11 +258,11 @@ public class EmbargoManager
         options.addOption("n", "dryrun", false,
                 "Do not change anything in the data model, print message instead.");
         options.addOption("i", "identifier", true,
-                        "Process ONLY this Handle identifier(s), which must be an Item.  Can be repeated.");
+                "Process ONLY this Handle identifier(s), which must be an Item.  Can be repeated.");
         options.addOption("c", "check", false,
-                        "Function: ONLY check the state of embargoed Items, do NOT lift any embargoes.");
+                "Function: ONLY check the state of embargoed Items, do NOT lift any embargoes.");
         options.addOption("l", "lift", false,
-                        "Function: ONLY lift embargoes, do NOT check the state of any embargoed Items.");
+                "Function: ONLY lift embargoes, do NOT check the state of any embargoed Items.");
 
         options.addOption("a", "adjust", false,
                 "Function: Adjust bitstreams policies");
@@ -487,8 +487,22 @@ public class EmbargoManager
         System.exit(status);
     }
 
-    // lift or check embargo on one Item, handle exceptions
-    // return false on success, true if there was fatal exception.
+    /**
+     * Lift or check embargo on one Item, handle exceptions
+     * 
+     * @param context
+     *          Current context
+     * @param item
+     *          Item being worked on.
+     * @param line
+     *          CommandLine object
+     * @param now
+     *          Current date.
+     * @return
+     *      Return false on success, true if there was a fatal exception.
+     * 
+     * @throws Exception 
+     */
     private static boolean processOneItem(Context context, Item item, CommandLine line, Date now)
         throws Exception
     {
@@ -744,29 +758,59 @@ public class EmbargoManager
     }
 
     // return the schema part of "schema.element.qualifier" metadata field spec
+    /**
+     * Return the schema part of "schema.element.qualifier" metadata field spec
+     * 
+     * @param field
+     *      Name of metadata field.
+     * @return 
+     *       Return the schema part of "schema.element.qualifier" metadata field spec
+     */
     private static String getSchemaOf(String field)
     {
         String sa[] = field.split("\\.", 3);
         return sa[0];
     }
 
-    // return the element part of "schema.element.qualifier" metadata field spec, if any
+    
+    /**
+     * Return the element part of "schema.element.qualifier" metadata field spec, if any
+     * 
+     * @param field
+     *      Name of metadata field
+     * @return 
+     *      Return the element part of "schema.element.qualifier" 
+     *      metadata field spec
+     */
     private static String getElementOf(String field)
     {
         String sa[] = field.split("\\.", 3);
         return sa.length > 1 ? sa[1] : null;
     }
 
-    // return the qualifier part of "schema.element.qualifier" metadata field spec, if any
+    /**
+     * Return the qualifier part of "schema.element.qualifier" metadata field spec, if any
+     * 
+     * @param field
+     *      Name of metadata field
+     * @return 
+     *      Returns the qualifier part of the "schema.element.qualifier"
+     *      metadata field spec.
+     */
     private static String getQualifierOf(String field)
     {
         String sa[] = field.split("\\.", 3);
         return sa.length > 2 ? sa[2] : null;
     }
 
-    // return the lift date assigned when embargo was set, or null, if either:
-    // it was never under embargo, or the lift date has passed.
-    @Deprecated
+    /**
+     * Return the lift date assigned when embargo was set, or null, if either:
+     * it was never under embargo, or the lift date has passed.
+     * 
+     * @param item
+     *      Item being worked on.
+     * @return 
+     */
     private static DCDate recoverEmbargoDate(Item item)
     {
         /*DCDate liftDate = null;
@@ -947,10 +991,15 @@ public class EmbargoManager
     }
 
     /**
-     *
+     * Returns an item's dc.date.accessioned metadata value.
+     * 
      * @param context
+     *          Current context
      * @param item
+     *          Current item being worked on.
      * @return
+     *          Return an item's dc.date.accessioned metadata value
+     * 
      * @throws AuthorizeException
      * @throws IOException
      * @throws SQLException
@@ -962,9 +1011,13 @@ public class EmbargoManager
     }
 
     /**
-     *
+     * Remove an item's embargo/resource policies.
+     * 
      * @param context
+     *          Current context
      * @param item
+     *          Current item being worked on
+     * 
      * @throws SQLException
      * @throws IOException
      * @throws AuthorizeException
@@ -993,19 +1046,55 @@ public class EmbargoManager
             }
         }
     }
-
+    
+    /**
+     * Remove an item's dc.embargo.end_date metadata value.
+     * 
+     * @param context
+     *          Current context
+     * @param item
+     *          Current item being worked on
+     * 
+     * @throws SQLException
+     * @throws IOException
+     * @throws AuthorizeException 
+     */
     public static void removeEmbargoEndDateMDV(Context context, Item item)
         throws SQLException, IOException, AuthorizeException
     {
         removeMetadataFieldValue(context, item, "embargo", "enddate");
     }
-
+    
+    /**
+     * Remove an item's dc.rights metadata value.
+     * 
+     * @param context
+     *          Current context
+     * @param item
+     *          Current item being worked on.
+     * 
+     * @throws SQLException
+     * @throws IOException
+     * @throws AuthorizeException 
+     */
     public static void removeEmbargoRightsMDV(Context context, Item item)
         throws SQLException, IOException, AuthorizeException
     {
         removeMetadataFieldValue(context, item, "rights", null);
     }
-
+    
+    /**
+     * Remove an item's dc.embargo.length metadata value.
+     * 
+     * @param context
+     *          Current context
+     * @param item
+     *          Current item being worked on.
+     * 
+     * @throws SQLException
+     * @throws IOException
+     * @throws AuthorizeException 
+     */
     public static void removeEmbargoLengthMDV(Context context, Item item)
         throws SQLException, IOException, AuthorizeException
     {
@@ -1035,12 +1124,19 @@ public class EmbargoManager
     }
 
     /**
-     *
+     * Create a new or modify an existing metadata value.
+     * 
      * @param context
+     *          Current context
      * @param item
+     *          Current item being worked on.
      * @param element
+     *          Element portion of a metadata value name.
      * @param qualifier
+     *          Qualifier portion of a metadata value name.
      * @param value
+     *          Content that will occupy the metadata value record.
+     * 
      * @throws SQLException
      * @throws IOException
      * @throws AuthorizeException
@@ -1199,7 +1295,8 @@ public class EmbargoManager
     }
 
     /**
-     *
+     * Output information about a submitted embargo lift date.
+     * 
      * @param context
      *      Current DSpace context
      * @param liftDate
@@ -1248,10 +1345,10 @@ public class EmbargoManager
     }
 
     /**
-     *
+     * Output information about a submitted metadata value object.
+     * 
      * @param context
      *      Current DSpace context.
-     *
      * @param mdv
      *      Metadata value object
      *

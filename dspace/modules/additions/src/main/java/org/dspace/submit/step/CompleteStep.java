@@ -72,9 +72,9 @@ public class CompleteStep extends AbstractProcessingStep
      *         no errors occurred!)
      */
     public int doProcessing(Context context, HttpServletRequest request,
-            HttpServletResponse response, SubmissionInfo subInfo)
-            throws ServletException, IOException, SQLException,
-            AuthorizeException
+                            HttpServletResponse response, SubmissionInfo subInfo)
+        throws ServletException, IOException, SQLException,
+        AuthorizeException
     {
         // The Submission is COMPLETE!!
         log.info(LogManager.getHeader(context, "submission_complete", "Completed submission with id=" + subInfo.getSubmissionItem().getID()));
@@ -148,7 +148,8 @@ public class CompleteStep extends AbstractProcessingStep
      * @return the number of pages in this step
      */
     public int getNumberOfPages(HttpServletRequest request,
-            SubmissionInfo subInfo) throws ServletException
+                                SubmissionInfo subInfo) 
+        throws ServletException
     {
         // This class represents the non-interactive processing step
         // that occurs just *before* the final confirmation page!

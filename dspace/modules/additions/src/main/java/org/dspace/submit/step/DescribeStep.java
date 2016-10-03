@@ -110,11 +110,12 @@ public class DescribeStep extends AbstractProcessingStep
      *         no errors occurred!)
      */
     public int doProcessing(Context context, HttpServletRequest request,
-            HttpServletResponse response, SubmissionInfo subInfo)
-            throws ServletException, IOException, SQLException,
-            AuthorizeException
+                            HttpServletResponse response, SubmissionInfo subInfo)
+        throws ServletException, IOException, SQLException,
+        AuthorizeException
     {
-        if(!request.getParameterNames().hasMoreElements()){
+        if(!request.getParameterNames().hasMoreElements())
+        {
             //In case of an empty request do NOT just remove all metadata, just return to the submission page
             return STATUS_MORE_INPUT_REQUESTED;
         }
@@ -196,7 +197,7 @@ public class DescribeStep extends AbstractProcessingStep
         boolean moreInput = false;
         for (int j = 0; j < inputs.length; j++)
         {
-        	// Omit fields not allowed for this document type
+            // Omit fields not allowed for this document type
             if(!inputs[j].isAllowedFor(documentType))
             {
             	continue;
@@ -693,7 +694,7 @@ public class DescribeStep extends AbstractProcessingStep
      *            language to set (ISO code)
      */
     protected void readText(HttpServletRequest request, Item item, String schema,
-            String element, String qualifier, boolean repeated, String lang)
+                            String element, String qualifier, boolean repeated, String lang)
     {
         // FIXME: Of course, language should be part of form, or determined
         // some other way
@@ -814,7 +815,7 @@ public class DescribeStep extends AbstractProcessingStep
      * @throws SQLException
      */
     protected void readDate(HttpServletRequest request, Item item, String schema,
-            String element, String qualifier) throws SQLException
+                            String element, String qualifier) throws SQLException
     {
         String metadataField = MetadataField
                 .formKey(schema, element, qualifier);
@@ -872,7 +873,7 @@ public class DescribeStep extends AbstractProcessingStep
      *            set to true if the field is repeatable on the form
      */
     protected void readSeriesNumbers(HttpServletRequest request, Item item,
-            String schema, String element, String qualifier, boolean repeated)
+                                    String schema, String element, String qualifier, boolean repeated)
     {
         String metadataField = MetadataField
                 .formKey(schema, element, qualifier);
@@ -958,7 +959,7 @@ public class DescribeStep extends AbstractProcessingStep
      * @return a List of Strings
      */
     protected List<String> getRepeatedParameter(HttpServletRequest request,
-            String metadataField, String param)
+                                                String metadataField, String param)
     {
         List<String> vals = new LinkedList<String>();
 

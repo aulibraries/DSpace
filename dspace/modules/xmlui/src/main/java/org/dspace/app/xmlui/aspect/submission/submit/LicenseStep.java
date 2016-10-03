@@ -86,13 +86,13 @@ public class LicenseStep extends AbstractSubmissionStep
         message("xmlui.Submission.submit.LicenseStep.decision_accepted");
     
     /**
-	 * Establish our required parameters, abstractStep will enforce these.
-	 */
-	public LicenseStep()
-	{
-		this.requireSubmission = true;
-		this.requireStep = true;
-	}
+     * Establish our required parameters, abstractStep will enforce these.
+     */
+    public LicenseStep()
+    {
+        this.requireSubmission = true;
+        this.requireStep = true;
+    }
 
     /**
      * 
@@ -104,15 +104,15 @@ public class LicenseStep extends AbstractSubmissionStep
      * @throws java.io.IOException
      * @throws org.dspace.authorize.AuthorizeException 
      */
-	public void addBody(Body body) 
+    public void addBody(Body body) 
         throws SAXException, WingException, 
         UIException, SQLException, IOException, AuthorizeException
-	{
-		// Get the full text for the actual licese
-		Collection collection = submission.getCollection();
-		String actionURL = contextPath + "/handle/"+collection.getHandle() + "/submit/" + knot.getId() + ".continue";
-		String licenseText = LicenseUtils.getLicenseText(context.getCurrentLocale(), collection, submission.getItem(),
-                submission.getSubmitter());
+    {
+        // Get the full text for the actual licese
+        Collection collection = submission.getCollection();
+        String actionURL = contextPath + "/handle/"+collection.getHandle() + "/submit/" + knot.getId() + ".continue";
+        String licenseText = LicenseUtils.getLicenseText(context.getCurrentLocale(), collection, submission.getItem(),
+        submission.getSubmitter());
 		
         Item item = submission.getItem();
         Bundle[] bndlList = item.getBundles(Constants.LICENSE_BUNDLE_NAME);
@@ -132,14 +132,14 @@ public class LicenseStep extends AbstractSubmissionStep
             showCheckbox = false;
         }
         
-		Division div = body.addInteractiveDivision("submit-license",actionURL, Division.METHOD_POST,"primary submission");
-		div.setHead(T_submission_head);
-		addSubmissionProgressList(div);
-		
-		Division inner = div.addDivision("submit-license-inner");
-		inner.setHead(T_head);
-		//inner.addPara(T_info1);
-		//inner.addPara(T_info2);
+        Division div = body.addInteractiveDivision("submit-license",actionURL, Division.METHOD_POST,"primary submission");
+        div.setHead(T_submission_head);
+        addSubmissionProgressList(div);
+
+        Division inner = div.addDivision("submit-license-inner");
+        inner.setHead(T_head);
+        //inner.addPara(T_info1);
+        //inner.addPara(T_info2);
 		
         if(showCheckbox)
         {
@@ -152,11 +152,11 @@ public class LicenseStep extends AbstractSubmissionStep
             inner.addPara(T_accepted);
         }
 		
-		//inner.addPara(T_info3);
-		
-		List controls = inner.addList("submit-review", List.TYPE_FORM);
-		
-		if(showCheckbox)
+        //inner.addPara(T_info3);
+
+        List controls = inner.addList("submit-review", List.TYPE_FORM);
+
+        if(showCheckbox)
         {
             CheckBox decision = controls.addItem().addCheckBox("decision");
             //decision.setLabel(T_decision_label);
@@ -169,16 +169,16 @@ public class LicenseStep extends AbstractSubmissionStep
 
                 decision.addError(T_decision_error);
             }
-		}
+        }
         else
         {
             //controls.addLabel(T_accepted);
             //inner.addPara(T_accepted);
             controls.addItem().addHidden("decision").setValue("accept");
         }
-		// add standard control/paging buttons
-		addControlButtons(controls);
-	}
+        // add standard control/paging buttons
+        addControlButtons(controls);
+    }
     
     /** 
      * Each submission step must define its own information to be reviewed

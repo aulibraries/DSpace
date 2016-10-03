@@ -146,17 +146,17 @@ public class FlowItemUtils
                 // ignoring the exception
             }
 
-                if (item != null)
-                {
-                    result.setParameter("itemID", item.getID());
-                    result.setParameter("type", Constants.ITEM);
-                    result.setContinue(true);
-                    return result;
-                }
+            if (item != null)
+            {
+                result.setParameter("itemID", item.getID());
+                result.setParameter("type", Constants.ITEM);
+                result.setContinue(true);
+                return result;
             }
+        }
 
-            result.addError("identifier");
-            return result;
+        result.addError("identifier");
+        return result;
     }
 
     /**
@@ -762,7 +762,8 @@ public class FlowItemUtils
     }
 
     /**
-     *
+     * Helper method that performs calls the custom ETDEmbargoSetter method generateETDEmbargoPolicies.
+     * 
      * @param context
      * @param request
      * @param collection
@@ -1661,7 +1662,18 @@ public class FlowItemUtils
 
         return parts;
     }
-
+    
+    /**
+     * Creates a provenance message detailing any alterations made to an 
+     * embargoed item's embargo information.
+     * 
+     * @param context
+     * @param provSB
+     * @param item
+     * @throws AuthorizeException
+     * @throws IOException
+     * @throws SQLException 
+     */
     private static void CreateProvenanceMessage(Context context, StringBuilder provSB, Item item)
         throws AuthorizeException, IOException, SQLException
     {

@@ -230,13 +230,13 @@ public class UploadWithEmbargoStep extends UploadStep
     private ResourcePolicy rp;
 
     /**
-	 * Establish our required parameters, abstractStep will enforce these.
-	 */
-	public UploadWithEmbargoStep()
-	{
-		this.requireSubmission = true;
-		this.requireStep = true;
-	}
+     * Establish our required parameters, abstractStep will enforce these.
+     */
+    public UploadWithEmbargoStep()
+    {
+        this.requireSubmission = true;
+        this.requireStep = true;
+    }
 
 
     /**
@@ -393,8 +393,8 @@ public class UploadWithEmbargoStep extends UploadStep
             }
         }
 
-		// Part A:
-		//  First ask the user if they would like to upload a new file (may be the first one)
+        // Part A:
+        //  First ask the user if they would like to upload a new file (may be the first one)
     	Division div = body.addInteractiveDivision("submit-upload", actionURL, Division.METHOD_MULTIPART, "primary submission");
     	div.setHead(T_submission_head);
     	addSubmissionProgressList(div);
@@ -405,17 +405,16 @@ public class UploadWithEmbargoStep extends UploadStep
         // file's information
         if(bitstreams.length <= 0 && !disableFileEditing && errorSize >= 0)
         {
-    		// Only add the upload capabilities for new item submissions
-	    	upload = div.addList("submit-upload-new", List.TYPE_FORM);
-	        upload.setHead(ETD_FILE_UPLOAD_FORM_HEAD);
+            // Only add the upload capabilities for new item submissions
+            upload = div.addList("submit-upload-new", List.TYPE_FORM);
+            upload.setHead(ETD_FILE_UPLOAD_FORM_HEAD);
 
-	        File file = upload.addItem().addFile("file");
-	        file.setLabel(T_file);
-	        file.setHelp(ETD_FILE_UPLOAD_HELP);
-	        file.setRequired();
+            File file = upload.addItem().addFile("file");
+            file.setLabel(T_file);
+            file.setHelp(ETD_FILE_UPLOAD_HELP);
+            file.setRequired();
 
-	        // if no files found error was thrown by processing class, display it!
-            //if(this.errorFieldsFlags != null && this.errorFieldsFlags.containsKey("file"))
+            // if no files found error was thrown by processing class, display it!
             if(submissionInfo.containsKey("file_ERROR"))
             {
                 int errFlag = Integer.parseInt(submissionInfo.get("file_ERROR").toString());
@@ -620,8 +619,6 @@ public class UploadWithEmbargoStep extends UploadStep
         {
             uploadSection.addItem().addContent(EMBARGO_RADIO_BUTTON1);
         }
-
-
 
         // return this new "upload" section
         return uploadSection;

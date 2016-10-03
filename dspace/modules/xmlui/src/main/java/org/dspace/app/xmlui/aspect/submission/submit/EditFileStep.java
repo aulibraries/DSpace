@@ -148,18 +148,18 @@ public class EditFileStep extends AbstractStep
     /** log4j logger */
     private static final Logger log = Logger.getLogger(EditFileStep.class);
 
-	/**
-	 * Establish our required parameters, abstractStep will enforce these.
-	 */
-	public EditFileStep()
-	{
-		this.requireSubmission = true;
-		this.requireStep = true;
-	}
+    /**
+     * Establish our required parameters, abstractStep will enforce these.
+     */
+    public EditFileStep()
+    {
+        this.requireSubmission = true;
+        this.requireStep = true;
+    }
 
 
-	/**
-	 * Get the bitstream we are editing
+    /**
+     * Get the bitstream we are editing
      * @param resolver
      * @param objectModel
      * @param src
@@ -167,16 +167,16 @@ public class EditFileStep extends AbstractStep
      * @throws org.apache.cocoon.ProcessingException
      * @throws org.xml.sax.SAXException
      * @throws java.io.IOException
-	 */
+     */
     @Override
-	public void setup(SourceResolver resolver, Map objectModel, String src, Parameters parameters)
+    public void setup(SourceResolver resolver, Map objectModel, String src, Parameters parameters)
         throws ProcessingException, SAXException, IOException
-	{
-		super.setup(resolver,objectModel,src,parameters);
+    {
+        super.setup(resolver,objectModel,src,parameters);
 
-		//the bitstream should be stored in our Submission Info object
+        //the bitstream should be stored in our Submission Info object
         this.bitstream = submissionInfo.getBitstream();
-	}
+    }
 
     /**
      *
@@ -192,11 +192,11 @@ public class EditFileStep extends AbstractStep
         throws SAXException, WingException, UIException,
         SQLException, IOException, AuthorizeException
     {
-		Collection collection = submission.getCollection();
-		String actionURL = contextPath + "/handle/"+collection.getHandle() + "/submit/" + knot.getId() + ".continue";
+        Collection collection = submission.getCollection();
+        String actionURL = contextPath + "/handle/"+collection.getHandle() + "/submit/" + knot.getId() + ".continue";
 
     	// Get the bitstream and all the various formats
-		BitstreamFormat currentFormat = bitstream.getFormat();
+        BitstreamFormat currentFormat = bitstream.getFormat();
         BitstreamFormat guessedFormat = FormatIdentifier.guessFormat(context, bitstream);
 
         int itemID = submissionInfo.getSubmissionItem().getItem().getID();
@@ -217,8 +217,8 @@ public class EditFileStep extends AbstractStep
 
         if (guessedFormat != null)
         {
-        	edit.addLabel(T_format_detected);
-        	edit.addItem(guessedFormat.getShortDescription());
+            edit.addLabel(T_format_detected);
+            edit.addItem(guessedFormat.getShortDescription());
         }
 
         //Add the embargo editing field section
@@ -230,7 +230,7 @@ public class EditFileStep extends AbstractStep
         // Note, not standard control actions, this page just goes back to the upload step.
         org.dspace.app.xmlui.wing.element.Item actions = edit.addItem();
         actions.addButton("submit_save").setValue(T_submit_save);
-		actions.addButton("submit_edit_cancel").setValue(T_submit_cancel);
+        actions.addButton("submit_edit_cancel").setValue(T_submit_cancel);
     }
 
     /**
@@ -306,73 +306,5 @@ public class EditFileStep extends AbstractStep
                 embargoDateField.setValue(submissionInfo.get(ETD_DATE_FIELD_NAME).toString());
             }
         }
-
-        /*
-        embargoStatus = EmbargoManager.getEmbargoStatusMDV(context, submission.getItem());
-        endDateMDV = EmbargoManager.getEmbargoEndDateMDV(context, submission.getItem());
-
-        if(embargoStatus != null)
-        {
-            switch(embargoStatus)
-            {
-                case ETDEmbargoSetter.EMBARGOED:
-                    String embargoType = EmbargoManager.getEmbargoRightsMDV(context, submission.getItem());
-                    if(embargoType != null)
-                    {
-                        switch (embargoType)
-                        {
-                            case ETDEmbargoSetter.EMBARGO_NOT_AUBURN_STR:
-                                embargoTypeRadio.setOptionSelected("2");
-                                break;
-                            case ETDEmbargoSetter.EMBARGO_GLOBAL_STR:
-                                embargoTypeRadio.setOptionSelected("3");
-                                break;
-                        }
-                    }
-
-                    if(this.errorFieldsFlags != null)
-                    {
-                        if(this.errorFieldsFlags.containsKey(ETD_DATE_FIELD_NAME))
-                        {
-                            int dateErrFlag = Integer.parseInt(this.errorFieldsFlags.get(ETD_DATE_FIELD_NAME));
-                            if(dateErrFlag == STATUS_ERROR_MISSING_DATE)
-                            {
-                                embargoDateField.addError(ETD_DATE_REQUIRED_ERROR);
-                                datefieldDisplayInput.setValue(1);
-                            }
-
-                            if(dateErrFlag == STATUS_ERROR_DATE_IN_PAST)
-                            {
-                                embargoDateField.addError(ETD_DATE_IN_PAST_ERROR);
-                                datefieldDisplayInput.setValue(1);
-                            }
-
-                            if(dateErrFlag == STATUS_ERROR_DATE_IS_CURRENT)
-                            {
-                                embargoDateField.addError(ETD_DATE_IS_CURRENT_ERROR);
-                                datefieldDisplayInput.setValue(1);
-                            }
-                        }
-                    }
-
-                    if(endDateMDV != null)
-                    {
-                        rpEndDate = new DateTime(endDateMDV);
-                    }
-
-                    if(rpEndDate != null)
-                    {
-                        embargoDateField.setValue(dft.print(rpEndDate));
-                    }
-                    else
-                    {
-                        log.debug(LogManager.getHeader(context, "Viewing dso RP List", " First List Item end Date = NULL"));
-                    }
-                    break;
-                case ETDEmbargoSetter.NOT_EMBARGOED:
-                    embargoTypeRadio.setOptionSelected("1");
-                    break;
-            }
-        }*/
     }
 }

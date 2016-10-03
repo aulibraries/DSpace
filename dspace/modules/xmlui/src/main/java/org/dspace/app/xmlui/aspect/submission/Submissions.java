@@ -133,16 +133,17 @@ public class Submissions extends AbstractDSpaceTransformer
     public void addPageMeta(PageMeta pageMeta)
         throws SAXException, WingException, UIException, SQLException,
         IOException, AuthorizeException
-	{
-            pageMeta.addMetadata("title").addContent(T_title);
+    {
+        pageMeta.addMetadata("title").addContent(T_title);
 
-            pageMeta.addTrailLink(contextPath + "/",T_dspace_home);
-            pageMeta.addTrailLink(null,T_trail);
-	}
+        pageMeta.addTrailLink(contextPath + "/",T_dspace_home);
+        pageMeta.addTrailLink(null,T_trail);
+    }
 
     @Override
-    public void addBody(Body body) throws SAXException, WingException,
-            UIException, SQLException, IOException, AuthorizeException
+    public void addBody(Body body) 
+        throws SAXException, WingException,
+        UIException, SQLException, IOException, AuthorizeException
     {
         Request request = ObjectModelHelper.getRequest(objectModel);
         boolean displayAll = false;
@@ -514,7 +515,7 @@ public class Submissions extends AbstractDSpaceTransformer
     }
 
     private String getProvDescMDV(Item item)
-            throws SQLException, IOException, AuthorizeException
+        throws SQLException, IOException, AuthorizeException
     {
         String reasonMsg = null;
 
