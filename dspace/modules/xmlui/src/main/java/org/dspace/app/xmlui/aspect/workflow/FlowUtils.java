@@ -245,7 +245,7 @@ public class FlowUtils {
      * @throws java.io.IOException
      *
      */
-    public static String processRejectTask(Context context, String id, Request request)
+    public static String processRejectTask(Context context, String id, HttpServletRequest request)
         throws SQLException, UIException, ServletException, AuthorizeException, IOException
     {
         WorkflowItem workflowItem = findWorkflow(context, id);
