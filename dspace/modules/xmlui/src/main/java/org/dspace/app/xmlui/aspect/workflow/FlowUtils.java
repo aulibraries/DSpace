@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 
 // Apache class imports
 import org.apache.cocoon.environment.Request;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 // DSpace class imports
@@ -316,38 +317,6 @@ public class FlowUtils {
 
         // Return no errors.
         return null;
-        
-        /*if (reason != null && reason.length() > 1)
-        {
-            WorkspaceItem wsi = WorkflowManager.reject(context, workflowItem,context.getCurrentUser(), reason);
-
-            // Load the Submission Process for the collection this WSI is associated with
-            Collection c = wsi.getCollection();
-            SubmissionConfigReader subConfigReader = new SubmissionConfigReader();
-            SubmissionConfig subConfig = subConfigReader.getSubmissionConfig(c.getHandle(), false);
-
-            // Set the "stage_reached" column on the workspace item
-            // to the LAST page of the LAST step in the submission process
-            // (i.e. the page just before "Complete", which is at NumSteps-1)
-            int lastStep = subConfig.getNumberOfSteps()-2;
-            wsi.setStageReached(lastStep);
-            wsi.setPageReached(AbstractProcessingStep.LAST_PAGE_REACHED);
-            wsi.update();
-
-            context.commit();
-
-            // Submission rejected.  Log this information
-            log.info(LogManager.getHeader(context, "reject_workflow", MessageFormat.format("workflow_item_id = {0}, item_id = {1}, collection_id = {2}, eperson_id = {3}", wsi.getID(), wsi.getItem().getID(), wsi.getCollection().getID(), context.getCurrentUser().getID())));
-
-            // Return no errors.
-            return null;
-        }
-        else
-        {
-            // If the user did not supply a reason then
-            // place the reason field in error.
-            return "reason";
-        }*/
     }
 
     /**
@@ -404,12 +373,12 @@ public class FlowUtils {
         Enumeration attNames = request.getAttributeNames();
 
         ArrayList<String> attNamesList = Collections.list(attNames);
-        log.debug(LogManager.getHeader(context, "Rejection Upload File Request Param", " Num Attributes = "+String.valueOf(attNamesList.size())));
 
         //loop through our request attributes
         for(String attName : attNamesList)
         {
             log.debug(LogManager.getHeader(context, "Rejection Upload File Request", " Attribute Name = "+attName));
+            log.debug(LogManager.getHeader(context, "Rejection Upload File Request", attName+" = "+request.getAttribute(attName)));
 
             if(attName.endsWith("-path"))
             {
@@ -422,21 +391,21 @@ public class FlowUtils {
                 // Load the file's path and input stream and description
                 filePath = (String) request.getAttribute(param + "-path");
                 log.debug(LogManager.getHeader(context, "Rejection Upload File Request Param", " File Path = "+filePath));
-
+                    
                 // No file was provided so don't bother going any further
-                if(filePath == null)
-                {
+                if(StringUtils.isBlank(filePath))
+                {                    
                     return null;
                 }
-
+                
                 fileInputStream = (InputStream) request.getAttribute(param + "-inputstream");
 
                 // Strip all but the last filename. It would be nice
                 // to know which OS the file came from.
                 String noPath = filePath;
 
-                /*log.debug(LogManager.getHeader(context, "", "Number of bytes available in fileInputStream is"+String.valueOf(fileInputStream.available())));
-                System.out.printf("Number of bytes available in fileInputStream is:  %d\n\r", fileInputStream.available());*/
+                //log.debug(LogManager.getHeader(context, "", "Number of bytes available in fileInputStream is"+String.valueOf(fileInputStream.available())));
+                /*System.out.printf("Number of bytes available in fileInputStream is:  %d\n\r", fileInputStream.available());*/
 
                 while (noPath.indexOf('/') > -1)
                 {
