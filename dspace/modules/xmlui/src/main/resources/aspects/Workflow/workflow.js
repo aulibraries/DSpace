@@ -44,7 +44,7 @@ function getObjectModel()
  */
 function getDSContext()
 {
-	return ContextUtil.obtainContext(getObjectModel());
+    return ContextUtil.obtainContext(getObjectModel());
 }
 
 
@@ -72,7 +72,7 @@ function getHttpRequest()
  */
 function getHttpResponse()
 {
-	return getObjectModel().get(HttpEnvironment.HTTP_RESPONSE_OBJECT);
+    return getObjectModel().get(HttpEnvironment.HTTP_RESPONSE_OBJECT);
 }
 
 /**
@@ -138,6 +138,7 @@ function doWorkflow()
         {
             // Just exit workflow without doing anything
             var contextPath = cocoon.request.getContextPath();
+            
             cocoon.redirectTo(contextPath+"/submissions",true);
             getDSContext().complete();
             cocoon.exit();
@@ -146,8 +147,8 @@ function doWorkflow()
         {
             // Approve this task and exit the workflow
             var archived = FlowUtils.processApproveTask(getDSContext(),workflowID);
-
             var contextPath = cocoon.request.getContextPath();
+            
             cocoon.redirectTo(contextPath+"/submissions",true);
             getDSContext().complete();
             cocoon.exit();
@@ -158,6 +159,7 @@ function doWorkflow()
             FlowUtils.processUnclaimTask(getDSContext(),workflowID);
 
             var contextPath = cocoon.request.getContextPath();
+            
             cocoon.redirectTo(contextPath+"/submissions",true);
             getDSContext().complete();
             cocoon.exit();
@@ -166,7 +168,6 @@ function doWorkflow()
         {
             // Take the task and stay on this workflow
             FlowUtils.processClaimTask(getDSContext(),workflowID);
-
         }
         else if (cocoon.request.get("submit_reject"))
         {
@@ -183,8 +184,8 @@ function doWorkflow()
         }
         else if (cocoon.request.get("submit_edit"))
         {
-
             var contextPath = cocoon.request.getContextPath();
+            
             cocoon.redirectTo(contextPath+"/handle/"+handle+"/workflow_edit_metadata?"+"workflowID=W"+workflowID, true);
             getDSContext().complete();
             cocoon.exit();
