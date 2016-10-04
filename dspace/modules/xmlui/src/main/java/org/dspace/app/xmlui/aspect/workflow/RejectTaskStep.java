@@ -70,13 +70,13 @@ public class RejectTaskStep extends AbstractStep
         message("xmlui.Submission.workflow.RejectTaskStep.ETD_file_upload_error");
     protected static final String ETD_Reject_file_field_name = "rejected-file";
 
-	/**
-	 * Establish our required parameters, abstractStep will enforce these.
-	 */
-	public RejectTaskStep()
-	{
-		this.requireWorkflow = true;
-	}
+    /**
+     * Establish our required parameters, abstractStep will enforce these.
+     */
+    public RejectTaskStep()
+    {
+        this.requireWorkflow = true;
+    }
 
     /**
      *
@@ -131,7 +131,6 @@ public class RejectTaskStep extends AbstractStep
         TextArea reason = form.addItem().addTextArea("reason");
         reason.setLabel(T_reason);
         reason.setRequired();
-        //reason.setSize(15, 50);
 
         if (this.errorFields.contains("reason"))
         {
