@@ -260,7 +260,6 @@ public class FlowUtils {
         ArrayList<String> requestParamNamesList = Collections.list(requestParamNames);
         ArrayList<String> requestAttrNamesList = Collections.list(requestAttrNames);
 
-
         for(String requestParamName : requestParamNamesList)
         {
             log.debug(LogManager.getHeader(context, "Rejection Request Info", " Param Name = "+requestParamName));
@@ -274,7 +273,7 @@ public class FlowUtils {
         log.debug(LogManager.getHeader(context, "Rejection Request Info", " Query String = "+request.getParameter("error_fields")));
         log.debug(LogManager.getHeader(context, "Rejection Request Info", " Reason Field Info "+reason));*/
 
-        if(reason.isEmpty() && reason.length() > 1)
+        if(StringUtils.isBlank(reason))
         {
             // If the user did not supply a reason then
             // place the reason field in error.
@@ -282,15 +281,13 @@ public class FlowUtils {
         }
 
         rejectedFilePath = createRejectionTempFile(context, request);
-
-        if(rejectedFilePath != null)
+        
+        // If content was returned and the content equals 'rejection
+        if(StringUtils.isNotBlank(rejectedFilePath) && rejectedFilePath.equals("bad-file"))
         {
             log.debug(LogManager.getHeader(context, "Rejected File Upload", " "+rejectedFilePath));
-
-            if(rejectedFilePath.equals("rejection-upload-file-bad-file"))
-            {
-                return rejectedFilePath;
-            }
+            
+            return rejectedFilePath;
         }
 
         wsi = WorkflowManager.reject(context, workflowItem,context.getCurrentUser(), reason, rejectedFilePath);
@@ -444,7 +441,7 @@ public class FlowUtils {
                     log.debug(LogManager.getHeader(context, "Rejection Upload File Info", " File Extension = "+extension));
                     if(!acceptableExtensionsList.contains(extension))
                     {
-                        return "rejection-upload-file-bad-file";
+                        return "bad-file";
                     }
                 }
 

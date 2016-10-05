@@ -12,10 +12,11 @@ package org.dspace.app.xmlui.aspect.workflow;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.MessageFormat;
+import javax.servlet.http.HttpServletRequest;
 
 // Apache class imports
 import org.apache.cocoon.environment.ObjectModelHelper;
-import org.apache.cocoon.environment.Request;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 // DSpace class imports
@@ -97,7 +98,7 @@ public class RejectTaskStep extends AbstractStep
         Collection collection = submission.getCollection();
         String actionURL = contextPath + "/handle/"+collection.getHandle() + "/workflow";
 
-    	Request request = ObjectModelHelper.getRequest(objectModel);
+    	HttpServletRequest request = ObjectModelHelper.getRequest(objectModel);
         String showfull = request.getParameter("showfull");
 
         // if the user selected showsimple, remove showfull.
@@ -140,8 +141,13 @@ public class RejectTaskStep extends AbstractStep
         File rejectedFile = form.addItem().addFile(ETD_Reject_file_field_name);
         rejectedFile.setLabel(ETD_Reject_file_field_label);
 
-        if (this.errorFields.contains("rejection-upload-file-bad-file"))
+        if (this.errorFields.contains("bad-file"))
         {
+            if(StringUtils.isNotBlank(request.getParameter("reason")))
+            {
+                reason.setValue(request.getParameter("reason"));
+            }
+            
             rejectedFile.addError(ETD_Reject_file_field_error);
         }
 
