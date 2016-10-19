@@ -346,7 +346,9 @@
                         </a>
                     </div>
                     <div class="sub-heading hidden-print">
-                        <xsl:text>Development/Testing System</xsl:text>
+                        <xsl:if test="contains($serverName, 'localhost') or contains($serverName, 'dstest') or contains($serverName, 'aucompbiker')">
+                            <xsl:text>Development/Testing System</xsl:text>
+                        </xsl:if>
                         <xsl:choose>
                             <xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker')">
                                 <xsl:text> (Local)</xsl:text>
