@@ -139,6 +139,12 @@ public class UploadStep extends AbstractSubmissionStep
 
     protected static final Message T_sherpa_more =
             message("xmlui.aspect.sherpa.submission.more");
+    
+    /**
+     * Custom Message strings
+     */
+    public static final Message REVIEW_HEAD =
+        message("xmlui.Submission.submit.UploadStep.review_head");
 
     /**
      * Global reference to edit file page
@@ -261,7 +267,7 @@ public class UploadStep extends AbstractSubmissionStep
             summary.setHead(T_head2);
 
             Row header = summary.addRow(Row.ROLE_HEADER);
-            header.addCellContent(T_column0); // primary bitstream
+            //header.addCellContent(T_column0); // primary bitstream
             header.addCellContent(T_column1); // select checkbox
             header.addCellContent(T_column2); // file name
             header.addCellContent(T_column3); // size
@@ -279,11 +285,18 @@ public class UploadStep extends AbstractSubmissionStep
                 String algorithm = bitstream.getChecksumAlgorithm();
                 String checksum = bitstream.getChecksum();
 
-
                 Row row = summary.addRow();
 
+                /**
+                 * Removed the Primary Bitstream radio button and table
+                 * column heading from the summary table. Editing any
+                 * information about a bitstream should be performed
+                 * within the EditFileStep rather than in the summary
+                 * table.
+                 */
+                /*
                 // Add radio-button to select this as the primary bitstream
-                /*Radio primary = row.addCell().addRadio("primary_bitstream_id");
+                Radio primary = row.addCell().addRadio("primary_bitstream_id");
                 primary.addOption(String.valueOf(id));
 
                 // If this bitstream is already marked as the primary bitstream
@@ -451,7 +464,7 @@ public class UploadStep extends AbstractSubmissionStep
     {
         // Create a new list section for this step (and set its heading)
         List uploadSection = reviewList.addList("submit-review-" + this.stepAndPage, List.TYPE_FORM);
-        uploadSection.setHead(T_head);
+        uploadSection.setHead(REVIEW_HEAD);
 
         // Review all uploaded files
         Item item = submission.getItem();
