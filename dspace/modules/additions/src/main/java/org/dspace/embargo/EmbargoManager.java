@@ -31,6 +31,9 @@ import org.dspace.core.Context;
 import org.dspace.core.LogManager;
 import org.dspace.core.PluginManager;
 import org.dspace.handle.HandleManager;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 /**
  * Public interface to the embargo subsystem.
@@ -264,8 +267,8 @@ public class EmbargoManager
         {
             context = new Context();
             context.turnOffAuthorisationSystem();
-            Date now = new Date();
-             
+            DateTime now = DateTime.now();
+            
             // scan items under embargo
             if (line.hasOption('i'))
             {
@@ -284,7 +287,7 @@ public class EmbargoManager
                     }
                     else
                     {
-                        if (processOneItem(context, (Item)dso, line, now))
+                        if (processOneItem(context, (Item)dso, line, now.toDate()))
                         {
                             status = 1;
                         }
@@ -397,7 +400,11 @@ public class EmbargoManager
     private static boolean processOneItem(Context context, Item item, CommandLine line, Date now)
         throws Exception
     {
-        if (line.hasOption('a'))
+        boolean status = false;
+
+        try
+        {
+            if (line.hasOption('a'))
             {
                 setter.setEmbargo(context, item);
             }
@@ -551,6 +558,25 @@ public class EmbargoManager
             }
         }
         return liftDate;
+    }
+
+    /**
+     * Returns an item's embargo end date metadata info
+     *
+     * @param context
+     *      Context
+     * @param item
+     *      Item being worked on
+     * @return
+     *
+     * @throws java.io.IOException
+     * @throws java.sql.SQLException
+     * @throws org.dspace.authorize.AuthorizeException
+     */
+    public static String getEmbargoEndDateMDV(Context context, Item item)
+        throws IOException, SQLException, AuthorizeException
+    {
+        return getMetadataFieldValue(context, item, "embargo", "enddate");
     }
 
     /**

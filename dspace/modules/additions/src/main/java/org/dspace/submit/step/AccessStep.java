@@ -22,6 +22,7 @@ import org.dspace.content.Item;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
+import org.dspace.embargo.EmbargoManager;
 import org.dspace.handle.HandleManager;
 import org.dspace.submit.AbstractProcessingStep;
 import org.joda.time.DateTime;
