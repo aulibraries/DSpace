@@ -145,23 +145,26 @@
                     </small>
                 </span>
                 <xsl:text> </xsl:text>
-                <xsl:if test="dim:field[@element='date' and @qualifier='accessioned']">
-                    <span class="publisher-date">
-                        <small>
-                            <xsl:text>(</xsl:text>
-                            <xsl:if test="dim:field[@element='publisher']">
-                                <span class="publisher">
-                                    <xsl:copy-of select="dim:field[@element='publisher']/node()"/>
-                                </span>
-                                <xsl:text>, </xsl:text>
-                            </xsl:if>
-                            <span class="date">
-                                <xsl:value-of select="substring(dim:field[@element='date' and @qualifier='accessioned']/node(),1,10)"/>
-                            </span>
-                            <xsl:text>)</xsl:text>
-                        </small>
-                    </span>
-                </xsl:if>
+                <span class="publisher-date">
+                    <small>
+                        <xsl:text>(</xsl:text>
+                        <span class="date">
+                            <xsl:choose>
+                                <xsl:when test="dim:field[@element='date' and @qualifier='issued' and descendant::text()]">
+                                    <xsl:for-each select="dim:field[@element='date' and @qualifier='issued']">
+                                        <xsl:copy-of select="substring(./node(),1,10)"/>
+                                    </xsl:for-each>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:for-each select="dim:field[@element='date' and @qualifier='accessioned']">
+                                        <xsl:copy-of select="substring(./node(),1,10)"/>
+                                    </xsl:for-each>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </span>
+                        <xsl:text>)</xsl:text>
+                    </small>
+                </span>
             </div>
             <xsl:if test="dim:field[@element = 'description' and @qualifier='abstract']">
                 <xsl:variable name="abstract" select="dim:field[@element = 'description' and @qualifier='abstract']/node()"/>
