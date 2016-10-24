@@ -332,7 +332,7 @@
                         <xsl:copy-of select="substring(./node(),1,10)"/>
                     </xsl:when>
                     <xsl:when test="dim:field[@qualifier='issued'] = ''">
-                        <xsl:copy-of select="dim:field[@qualifier='accessioned']/node(), 1, 10)"/>
+                        <xsl:copy-of select="substring(dim:field[@qualifier='accessioned']/node(), 1, 10)"/>
                     </xsl:when>
                     <xsl:otherwise/>
                 </xsl:choose>
