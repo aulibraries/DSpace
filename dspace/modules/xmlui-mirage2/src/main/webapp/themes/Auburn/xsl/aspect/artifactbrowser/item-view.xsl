@@ -322,19 +322,26 @@
     </xsl:template>
 
     <xsl:template name="itemSummaryView-DIM-date">
-        <xsl:if test="dim:field[@element='date' and @qualifier='issued' and descendant::text()]">
-            <div class="simple-item-view-date word-break item-page-field-wrapper table">
-                <h5>
-                    <i18n:text>xmlui.dri2xhtml.METS-1.0.item-date</i18n:text>
-                </h5>
-                <xsl:for-each select="dim:field[@element='date' and @qualifier='issued']">
-                    <xsl:copy-of select="substring(./node(),1,10)"/>
-                    <xsl:if test="count(following-sibling::dim:field[@element='date' and @qualifier='issued']) != 0">
-                        <br/>
-                    </xsl:if>
-                </xsl:for-each>
-            </div>
-        </xsl:if>
+        <div class="simple-item-view-date word-break item-page-field-wrapper table">
+            <h5>
+                <i18n:text>xmlui.dri2xhtml.METS-1.0.item-date</i18n:text>
+            </h5>
+            <xsl:for-each select="dim:field[@element='date']">
+                <xsl:choose>
+                    <xsl:when test="dim:field[@qualifier='issued'] != ''">
+                        <xsl:copy-of select="substring(./node(),1,10)"/>
+                    </xsl:when>
+                    <xsl:when test="dim:field[@qualifier='issued'] = ''">
+                        <xsl:copy-of select="dim:field[@qualifier='accessioned']/node(), 1, 10)"/>
+                    </xsl:when>
+                    <xsl:otherwise/>
+                </xsl:choose>
+                <!--<xsl:copy-of select="substring(./node(),1,10)"/>
+                <xsl:if test="count(following-sibling::dim:field[@element='date' and @qualifier='issued']) != 0">
+                    <br/>
+                </xsl:if>-->
+            </xsl:for-each>
+        </div>
     </xsl:template>
 
     <xsl:template name="itemSummaryView-show-full">
