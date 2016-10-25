@@ -21,6 +21,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.authorize.AuthorizeManager;
@@ -346,8 +347,16 @@ public class EmbargoManager
                     while (ii.hasNext())
                     {
                         Item nextItem = ii.next();
-
-                        itemArrayList.add(nextItem);
+                        
+                        if(StringUtils.isBlank(getDateIssuedMDV(context, nextItem)))
+                        {
+                            if(log.isDebugEnabled())
+                            {
+                                System.out.println("Item: "+nextItem.getID()+" has been added to the itemArrayList array.");
+                            }
+                            
+                            itemArrayList.add(nextItem);
+                        }                        
                     }
 
                     if(!itemArrayList.isEmpty())
@@ -443,7 +452,7 @@ public class EmbargoManager
                     }
                 }
 
-                if(line.hasOption('a'))
+                /*if(line.hasOption('a'))
                 {
                     WorkflowItem[] wfiList = WorkflowItem.findAll(context);
 
@@ -459,7 +468,7 @@ public class EmbargoManager
                             }
                         }
                     }
-                }
+                }*/
             }
             log.debug("Cache size at end = "+context.getCacheSize());
             context.complete();
@@ -527,10 +536,12 @@ public class EmbargoManager
 
         if(log.isDebugEnabled())
         {
-            String embargoStatus = getEmbargoStatusMDV(context, item);
+            /*String embargoStatus = getEmbargoStatusMDV(context, item);
             String embargoLength = getEmbargoLengthMDV(context, item);
-            String embargoRights = getEmbargoRightsMDV(context, item);
-
+            String embargoRights = getEmbargoRightsMDV(context, item);*/
+            String dateIssued = getDateIssuedMDV(context, item);
+            String dateAccessioned = getDateAccessionedMDV(context, item);
+            
             System.out.println("\n");
             System.out.println("Processing information for item "+item.getID());
             System.out.println("Item's Name: \""+item.getName()+"\"");
@@ -542,7 +553,7 @@ public class EmbargoManager
             System.out.println("-----------------------------------------------------");
             System.out.println("METADATA INFORMATION");
             System.out.println("-----------------------------------------------------");
-            if(embargoStatus != null)
+            /*if(embargoStatus != null)
             {
                 System.out.println("Item's Embargo Status:  "+embargoStatus);
             }
@@ -555,10 +566,29 @@ public class EmbargoManager
             if(embargoLength != null)
             {
                 System.out.println("Item's Embargo Length:  "+embargoLength);
+            }*/
+            
+            if(StringUtils.isNotBlank(dateAccessioned))
+            {
+                System.out.println("Item's Date Accessioned: "+dateAccessioned);
             }
+            else
+            {
+                System.out.println("Item Has NO Date Accessioned MDV.");
+            }
+            
+            if(dateIssued != null)
+            {
+                System.out.println("Item's Date Issued: "+dateIssued);
+            }
+            else
+            {
+                System.out.println("Item Has NO Date Issued MDV.");
+            }
+            
             System.out.println("-----------------------------------------------------");
 
-            System.out.println("");
+            /*System.out.println("");
             System.out.println("BITSTREAM RESOURCE POLICY INFORMATION");
             System.out.println("-----------------------------------------------------");
 
@@ -578,7 +608,7 @@ public class EmbargoManager
                     System.out.println("-----------------------------------------------------");
                 }
             }
-            System.out.println("");
+            System.out.println("");*/
             System.out.println("=====================================================");
         }
 
@@ -587,16 +617,18 @@ public class EmbargoManager
         {
             if (line.hasOption('a'))
             {
-                /*if(line.hasOption('v'))
+                if(line.hasOption('v'))
                 {
-                    ETDEmbargoSetter.convertEmbargoSettings(context, item, true);
+                    ETDEmbargoSetter.generateMissingDateIssuedMDV(context, item, true);
+                    //ETDEmbargoSetter.convertEmbargoSettings(context, item, true);
                 }
                 else
                 {
-                    ETDEmbargoSetter.convertEmbargoSettings(context, item, false);
+                    ETDEmbargoSetter.generateMissingDateIssuedMDV(context, item, false);
+                    //ETDEmbargoSetter.convertEmbargoSettings(context, item, false);
                 }
 
-                log.debug(LogManager.getHeader(context, "Conversion Complete", "******************* Conversion of Item "+item.getHandle()+" Complete ************************* "));*/
+                /*log.debug(LogManager.getHeader(context, "Conversion Complete", "******************* Conversion of Item "+item.getHandle()+" Complete ************************* "));*/
             }
             else
             {
@@ -696,13 +728,15 @@ public class EmbargoManager
             System.err.println("Failed attempting to lift embargo, item="+item.getHandle()+": "+ e);
             e.printStackTrace();
             status = true;
-        } catch (AuthorizeException e)
+        } 
+        catch (AuthorizeException e)
         {
             log.error("Failed attempting to lift embargo, item="+item.getHandle()+": ", e);
             System.err.println("Failed attempting to lift embargo, item="+item.getHandle()+": "+ e);
             e.printStackTrace();
             status = true;
-        } catch (IOException e)
+        } 
+        catch (IOException e)
         {
             log.error("Failed attempting to lift embargo, item="+item.getHandle()+": ", e);
             System.err.println("Failed attempting to lift embargo, item="+item.getHandle()+": "+ e);
@@ -1008,6 +1042,21 @@ public class EmbargoManager
         throws AuthorizeException, IOException, SQLException
     {
         return getMetadataFieldValue(context, item, "date", "accessioned");
+    }
+    
+    /**
+     * 
+     * @param context
+     * @param item
+     * @return
+     * @throws AuthorizeException
+     * @throws IOException
+     * @throws SQLException 
+     */
+    public static String getDateIssuedMDV(Context context, Item item)
+        throws AuthorizeException, IOException, SQLException
+    {
+        return getMetadataFieldValue(context, item, "date", "issued");
     }
 
     /**
@@ -1359,7 +1408,8 @@ public class EmbargoManager
         throws SQLException, AuthorizeException
     {
         System.out.println("Row id: "+mdv.getValueId());
-        System.out.println("Item id: "+mdv.getResourceId());
+        System.out.println("Resource id: "+mdv.getResourceId());
+        System.out.println("Resource Type id: "+mdv.getResourceTypeId());
         System.out.println("Field id: "+mdv.getFieldId());
         System.out.println("Value:  "+mdv.getValue());
         System.out.println("Language:  "+mdv.getLanguage());
@@ -1370,7 +1420,8 @@ public class EmbargoManager
         System.out.println("-----------------------------------------------------");/**/
 
         log.debug(LogManager.getHeader(context, "Printing MetadataValue Info", "Row id = "+mdv.getValueId()));
-        log.debug(LogManager.getHeader(context, "Printing MetadataValue Info", "Item id = "+mdv.getResourceId()));
+        log.debug(LogManager.getHeader(context, "Printing MetadataValue Info", "Resource id = "+mdv.getResourceId()));
+        log.debug(LogManager.getHeader(context, "Printing MetadataValue Info", "Resource Type id = "+mdv.getResourceTypeId()));
         log.debug(LogManager.getHeader(context, "Printing MetadataValue Info", "Field id = "+mdv.getFieldId()));
         log.debug(LogManager.getHeader(context, "Printing MetadataValue Info", "Value = "+mdv.getValue()));
         log.debug(LogManager.getHeader(context, "Printing MetadataValue Info", "Language = "+mdv.getLanguage()));

@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.authorize.AuthorizeManager;
@@ -179,9 +180,8 @@ public class ETDEmbargoSetter implements EmbargoSetter
      * @throws org.dspace.authorize.AuthorizeException
      */
     public static void generateMissingEmbargoMDVInfo(Context context, Item item)
-            throws SQLException, IOException, AuthorizeException
+        throws SQLException, IOException, AuthorizeException
     {
-
         String status = EmbargoManager.getEmbargoStatusMDV(context, item);
         String length = EmbargoManager.getEmbargoLengthMDV(context, item);
         String enddate = EmbargoManager.getEmbargoEndDateMDV(context, item);
@@ -251,9 +251,9 @@ public class ETDEmbargoSetter implements EmbargoSetter
                     rpNameList.add(bsRP.getRpName());
                 }
 
-                if(!rpTypeList.contains(ResourcePolicy.TYPE_INHERITED)
-                        && !rpTypeList.contains(ResourcePolicy.TYPE_SUBMISSION)
-                        && !rpTypeList.contains(ResourcePolicy.TYPE_WORKFLOW))
+                if(!rpTypeList.contains(ResourcePolicy.TYPE_INHERITED) && 
+                    !rpTypeList.contains(ResourcePolicy.TYPE_SUBMISSION) && 
+                    !rpTypeList.contains(ResourcePolicy.TYPE_WORKFLOW))
                 {
                     if(rpNameList.contains("Auburn") && rpNameList.contains("Public"))
                     {
@@ -674,6 +674,79 @@ public class ETDEmbargoSetter implements EmbargoSetter
                         log.debug(LogManager.getHeader(context, "", "Embargo End Date Metadata Information"));
                         log.debug(LogManager.getHeader(context, "", "-----------------------------------------------------"));
                         EmbargoManager.printMDVInfo(context, mdv);
+                    }
+                }
+            }
+        }
+    }
+    
+    public static void setDateIssuedMDV(Context context, Item item, boolean verbose)
+        throws SQLException, IOException, AuthorizeException
+    {
+        DateTimeFormatter dft = DateTimeFormat.forPattern("yyyy-MM-dd");
+        int DateIssuedMDFID = EmbargoManager.getMetadataFieldID(context, "date", "issued");
+        
+        EmbargoManager.CreateOrModifyEmbargoMetadataValue(context, item, "date", "issued", dft.print(DateTime.now()));
+        
+        if(verbose)
+        {
+            List<MetadataValue> dateIssuedMDVList = MetadataValue.findByField(
+                    context, DateIssuedMDFID);
+            if(!dateIssuedMDVList.isEmpty())
+            {
+                for(MetadataValue dateIssuedMDV : dateIssuedMDVList)
+                {
+                    if(dateIssuedMDV.getResourceId() == item.getID())
+                    {
+                        System.out.println("Date Issued Metadata Information");
+                        System.out.println("-----------------------------------------------------");
+                        EmbargoManager.printMDVInfo(context, dateIssuedMDV);
+                    }
+                }
+            }
+        }
+    }
+    
+    public static void generateMissingDateIssuedMDV(Context context, Item item, boolean verbose)
+        throws SQLException, IOException, AuthorizeException
+    {
+        DateTimeFormatter dft = DateTimeFormat.forPattern("yyyy-MM-dd");
+        int DateIssuedMDFID = EmbargoManager.getMetadataFieldID(context, "date", "issued");
+        String dateAccessionedMDV = EmbargoManager.getDateAccessionedMDV(context, item);
+        DateTime dateAccessioned = new DateTime(dateAccessionedMDV);
+        
+        if(log.isDebugEnabled())
+        {
+            System.out.println("-----------------------------------------------------");
+            System.out.println("SETTING DATE ISSUED MDV INFORMATION");
+            System.out.println("-----------------------------------------------------");
+            
+            System.out.println("Item's Date Accessioned MDV: "+dateAccessionedMDV);
+            System.out.println("Item's New Issue Date: "+dft.print(dateAccessioned));
+            System.out.println("-----------------------------------------------------");
+        }
+        
+        EmbargoManager.CreateOrModifyEmbargoMetadataValue(context, item, "date", "issued", dft.print(dateAccessioned));
+        
+        // Since we've updated the metadata information for this item
+        // we need to update its last modified date.
+        context.turnOffAuthorisationSystem();
+        item.updateLastModified();
+        context.restoreAuthSystemState();
+        
+        if(verbose)
+        {
+            List<MetadataValue> dateIssuedMDVList = MetadataValue.findByField(
+                    context, DateIssuedMDFID);
+            if(!dateIssuedMDVList.isEmpty())
+            {
+                for(MetadataValue dateIssuedMDV : dateIssuedMDVList)
+                {
+                    if(dateIssuedMDV.getResourceId() == item.getID())
+                    {
+                        System.out.println("Date Issued Metadata Information");
+                        System.out.println("-----------------------------------------------------");
+                        EmbargoManager.printMDVInfo(context, dateIssuedMDV);
                     }
                 }
             }
