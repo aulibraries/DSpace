@@ -830,20 +830,18 @@ public class WorkflowManager
             String handle = HandleManager.findHandle(c, i);
 
             // Get title
-            Metadatum[] titles = i.getMetadata("dc", "titles", null, Item.ANY);
-            String title = "";
+            String title = null;
+            
+            Metadatum[] titles = i.getMetadata("dc", "title", null, Item.ANY);
 
-            try
-            {
-                title = I18nUtil.getMessage("org.dspace.workflow.WorkflowManager.untitled");
-            }
-            catch (MissingResourceException e)
-            {
-                title = "Untitled";
-            }
+            // only return the first element, or "Untitled"
             if (titles.length > 0)
             {
                 title = titles[0].value;
+            }
+            else
+            {
+                title = I18nUtil.getMessage("org.dspace.workflow.WorkflowManager.untitled ");
             }
 
             for(Bundle bndl : i.getBundles(Constants.CONTENT_BUNDLE_NAME))
@@ -1333,7 +1331,7 @@ public class WorkflowManager
         }
         catch (MessagingException e)
         {
-            log.warn(LogManager.getHeader(c, "notifyOfArchive", MessageFormat.format("cannot email user item_id = {0}, "
+            log.warn(LogManager.getHeader(c, "notifyOfSubmission", MessageFormat.format("cannot email user item_id = {0}, "
                 + "reason = {1}", i.getID(), e.getMessage())));
         }
     }
