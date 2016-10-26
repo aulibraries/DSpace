@@ -149,18 +149,7 @@
                     <small>
                         <xsl:text>(</xsl:text>
                         <span class="date">
-                            <xsl:choose>
-                                <xsl:when test="dim:field[@element='date' and @qualifier='issued' and descendant::text()]">
-                                    <xsl:for-each select="dim:field[@element='date' and @qualifier='issued']">
-                                        <xsl:copy-of select="substring(./node(),1,10)"/>
-                                    </xsl:for-each>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:for-each select="dim:field[@element='date' and @qualifier='accessioned']">
-                                        <xsl:copy-of select="substring(./node(),1,10)"/>
-                                    </xsl:for-each>
-                                </xsl:otherwise>
-                            </xsl:choose>
+                            <xsl:value-of select="substring(dim:field[@element='date' and @qualifier='issued']/node(),1,10)"/>
                         </span>
                         <xsl:text>)</xsl:text>
                     </small>

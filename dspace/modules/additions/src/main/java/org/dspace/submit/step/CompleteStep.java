@@ -20,6 +20,9 @@ import org.dspace.app.util.SubmissionInfo;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.submit.AbstractProcessingStep;
 import org.dspace.authorize.AuthorizeException;
+import org.dspace.content.DCDate;
+import org.dspace.content.Item;
+import org.dspace.content.MetadataSchema;
 import org.dspace.content.WorkspaceItem;
 import org.dspace.core.Context;
 import org.dspace.core.LogManager;
@@ -81,6 +84,7 @@ public class CompleteStep extends AbstractProcessingStep
 
         // Start the workflow for this Submission
         boolean success = false;
+                
         try
         {
             if(ConfigurationManager.getProperty("workflow","workflow.framework").equals("xmlworkflow"))
@@ -98,7 +102,7 @@ public class CompleteStep extends AbstractProcessingStep
             else
             {
                 WorkflowManager.start(context, (WorkspaceItem) subInfo.getSubmissionItem());
-            }
+            }           
             success = true;
         }
         catch (Exception e)
@@ -108,7 +112,7 @@ public class CompleteStep extends AbstractProcessingStep
         }
         finally
         {
-        // commit changes to database
+            // commit changes to database
             if (success)
             {
                 context.commit();
@@ -119,8 +123,8 @@ public class CompleteStep extends AbstractProcessingStep
             }
         }
         
-         // Notify the submitter that their submission has completed.
-        //WorkflowManager.notifyOfSubmission(context, subInfo.getSubmissionItem().getItem());
+        // Notify the submitter that their submission has completed.
+        WorkflowManager.notifyOfSubmission(context, subInfo.getSubmissionItem().getItem());
         
         return STATUS_COMPLETE;
     }

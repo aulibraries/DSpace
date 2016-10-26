@@ -212,8 +212,8 @@ public class InstallItem
         }
         else
         {
-            DCDate dateIssued = new DCDate(now.getYear(),now.getMonth(),now.getDay(),-1,-1,-1);
-            item.addDC("date", "issued", null, dateIssued.toString());
+            DCDate issued = new DCDate(now.getYear(),now.getMonth(),now.getDay(),-1,-1,-1);
+            item.addMetadata(MetadataSchema.DC_SCHEMA, "date", "issued", null, issued.toString());
         }
 
         // Add provenance description

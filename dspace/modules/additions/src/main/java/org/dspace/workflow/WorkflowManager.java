@@ -1299,20 +1299,32 @@ public class WorkflowManager
      * @throws java.io.IOException
      * @throws org.dspace.authorize.AuthorizeException
      */
-    public static void notifyOfSubmission(Context c, WorkflowItem wi)
+    public static void notifyOfSubmission(Context c, Item i)
         throws SQLException, IOException, AuthorizeException
     {
         try
         {
             // Get submitter
-            EPerson ep = wi.getSubmitter();
+            EPerson ep = i.getSubmitter();
             // Get the Locale
             Locale supportedLocale = I18nUtil.getEPersonLocale(ep);
             Email email = Email.getEmail(I18nUtil.getEmailFilename(supportedLocale, "submit_notify"));
 
             String title = null;
+            
+            Metadatum[] titles = i.getMetadata("dc", "title", null, Item.ANY);
 
-            title = getItemTitle(wi);
+            // only return the first element, or "Untitled"
+            if (titles.length > 0)
+            {
+                title = titles[0].value;
+            }
+            else
+            {
+                title = I18nUtil.getMessage("org.dspace.workflow.WorkflowManager.untitled ");
+            }
+
+            //title = getItemTitle(wi);
 
             email.addArgument(title);
             email.addArgument(getMyDSpaceLink());
@@ -1322,7 +1334,7 @@ public class WorkflowManager
         catch (MessagingException e)
         {
             log.warn(LogManager.getHeader(c, "notifyOfArchive", MessageFormat.format("cannot email user item_id = {0}, "
-                + "reason = {1}", wi.getID(), e.getMessage())));
+                + "reason = {1}", i.getID(), e.getMessage())));
         }
     }
 
