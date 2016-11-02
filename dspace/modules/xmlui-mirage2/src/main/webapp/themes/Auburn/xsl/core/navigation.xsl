@@ -60,7 +60,7 @@
                     <h2 class="ds-option-set-head h5">
                         <i18n:text>xmlui.feed.header</i18n:text>
                     </h2>
-                    <div id="ds-feed-option" class="ds-option-set list-group col-sm-12">
+                    <div id="ds-feed-option" class="ds-option-set list-group">
                         <xsl:call-template name="addRSSLinks"/>
                     </div>
                 <!-- </div> -->
