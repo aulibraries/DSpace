@@ -323,7 +323,7 @@
                             <xsl:attribute name="href">
                                 <xsl:choose>
                                     <xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker') or contains($serverName, 'dstest')">
-                                        <xsl:text>/aurora/</xsl:text>
+                                        <xsl:text>/aurora-embargo/</xsl:text>
                                     </xsl:when>
                                     <xsl:otherwise>
                                         <xsl:text>/</xsl:text>
@@ -362,7 +362,7 @@
                                 <xsl:attribute name="href">
                                     <xsl:choose>
                                         <xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker') or contains($serverName, 'dstest')">
-                                            <xsl:text>/aurora/</xsl:text>
+                                            <xsl:text>/aurora-embargo/</xsl:text>
                                         </xsl:when>
                                         <xsl:otherwise>
                                             <xsl:text>/</xsl:text>
@@ -380,13 +380,13 @@
                                 <xsl:attribute name="href">
                                     <xsl:choose>
                                         <xsl:when test="contains($serverName, 'aucompbiker') or contains($serverName, 'localhost')">
-                                            <xsl:text>http://localhost:8080/aurora/faqs.html</xsl:text>
+                                            <xsl:text>http://localhost:8080/aurora-embargo/faqs.html</xsl:text>
                                         </xsl:when>
                                         <xsl:when test="contains($serverName, 'aurora.auburn')">
                                             <xsl:text>https://aurora.auburn.edu/faqs.html</xsl:text>
                                         </xsl:when>
                                         <xsl:when test="contains($serverName, 'dstest.lib')">
-                                            <xsl:text>https://dstest.lib.auburn.edu/aurora/faqs.html</xsl:text>
+                                            <xsl:text>https://dstest.lib.auburn.edu/aurora-embargo/faqs.html</xsl:text>
                                         </xsl:when>
                                         <xsl:otherwise>
                                             <xsl:text>#</xsl:text>
@@ -404,13 +404,13 @@
                                 <xsl:attribute name="href">
                                     <xsl:choose>
                                         <xsl:when test="contains($serverName, 'aucompbiker') or contains($serverName, 'localhost')">
-                                            <xsl:text>http://localhost:8080/aurora/liaisons.html</xsl:text>
+                                            <xsl:text>http://localhost:8080/aurora-embargo/liaisons.html</xsl:text>
                                         </xsl:when>
                                         <xsl:when test="contains($serverName, 'aurora.auburn')">
                                             <xsl:text>https://aurora.auburn.edu/liaisons.html</xsl:text>
                                         </xsl:when>
                                         <xsl:when test="contains($serverName, 'dstest.lib')">
-                                            <xsl:text>https://dstest.lib.auburn.edu/aurora/liaisons.html</xsl:text>
+                                            <xsl:text>https://dstest.lib.auburn.edu/aurora-embargo/liaisons.html</xsl:text>
                                         </xsl:when>
                                         <xsl:otherwise>
                                             <xsl:text>#</xsl:text>
@@ -428,13 +428,13 @@
                                 <xsl:attribute name="href">
                                     <xsl:choose>
                                         <xsl:when test="contains($serverName, 'aurora.aucompbiker') or contains($serverName, 'localhost')">
-                                            <xsl:text>http://localhost:8080/aurora/contact.html</xsl:text>
+                                            <xsl:text>http://localhost:8080/aurora-embargo/contact.html</xsl:text>
                                         </xsl:when>
                                         <xsl:when test="contains($serverName, 'aurora.auburn')">
                                             <xsl:text>https://aurora.auburn.edu/contact.html</xsl:text>
                                         </xsl:when>
                                         <xsl:when test="contains($serverName, 'dstest.lib')">
-                                            <xsl:text>https://dstest.lib.auburn.edu/aurora/contact.html</xsl:text>
+                                            <xsl:text>https://dstest.lib.auburn.edu/aurora-embargo/contact.html</xsl:text>
                                         </xsl:when>
                                         <xsl:otherwise>
                                             <xsl:text>#</xsl:text>
