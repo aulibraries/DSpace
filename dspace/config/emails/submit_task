@@ -6,7 +6,7 @@
 # {3}  Description of task
 # {4}  link to 'my DSpace' page 
 #
-Subject: DSpace: You have a new task
+Subject: AUrora: You have a new task
 
 A new item has been submitted:
 
@@ -16,9 +16,14 @@ Submitted by: {2}
 
 {3}
 
-To claim this task, please visit your "My DSpace"
-page:  {4}
+The submission must be checked for completeness before inclusion in AUrora. To claim this task, please log in to your AUrora
+account at https://aurora.auburn.edu/login and click on My Account - Submissions. You can log in using your Auburn University
+ username and password.
+
+If you have questions or need assistance please contact the AUrora Support Team at libhelp@auburn.edu.
 
 Many thanks!
 
-DSpace
+The AUrora Support Team
+libhelp@auburn.edu
+

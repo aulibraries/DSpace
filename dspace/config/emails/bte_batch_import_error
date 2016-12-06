@@ -6,14 +6,14 @@
 #
 # See org.dspace.core.Email for information on the format of this file.
 #
-Subject: DSpace - The batch import was not completed.
-The batch import you initiated from the DSpace UI was not completed, due to the following reason:
+Subject: AUrora - The batch import was not completed.
+The batch import you initiated from the AUrora UI was not completed, due to the following reason:
  {0}
 
 For more information you may contact your system administrator:
  {1}
 
+If you have questions or need assistance with your account please contact the AUrora Support Team at libhelp@auburn.edu.
 
-
-The DSpace Team
-
+The AUrora Support Team
+libhelp@auburn.edu

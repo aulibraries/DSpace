@@ -34,8 +34,14 @@
         </property>
         <property name="fieldDefaults">
             <map>
-                <entry key="dc_contributor_author">
+                <!--<entry key="dc_contributor_author">
                     <bean class="org.dspace.authority.PersonAuthorityValue"/>
+                </entry>-->
+                <entry key="dc_creator">
+                    <bean<bean class="org.dspace.authority.PersonAuthorityValue"/>
+                </entry>
+                <entry key="dc_creator_alternate">
+                    <bean<bean class="org.dspace.authority.PersonAuthorityValue"/>
                 </entry>
             </map>
         </property>

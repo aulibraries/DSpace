@@ -5,11 +5,13 @@
 #
 # See org.dspace.core.Email for information on the format of this file.
 #
-Subject: DSpace - Batch import successfully completed
-The batch item import you initiated from the DSpace UI has completed successfully.
+Subject: AUrora - Batch import successfully completed
+The batch item import you initiated from the AUrora UI has completed successfully.
 
 You may find the mapfile for the import in the following path: {0}
 
+If you have questions or need assistance with your account please contact the AUrora Support Team at libhelp@auburn.edu.
 
-The DSpace Team
+The AUrora Support Team
+libhelp@auburn.edu
 
