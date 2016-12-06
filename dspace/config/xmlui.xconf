@@ -182,7 +182,10 @@
         <!-- <theme name="Test Theme 2" regex="community-list" path="theme2/"/> -->
 
         <!-- Mirage theme, @mire contributed theme, default since DSpace 3.0 -->
-        <theme name="Atmire Mirage Theme" regex=".*" path="Mirage/" />
+        <!-- <theme name="Atmire Mirage Theme" regex=".*" path="Mirage/" /> -->
+	
+	<!-- Mirage2 theme, @mire contributed theme -->
+	<!-- <theme name="Atmire Mirage2 Theme" regex=".*" path="Mirage2/" /> -->
 
         <!-- Reference theme, the default Manakin XMLUI layout up to DSpace 1.8 -->
         <!-- <theme name="Default Reference Theme" regex=".*" path="Reference/" /> -->
@@ -192,6 +195,9 @@
 
         <!-- The Kubrick theme -->
         <!-- <theme name="Kubrick" regex=".*" path="Kubrick/" /> -->
+
+	<!-- Auburn University Libraries ETD Theme -->
+	<theme name="Auburn University Libraries ETD Theme" regex=".*" path="Auburn/" />
 
         <!--
              For information on configuring the mobile theme, see:
