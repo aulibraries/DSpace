@@ -321,7 +321,7 @@ public class AuthorizeManager
         }
 
         log.debug(LogManager.getHeader(c, "Authorize Info", " Checking authorization info for "+o.getTypeText()+" Name = "+o.getName()));
-        log.debug(LogManager.getHeader(c, "", "-----------------------------------------------------"));
+        //log.debug(LogManager.getHeader(c, "", "-----------------------------------------------------"));
         
         // In case the dso is an bundle or bitstream we must ignore custom 
         // policies if it does not belong to at least one installed item (see 
@@ -332,7 +332,9 @@ public class AuthorizeManager
         if(o instanceof Bitstream)
         {
             Bitstream b = (Bitstream) o;
-
+            String embargoRights = null;
+            List<ResourcePolicy> bsRPList = null;
+            
             // Ensure that this is not a collection or community logo
             DSpaceObject parent = b.getParentObject();
             if (!(parent instanceof Collection) && !(parent instanceof Community))
@@ -340,11 +342,9 @@ public class AuthorizeManager
                 ignoreCustomPolicies = !isAnyItemInstalled(c, b.getBundles());
             }
             
-            String embargoRights = null;
-            List<ResourcePolicy> bsRPList = getPoliciesActionFilter(c, o, action);
-
-            log.debug(LogManager.getHeader(c, "Authorize Info", " Checking authorization info for file "+o.getName()));
-
+            // Get all resource policies assigned to the DSpace Object o (bitstream)
+            bsRPList = getPolicies(c, o);           
+            
             try
             {
                 item = getItemFromBitstream(c, o.getID());
@@ -354,15 +354,37 @@ public class AuthorizeManager
             {
 
             }
-
-            // Prevent access to the selected file from everyone
-            // except members of specified groups and/or
-            // the item's owner until the file's resource policy
-            // lift or end date has passed.
-
+            
+            log.debug(LogManager.getHeader(c, "Authorize Info", " Checking authorization info for file "+o.getName()));
+            log.debug(LogManager.getHeader(c, "Authorize Info", " File ID "+o.getID()));
+            
+            log.debug(LogManager.getHeader(c, "Authorize Info", " Associated Item Handle = "+item.getHandle()));
+            log.debug(LogManager.getHeader(c, "Authorize Info", " Size of bsRPList is "+bsRPList.size()));
+            
+            if(log.isDebugEnabled())
+            {
+                if(!bsRPList.isEmpty())
+                {
+                    for(ResourcePolicy bsRP : bsRPList)
+                    {                
+                        EmbargoManager.printRPInfo(c, bsRP);
+                    }
+                }
+            }
+            
+            log.debug(LogManager.getHeader(c, "", "-----------------------------------------------------"));
+            
+            /**
+             * Prevent access to the selected file from everyone
+             * except members of specified groups and/or 
+             * the item's owner until the file's resource policy 
+             * lift or end date has passed.
+             */
             // First check: the current user is not a member of the Administrator user group
             if(!isAdmin(c))
             {
+                ResourcePolicy bsRP = null;
+                
                 // Members of the Grad School Staff are always exempt from the
                 // access restriction
                 if(Group.isMember(c, Group.findByName(c, ConfigurationManager.getProperty("auetd.authorization.group.1")).getID()))
@@ -390,22 +412,29 @@ public class AuthorizeManager
                 {
                     return true;
                 }
-
+                
+                                
                 // If none of the above criteria are met then check
                 // that the end date of the bitstream's resource policies
                 // has not passed already.
-                ResourcePolicy bsRP = bsRPList.get(0);
-
-                DateTime endDate = null;
-
-                if(bsRP.getEndDate() != null)
+                if(!bsRPList.isEmpty())
                 {
-                    endDate = new DateTime(bsRP.getEndDate());
+                    bsRP = bsRPList.get(0);
                 }
-
-                if(endDate != null)
+                
+                if(bsRP != null)
                 {
-                    return endDate.isBeforeNow();
+                    DateTime endDate = null;
+
+                    if(bsRP.getEndDate() != null)
+                    {
+                        endDate = new DateTime(bsRP.getEndDate());
+                    }
+
+                    if(endDate != null)
+                    {
+                        return endDate.isBeforeNow();
+                    }
                 }
             }
         }

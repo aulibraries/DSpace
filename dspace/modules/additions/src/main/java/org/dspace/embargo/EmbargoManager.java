@@ -1249,8 +1249,8 @@ public class EmbargoManager
         String rsrcTypeTxt = null;
         String response = null;
 
-        System.out.println("Policy ID:  "+rp.getID());
-        System.out.println("Resource ID:  "+rp.getResourceID());
+        /*System.out.println("Policy ID:  "+rp.getID());
+        System.out.println("Resource ID:  "+rp.getResourceID());*/
 
         log.debug(LogManager.getHeader(context, "Printing Policy Info", " Policy ID = "+rp.getID()));
         log.debug(LogManager.getHeader(context, "Printing Policy Info", " Resource ID = "+rp.getResourceID()));
@@ -1258,7 +1258,7 @@ public class EmbargoManager
         DSpaceObject dso = DSpaceObject.find(context, rp.getResourceType(), rp.getResourceID());
         rsrcTypeTxt = dso.getTypeText();
 
-        System.out.println("Resource Type:  "+rsrcTypeTxt.toUpperCase());
+        //System.out.println("Resource Type:  "+rsrcTypeTxt.toUpperCase());        
         log.debug(LogManager.getHeader(context, "Printing Policy Info", " Resource Type = "+rsrcTypeTxt.toUpperCase()));
 
         switch(rp.getResourceType())
@@ -1272,11 +1272,12 @@ public class EmbargoManager
                         rp.getResourceID()).getName();
                 break;
         }
-        System.out.println(response);
+        
+        //System.out.println(response);
         log.debug(LogManager.getHeader(context,"Printing Policy Info", " "+response));
         response = null;
 
-        System.out.println("Action:  "+rp.getActionText());
+        //System.out.println("Action:  "+rp.getActionText());
         log.debug(LogManager.getHeader(context,"Printing Policy Info", " Action = "+rp.getActionText()));
 
         if(rp.getEPerson() != null)
@@ -1287,7 +1288,8 @@ public class EmbargoManager
         {
             response = "null";
         }
-        System.out.println("EPerson ID: "+response);
+        
+        //System.out.println("EPerson ID: "+response);
         log.debug(LogManager.getHeader(context,"Printing Policy Info", " EPerson ID = "+response));
         response = null;
 
@@ -1299,12 +1301,14 @@ public class EmbargoManager
         {
             response = "null";
         }
-        System.out.println("Group: "+response);
+        
+        //System.out.println("Group: "+response);
         log.debug(LogManager.getHeader(context,"Printing Policy Info", " Group = "+response));
         response = null;
 
-        System.out.println("Resource Policy Name:  "+rp.getRpName());
+        //System.out.println("Resource Policy Name:  "+rp.getRpName());
         log.debug(LogManager.getHeader(context,"Printing Policy Info", " Resource Policy Name = "+rp.getRpName()));
+        
         if(rp.getStartDate() != null)
         {
             DCDate date = new DCDate(rp.getStartDate());
@@ -1316,7 +1320,8 @@ public class EmbargoManager
         {
             response = "null";
         }
-        System.out.println("Start Date: "+response);
+        
+        //System.out.println("Start Date: "+response);
         log.debug(LogManager.getHeader(context,"Printing Policy Info", " Start Date = "+response));
         response = null;
 
@@ -1331,13 +1336,14 @@ public class EmbargoManager
         {
             response = "null";
         }
-        System.out.println("End Date:  "+response);
-        log.debug(LogManager.getHeader(context,"Printing Policy Info", "End Date = "+response));
+        
+        //System.out.println("End Date:  "+response);
+        log.debug(LogManager.getHeader(context,"Printing Policy Info", " End Date = "+response));
         response = null;
 
-        System.out.println("Resource Policy Type:  "+rp.getRpType());
+        /*System.out.println("Resource Policy Type:  "+rp.getRpType());
         System.out.println("Resource Policy Dscp:  "+rp.getRpDescription());
-        System.out.println("-----------------------------------------------------");
+        System.out.println("-----------------------------------------------------");*/
         log.debug(LogManager.getHeader(context,"Printing Policy Info", " Resource Policy Type = "+rp.getRpType()));
         log.debug(LogManager.getHeader(context,"Printing Policy Info", " Resource Policy Dscp = "+rp.getRpDescription()));
         log.debug(LogManager.getHeader(context,"Printing Policy Info", "-----------------------------------------------------"));
