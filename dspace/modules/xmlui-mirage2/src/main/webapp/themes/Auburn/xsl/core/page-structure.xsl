@@ -114,14 +114,13 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!--
-                                        The footer div, dropping whatever extra information is needed on the page. It will
-                                        most likely be something similar in structure to the currently given example.
-                                    -->
-                                    <div class="footer-wrap hidden-print footer-wrap">
-                                        <xsl:call-template name="buildFooter"/>
-                                    </div>
+                                </div>
+                                <!--
+                                    The footer div, dropping whatever extra information is needed on the page. It will
+                                    most likely be something similar in structure to the currently given example.
+                                -->
+                                <div class="footer-wrap hidden-print footer-wrap">
+                                    <xsl:call-template name="buildFooter"/>
                                 </div>
                             </xsl:otherwise>
                         </xsl:choose>
@@ -597,7 +596,7 @@
     <xsl:template name="buildFooter">
         <footer>
             <p style="font-size:11px; text-align:center;">Auburn University Libraries | 231 Mell Street | Auburn, Alabama 36849 | (334) 844-4500 or (800) 446-0387  | <script type="text/javascript">emailE='auburn.edu'; emailE=('etdhelp' + '@' + emailE); document.write('<a href="mailto:'+emailE+'">' + emailE + '</a>');</script></p>
-            <p class="social"><a href="https://twitter.com/aulibraries" class="social twitter" aria-label="Follow The Libraries on Twitter" alt="Follow The Libraries on Twitter" title="Follow The Libraries on Twitter" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a> <a href="https://www.flickr.com/photos/aulibraries" class="social flickr" aria-label="Follow The Libraries on Flickr" alt="Follow the Auburn Libraries on Flickr" title="Follow the Auburn Libraries on Flickr" target="_blank"><i class="fa fa-flickr" aria-hidden="true"></i></a> <a href="https://www.facebook.com/auburnlibraries" class="social facebook" aria-label="Follow The Libraries on Facebook" alt="Follow the Auburn Libraries on Facebook" title="Follow the Auburn Libraries on Facebook" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a> <a href="https://instagram.com/aulibraries" class="social instagram" aria-label="Follow The Libraries on Instagram" title="Follow the Auburn Libraries on Instagram" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a><a href="https://vimeo.com/aulibraries" class="social vimeo" aria-label="Follow The Libraries on Vimeo" title="Follow the Auburn Libraries on Vimeo" target="_blank"><i class="fa fa-vimeo" aria-hidden="true"></i></a> <a href="https://www.youtube.com/user/auburnlibraries" class="social youtube" alt="Follow the Auburn Libraries on YouTube" aria-label="Follow The Libraries on YouTube" title="Follow the Auburn Libraries on YouTube" target="_blank"><i class="fa fa-youtube" aria-hidden="true"></i></a></p>
+            <p class="social"><a href="https://twitter.com/aulibraries" class="social twitter" aria-label="Follow The Libraries on Twitter" title="Follow The Libraries on Twitter" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a> <a href="https://www.flickr.com/photos/aulibraries" class="social flickr" aria-label="Follow The Libraries on Flickr" title="Follow the Auburn Libraries on Flickr" target="_blank"><i class="fa fa-flickr" aria-hidden="true"></i></a> <a href="https://www.facebook.com/auburnlibraries" class="social facebook" aria-label="Follow The Libraries on Facebook" title="Follow the Auburn Libraries on Facebook" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a> <a href="https://instagram.com/aulibraries" class="social instagram" aria-label="Follow The Libraries on Instagram" title="Follow the Auburn Libraries on Instagram" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a><a href="https://vimeo.com/aulibraries" class="social vimeo" aria-label="Follow The Libraries on Vimeo" title="Follow the Auburn Libraries on Vimeo" target="_blank"><i class="fa fa-vimeo" aria-hidden="true"></i></a> <a href="https://www.youtube.com/user/auburnlibraries" class="social youtube" aria-label="Follow The Libraries on YouTube" title="Follow the Auburn Libraries on YouTube" target="_blank"><i class="fa fa-youtube" aria-hidden="true"></i></a></p>
             <!--Invisible link to HTML sitemap (for search engines) -->
             <a class="hidden">
                 <xsl:attribute name="href">
