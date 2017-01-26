@@ -11,13 +11,13 @@
  * It will be included in all color schemes
  */
 
- /** Add the Font Awesome CSS file */
-@import "../vendor/font-awesome/css/font-awesome.css";
+@import "aurora_variables";
+
+/** Add the Font Awesome CSS file */
+@import "../vendor/font-awesome/scss/font-awesome";
 
 /** Select2 jQuery plugin CSS file */
-@import "../vendor/select2/dist/css/select2.min.css";
-
-@import "aurora_variables";
+@import "../vendor/select2/src/scss/core";
 
 //example mixin to set the text-selection style
 @mixin selection {
@@ -31,186 +31,7 @@
 }
 
 /** Auburn University CSS */
-@charset "utf-8";
-/*****  Font Import  ******************************************/
-@font-face { font-family: 'Open Sans'; font-style: normal; font-weight: 700; src: local("Open Sans Bold"), local("OpenSans-Bold"), url("//themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzBa1RVmPjeKy21_GQJaLlJI.woff") format("woff"); }
-@font-face { font-family: 'Open Sans'; font-style: italic; font-weight: 700; src: local("Open Sans Bold Italic"), local("OpenSans-BoldItalic"), url("//themes.googleusercontent.com/static/fonts/opensans/v6/PRmiXeptR36kaC0GEAetxoUt79146ZFaIJxILcpzmhI.woff") format("woff"); }
-@font-face { font-family: 'Open Sans'; font-style: italic; font-weight: 400; src: local("Open Sans Italic"), local("OpenSans-Italic"), url("//themes.googleusercontent.com/static/fonts/opensans/v6/xjAJXh38I15wypJXxuGMBtIh4imgI8P11RFo6YPCPC0.woff") format("woff"); }
-@font-face { font-family: 'Open Sans'; font-style: normal; font-weight: 400; src: local("Open Sans"), local("OpenSans"), url("//themes.googleusercontent.com/static/fonts/opensans/v6/u-WUoqrET9fUeobQW7jkRT8E0i7KZn-EPnyo3HZu7kw.woff") format("woff"); }
-/*****  General Page Formatting  ******************************/
-html{background:#fff;}
-body { font-family: "Open Sans", Arial, Verdana, sans-serif; font-size: 13px; }
-body > .container{overflow-x:hidden;}
-a { color: #496e9c; text-decoration: none; }
-a:hover { color: #dd550c;}
-ol ol { list-style-type: lower-alpha; }
-ol ol ol { list-style-type: lower-roman; }
-ul{margin:0; padding:0 0 0 10px;}
-ul li{background:url("https://cdn.auburn.edu/assets/img/bullet-arrow2.gif") 0 6px no-repeat; list-style:none; margin:5px 0; padding:0 0 0 15px;}
-ul li ul li{background:url("https://cdn.auburn.edu/assets/img/bullet-arrow.gif") 0 6px no-repeat;}
-label {font-weight:normal;}
-
-/*****  Miscellaneous Styles  *********************************/
-.skip { left: -999em; position: absolute; }
-.to-top {bottom: 25px; position: fixed; right: 10px; z-index: 3000;}
-.to-top a {background-image:url("https://cdn.auburn.edu/assets/img/to-top.png"); background-size: 77px 35px; border-bottom: none; display:inline-block; height: 35px; width: 77px;}
-.to-top a:hover{background-image:url("https://cdn.auburn.edu/assets/img/to-top2.png"); background-size: 77px 35px;}
-
-/*****  Header Section  ***************************************/
-.header-wrap { background: inherit; display: block; }
-.header-wrap header { display: block; min-height: 110px; padding: 15px 0 0 0; position: relative; }
-.logo { background-image: url("../images/header-logo-mobile.png"); background-position: center center; background-repeat: no-repeat; background-size:199px 66px; cursor: pointer; height: 66px; margin: 0 auto 15px auto; width: 199px; }
-.logo img { display: none; }
-.menu-icon {color: #DD550C; display: none; font-size:24px; position: absolute; left: 0; top: 20px; }
-.menu-icon:hover{cursor:pointer;}
-.menu-icon > i{padding:10px;}
-.search-icon { color:#DD550C; cursor: pointer; display: block; font-size:20px; padding:10px; position: absolute; right: 4px; top: 13px; }
-
-.header-title { font-size: 12px; }
-.top-links { color: #fff; display: none; padding: 3px 0; text-align: center; }
-.top-links a { color: #fff; padding: 0 3px; }
-.title-area { text-align: center; }
-.main-heading { color:#000; display: block; font-size: 20px; }
-.sub-heading { color:#000; display: block; font-size: 16px; padding: 5px 0; }
-.main-heading a, .sub-heading a { color: #000; }
-.main-heading a:hover, .sub-heading a:hover {text-decoration:none; }
-
-
-/*****  Navigation Section  ***********************************/
-.navbar li{background:none; margin:0; padding:0;}
-.header-wrap nav { background-color: #dd550c; border:none; border-bottom: 3px solid #f68026; border-radius: 0; margin: 0; min-height:30px; padding: 0; }
-.header-wrap nav .navbar-collapse {padding:0;}
-.header-wrap nav .nav {font-size:0; margin: 0; padding: 0; }
-.header-wrap nav .nav > li{display:block; font-size:14px; margin:0;}
-.header-wrap nav .nav > li > a {background:#dd550c; border-left: 1px solid #f68026; color: #fff; font-size: 12px; margin:0; padding: 10px 20px; text-transform: uppercase; }
-.header-wrap nav .nav > li > a:hover { background: #f68026; color: #fff; text-decoration:none;}
-.header-wrap nav .nav > li:first-child > a{border-left:none;}
-.header-wrap .navbar-brand { color: #fff; display: block; float:none; font-size: 16px; margin: 0; max-width: none; /* padding: 10px 15px; */ text-align:center; }
-.header-wrap .navbar-brand:hover { background: #f68026; cursor: pointer; }
-.header-wrap .navbar-brand span { background: url("https://cdn.auburn.edu/assets/img/glyphicons-halflings-white.png") -310px -117px no-repeat; float: right; height: 20px; width: 20px; }
-.header-wrap .navbar-toggle { border: none; border-radius: 0; padding: 6px 12px; top: 1px; }
-.header-wrap .navbar-toggle:hover, .header-wrap .navbar-toggle:focus { background-color: #f68026; }
-.header-wrap .navbar-nav a:hover { text-decoration:none;}
-.header-wrap .navbar-nav>.open>a,.header-wrap .navbar-nav>.open>a:hover,.header-wrap .navbar-nav>.open>a:focus{background-color:#f68026 !important;color:#fff;outline:0;}
-.header-wrap .dropdown-menu>li.nav-header, .header-wrap .dropdown-menu>li>a{padding:10px 20px;}
-.header-wrap .dropdown-menu>li>a:hover, .header-wrap .dropdown-menu>li>a:focus{background-color:#dd550c !important;color:#fff;outline:0;}
-.header-wrap .navbar-nav > .dropdown > a .caret, .header-wrap .navbar-nav > .open > a .caret, .header-wrap .navbar-nav > .open > a:hover .caret, .header-wrap .navbar-nav > .open > a:focus .caret { border-top-color: #fff; border-bottom-color: #fff; }
-.dropdown a:focus{outline:none;}
-.header-wrap nav .dropdown-menu{background:#f68026; color:#fff;}
-.header-wrap nav .dropdown-menu a{color:#fff;}
-.header-wrap nav .dropdown-menu a:hover{background:#dd550c; color:#fff;}
-
-/*****  Content Section  **************************************/
-.breadcrumb{background:transparent; padding:0;}
-ul.breadcrumb li{background:none; padding:0;}
-
-/*****  Footer Section  ***************************************/
-.footer-wrap { background:#fff;  border: none; clear:both; color: #000; display: block; font-size: 12px; padding: 0; }
-.footer-wrap footer { background: transparent; border: none; display: block; margin: 0; overflow: hidden; padding: 18px 0; text-align:center; }
-.footer-wrap footer a, .footer-wrap footer a:visited { color: #000; }
-.footer-wrap footer a:hover, .footer-wrap footer a:active { color: #DD550C; }
-
-/*****  Bootstrap Overrides  **********************************/
-blockquote, .blockquote{ border-left: 5px solid #eee;font-size:inherit; margin: 0 0 20px; padding: 10px 20px;}
-.carousel-caption{display:none;}
-.container2 .row{margin-left:0; margin-right:0;}
-
-
-@media(min-width: 768px) {
-/*****  General Page Formatting  ******************************/
-body {background: url("../images/white-bg.png") repeat-x scroll center top #fff;}
-/*****  Miscellaneous Styles  *********************************/
-/*****  Header Section  ***************************************/
-.header-wrap { background: transparent; }
-.header-wrap header { padding: 0; }
-.logo {background-image:none; background-size:220px 90px; height:90px; left: 0; position: absolute; top: 10px; width:220px;}
-.logo img { display: inline;}
-.search-icon { display: none; }
-.header-title { font-size: 10px; }
-.top-links { color: #496e9c; display: block; position: absolute; right: 195px; top: 0; }
-.top-links a { color: #496e9c; }
-.title-area { position: absolute; right: 10px; text-align: right; top: 45px; }
-.main-heading { display: block; font-size: 34px; margin: -20px 13px 0 0; }
-.sub-heading { color: #000; display: block; font-size: 16px; padding: 0; margin: 0 10px 0 0;}
-/*****  Search Section  ***************************************/
-.search-form { display: block; position: absolute; right: 10px; top: -1px; }
-.search-box { display: inline-block; }
-input.search-field { font-size: 10px; line-height: 14px; height:auto; margin: 0; padding: 0 5px; width: 175px; }
-.search-field::-webkit-input-placeholder, .search-field:-moz-placeholder, .search-field::-moz-placeholder, .search-field:-ms-input-placeholder { font-size:10px; }
-/*****  Navigation Section  ***********************************/
-.header-wrap nav {min-height:30px;}
-.header-wrap nav .collapse{display:block;}
-.header-wrap nav .container, .header-wrap .navbar .container div, .header-wrap .navbar .container div ul.nav {min-height:30px;}
-.header-wrap nav .container .nav-collapse.collapse{display:block !important; height:auto !important;}
-.header-wrap nav .nav.nav--auto { text-align: center; width: 100%; }
-.header-wrap nav .nav > li{display:inline-block;}
-.header-wrap nav .nav > li > a { margin:0; padding: 4px 25px 3px 25px; }
-.header-wrap nav .nav > li:last-child > a { border-right: 1px solid #f68026; padding: 4px 35px 3px 36px; }
-.header-wrap nav .nav.nav--auto > li > a { padding-left: 0; padding-right: 0; }
-.header-wrap .dropdown-menu>li.nav-header, .header-wrap .dropdown-menu>li>a{padding:3px 20px;}
-.header-wrap .dropdown:hover .dropdown-menu {display: block;}
-.container .header-wrap .navbar .nav > li:last-child > a { border-right: none; }
-.header-wrap .navbar-brand { display: none; }
-.menu-icon { display: none; }
-
-/*****  Footer Section  ***************************************/
-.footer-wrap { background-color: transparent; background-size:1170px 92px; border: none;  color: #000; padding: 92px 0 0 0; }
-/*****  Bootstrap Overrides  **********************************/
-ul.dropdown-menu li {background: none; padding: 0;}
-.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {background-color: #f68026;}
-    
-}
-
-@media(min-width: 992px) {
-/*****  General Page Formatting  ******************************/
-/*****  Miscellaneous Styles  *********************************/
-/*****  Header Section  ***************************************/
-/*****  Search Section  ***************************************/
-/*****  Navigation Section  ***********************************/
-.header-wrap nav .nav > li > a { padding: 4px 42px 3px 43px; }
-.header-wrap nav .nav > li:last-child > a { padding: 4px 54px 3px 54px; }
-.header-wrap nav .nav.nav--auto > li > a { padding-left: 0; padding-right: 0; }
-/*****  Content Section  **************************************/
-/*****  Sidebar Section  **************************************/
-/*****  Footer Section  ***************************************/
-.footer-wrap { background-position: center 6px; }
-/*****  Bootstrap Overrides  **********************************/
-}
-
-@media(min-width: 1200px) {
-/*****  General Page Formatting  ******************************/
-/*****  Miscellaneous Styles  *********************************/
-/*****  Header Section  ***************************************/
-/*****  Search Section  ***************************************/
-/*****  Navigation Section  ***********************************/
-.header-wrap nav .nav > li > a { padding: 4px 62px 3px 62px; }
-.header-wrap nav .nav > li:last-child > a { padding: 4px 71px 3px 72px; }
-.header-wrap nav .nav.nav--auto > li > a { padding-left: 0; padding-right: 0; }
-/*****  Content Section  **************************************/
-/*****  Sidebar Section  **************************************/
-/*****  Footer Section  ***************************************/
-/*****  Bootstrap Overrides  **********************************/
-}
-
-@media only print {
-.title-area{text-align:right;}
-.sub-heading{border-bottom:1px solid #888; padding-bottom:10px;}
-}
-
-@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi) {
-  .to-top a {background-image:url("https://cdn.auburn.edu/assets/img/to-top@2x.png");}
-  .to-top a:hover{background-image:url("https://cdn.auburn.edu/assets/img/to-top2@2x.png");}
-  .logo { background-image: url("../imges/header-logo-mobile.png");}
-  .logo img { display: none; }
-  a.social, .footer-wrap footer section a.arra-image { background-image: url("https://cdn.auburn.edu/assets/img/css-sprite@2x.png");}
-}
-@media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 768px), only screen and (min-resolution: 192dpi) and (min-width: 768px) {
-  .logo { background-image: url("../images/headerLogo_2013@2x.png");}
-  .logo img { display: none; }
-  .social-details { background-image: url("https://cdn.auburn.edu/assets/img/css-sprite@2x.png");}
-  .footer-wrap { background-image: url("https://cdn.auburn.edu/assets/img/footer@2x.png");}
-}
-
+@import "auburn_default_styles";
 
 /** ********** AUrora Customizations *************** */
 
@@ -370,38 +191,6 @@ h3.page-header {
     footer {
         p:first-of-type {
             padding-bottom: 7px;     
-        }
-        
-        a {
-            &.social {
-                background: none;
-                display: inline-block;
-                padding: 4px 0;
-                \width: 32px;
-                height: 32px;
-                font-size: 2em;
-                line-height: 0px;
-                text-decoration: none;
-                text-align: center;
-                vertical-align: center;
-                border-radius: 4px;
-                margin-right: 6px; 
-                
-                @media(max-width: $screen-xs-min) {
-                    padding: 4px 0;
-                    width: 25px;
-                    height: 25px;
-                    font-size: 1.3em;
-                    margin-right: 4px; 
-                }
-            }
-            
-            &.facebook { color: #fff; background-color: #3b5a9b; border-color: #3b5a9b;}
-            &.flickr { color: #fff; background-color: #ff0084; border-color: #ff0084;}
-            &.instagram { color: #fff; background-color: #507ea4; border-color: #507ea4;}
-            &.twitter { color: #fff; background-color: #2baae1; border-color: #2baae1;}
-            &.vimeo { color: #fff; background-color: #40b2dc; border-color: #40b2dc;}
-            &.youtube { color: #fff; background-color: #ff3330; border-color: #ff3330;}
         }
         
         @media(min-width: $screen-sm-min) {
