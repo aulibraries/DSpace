@@ -1,0 +1,683 @@
+/**
+ * The contents of this file are subject to the license and copyright
+ * detailed in the LICENSE and NOTICE files at the root of the source
+ * tree and available online at
+ *
+ * http://www.dspace.org/license/
+ */
+
+/*****  Font Import  ******************************************/
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: local("Open Sans Bold"), local("OpenSans-Bold"), url("//themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzBa1RVmPjeKy21_GQJaLlJI.woff") format("woff");
+}
+
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 700;
+    src: local("Open Sans Bold Italic"), local("OpenSans-BoldItalic"), url("//themes.googleusercontent.com/static/fonts/opensans/v6/PRmiXeptR36kaC0GEAetxoUt79146ZFaIJxILcpzmhI.woff") format("woff");
+}
+
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 400;
+    src: local("Open Sans Italic"), local("OpenSans-Italic"), url("//themes.googleusercontent.com/static/fonts/opensans/v6/xjAJXh38I15wypJXxuGMBtIh4imgI8P11RFo6YPCPC0.woff") format("woff");
+}
+
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: local("Open Sans"), local("OpenSans"), url("//themes.googleusercontent.com/static/fonts/opensans/v6/u-WUoqrET9fUeobQW7jkRT8E0i7KZn-EPnyo3HZu7kw.woff") format("woff");
+}
+
+
+/*****  General Page Formatting  ******************************/
+
+html {
+    background: #fff;
+}
+
+body {
+    font-family: "Open Sans", Arial, Verdana, sans-serif;
+    font-size: 13px;
+    > .container {
+        overflow-x: hidden;
+    }
+}
+
+a {
+    color: $auburn-default-link-color;
+    text-decoration: none;
+    &:hover {
+        color: $brand-primary;
+        cursor: hand;
+    }
+}
+
+ol ol {
+    list-style-type: lower-alpha;
+    ol {
+        list-style-type: lower-roman;
+    }
+}
+
+ul {
+    margin: 0;
+    padding: 0 0 0 10px;
+    li {
+        background: url("https://cdn.auburn.edu/assets/img/bullet-arrow2.gif") 0 6px no-repeat;
+        list-style: none;
+        margin: 5px 0;
+        padding: 0 0 0 15px;
+        ul li {
+            background: url("https://cdn.auburn.edu/assets/img/bullet-arrow.gif") 0 6px no-repeat;
+        }
+    }
+}
+
+label {
+    font-weight: normal;
+}
+
+/*****  Miscellaneous Styles  *********************************/
+
+.skip {
+    left: -999em;
+    position: absolute;
+}
+
+.to-top {
+    bottom: 25px;
+    position: fixed;
+    right: 10px;
+    z-index: 3000;
+    a {
+        background-image: url("https://cdn.auburn.edu/assets/img/to-top.png");
+        background-size: 77px 35px;
+        border-bottom: none;
+        display: inline-block;
+        height: 35px;
+        width: 77px;
+        &:hover {
+            background-image: url("https://cdn.auburn.edu/assets/img/to-top2.png");
+            background-size: 77px 35px;
+        }
+    }
+}
+
+/*****  Header Section  ***************************************/
+
+.header-wrap {
+    background: $auburn-navy;
+    display: block;
+    header {
+        display: block;
+        min-height: 110px;
+        padding: 15px 0 0 0;
+        position: relative;
+    }
+}
+
+.logo {
+    background-image: url("https://cdn.auburn.edu/assets/img/header-logo-mobile.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 199px 36px;
+    cursor: pointer;
+    height: 36px;
+    margin: 0 auto 15px auto;
+    width: 199px;
+    img {
+        display: none;
+    }
+}
+
+.menu-icon {
+    color: #fff;
+    display: block;
+    font-size: 24px;
+    position: absolute;
+    left: 0;
+    top: 20px;
+    &:hover {
+        cursor: pointer;
+    }
+    > i {
+        padding: 10px;
+    }
+}
+
+.search-icon {
+    color: #fff;
+    cursor: pointer;
+    display: block;
+    font-size: 20px;
+    padding: 10px;
+    position: absolute;
+    right: 4px;
+    top: 13px;
+}
+
+.header-title {
+    font-size: 12px;
+}
+
+.top-links {
+    color: #fff;
+    display: none;
+    padding: 3px 0;
+    text-align: center;
+    a {
+        color: #fff;
+        padding: 0 3px;
+    }
+}
+
+.title-area {
+    text-align: center;
+}
+
+.main-heading {
+    color: #fff;
+    display: block;
+    font-size: 20px;
+}
+
+.sub-heading {
+    color: #fff;
+    display: block;
+    font-size: 16px;
+    padding: 5px 0;
+}
+
+.main-heading a, .sub-heading a {
+    color: #fff;
+}
+
+.main-heading a:hover, .sub-heading a:hover {
+    text-decoration: none;
+}
+
+/*****  Search Section  ***************************************/
+
+.search-form {
+    display: none;
+    padding: 3px 0;
+}
+
+.search-box {}
+
+input.search-field {
+    border-radius: 0;
+    font-size: 12px;
+    line-height: 16px;
+    margin: 10px auto;
+    min-height: 10px;
+    padding: 5px;
+    width: 75%;
+}
+
+/*****  Navigation Section  ***********************************/
+
+.navbar li {
+    background: none;
+    margin: 0;
+    padding: 0;
+}
+
+.header-wrap {
+    nav {
+        background-color: $brand-primary;
+        border: none;
+        border-bottom: 3px solid $auburn-navbar-orange;
+        border-radius: 0;
+        margin: 0;
+        min-height: 30px;
+        padding: 0;
+        .navbar-collapse {
+            padding: 0;
+        }
+        .nav {
+            font-size: 0;
+            margin: 0;
+            padding: 0;
+            > li {
+                display: block;
+                font-size: 14px;
+                margin: 0;
+                > a {
+                    background: $brand-primary;
+                    border-left: 1px solid $auburn-navbar-orange;
+                    color: #fff;
+                    font-size: 12px;
+                    margin: 0;
+                    padding: 10px 20px;
+                    text-transform: uppercase;
+                    &:hover {
+                        background: $auburn-navbar-orange;
+                        color: #fff;
+                        text-decoration: none;
+                    }
+                }
+                &:first-child > a {
+                    border-left: none;
+                }
+            }
+        }
+    }
+    .navbar-brand {
+        color: #fff;
+        display: block;
+        float: none;
+        font-size: 16px;
+        margin: 0;
+        max-width: none;
+        /* padding: 10px 15px; */
+        text-align: center;
+        &:hover {
+            background: $auburn-navbar-orange;
+            cursor: pointer;
+        }
+        span {
+            background: url("https://cdn.auburn.edu/assets/img/glyphicons-halflings-white.png") -310px -117px no-repeat;
+            float: right;
+            height: 20px;
+            width: 20px;
+        }
+    }
+    .navbar-toggle {
+        border: none;
+        border-radius: 0;
+        padding: 6px 12px;
+        top: 1px;
+        &:hover, &:focus {
+            background-color: $auburn-navbar-orange;
+        }
+    }
+    .navbar-nav {
+        a:hover {
+            text-decoration: none;
+        }
+        > .open > a {
+            background-color: $auburn-navbar-orange !important;
+            color: #fff;
+            outline: 0;
+            &:hover, &:focus {
+                background-color: $auburn-navbar-orange !important;
+                color: #fff;
+                outline: 0;
+            }
+        }
+    }
+    .dropdown-menu > li {
+        &.nav-header {
+            padding: 10px 20px;
+        }
+        > a {
+            padding: 10px 20px;
+            &:hover, &:focus {
+                background-color: $brand-primary !important;
+                color: #fff;
+                outline: 0;
+            }
+        }
+    }
+    .navbar-nav {
+        .dropdown > a .caret {
+            border-top-color: #fff;
+            border-bottom-color: #fff;
+        }
+        .open > a {
+            .caret, &:hover .caret, &:focus .caret {
+                border-top-color: #fff;
+                border-bottom-color: #fff;
+            }
+        }
+    }
+}
+
+.dropdown a:focus {
+    outline: none;
+}
+
+.header-wrap nav .dropdown-menu {
+    background: $auburn-navbar-orange;
+    color: #fff;
+    a {
+        color: #fff;
+        &:hover {
+            background: $brand-primary;
+            color: #fff;
+        }
+    }
+}
+
+/*****  Content Section  **************************************/
+
+.breadcrumb {
+    background: transparent;
+    padding: 0;
+}
+
+ul.breadcrumb li {
+    background: none;
+    padding: 0;
+}
+
+/*****  Footer Section  ***************************************/
+
+.footer-wrap {
+    background: #fff;
+    clear: both;
+    color: #fff;
+    display: block;
+    font-size: 12px;
+    padding: 0;
+    footer {
+        background: $auburn-navy;
+        display: block;
+        margin: 0;
+        overflow: hidden;
+        padding: 18px 0;
+        text-align: center;
+        a {
+            color: #fff;
+            &:visited {
+                color: #fff;
+            }
+        }
+    }
+    .subfooter {
+        border-top: $brand-primary 5px solid;
+        clear: both;
+        color: $auburn-navy;
+        display: block;
+        padding: 15px 0 10px 0;
+        text-align: center;
+        a {
+            color: $auburn-navy;
+            &:hover, &:visited {
+                color: $auburn-navy;
+            }
+            &.last {
+                border-right: none;
+            }
+        }
+    }
+}
+
+/*****  Bootstrap Overrides  **********************************/
+
+blockquote, .blockquote {
+    border-left: 5px solid #eee;
+    font-size: inherit;
+    margin: 0 0 20px;
+    padding: 10px 20px;
+}
+
+.carousel-caption {
+    display: none;
+}
+
+.container2 .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+a.list-group-item.active {
+    background-color: $auburn-default-link-color;
+    border-color: $auburn-default-link-color;
+}
+
+@media (min-width: 768px) {
+    /*****  General Page Formatting  ******************************/
+    body {
+        background: #fff url("https://cdn.auburn.edu/assets/img/body-background2.png") top center repeat-x;
+    }
+    /*****  Miscellaneous Styles  *********************************/
+    /*****  Header Section  ***************************************/
+    .header-wrap {
+        background: transparent;
+        header {
+            padding: 0;
+        }
+    }
+    .logo {
+        background-image: none;
+        background-size: 203px 75px;
+        height: 75px;
+        left: 0;
+        position: absolute;
+        top: 26px;
+        width: 203px;
+        img {
+            display: inline;
+        }
+    }
+    .search-icon {
+        display: none;
+    }
+    .header-title {
+        font-size: 10px;
+    }
+    .top-links {
+        color: $auburn-default-link-color;
+        display: block;
+        position: absolute;
+        right: 195px;
+        top: 0;
+        a {
+            color: $auburn-default-link-color;
+        }
+    }
+    .title-area {
+        position: absolute;
+        right: 10px;
+        text-align: right;
+        top: 45px;
+    }
+    .main-heading {
+        display: block;
+        font-size: 24px;
+    }
+    .sub-heading {
+        display: block;
+        font-size: 16px;
+        padding: 0;
+    }
+    /*****  Search Section  ***************************************/
+    .search-form {
+        display: block;
+        position: absolute;
+        right: 10px;
+        top: -1px;
+    }
+    .search-box {
+        display: inline-block;
+    }
+    input.search-field {
+        font-size: 10px;
+        line-height: 14px;
+        height: auto;
+        margin: 0;
+        padding: 0 5px;
+        width: 175px;
+    }
+    .search-field {
+        &::-webkit-input-placeholder, &:-moz-placeholder, &::-moz-placeholder, &:-ms-input-placeholder {
+            font-size: 10px;
+        }
+    }
+    /*****  Navigation Section  ***********************************/
+    .header-wrap {
+        nav {
+            min-height: 30px;
+            .collapse {
+                display: block;
+            }
+            .container {
+                min-height: 30px;
+            }
+        }
+        .navbar .container div {
+            min-height: 30px;
+            ul.nav {
+                min-height: 30px;
+            }
+        }
+        nav {
+            .container .nav-collapse.collapse {
+                display: block !important;
+                height: auto !important;
+            }
+            .nav {
+                &.nav--auto {
+                    text-align: center;
+                    width: 100%;
+                    > li > a {
+                        padding-left: 0;
+                        padding-right: 0;
+                    }
+                }
+                > li {
+                    display: inline-block;
+                    > a {
+                        margin: 0;
+                        padding: 4px 25px 3px 25px;
+                    }
+                    &:last-child > a {
+                        border-right: 1px solid $auburn-navbar-orange;
+                        padding: 4px 35px 3px 36px;
+                    }
+                }
+            }
+        }
+        .dropdown-menu > li {
+            &.nav-header, > a {
+                padding: 3px 20px;
+            }
+        }
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+    }
+    .container .header-wrap .navbar .nav > li:last-child > a {
+        border-right: none;
+    }
+    .header-wrap .navbar-brand {
+        display: none;
+    }
+    /*****  Footer Section  ***************************************/
+    .footer-wrap {
+        background-image: url("https://cdn.auburn.edu/assets/img/footer.png");
+        background-position: -120px 6px;
+        background-repeat: no-repeat;
+        background-size: 1170px 92px;
+        padding: 92px 0 0 0;
+    }
+    /*****  Bootstrap Overrides  **********************************/
+    /*ul.dropdown-menu li {background: none; padding: 0;}
+    .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {background-color: #f68026; color: #fff;} */
+}
+
+@media (min-width: 992px) {
+    /*****  General Page Formatting  ******************************/
+    /*****  Miscellaneous Styles  *********************************/
+    /*****  Header Section  ***************************************/
+    /*****  Search Section  ***************************************/
+    /*****  Navigation Section  ***********************************/
+    .header-wrap nav .nav {
+        > li {
+            > a {
+                padding: 4px 42px 3px 43px;
+            }
+            &:last-child > a {
+                padding: 4px 54px 3px 54px;
+            }
+        }
+        &.nav--auto > li > a {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+    /*****  Content Section  **************************************/
+    /*****  Sidebar Section  **************************************/
+    /*****  Footer Section  ***************************************/
+    .footer-wrap {
+        background-position: center 6px;
+    }
+    /*****  Bootstrap Overrides  **********************************/
+    /*.container{width:940px;}*/
+}
+
+@media (min-width: 1200px) {
+    /*****  General Page Formatting  ******************************/
+    /*****  Miscellaneous Styles  *********************************/
+    /*****  Header Section  ***************************************/
+    /*****  Search Section  ***************************************/
+    /*****  Navigation Section  ***********************************/
+    .header-wrap nav .nav {
+        > li {
+            > a {
+                padding: 4px 62px 3px 62px;
+            }
+            &:last-child > a {
+                padding: 4px 71px 3px 72px;
+            }
+        }
+        &.nav--auto > li > a {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+    /*****  Content Section  **************************************/
+    /*****  Sidebar Section  **************************************/
+    /*****  Footer Section  ***************************************/
+    /*****  Bootstrap Overrides  **********************************/
+    /*.container{width:1170px;}*/
+}
+
+@media only print {
+    .title-area {
+        text-align: right;
+    }
+    .sub-heading {
+        border-bottom: 1px solid #888;
+        padding-bottom: 10px;
+    }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi) {
+    .to-top a {
+        background-image: url("https://cdn.auburn.edu/assets/img/to-top@2x.png");
+        &:hover {
+            background-image: url("https://cdn.auburn.edu/assets/img/to-top2@2x.png");
+        }
+    }
+    .logo {
+        background-image: url("https://cdn.auburn.edu/assets/img/header-logo-mobile@2x.png");
+        img {
+            display: none;
+        }
+    }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 768px), only screen and (min-resolution: 192dpi) and (min-width: 768px) {
+    .logo {
+        background-image: url("https://cdn.auburn.edu/assets/img/header-logo@2x.png");
+        img {
+            display: none;
+        }
+    }
+    .footer-wrap {
+        background-image: url("https://cdn.auburn.edu/assets/img/footer@2x.png");
+    }
+}
