@@ -436,7 +436,7 @@ blockquote {
         margin-right: 0;
     }
 }
-@media min-width: 768px) {
+@media (min-width: 768px) {
     body {
         background: url("../images/white-bg.png") repeat-x scroll center top #fff;
     }
@@ -635,7 +635,7 @@ blockquote {
         }
     }
 }
-@media min-width: 992px) {
+@media (min-width: 992px) {
     .header-wrap {
         nav {
             .nav {
@@ -664,7 +664,7 @@ blockquote {
         background-position: center 6px;
     }
 }
-@media min-width: 1200px) {
+@media (min-width: 1200px) {
     .header-wrap {
         nav {
             .nav {
