@@ -187,7 +187,8 @@
                     </xsl:attribute>
                 </link>
             </xsl:for-each>
-
+            
+            <link rel="stylesheet" href="{concat($theme-path, 'vendor/jquery-ui/themes/base/jquery-ui.css')}"/>
             <link rel="stylesheet" href="{concat($theme-path, 'styles/main.css')}"/>
 
             <!-- Add syndication feeds -->

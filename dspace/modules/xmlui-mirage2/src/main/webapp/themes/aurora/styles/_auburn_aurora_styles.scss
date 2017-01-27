@@ -1,0 +1,786 @@
+/**
+ * The contents of this file are subject to the license and copyright
+ * detailed in the LICENSE and NOTICE files at the root of the source
+ * tree and available online at
+ *
+ * http://www.dspace.org/license/
+ */
+
+/*****  Font Import  ******************************************/
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: local("Open Sans Bold"), local("OpenSans-Bold"), url("//themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzBa1RVmPjeKy21_GQJaLlJI.woff") format("woff");
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 700;
+    src: local("Open Sans Bold Italic"), local("OpenSans-BoldItalic"), url("//themes.googleusercontent.com/static/fonts/opensans/v6/PRmiXeptR36kaC0GEAetxoUt79146ZFaIJxILcpzmhI.woff") format("woff");
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 400;
+    src: local("Open Sans Italic"), local("OpenSans-Italic"), url("//themes.googleusercontent.com/static/fonts/opensans/v6/xjAJXh38I15wypJXxuGMBtIh4imgI8P11RFo6YPCPC0.woff") format("woff");
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: local("Open Sans"), local("OpenSans"), url("//themes.googleusercontent.com/static/fonts/opensans/v6/u-WUoqrET9fUeobQW7jkRT8E0i7KZn-EPnyo3HZu7kw.woff") format("woff");
+}
+/*****  General Page Formatting  ******************************/
+/*****  Miscellaneous Styles  *********************************/
+/*****  Header Section  ***************************************/
+/*****  Navigation Section  ***********************************/
+/*****  Content Section  **************************************/
+/*****  Footer Section  ***************************************/
+/*****  Bootstrap Overrides  **********************************/
+/*****  General Page Formatting  ******************************/
+/*****  Miscellaneous Styles  *********************************/
+/*****  Header Section  ***************************************/
+/*****  Search Section  ***************************************/
+/*****  Navigation Section  ***********************************/
+/*****  Footer Section  ***************************************/
+/*****  Bootstrap Overrides  **********************************/
+/*****  General Page Formatting  ******************************/
+/*****  Miscellaneous Styles  *********************************/
+/*****  Header Section  ***************************************/
+/*****  Search Section  ***************************************/
+/*****  Navigation Section  ***********************************/
+/*****  Content Section  **************************************/
+/*****  Sidebar Section  **************************************/
+/*****  Footer Section  ***************************************/
+/*****  Bootstrap Overrides  **********************************/
+/*****  General Page Formatting  ******************************/
+/*****  Miscellaneous Styles  *********************************/
+/*****  Header Section  ***************************************/
+/*****  Search Section  ***************************************/
+/*****  Navigation Section  ***********************************/
+/*****  Content Section  **************************************/
+/*****  Sidebar Section  **************************************/
+/*****  Footer Section  ***************************************/
+/*****  Bootstrap Overrides  **********************************/
+html {
+    background: #fff;
+}
+body {
+    font-family: $font_family_1;
+    font-size: 13px;
+    >.container {
+        overflow-x: hidden;
+    }
+}
+a {
+    color: $color_1;
+    text-decoration: none;
+    &:hover {
+        color: $color_2;
+    }
+}
+ol {
+    ol {
+        list-style-type: lower-alpha;
+        ol {
+            list-style-type: lower-roman;
+        }
+    }
+}
+ul {
+    margin: 0;
+    padding: 0 0 0 10px;
+    li {
+        background: url("https://cdn.auburn.edu/assets/img/bullet-arrow2.gif") 0 6px no-repeat;
+        list-style: none;
+        margin: 5px 0;
+        padding: 0 0 0 15px;
+        ul {
+            li {
+                background: url("https://cdn.auburn.edu/assets/img/bullet-arrow.gif") 0 6px no-repeat;
+            }
+        }
+    }
+}
+label {
+    font-weight: normal;
+}
+.skip {
+    left: -999em;
+    position: absolute;
+}
+.to-top {
+    bottom: 25px;
+    position: fixed;
+    right: 10px;
+    z-index: 3000;
+    a {
+        background-image: url("https://cdn.auburn.edu/assets/img/to-top.png");
+        background-size: 77px 35px;
+        border-bottom: none;
+        display: inline-block;
+        height: 35px;
+        width: 77px;
+        &:hover {
+            background-image: url("https://cdn.auburn.edu/assets/img/to-top2.png");
+            background-size: 77px 35px;
+        }
+    }
+}
+.header-wrap {
+    background: inherit;
+    display: block;
+    header {
+        display: block;
+        min-height: 110px;
+        padding: 15px 0 0 0;
+        position: relative;
+    }
+    nav {
+        background-color: $background_color_1;
+        border: none;
+        border-bottom: 3px solid #f68026;
+        border-radius: 0;
+        margin: 0;
+        min-height: 30px;
+        padding: 0;
+        .navbar-collapse {
+            padding: 0;
+        }
+        .nav {
+            font-size: 0;
+            margin: 0;
+            padding: 0;
+            >li {
+                display: block;
+                font-size: 14px;
+                margin: 0;
+                >a {
+                    background: #dd550c;
+                    border-left: 1px solid #f68026;
+                    color: $color_4;
+                    font-size: 12px;
+                    margin: 0;
+                    padding: 10px 20px;
+                    text-transform: uppercase;
+                    &:hover {
+                        background: #f68026;
+                        color: $color_4;
+                        text-decoration: none;
+                    }
+                }
+                &:first-child {
+                    >a {
+                        border-left: none;
+                    }
+                }
+            }
+        }
+        .dropdown-menu {
+            background: #f68026;
+            color: $color_4;
+            a {
+                color: $color_4;
+                &:hover {
+                    background: #dd550c;
+                    color: $color_4;
+                }
+            }
+        }
+    }
+    .navbar-brand {
+        color: $color_4;
+        display: block;
+        float: none;
+        font-size: 16px;
+        margin: 0;
+        max-width: none;
+        text-align: center;
+        &:hover {
+            background: #f68026;
+            cursor: pointer;
+        }
+        span {
+            background: url("https://cdn.auburn.edu/assets/img/glyphicons-halflings-white.png") -310px -117px no-repeat;
+            float: right;
+            height: 20px;
+            width: 20px;
+        }
+    }
+    .navbar-toggle {
+        border: none;
+        border-radius: 0;
+        padding: 6px 12px;
+        top: 1px;
+        &:hover {
+            background-color: $background_color_2;
+        }
+        &:focus {
+            background-color: $background_color_2;
+        }
+    }
+    .navbar-nav {
+        a {
+            &:hover {
+                text-decoration: none;
+            }
+        }
+        >.open {
+            >a {
+                background-color: $background_color_2 !important;
+                color: $color_4;
+                outline: 0;
+                &:hover {
+                    background-color: $background_color_2 !important;
+                    color: $color_4;
+                    outline: 0;
+                    .caret {
+                        border-top-color: $border_top_color_1;
+                        border-bottom-color: $border_bottom_color_1;
+                    }
+                }
+                &:focus {
+                    background-color: $background_color_2 !important;
+                    color: $color_4;
+                    outline: 0;
+                    .caret {
+                        border-top-color: $border_top_color_1;
+                        border-bottom-color: $border_bottom_color_1;
+                    }
+                }
+                .caret {
+                    border-top-color: $border_top_color_1;
+                    border-bottom-color: $border_bottom_color_1;
+                }
+            }
+        }
+        >.dropdown {
+            >a {
+                .caret {
+                    border-top-color: $border_top_color_1;
+                    border-bottom-color: $border_bottom_color_1;
+                }
+            }
+        }
+    }
+    .dropdown-menu {
+        >li.nav-header {
+            padding: 10px 20px;
+        }
+        >li {
+            >a {
+                padding: 10px 20px;
+                &:hover {
+                    background-color: $background_color_1 !important;
+                    color: $color_4;
+                    outline: 0;
+                }
+                &:focus {
+                    background-color: $background_color_1 !important;
+                    color: $color_4;
+                    outline: 0;
+                }
+            }
+        }
+    }
+}
+.logo {
+    background-image: url("../images/header-logo-mobile.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 199px 66px;
+    cursor: pointer;
+    height: 66px;
+    margin: 0 auto 15px auto;
+    width: 199px;
+    img {
+        display: none;
+    }
+}
+.menu-icon {
+    color: $color_3;
+    display: none;
+    font-size: 24px;
+    position: absolute;
+    left: 0;
+    top: 20px;
+    &:hover {
+        cursor: pointer;
+    }
+    >i {
+        padding: 10px;
+    }
+}
+.search-icon {
+    color: $color_3;
+    cursor: pointer;
+    display: block;
+    font-size: 20px;
+    padding: 10px;
+    position: absolute;
+    right: 4px;
+    top: 13px;
+}
+.header-title {
+    font-size: 12px;
+}
+.top-links {
+    color: $color_4;
+    display: none;
+    padding: 3px 0;
+    text-align: center;
+    a {
+        color: $color_4;
+        padding: 0 3px;
+    }
+}
+.title-area {
+    text-align: center;
+}
+.main-heading {
+    color: $color_5;
+    display: block;
+    font-size: 20px;
+    a {
+        color: $color_5;
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
+.sub-heading {
+    color: $color_5;
+    display: block;
+    font-size: 16px;
+    padding: 5px 0;
+    a {
+        color: $color_5;
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
+.navbar {
+    li {
+        background: none;
+        margin: 0;
+        padding: 0;
+    }
+}
+.dropdown {
+    a {
+        &:focus {
+            outline: none;
+        }
+    }
+}
+.breadcrumb {
+    background: transparent;
+    padding: 0;
+}
+ul.breadcrumb {
+    li {
+        background: none;
+        padding: 0;
+    }
+}
+.footer-wrap {
+    background: #fff;
+    border: none;
+    clear: both;
+    color: $color_5;
+    display: block;
+    font-size: 12px;
+    padding: 0;
+    footer {
+        background: transparent;
+        border: none;
+        display: block;
+        margin: 0;
+        overflow: hidden;
+        padding: 18px 0;
+        text-align: center;
+        a {
+            color: $color_5;
+            &:visited {
+                color: $color_5;
+            }
+            &:hover {
+                color: $color_3;
+            }
+            &:active {
+                color: $color_3;
+            }
+        }
+    }
+}
+blockquote {
+    border-left: 5px solid #eee;
+    font-size: inherit;
+    margin: 0 0 20px;
+    padding: 10px 20px;
+}
+.blockquote {
+    border-left: 5px solid #eee;
+    font-size: inherit;
+    margin: 0 0 20px;
+    padding: 10px 20px;
+}
+.carousel-caption {
+    display: none;
+}
+.container2 {
+    .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+@media min-width: 768px) {
+    body {
+        background: url("../images/white-bg.png") repeat-x scroll center top #fff;
+    }
+    .header-wrap {
+        background: transparent;
+        header {
+            padding: 0;
+        }
+        nav {
+            min-height: 30px;
+            .collapse {
+                display: block;
+            }
+            .container {
+                min-height: 30px;
+                .nav-collapse.collapse {
+                    display: block !important;
+                    height: auto !important;
+                }
+            }
+            .nav.nav--auto {
+                text-align: center;
+                width: 100%;
+                >li {
+                    >a {
+                        padding-left: 0;
+                        padding-right: 0;
+                    }
+                }
+            }
+            .nav {
+                >li {
+                    display: inline-block;
+                    >a {
+                        margin: 0;
+                        padding: 4px 25px 3px 25px;
+                    }
+                    &:last-child {
+                        >a {
+                            border-right: 1px solid #f68026;
+                            padding: 4px 35px 3px 36px;
+                        }
+                    }
+                }
+            }
+        }
+        .navbar {
+            .container {
+                div {
+                    min-height: 30px;
+                    ul.nav {
+                        min-height: 30px;
+                    }
+                }
+            }
+        }
+        .dropdown-menu {
+            >li.nav-header {
+                padding: 3px 20px;
+            }
+            >li {
+                >a {
+                    padding: 3px 20px;
+                }
+            }
+        }
+        .dropdown {
+            &:hover {
+                .dropdown-menu {
+                    display: block;
+                }
+            }
+        }
+        .navbar-brand {
+            display: none;
+        }
+    }
+    .logo {
+        background-image: none;
+        background-size: 220px 90px;
+        height: 90px;
+        left: 0;
+        position: absolute;
+        top: 10px;
+        width: 220px;
+        img {
+            display: inline;
+        }
+    }
+    .search-icon {
+        display: none;
+    }
+    .header-title {
+        font-size: 10px;
+    }
+    .top-links {
+        color: $color_1;
+        display: block;
+        position: absolute;
+        right: 195px;
+        top: 0;
+        a {
+            color: $color_1;
+        }
+    }
+    .title-area {
+        position: absolute;
+        right: 10px;
+        text-align: right;
+        top: 45px;
+    }
+    .main-heading {
+        display: block;
+        font-size: 34px;
+        margin: -20px 13px 0 0;
+    }
+    .sub-heading {
+        color: $color_5;
+        display: block;
+        font-size: 16px;
+        padding: 0;
+        margin: 0 10px 0 0;
+    }
+    .search-form {
+        display: block;
+        position: absolute;
+        right: 10px;
+        top: -1px;
+    }
+    .search-box {
+        display: inline-block;
+    }
+    input.search-field {
+        font-size: 10px;
+        line-height: 14px;
+        height: auto;
+        margin: 0;
+        padding: 0 5px;
+        width: 175px;
+    }
+    .search-field {
+        &::-webkit-input-placeholder {
+            font-size: 10px;
+        }
+        &:-moz-placeholder {
+            font-size: 10px;
+        }
+        &::-moz-placeholder {
+            font-size: 10px;
+        }
+        &:-ms-input-placeholder {
+            font-size: 10px;
+        }
+    }
+    .container {
+        .header-wrap {
+            .navbar {
+                .nav {
+                    >li {
+                        &:last-child {
+                            >a {
+                                border-right: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .menu-icon {
+        display: none;
+    }
+    .footer-wrap {
+        background-color: $background_color_3;
+        background-size: 1170px 92px;
+        border: none;
+        color: $color_5;
+        padding: 92px 0 0 0;
+    }
+    ul.dropdown-menu {
+        li {
+            background: none;
+            padding: 0;
+        }
+    }
+    .dropdown-menu {
+        >li {
+            >a {
+                &:hover {
+                    background-color: $background_color_2;
+                }
+                &:focus {
+                    background-color: $background_color_2;
+                }
+            }
+        }
+    }
+}
+@media min-width: 992px) {
+    .header-wrap {
+        nav {
+            .nav {
+                >li {
+                    >a {
+                        padding: 4px 42px 3px 43px;
+                    }
+                    &:last-child {
+                        >a {
+                            padding: 4px 54px 3px 54px;
+                        }
+                    }
+                }
+            }
+            .nav.nav--auto {
+                >li {
+                    >a {
+                        padding-left: 0;
+                        padding-right: 0;
+                    }
+                }
+            }
+        }
+    }
+    .footer-wrap {
+        background-position: center 6px;
+    }
+}
+@media min-width: 1200px) {
+    .header-wrap {
+        nav {
+            .nav {
+                >li {
+                    >a {
+                        padding: 4px 62px 3px 62px;
+                    }
+                    &:last-child {
+                        >a {
+                            padding: 4px 71px 3px 72px;
+                        }
+                    }
+                }
+            }
+            .nav.nav--auto {
+                >li {
+                    >a {
+                        padding-left: 0;
+                        padding-right: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+@media only print {
+    .title-area {
+        text-align: right;
+    }
+    .sub-heading {
+        border-bottom: 1px solid #888;
+        padding-bottom: 10px;
+    }
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+    .to-top {
+        a {
+            background-image: url("https://cdn.auburn.edu/assets/img/to-top@2x.png");
+            &:hover {
+                background-image: url("https://cdn.auburn.edu/assets/img/to-top2@2x.png");
+            }
+        }
+    }
+    .logo {
+        background-image: url("../imges/header-logo-mobile.png");
+        img {
+            display: none;
+        }
+    }
+    a.social {
+        background-image: url("https://cdn.auburn.edu/assets/img/css-sprite@2x.png");
+    }
+    .footer-wrap {
+        footer {
+            section {
+                a.arra-image {
+                    background-image: url("https://cdn.auburn.edu/assets/img/css-sprite@2x.png");
+                }
+            }
+        }
+    }
+}
+@media only screen and (min-resolution: 192dpi) {
+    .to-top {
+        a {
+            background-image: url("https://cdn.auburn.edu/assets/img/to-top@2x.png");
+            &:hover {
+                background-image: url("https://cdn.auburn.edu/assets/img/to-top2@2x.png");
+            }
+        }
+    }
+    .logo {
+        background-image: url("../imges/header-logo-mobile.png");
+        img {
+            display: none;
+        }
+    }
+    a.social {
+        background-image: url("https://cdn.auburn.edu/assets/img/css-sprite@2x.png");
+    }
+    .footer-wrap {
+        footer {
+            section {
+                a.arra-image {
+                    background-image: url("https://cdn.auburn.edu/assets/img/css-sprite@2x.png");
+                }
+            }
+        }
+    }
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 768px) {
+    .logo {
+        background-image: url("../images/headerLogo_2013@2x.png");
+        img {
+            display: none;
+        }
+    }
+    .social-details {
+        background-image: url("https://cdn.auburn.edu/assets/img/css-sprite@2x.png");
+    }
+    .footer-wrap {
+        background-image: url("https://cdn.auburn.edu/assets/img/footer@2x.png");
+    }
+}
+@media only screen and (min-resolution: 192dpi) and (min-width: 768px) {
+    .logo {
+        background-image: url("../images/headerLogo_2013@2x.png");
+        img {
+            display: none;
+        }
+    }
+    .social-details {
+        background-image: url("https://cdn.auburn.edu/assets/img/css-sprite@2x.png");
+    }
+    .footer-wrap {
+        background-image: url("https://cdn.auburn.edu/assets/img/footer@2x.png");
+    }
+}
+
