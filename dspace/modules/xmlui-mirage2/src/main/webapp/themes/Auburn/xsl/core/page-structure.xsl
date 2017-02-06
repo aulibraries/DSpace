@@ -324,7 +324,7 @@
             <div class="header-title">
                 <div class="top-links hidden-print"><a href="http://www.auburn.edu/main/sitemap.php">A-Z Index</a> | <a href="http://www.auburn.edu/map">Map</a> | <a href="http://www.auburn.edu/main/auweb_campus_directory.html" class="lastTopLink">People Finder</a></div>
                 <form action="https://search.auburn.edu" class="search-form form-group hidden-print" method="get">
-                    <div class="search-box"><input type="text" name="q" id="q" role="search" accesskey="q" tabindex="1" class="search-field form-control" placeholder="Search AU..." value=""/></div>
+                    <div class="search-box"><input type="text" name="q" id="q" role="search" accesskey="q" tabindex="0" class="search-field form-control" placeholder="Search AU..." value=""/></div>
                     <input type="hidden" name="cx" value="006456623919840955604:pinevfah6qm"/>
                     <input type="hidden" name="ie" value="utf-8"/>
                     <label for="q" class="form-control" style=" position:absolute; left:-9999px; visibility:hidden;">Enter your search terms</label>
@@ -709,7 +709,7 @@
                                 <div class="input-group">
                                     <input id="aspect_artifactbrowser_FrontPageSearch_field_query" class="ds-text-field form-control" name="query" type="text" placeholder="xmlui.general.search.placeholder.auetd_placeholder" i18n:attr="placeholder" value=""/>
                                     <span class="input-group-btn">
-                                        <button id="aspect_artifactbrowser_FrontPageSearch_field_submit" class="ds-button-field btn btn-default" name="submit" type="submit">
+                                        <button id="aspect_artifactbrowser_FrontPageSearch_field_submit" class="ds-button-field btn btn-default" name="submit" title="Click to submit the search form" type="submit">
                                             <i class="glyphicon glyphicon-search" aria-hidden="true" title="Click here to submit the search form"/>&#160;
                                         </button>
                                     </span>
