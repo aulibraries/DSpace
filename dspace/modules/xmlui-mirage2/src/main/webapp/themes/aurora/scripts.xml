@@ -47,7 +47,7 @@
 
     <!-- Custom scripts -->
     <script src="scripts/bootstrap-filestyle.min.js">&#160;</script>
-	<script src="vendor/select2/dist/js/select2.full.min.js">&#160;</script>
+    <script src="vendor/select2/dist/js/select2.full.min.js">&#160;</script>
     <script src="scripts/application.js">&#160;</script>
 
     <!-- endbuild -->

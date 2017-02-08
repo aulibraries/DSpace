@@ -109,14 +109,13 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!--
-                                        The footer div, dropping whatever extra information is needed on the page. It will
-                                        most likely be something similar in structure to the currently given example.
-                                    -->
-                                    <div class="footer-wrap hidden-print footer-wrap">
-                                        <xsl:call-template name="buildFooter"/>
-                                    </div>
+                                </div>
+                                <!--
+                                    The footer div, dropping whatever extra information is needed on the page. It will
+                                    most likely be something similar in structure to the currently given example.
+                                -->
+                                <div class="footer-wrap hidden-print footer-wrap">
+                                    <xsl:call-template name="buildFooter"/>
                                 </div>
                             </xsl:otherwise>
                         </xsl:choose>
