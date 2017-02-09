@@ -122,6 +122,40 @@ div.list-group-item {
     }
 }
 
+h2.page-header {
+	padding: 9px 0;
+	margin: 0 0 10px 0;
+	border-bottom: 1px solid #eee;
+    font-weight: normal;
+}
+h3.page-header {
+	padding: 9px 0;
+	margin: 0;
+	border: none;
+    font-weight: normal;
+}
+
+/** *************** Header ************** */
+
+.logo {
+    @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+        background-image: url("../images/header-logo-mobile.png");
+    }
+    
+    @media only screen and (min-resolution: 192dpi) {
+        background-image: url("../images/header-logo-mobile.png");
+    }
+    
+    @media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 768px) {
+        background-image: url("../images/headerLogo_2013.png");
+    }
+    
+    @media only screen and (min-resolution: 192dpi) and (min-width: 768px) {
+        background-image: url("../images/headerLogo_2013.png");
+    }
+    
+}
+
 .menu-icon-header {
     color: #DD550C;
     font-size:24px;
@@ -134,21 +168,8 @@ div.list-group-item {
     color: #FFF;
     display: block;
     font-size: 18px;
-    position: relative;
-}
-
-
-h2.page-header {
-	padding: 9px 0;
-	margin: 0 0 10px 0;
-	border-bottom: 1px solid #eee;
-    font-weight: normal;
-}
-h3.page-header {
-	padding: 9px 0;
-	margin: 0;
-	border: none;
-    font-weight: normal;
+    position: absolute;
+    right: 0;
 }
 
 /************** Home page Styles *********************/
@@ -191,38 +212,6 @@ h3.page-header {
     footer {
         p:first-of-type {
             padding-bottom: 7px;     
-        }
-        
-        a {
-            &.social {
-                background: none;
-                display: inline-block;
-                padding: 4px 0;
-                \width: 32px;
-                height: 32px;
-                font-size: 2em;
-                line-height: 0px;
-                text-decoration: none;
-                text-align: center;
-                vertical-align: center;
-                border-radius: 4px;
-                margin-right: 6px; 
-                
-                @media(max-width: $screen-xs-min) {
-                    padding: 4px 0;
-                    width: 25px;
-                    height: 25px;
-                    font-size: 1.3em;
-                    margin-right: 4px; 
-                }
-            }
-            
-            &.facebook { color: #fff; background-color: #3b5a9b; border-color: #3b5a9b;}
-            &.flickr { color: #fff; background-color: #ff0084; border-color: #ff0084;}
-            &.instagram { color: #fff; background-color: #507ea4; border-color: #507ea4;}
-            &.twitter { color: #fff; background-color: #2baae1; border-color: #2baae1;}
-            &.vimeo { color: #fff; background-color: #40b2dc; border-color: #40b2dc;}
-            &.youtube { color: #fff; background-color: #ff3330; border-color: #ff3330;}
         }
         
         @media(min-width: $screen-sm-min) {

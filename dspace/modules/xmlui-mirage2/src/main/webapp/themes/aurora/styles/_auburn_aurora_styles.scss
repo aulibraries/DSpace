@@ -1,10 +1,4 @@
-/**
- * The contents of this file are subject to the license and copyright
- * detailed in the LICENSE and NOTICE files at the root of the source
- * tree and available online at
- *
- * http://www.dspace.org/license/
- */
+
 
 /*****  Font Import  ******************************************/
 @font-face {
@@ -610,6 +604,7 @@ blockquote {
         display: none;
     }
     .footer-wrap {
+        background-image: url("https://cdn.auburn.edu/assets/img/footer.png");
         background-color: $background_color_3;
         background-size: 1170px 92px;
         border: none;
@@ -709,7 +704,7 @@ blockquote {
         }
     }
     .logo {
-        background-image: url("../imges/header-logo-mobile.png");
+        background-image: url("https://cdn.auburn.edu/assets/img/header-logo-mobile@2x.png");
         img {
             display: none;
         }
@@ -737,7 +732,7 @@ blockquote {
         }
     }
     .logo {
-        background-image: url("../imges/header-logo-mobile.png");
+        background-image: url("https://cdn.auburn.edu/assets/img/header-logo-mobile@2x.png");
         img {
             display: none;
         }
@@ -757,7 +752,7 @@ blockquote {
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 768px) {
     .logo {
-        background-image: url("../images/headerLogo_2013@2x.png");
+        background-image: url("https://cdn.auburn.edu/assets/img/header-logo@2x.png");
         img {
             display: none;
         }
@@ -771,7 +766,7 @@ blockquote {
 }
 @media only screen and (min-resolution: 192dpi) and (min-width: 768px) {
     .logo {
-        background-image: url("../images/headerLogo_2013@2x.png");
+        background-image: url("https://cdn.auburn.edu/assets/img/header-logo@2x.png");
         img {
             display: none;
         }
