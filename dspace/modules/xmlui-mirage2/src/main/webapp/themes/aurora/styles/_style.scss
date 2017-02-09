@@ -157,7 +157,7 @@ h3.page-header {
 }
 
 .menu-icon-header {
-    color: #DD550C;
+    color: $color_burntOrange;
     font-size:24px;
     position: absolute;
     left: 0;
@@ -165,7 +165,7 @@ h3.page-header {
 }
 
 .menu-icon-nav {
-    color: #FFF;
+    color: $color_white;
     display: block;
     font-size: 18px;
     position: absolute;
@@ -563,7 +563,7 @@ ul.dropdown-menu {
         &>a {
             &:focus,
             &:hover {
-                background-color: #f68026;
+                background-color: $color_lightOrange;
                 color: #fff;
             }
         }

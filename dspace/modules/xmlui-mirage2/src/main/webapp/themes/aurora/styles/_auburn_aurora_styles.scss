@@ -1,4 +1,10 @@
-
+/**
+ * The contents of this file are subject to the license and copyright
+ * detailed in the LICENSE and NOTICE files at the root of the source
+ * tree and available online at
+ *
+ * http://www.dspace.org/license/
+ */
 
 /*****  Font Import  ******************************************/
 @font-face {
@@ -58,7 +64,7 @@
 /*****  Footer Section  ***************************************/
 /*****  Bootstrap Overrides  **********************************/
 html {
-    background: #fff;
+    background: $color_white;
 }
 body {
     font-family: $font_family_1;
@@ -68,10 +74,10 @@ body {
     }
 }
 a {
-    color: $color_1;
+    color: $link_color;
     text-decoration: none;
     &:hover {
-        color: $color_2;
+        color: $color_burntOrange;
     }
 }
 ol {
@@ -132,9 +138,9 @@ label {
         position: relative;
     }
     nav {
-        background-color: $background_color_1;
+        background-color: $color_burntOrange;
         border: none;
-        border-bottom: 3px solid #f68026;
+        border-bottom: 3px solid $color_lightOrange;
         border-radius: 0;
         margin: 0;
         min-height: 30px;
@@ -151,16 +157,16 @@ label {
                 font-size: 14px;
                 margin: 0;
                 >a {
-                    background: #dd550c;
-                    border-left: 1px solid #f68026;
-                    color: $color_4;
+                    background: $color_burntOrange;
+                    border-left: 1px solid $color_lightOrange;
+                    color: $color_white;
                     font-size: 12px;
                     margin: 0;
                     padding: 10px 20px;
                     text-transform: uppercase;
                     &:hover {
-                        background: #f68026;
-                        color: $color_4;
+                        background: $color_lightOrange;
+                        color: $color_white;
                         text-decoration: none;
                     }
                 }
@@ -172,19 +178,19 @@ label {
             }
         }
         .dropdown-menu {
-            background: #f68026;
-            color: $color_4;
+            background: $color_lightOrange;
+            color: $color_white;
             a {
-                color: $color_4;
+                color: $color_white;
                 &:hover {
-                    background: #dd550c;
-                    color: $color_4;
+                    background: $color_burntOrange;
+                    color: $color_white;
                 }
             }
         }
     }
     .navbar-brand {
-        color: $color_4;
+        color: $color_white;
         display: block;
         float: none;
         font-size: 16px;
@@ -192,7 +198,7 @@ label {
         max-width: none;
         text-align: center;
         &:hover {
-            background: #f68026;
+            background: $color_lightOrange;
             cursor: pointer;
         }
         span {
@@ -208,10 +214,10 @@ label {
         padding: 6px 12px;
         top: 1px;
         &:hover {
-            background-color: $background_color_2;
+            background-color: $color_lightOrange;
         }
         &:focus {
-            background-color: $background_color_2;
+            background-color: $color_lightOrange;
         }
     }
     .navbar-nav {
@@ -222,38 +228,38 @@ label {
         }
         >.open {
             >a {
-                background-color: $background_color_2 !important;
-                color: $color_4;
+                background-color: $color_lightOrange; !important;
+                color: $color_white;
                 outline: 0;
                 &:hover {
-                    background-color: $background_color_2 !important;
-                    color: $color_4;
+                    background-color: $color_lightOrange; !important;
+                    color: $color_white;
                     outline: 0;
                     .caret {
-                        border-top-color: $border_top_color_1;
-                        border-bottom-color: $border_bottom_color_1;
+                        border-top-color: $color_white;
+                        border-bottom-color: $color_white;
                     }
                 }
                 &:focus {
-                    background-color: $background_color_2 !important;
-                    color: $color_4;
+                    background-color: $color_lightOrange; !important;
+                    color: $color_white;
                     outline: 0;
                     .caret {
-                        border-top-color: $border_top_color_1;
-                        border-bottom-color: $border_bottom_color_1;
+                        border-top-color: $color_white;
+                        border-bottom-color: $color_white;
                     }
                 }
                 .caret {
-                    border-top-color: $border_top_color_1;
-                    border-bottom-color: $border_bottom_color_1;
+                    border-top-color: $color_white;
+                    border-bottom-color: $color_white;
                 }
             }
         }
         >.dropdown {
             >a {
                 .caret {
-                    border-top-color: $border_top_color_1;
-                    border-bottom-color: $border_bottom_color_1;
+                    border-top-color: $color_white;
+                    border-bottom-color: $color_white;
                 }
             }
         }
@@ -266,13 +272,13 @@ label {
             >a {
                 padding: 10px 20px;
                 &:hover {
-                    background-color: $background_color_1 !important;
-                    color: $color_4;
+                    background-color: $color_burntOrange !important;
+                    color: $color_white;
                     outline: 0;
                 }
                 &:focus {
-                    background-color: $background_color_1 !important;
-                    color: $color_4;
+                    background-color: $color_burntOrange !important;
+                    color: $color_white;
                     outline: 0;
                 }
             }
@@ -293,7 +299,7 @@ label {
     }
 }
 .menu-icon {
-    color: $color_3;
+    color: $color_burntOrange;
     display: none;
     font-size: 24px;
     position: absolute;
@@ -307,7 +313,7 @@ label {
     }
 }
 .search-icon {
-    color: $color_3;
+    color: $color_burntOrange;
     cursor: pointer;
     display: block;
     font-size: 20px;
@@ -320,12 +326,12 @@ label {
     font-size: 12px;
 }
 .top-links {
-    color: $color_4;
+    color: $color_white;
     display: none;
     padding: 3px 0;
     text-align: center;
     a {
-        color: $color_4;
+        color: $color_white;
         padding: 0 3px;
     }
 }
@@ -333,23 +339,23 @@ label {
     text-align: center;
 }
 .main-heading {
-    color: $color_5;
+    color: $color_black;
     display: block;
     font-size: 20px;
     a {
-        color: $color_5;
+        color: $color_black;
         &:hover {
             text-decoration: none;
         }
     }
 }
 .sub-heading {
-    color: $color_5;
+    color: $color_black;
     display: block;
     font-size: 16px;
     padding: 5px 0;
     a {
-        color: $color_5;
+        color: $color_black;
         &:hover {
             text-decoration: none;
         }
@@ -380,10 +386,10 @@ ul.breadcrumb {
     }
 }
 .footer-wrap {
-    background: #fff;
+    background: $color_white;
     border: none;
     clear: both;
-    color: $color_5;
+    color: $color_black;
     display: block;
     font-size: 12px;
     padding: 0;
@@ -396,15 +402,15 @@ ul.breadcrumb {
         padding: 18px 0;
         text-align: center;
         a {
-            color: $color_5;
+            color: $color_black;
             &:visited {
-                color: $color_5;
+                color: $color_black;
             }
             &:hover {
-                color: $color_3;
+                color: $color_burntOrange;
             }
             &:active {
-                color: $color_3;
+                color: $color_burntOrange;
             }
         }
     }
@@ -432,7 +438,7 @@ blockquote {
 }
 @media (min-width: 768px) {
     body {
-        background: url("../images/white-bg.png") repeat-x scroll center top #fff;
+        background: url("../images/white-bg.png") repeat-x scroll center top $color_white;
     }
     .header-wrap {
         background: transparent;
@@ -470,7 +476,7 @@ blockquote {
                     }
                     &:last-child {
                         >a {
-                            border-right: 1px solid #f68026;
+                            border-right: 1px solid $color_lightOrange;
                             padding: 4px 35px 3px 36px;
                         }
                     }
@@ -527,13 +533,13 @@ blockquote {
         font-size: 10px;
     }
     .top-links {
-        color: $color_1;
+        color: $link_color;
         display: block;
         position: absolute;
         right: 195px;
         top: 0;
         a {
-            color: $color_1;
+            color: $link_color;
         }
     }
     .title-area {
@@ -548,7 +554,7 @@ blockquote {
         margin: -20px 13px 0 0;
     }
     .sub-heading {
-        color: $color_5;
+        color: $color_black;
         display: block;
         font-size: 16px;
         padding: 0;
@@ -605,10 +611,10 @@ blockquote {
     }
     .footer-wrap {
         background-image: url("https://cdn.auburn.edu/assets/img/footer.png");
-        background-color: $background_color_3;
+        background-color: $background_transparent;
         background-size: 1170px 92px;
         border: none;
-        color: $color_5;
+        color: $color_black;
         padding: 92px 0 0 0;
     }
     ul.dropdown-menu {
@@ -621,10 +627,10 @@ blockquote {
         >li {
             >a {
                 &:hover {
-                    background-color: $background_color_2;
+                    background-color: $color_lightOrange;
                 }
                 &:focus {
-                    background-color: $background_color_2;
+                    background-color: $color_lightOrange;
                 }
             }
         }
