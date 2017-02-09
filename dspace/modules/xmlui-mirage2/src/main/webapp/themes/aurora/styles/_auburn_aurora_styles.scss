@@ -228,11 +228,11 @@ label {
         }
         >.open {
             >a {
-                background-color: $color_lightOrange; !important;
+                background-color: $color_lightOrange !important;
                 color: $color_white;
                 outline: 0;
                 &:hover {
-                    background-color: $color_lightOrange; !important;
+                    background-color: $color_lightOrange !important;
                     color: $color_white;
                     outline: 0;
                     .caret {
@@ -241,7 +241,7 @@ label {
                     }
                 }
                 &:focus {
-                    background-color: $color_lightOrange; !important;
+                    background-color: $color_lightOrange !important;
                     color: $color_white;
                     outline: 0;
                     .caret {
