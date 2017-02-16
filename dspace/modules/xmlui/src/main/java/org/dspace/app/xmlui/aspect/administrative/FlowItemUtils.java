@@ -1041,7 +1041,9 @@ public class FlowItemUtils
                     recipientEmail = ep.getEmail();
                 }
                 Email email = Email.getEmail(I18nUtil.getEmailFilename(defaultLocale, "embargo_edit_notify"));
-                email.addArgument(item.getName());
+                
+                email.addArgument(context.getCurrentUser().getFullName()); // Name of user modifying embargo information
+                email.addArgument(item.getName());  // Item's title
 
                 // Previous Embargo Status
                 if(StringUtils.isBlank(prevStatus))
@@ -1086,7 +1088,7 @@ public class FlowItemUtils
                     email.addArgument(prevRights);
                 }
                 email.addArgument(rights); // New Embargo Rights
-
+                
                 email.addArgument(getMyDSpaceLink()+"/handle/"+item.getHandle());
                 email.addRecipient(recipientEmail);
                 email.send();

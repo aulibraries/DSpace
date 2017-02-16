@@ -10,10 +10,11 @@
 # {7}  Previous rights info
 # {8}  New rights info
 # {9}  link to 'AUETD' home page
+# {10} Name of user modifying embargo information
 #
 Subject: AUETD: Item Embargo Modification Notification 
 
-Embargo information of item "{0}" has been modified. 
+Embargo information of item "{0}" has been modified by {10}. 
 
 Changes to the embargo metadata information include:
 
