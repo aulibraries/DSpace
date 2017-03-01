@@ -680,7 +680,7 @@
         <div class="row submissionMsgRow">
             <div class="col-lg-12">
                 <h3>Submitting Your Thesis or Dissertation</h3>
-                <p>The Auburn University Graduate School handles submissions to the AUETD system. For information on how to submit your thesis or dissertation, please consult the Graduate School's <a target="_blank" title="Thesis and Dissertation Guide" href="//graduate.auburn.edu/current-students/electronic-thesis-dissertation-guide/">Thesis and Dissertation Guide</a>. For questions about the status of your thesis or dissertation in AUETD, please contact the Graduate School at <a title="Email the Graduate School" href="mailto:etdhelp@auburn.edu">etdhelp@auburn.edu</a>.</p>
+                <p>The Auburn University Graduate School handles submissions to the AUETD system. For information on how to submit your thesis or dissertation, please consult the Graduate School's <a target="_blank" title="Thesis and Dissertation Guide" href="http://graduate.auburn.edu/current-students/electronic-thesis-dissertation-guide/">Thesis and Dissertation Guide</a>. For questions about the status of your thesis or dissertation in AUETD, please contact the Graduate School at <a title="Email the Graduate School" href="mailto:etdhelp@auburn.edu">etdhelp@auburn.edu</a>.</p>
                 <xsl:if test="/dri:document/dri:meta/dri:userMeta/@authenticated = 'yes' and /dri:document/dri:meta/dri:userMeta/dri:metadata[@element='identifier'][@qualifier='authorized-submitter'] = 'yes'">
                     <xsl:choose>
                         <xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker') or contains($serverName, 'dstest')">
