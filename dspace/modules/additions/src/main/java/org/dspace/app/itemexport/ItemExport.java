@@ -20,6 +20,8 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,6 +43,7 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import org.dspace.authorize.AuthorizeManager;
 import org.dspace.content.Bitstream;
 import org.dspace.content.Bundle;
 import org.dspace.content.Collection;
@@ -106,7 +109,7 @@ public class ItemExport
         options.addOption("d", "dest", true,
                           "destination where you want items to go");
         options.addOption("m", "migrate", false, "export for migration (remove handle and metadata that will be re-created in new system)");
-        options.addOption("n", "number", true,
+        options.addOption("n", "number", false,
                           "sequence number to begin exporting items with");
         options.addOption("z", "zip", true, "export as zip file (specify filename e.g. export.zip)");
         options.addOption("h", "help", false, "help");
@@ -191,13 +194,16 @@ public class ItemExport
                 .println("destination directory must be set (-h for help)");
             System.exit(1);
         }
-
-        if (seqStart == -1)
+        
+        // Commented out this check to prevent the system from throwing an 
+        // error if the -n (sequence number) command line option is not 
+        // specified.
+        /*if (seqStart == -1)
         {
             System.out
                 .println("sequence start number must be set (-h for help)");
             System.exit(1);
-        }
+        }*/
 
         if (myIDString == null)
         {
@@ -289,6 +295,7 @@ public class ItemExport
 
                 // it's a collection, so do a bunch of items
                 ItemIterator i = mycollection.getItems();
+                
                 try
                 {
                     exportItem(c, i, destDirName, seqStart, migrate);
@@ -309,7 +316,17 @@ public class ItemExport
     private static void exportItem(Context c, ItemIterator i,
                                    String destDirName, int seqStart, boolean migrate) throws Exception
     {
-        int mySequenceNumber = seqStart;
+        /**
+         * Suppressing this code. The code doesn't make a lot of sense,
+         * and is redundant in many ways to code in next version of this
+         * method. This method should simply iterate through the item 
+         * map (i) and execute the exportItem method on each item. 
+         * 
+         * The new version of this method's code base is at the bottom
+         * of the method's code body.
+         * 
+         */
+        /*int mySequenceNumber = seqStart;
         int counter = SUBDIR_LIMIT - 1;
         int subDirSuffix = 0;
         String fullPath = destDirName;
@@ -344,47 +361,151 @@ public class ItemExport
             System.out.println("Exporting item to " + mySequenceNumber);
             exportItem(c, i.next(), fullPath, mySequenceNumber, migrate);
             mySequenceNumber++;
+        }*/
+        
+        List<Item> itemArrayList = new ArrayList<Item>();
+        
+        while(i.hasNext())
+        {
+            itemArrayList.add(i.next());
+        }
+        
+        if(!itemArrayList.isEmpty())
+        {
+            // Sort the items in itemArrayList
+            Collections.sort(itemArrayList, new Comparator<Item>()
+            {
+                @Override
+                public int compare(Item item1, Item item2)
+                {
+                    int item1ID = item1.getID();
+                    int item2ID = item2.getID();
+
+                    return (item1ID < item2ID ? -1 : (item1ID == item2ID ? 0 : 1));
+                }
+            });
+            
+            // Export each item in itemArrayList
+            for(Item item : itemArrayList)
+            {
+                exportItem(c, item, destDirName, 0, migrate);
+            }
         }
     }
 
     private static void exportItem(Context c, Item myItem, String destDirName,
                                    int seqStart, boolean migrate) throws Exception
     {
-        File destDir = new File(destDirName);
+        Boolean exportable = true;
+        Metadatum[] itemAccessionedDateMDVList = myItem.getMetadata(MetadataSchema.DC_SCHEMA, "date", "accessioned", Item.ANY);
+        Metadatum[] itemIssuedDateMDVList = myItem.getMetadata(MetadataSchema.DC_SCHEMA, "date", "issued", Item.ANY);
+        String itemAccessionedDateMDV = null;
+        String itemIssuedDateMDV = null;
+        String year = "0000";
 
+        if(itemAccessionedDateMDVList.length > 0)
+        {
+            itemAccessionedDateMDV = itemAccessionedDateMDVList[0].value;
+        }
+        
+        if(itemIssuedDateMDVList.length > 0)
+        {
+            itemIssuedDateMDV = itemIssuedDateMDVList[0].value;
+        }
+
+        if(itemIssuedDateMDV != null)
+        {
+            year = itemIssuedDateMDV.substring(0, 4);
+        }
+        
+        File destDir = new File(destDirName+"/"+year);
+        
         if (destDir.exists())
         {
             // now create a subdirectory
-            File itemDir = new File(destDir + "/" + seqStart);
-
-            System.out.println("Exporting Item " + myItem.getID() + " to "
-                               + itemDir);
-
+            //File itemDir = new File(destDir + "/" + seqStart);
+            String itemDirName = myItem.getHandle().replace("/", "-");
+            
+            File itemDir = new File(destDir + "/" + itemDirName);
+            
             if (itemDir.exists())
             {
-                throw new Exception("Directory " + destDir + "/" + seqStart
-                                    + " already exists!");
+                //throw new Exception("Directory " + destDir + "/" + seqStart + " already exists!");
+                throw new IOException("Directory "+ itemDir +" already exists");
             }
-
-            if (itemDir.mkdir())
+            
+            /**
+             * Item's currently under embargo should
+             * not be exported.
+             */
+            Bundle[] bndlList = myItem.getBundles(Constants.CONTENT_BUNDLE_NAME);
+            if(bndlList.length > 0)
             {
-                // make it this far, now start exporting
-                writeMetadata(c, myItem, itemDir, migrate);
-                writeBitstreams(c, myItem, itemDir);
-                if (!migrate)
+                Bitstream[] bsList = bndlList[0].getBitstreams();
+                
+                // Restore the context's authorization state if it's current being ignored
+                if(c.ignoreAuthorization())
                 {
-                    writeHandle(c, myItem, itemDir);
+                    c.restoreAuthSystemState();
+                }
+
+                for(Bitstream bs : bsList)
+                {   
+                    if(!AuthorizeManager.authorizeActionBoolean(c, bs, Constants.READ, migrate))
+                    {
+                       exportable = false;
+                    }
+                }
+            }
+            
+            System.out.println("Is item "+myItem.getHandle()+" currently under embargo?  " + (exportable ? "No": "Yes"));
+            
+            if(exportable)
+            {
+                if (itemDir.mkdir())
+                {
+                    System.out.println("Beginning export of item");
+                    System.out.println("Item: ");
+                    System.out.println(" ID: " + myItem.getID());
+                    System.out.println(" Title: "+myItem.getName());
+                    System.out.println(" Accession Date: "+itemAccessionedDateMDV);
+                    System.out.println(" Issued Date: "+itemIssuedDateMDV);
+                    System.out.println(" Destination directory: "+itemDir);
+                    
+                    
+                    // make it this far, now start exporting
+                    writeMetadata(c, myItem, itemDir, migrate);
+                    writeBitstreams(c, myItem, itemDir);
+                    if (!migrate)
+                    {
+                        writeHandle(c, myItem, itemDir);
+                    }
+                    System.out.println("Export of item "+myItem.getHandle()+" is done.");
+                    
+                }
+                else
+                {
+                    throw new IOException("Error, can't make dir " + itemDir);
                 }
             }
             else
             {
-                throw new Exception("Error, can't make dir " + itemDir);
+                System.out.println("Item "+myItem.getHandle()+" was not exported.");
             }
+            System.out.println("-----------------------------------------------------");
         }
         else
         {
-            throw new Exception("Error, directory " + destDirName
-                                + " doesn't exist!");
+            System.out.println("#####################################################");
+            System.out.println("#");
+            System.out.println("# CREATING DIRECTORY "+destDir.toString());
+            System.out.println("#");
+            System.out.println("#####################################################");
+            
+            if(!destDir.mkdirs())
+            {
+                throw new IOException("Error, directory " + destDir.toString() + " could not be created!");
+            }
         }
     }
 
@@ -717,7 +838,7 @@ public class ItemExport
     }
 
     /**
-     * Convenience methot to create export a single Community, Collection, or Item
+     * Convenience method to create export a single Community, Collection, or Item
      *
      * @param dso     - the dspace object to export
      * @param context - the dspace context
