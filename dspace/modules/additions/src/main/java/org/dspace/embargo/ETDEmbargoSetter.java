@@ -352,15 +352,11 @@ public class ETDEmbargoSetter implements EmbargoSetter
         List<ResourcePolicy> owningCollReadRPList = AuthorizeManager.getPoliciesActionFilter(context, owningCollection, Constants.READ);
 
         List<ResourcePolicy> dsoRPList = AuthorizeManager.getPoliciesActionFilter(context, dso, Constants.READ);
-
-        // Remove any exisiting policies for this object
-        // which have a value in their end date property
+        
+        // Remove all exisiting policies for this object.
         for(ResourcePolicy dsoRP : dsoRPList)
         {
-            if(dsoRP.getEndDate() != null)
-            {
-                dsoRP.delete();
-            }
+            dsoRP.delete();
         }
 
         /**
