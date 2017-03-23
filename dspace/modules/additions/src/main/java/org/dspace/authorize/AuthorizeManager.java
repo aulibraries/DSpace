@@ -355,7 +355,6 @@ public class AuthorizeManager
 
             }
             
-            log.debug(LogManager.getHeader(c, "Authorize Info", " Checking authorization info for file "+o.getName()));
             log.debug(LogManager.getHeader(c, "Authorize Info", " File ID "+o.getID()));
             
             log.debug(LogManager.getHeader(c, "Authorize Info", " Associated Item Handle = "+item.getHandle()));
@@ -383,12 +382,13 @@ public class AuthorizeManager
             // First check: the current user is not a member of the Administrator user group
             if(!isAdmin(c))
             {
-                ResourcePolicy bsRP = null;
+                //ResourcePolicy bsRP = null;
                 
                 // Members of the Grad School Staff are always exempt from the
                 // access restriction
                 if(Group.isMember(c, Group.findByName(c, ConfigurationManager.getProperty("auetd.authorization.group.1")).getID()))
                 {
+                    log.debug(LogManager.getHeader(c, "Authorize Info", " Authorization granted. Current user is a member of "+ConfigurationManager.getProperty("auetd.authorization.group.1")+" user group."));
                     return true;
                 }
 
@@ -399,6 +399,8 @@ public class AuthorizeManager
                     {
                         if(c.getCurrentUser().equals(item.getSubmitter()))
                         {
+                            log.debug(LogManager.getHeader(c, "Authorize Info", " Authorization granted. Current user is the file's owner."));
+                            
                             return true;
                         }
                     }
@@ -410,6 +412,8 @@ public class AuthorizeManager
                 if(ETDEmbargoSetter.EMBARGO_NOT_AUBURN_STR.equals(embargoRights) &&
                     Group.isMember(c, Group.findByName(c, ConfigurationManager.getProperty("auetd.authorization.group.2")).getID()))
                 {
+                    log.debug(LogManager.getHeader(c, "Authorize Info", " Authorization granted. Current user is a member of "+ConfigurationManager.getProperty("auetd.authorization.group.2")+" user group."));
+                    
                     return true;
                 }
                 
@@ -418,23 +422,14 @@ public class AuthorizeManager
                 // that the end date of the bitstream's resource policies
                 // has not passed already.
                 if(!bsRPList.isEmpty())
-                {
-                    bsRP = bsRPList.get(0);
-                }
-                
-                if(bsRP != null)
-                {
-                    DateTime endDate = null;
-
-                    if(bsRP.getEndDate() != null)
+                {  
+                    for(ResourcePolicy bsRP : bsRPList)
                     {
-                        endDate = new DateTime(bsRP.getEndDate());
-                    }
-
-                    if(endDate != null)
-                    {
-                        return endDate.isBeforeNow();
-                    }
+                        if(bsRP.getEndDate() != null)
+                        {
+                            return new DateTime(bsRP.getEndDate()).isBeforeNow();
+                        }
+                    }                    
                 }
             }
         }
