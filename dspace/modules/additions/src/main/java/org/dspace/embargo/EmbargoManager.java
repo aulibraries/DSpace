@@ -1437,4 +1437,24 @@ public class EmbargoManager
 
         log.debug(LogManager.getHeader(context, "", "-----------------------------------------------------"));
     }
+    
+    public static String printEmbargoInfo(Context context, Item item)
+        throws SQLException, IOException, AuthorizeException
+    {
+        String output = "";
+        String embargoStatus = getEmbargoStatusMDV(context, item);
+        String embargoLength = getEmbargoLengthMDV(context, item);
+        String embargoRights = getEmbargoRightsMDV(context, item);
+        String embargoEndDate = getEmbargoEndDateMDV(context, item);
+        
+        output += "Embargo Status:  "+((embargoStatus != null) ? embargoStatus : "N/A");
+        output += "\n";
+        output += "Embargo Rights:  "+((embargoRights != null) ? embargoRights : "N/A");
+        output += "\n";
+        output += "Embargo End Date: "+((embargoEndDate != null) ? embargoEndDate : "N/A");
+        output += "\n";
+        output += "Item's Embargo Length:  "+((embargoLength != null) ? embargoLength : "N/A");
+        
+        return output;
+    }
 }
