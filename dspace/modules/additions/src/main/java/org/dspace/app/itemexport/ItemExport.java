@@ -133,7 +133,8 @@ public class ItemExport
         int seqStart = -1;
         int myType = -1;
         DateTimeFormatter dft = DateTimeFormat.forPattern("h:m:s a");
-
+        boolean record = true;
+        
         Item myItem = null;
         Collection mycollection = null;
 
@@ -341,7 +342,12 @@ public class ItemExport
 
                 try
                 {
-                    exportAsZip(c, itemsList, destDirName, zipFileName, migrate);
+                    if(migrate || bypass)
+                    {
+                        record = false;
+                    }
+                    
+                    exportAsZip(c, itemsList, destDirName, zipFileName, migrate, record);
                 }
                 finally
                 {
@@ -405,6 +411,7 @@ public class ItemExport
                 if(migrate || bypass)
                 {
                     filter = false;
+                    record = false;
                 }
                 
                 // it's a collection, so do a bunch of items
@@ -418,7 +425,11 @@ public class ItemExport
                     
                     try
                     {
-                        exportItem(c, iList, destDirName, migrate, zip);
+                        if(migrate || bypass)
+                        {
+                            record = false;
+                        }
+                        exportItem(c, iList, destDirName, migrate, zip, record);
                     }
                     finally
                     {
@@ -456,7 +467,7 @@ public class ItemExport
      * @param migrate
      * @throws Exception 
      */
-    private static void exportItem(Context c, List<Item> items, String destDirName, boolean migrate, boolean zip)
+    private static void exportItem(Context c, List<Item> items, String destDirName, boolean migrate, boolean zip, boolean record)
         throws Exception
     {   
         //List<Item> itemArrayList = new ArrayList<Item>();
@@ -562,7 +573,7 @@ public class ItemExport
             
             // If we're migrating then don't bother recording 
             // the exported items.
-            if(!migrate)
+            if(record)
             {
                 // Record item has been exported
                 recordExport(c, item);  
@@ -644,7 +655,7 @@ public class ItemExport
      */
     public static void exportAsZip(Context context, List items,
                                    String destDirName, String zipFileName,
-                                   boolean migrate) throws Exception
+                                   boolean migrate, boolean record) throws Exception
     {
         DateTimeFormatter dft = DateTimeFormat.forPattern("h:m:s a");
         String workDir = getExportWorkDirectory()
@@ -665,7 +676,7 @@ public class ItemExport
 
         // export the items using normal export method
         //exportItem(context, items, workDir, seqStart, migrate);
-        exportItem(context, items, workDir, migrate, true);
+        exportItem(context, items, workDir, migrate, true, record);
         
         System.out.println("********************************************");
         System.out.println("*  Zipping up "+wkDir+" into "+zipFileName+".");
