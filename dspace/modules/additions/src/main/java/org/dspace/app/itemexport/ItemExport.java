@@ -8,6 +8,8 @@
 package org.dspace.app.itemexport;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,10 +17,10 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -45,7 +47,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import org.dspace.authorize.AuthorizeManager;
-import org.dspace.authorize.ResourcePolicy;
 import org.dspace.content.Bitstream;
 import org.dspace.content.Bundle;
 import org.dspace.content.Collection;
@@ -120,6 +121,9 @@ public class ItemExport
                           "sequence number to begin exporting items with");
         options.addOption("z", "zip", true, "export as zip file (specify filename e.g. export.zip)");
         options.addOption("h", "help", false, "help");
+        
+        // Custom option
+        options.addOption("b", "bypass", false, "by pass authorization and other filters.");
 
         CommandLine line = parser.parse(options, argv);
 
@@ -186,6 +190,13 @@ public class ItemExport
         {
             zip = true;
             zipFileName = line.getOptionValue('z');
+        }
+        
+        // Custom code
+        boolean bypass = false;
+        if(line.hasOption('b'))
+        {
+            bypass = true;
         }
 
         // now validate the args
@@ -274,30 +285,15 @@ public class ItemExport
 
         if (zip)
         {
-            ItemIterator items;
+            //ItemIterator items;
+            List<Item> itemsList = new ArrayList<Item>();
+            
             if (myItem != null)
             {
-                List<Integer> myItems = new ArrayList<Integer>();
-                
-                if(isAuthorized(c, myItem))
-                {
-                    myItems.add(myItem.getID());
-                }
-                items = new ItemIterator(c, myItems);
-            }
-            else
-            {
-                System.out.println("Exporting from collection: " + myIDString);
-                items = mycollection.getItems();
-            }
-            exportAsZip(c, items, destDirName, zipFileName, seqStart, migrate);
-        }
-        else
-        {
-            if (myItem != null)
-            {
-                // it's only a single item
-                //exportItem(c, myItem, destDirName, seqStart, migrate);
+                //List<Integer> myItems = new ArrayList<Integer>();
+                System.out.println("");
+                System.out.println("Attempting to export item: " + myIDString);
+                System.out.println("");
                 System.out.println(outputItemInfo(c, myItem));
                 
                 System.out.println("------------------------------------------------");
@@ -310,38 +306,138 @@ public class ItemExport
                 System.out.println("");
                 System.out.println((isAuthorized(c, myItem) ? "No, item "+myItem.getHandle()+" is not under embargo." : "Yes, item "+myItem.getHandle()+" is under embargo."));
                 
-                if(isAuthorized(c, myItem))
+                if(migrate || bypass)
+                {
+                    itemsList.add(myItem);
+                }
+                else
+                {
+                    if(isAuthorized(c, myItem))
+                    {
+                        //myItems.add(myItem.getID());
+                        itemsList.add(myItem);
+                    }
+                }
+            }
+            else
+            {
+                System.out.println("");
+                System.out.println("Exporting from collection: " + myIDString);
+                System.out.println("");
+                
+                boolean filter = true;
+                if(migrate || bypass)
+                {
+                    filter = false;
+                }
+                itemsList = filterAndSortItems(c, mycollection.getItems(), filter); 
+            }
+            
+            if(itemsList.size() > 0)
+            {
+                System.out.println("");
+                System.out.println(itemsList.size()+" items to be exported.");
+                System.out.println("");
+
+                try
+                {
+                    exportAsZip(c, itemsList, destDirName, zipFileName, migrate);
+                }
+                finally
+                {
+                    
+                }
+            }
+            else
+            {
+                System.out.println("");
+                System.out.println("Sorry no items to export.");
+            }    
+            
+            System.out.println("");
+            System.out.println("#######################################################");
+            System.out.println("#");
+            System.out.println("# Execution ended at "+ dft.print(DateTime.now()));
+            System.out.println("#");
+            System.out.println("#######################################################");
+        }
+        else
+        {
+            if (myItem != null)
+            {
+                // it's only a single item
+                
+                System.out.println("");
+                System.out.println("Attempting to export item: " + myIDString);
+                System.out.println("");
+                System.out.println(outputItemInfo(c, myItem));
+                
+                System.out.println("------------------------------------------------");
+                System.out.println("ITEM EMBARGO INFORMATION ");
+                System.out.println("------------------------------------------------");
+                System.out.println(EmbargoManager.printEmbargoInfo(c, myItem));
+                System.out.println("");
+                System.out.println("------------------------------------------------");
+                System.out.println("Is item " + myItem.getHandle() + " currently under embargo (Yes/No)?");
+                System.out.println("");
+                System.out.println((isAuthorized(c, myItem) ? "No, item "+myItem.getHandle()+" is not under embargo." : "Yes, item "+myItem.getHandle()+" is under embargo."));
+                
+                if(bypass || migrate)
                 {
                     exportItem(c, myItem, destDirName, migrate);
+                }
+                else
+                {
+                    if(isAuthorized(c, myItem))
+                    {
+                        exportItem(c, myItem, destDirName, migrate);
+                    }
                 }
                 System.out.println("*******************************************************************");
             }
             else
             {
+                System.out.println("");
                 System.out.println("Exporting from collection: " + myIDString);
-
-                // it's a collection, so do a bunch of items
-                ItemIterator i = mycollection.getItems();
-
-                try
+                System.out.println("");
+                
+                boolean filter = true;
+                if(migrate || bypass)
                 {
-                    //exportItem(c, i, destDirName, seqStart, migrate);
-                    exportItem(c, i, destDirName, migrate);
-                    
-                    System.out.println("#######################################################");
-                    System.out.println("#");
-                    System.out.println("# Execution ended at "+ dft.print(DateTime.now()));
-                    System.out.println("#");
-                    System.out.println("#######################################################");
+                    filter = false;
                 }
-                finally
+                
+                // it's a collection, so do a bunch of items
+                List<Item> iList = filterAndSortItems(c, mycollection.getItems(), filter);
+                
+                if(iList.size() > 0)
                 {
-                    if (i != null)
+                    System.out.println("");
+                    System.out.println(iList.size()+" items to be exported.");
+                    System.out.println("");
+                    
+                    try
                     {
-                        i.close();
+                        exportItem(c, iList, destDirName, migrate, zip);
+                    }
+                    finally
+                    {
+                       
                     }
                 }
+                else
+                {
+                    System.out.println("");
+                    System.out.println("Sorry no items to export.");
+                }                
             }
+            
+            System.out.println("");
+            System.out.println("#######################################################");
+            System.out.println("#");
+            System.out.println("# Execution ended at "+ dft.print(DateTime.now()));
+            System.out.println("#");
+            System.out.println("#######################################################");
         }
 
         c.complete();
@@ -360,142 +456,124 @@ public class ItemExport
      * @param migrate
      * @throws Exception 
      */
-    private static void exportItem(Context c, ItemIterator itemIT, String destDirName, boolean migrate)
+    private static void exportItem(Context c, List<Item> items, String destDirName, boolean migrate, boolean zip)
         throws Exception
     {   
-        List<Item> itemArrayList = new ArrayList<Item>();
-
-        while (itemIT.hasNext())
+        //List<Item> itemArrayList = new ArrayList<Item>();
+        List<String> yearDirNames = new ArrayList<String>();
+        String destDirPath = destDirName;
+        int counter = 0;
+                
+        if(!zip)
         {
-            itemArrayList.add(itemIT.next());
+            destDirPath += File.separator+"auetd-collection";
+        }
+        
+        System.out.println("itemArrayList size = "+items.size());
+
+        for(Item item : items)
+        {
+            String itemIssuedDateMDV = EmbargoManager.getDateIssuedMDV(c, item);
+            String itemAccessionedDateMDV = EmbargoManager.getDateAccessionedMDV(c, item);
+            String year = "";
+
+            if(itemIssuedDateMDV != null)
+            {
+                year = itemIssuedDateMDV.substring(0, 4);
+            }
+            else if(itemIssuedDateMDV == null && itemAccessionedDateMDV != null)
+            {
+                year = itemAccessionedDateMDV.substring(0, 4);
+            }
+
+            if(!yearDirNames.contains(year) && !(new File(destDirPath+File.separator+year).exists()))
+            {
+                yearDirNames.add(year);
+            }
         }
 
-        if (!itemArrayList.isEmpty())
+        if(!yearDirNames.isEmpty() && yearDirNames.size() > 0)
         {
-            // Sort the items in itemArrayList
-            Collections.sort(itemArrayList, new Comparator<Item>()
+            for(String yearDirName : yearDirNames)
             {
-                @Override
-                public int compare(Item item1, Item item2)
-                {
-                    int item1ID = item1.getID();
-                    int item2ID = item2.getID();
+                File yearDestDir = new File(destDirPath+File.separator+yearDirName);
+                
+                System.out.println("");
+                System.out.println("Destination directory path "+yearDestDir.toString()+" doesn't exit.");
+                System.out.println("");
+                System.out.println("#####################################################");
+                System.out.println("#");
+                System.out.println("# CREATING DIRECTORY " + yearDestDir.toString());
+                System.out.println("#");
+                System.out.println("#####################################################");
 
-                    return (item1ID < item2ID ? -1 : (item1ID == item2ID ? 0 : 1));
-                }
-            });
-            
-            int counter = 0;
-            List<String> yearDirs = new ArrayList<String>();
-            
-            for(Item item : itemArrayList)
-            {
-                String itemIssuedDateMDV = EmbargoManager.getDateIssuedMDV(c, item);
-                String itemAccessionedDateMDV = EmbargoManager.getDateAccessionedMDV(c, item);
-                String year = "";
-                
-                                
-                if(itemIssuedDateMDV != null)
+                if(!yearDestDir.mkdir())
                 {
-                    year = itemIssuedDateMDV.substring(0, 4);
-                }
-                else if(itemIssuedDateMDV == null && itemAccessionedDateMDV != null)
-                {
-                    year = itemAccessionedDateMDV.substring(0, 4);
-                }
-                
-                if(!yearDirs.contains(year))
-                {
-                    yearDirs.add(year);
+                    throw new IOException("Error, directory " + yearDestDir.toString() + " could not be created!");
                 }
             }
+        }
+
+        // Export each item in itemArrayList
+        for (Item item : items)
+        {
+            String itemIssuedDateMDV = EmbargoManager.getDateIssuedMDV(c, item);
+            String itemAccessionedDateMDV = EmbargoManager.getDateAccessionedMDV(c, item);
+            String year = "";
+            String newDestDir;
             
-            for(String yearDir : yearDirs)
+            if(itemIssuedDateMDV != null)
             {
-                File destDir = new File(destDirName+"/"+yearDir);
-                
-                System.out.println("Does the destination directory "+destDir.getPath()+" exist (Yes/No)? "+(destDir.exists() ? "Yes" : "No"));
-                System.out.println("");
-                                               
-                if(!destDir.exists())
-                {
-                    System.out.println("Destination directory path "+destDir.getPath()+" doesn't exit.");
-                    
-                    System.out.println("#####################################################");
-                    System.out.println("#");
-                    System.out.println("# CREATING DIRECTORY " + destDir.toString());
-                    System.out.println("#");
-                    System.out.println("#####################################################");
-
-                    if(!destDir.mkdir())
-                    {
-                        throw new IOException("Error, directory " + destDir.toString() + " could not be created!");
-                    }
-                }
+                year = itemIssuedDateMDV.substring(0, 4);
             }
-
-            // Export each item in itemArrayList
-            for (Item item : itemArrayList)
+            else if(itemIssuedDateMDV == null && itemAccessionedDateMDV != null)
             {
-                String itemIssuedDateMDV = EmbargoManager.getDateIssuedMDV(c, item);
-                String itemAccessionedDateMDV = EmbargoManager.getDateAccessionedMDV(c, item);
-                
-                String year = "";
-                String newDestDir = "";
-                
-                if(itemIssuedDateMDV != null)
-                {
-                    year = itemIssuedDateMDV.substring(0, 4);
-                }
-                else if(itemIssuedDateMDV == null && itemAccessionedDateMDV != null)
-                {
-                    year = itemAccessionedDateMDV.substring(0, 4);
-                } 
-
-                newDestDir = destDirName+File.separator+year;
-                                
-                if(counter <= 0)
-                {
-                    System.out.println("First item up is handle: "+item.getHandle());
-                }
-                else if(counter > 0 && counter <= itemArrayList.size())
-                {
-                    System.out.println("Next item up is handle: "+item.getHandle());
-                }
-                
-                System.out.println(outputItemInfo(c, item));
-                System.out.println("------------------------------------------------");
-                System.out.println("ITEM EMBARGO INFORMATION ");
-                System.out.println("------------------------------------------------");
-                System.out.println(EmbargoManager.printEmbargoInfo(c, item));
-                System.out.println("");
-                System.out.println("------------------------------------------------");
-                System.out.println("Is item " + item.getHandle() + " currently under embargo (Yes/No)?");
-                System.out.println("");
-                System.out.println((isAuthorized(c, item) ? "No, item "+item.getHandle()+" is not under embargo." : "Yes, item "+item.getHandle()+" is under embargo."));
-                
-                System.out.println("");
-                
-                if(isAuthorized(c, item))
-                {                    
-                    System.out.println("Exporting item "+item.getHandle()+" to "+newDestDir+" now.");
-                    System.out.println("");
-                    exportItem(c, item, newDestDir, migrate);                    
-                }
-                else
-                {
-                    System.out.println("Item " + item.getHandle() + " was not exported.");
-                    System.out.println("");
-                }
-                
-                if(counter < itemArrayList.size())
-                {
-                    System.out.println("*******************************************************************");
-                    System.out.println("");
-                }
-                
-                counter++;
+                year = itemAccessionedDateMDV.substring(0, 4);
             }
+            
+            newDestDir = destDirPath+File.separator+year;
+            String itemDirName = item.getHandle().replace("/", "-");
+            
+            if(counter <= 0)
+            {
+                System.out.println("First item up is handle: "+item.getHandle());
+            }
+            else if(counter > 0 && counter <= items.size())
+            {
+                System.out.println("Next item up is handle: "+item.getHandle());
+            }
+            
+            System.out.println(outputItemInfo(c, item));
+            System.out.println("------------------------------------------------");
+            System.out.println("ITEM EMBARGO INFORMATION ");
+            System.out.println("------------------------------------------------");
+            System.out.println(EmbargoManager.printEmbargoInfo(c, item));
+            System.out.println("");
+            System.out.println("------------------------------------------------");
+            System.out.println("Is item " + item.getHandle() + " currently under embargo (Yes/No)?");
+            System.out.println("");
+            System.out.println((isAuthorized(c, item) ? "No, item "+item.getHandle()+" is not under embargo." : "Yes, item "+item.getHandle()+" is under embargo."));
+            System.out.println("");
+            System.out.println("Exporting item "+item.getHandle()+" to "+newDestDir+" now.");
+            System.out.println("");
+            
+            // Export the item
+            exportItem(c, item, newDestDir, migrate);
+            
+            // If we're migrating then don't bother recording 
+            // the exported items.
+            if(!migrate)
+            {
+                // Record item has been exported
+                recordExport(c, item);  
+            }
+            
+            if(counter < items.size())
+            {
+                System.out.println("*******************************************************************");
+                System.out.println("");
+            }
+            counter++;
         }
         
         c.turnOffAuthorisationSystem();
@@ -508,18 +586,26 @@ public class ItemExport
         throws Exception
     {
         File destDir = new File(destDirName);
+        
+        // Turn off the system's authorization system
+        // if it's on.
+        if(!c.ignoreAuthorization())
+        {
+            c.turnOffAuthorisationSystem();
+        }
 
         if(destDir.exists())
         {
             // now create a subdirectory
             String itemDirName = myItem.getHandle().replace("/", "-");
 
-            File itemDir = new File(destDir + "/" + itemDirName);
+            File itemDir = new File(destDir + File.separator + itemDirName);
 
             if(itemDir.exists())
             {
-                throw new IOException("Directory " + itemDir + " already exists");
-            }
+                //throw new IOException("Directory " + itemDir + " already exists");
+                System.out.println("Directory " + itemDir + " already exists");
+            }/**/
 
             if(itemDir.mkdir())
             {                
@@ -544,6 +630,273 @@ public class ItemExport
             throw new IOException("Error, directory " + destDir.toString() + " could not be created!");
         }/**/
     }
+    
+    /**
+     * Method to perform an export and save it as a zip file.
+     *
+     * @param context     The DSpace Context
+     * @param items       The items to export
+     * @param destDirName The directory to save the export in
+     * @param zipFileName The name to save the zip file as
+     * @param migrate     Whether to use the migrate option or not
+     *
+     * @throws Exception
+     */
+    public static void exportAsZip(Context context, List items,
+                                   String destDirName, String zipFileName,
+                                   boolean migrate) throws Exception
+    {
+        DateTimeFormatter dft = DateTimeFormat.forPattern("h:m:s a");
+        String workDir = getExportWorkDirectory()
+                         + System.getProperty("file.separator")
+                         + zipFileName;
+
+        File wkDir = new File(workDir);
+        if (!wkDir.exists() && !wkDir.mkdirs())
+        {
+            log.error("Unable to create working direcory");
+        }
+
+        File dnDir = new File(destDirName);
+        if (!dnDir.exists() && !dnDir.mkdirs())
+        {
+            log.error("Unable to create destination directory");
+        }
+
+        // export the items using normal export method
+        //exportItem(context, items, workDir, seqStart, migrate);
+        exportItem(context, items, workDir, migrate, true);
+        
+        System.out.println("********************************************");
+        System.out.println("*  Zipping up "+wkDir+" into "+zipFileName+".");
+        System.out.println("********************************************");
+
+        // now zip up the export directory created above
+        zip(workDir, destDirName + System.getProperty("file.separator") + zipFileName);
+        
+        System.out.println("");
+        System.out.println("********************************************");
+        System.out.println("* Compression is done");
+        System.out.println("********************************************");
+    }
+    
+    private static void recordExport(Context c, Item i)
+        throws Exception
+    {
+        String fileName = "exportedETDs.txt";
+        File outFile = new File(getExportWorkDirectory(), fileName);
+        BufferedWriter writer = new BufferedWriter(new FileWriter(outFile, true));
+        
+        try
+        {
+            writer.write(i.getHandle());
+            writer.newLine();
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                writer.close();
+            }
+            catch(IOException e)
+            {
+                
+            }
+        }
+    }
+    
+    private static String toNumInUnits(long bytes) 
+    {
+        int u = 0;
+        for (;bytes > 1024*1024; bytes >>= 10) {
+            u++;
+        }
+        if (bytes > 1024){
+            u++;
+        }
+        return String.format("%.1f %cB", bytes/1024f, " kMGTPE".charAt(u));
+    }
+    
+    private static boolean isAuthorized(Context c, Item item)
+        throws Exception
+    {        
+        Bundle[] bndlList = item.getBundles(Constants.CONTENT_BUNDLE_NAME);
+        
+        if(bndlList.length > 0)
+        {
+            Bitstream[] bsList = bndlList[0].getBitstreams();
+
+            /**
+             * The system's authorization system is currently turned off. We 
+             * need to turn it on so we can verify items are under embargo 
+             * or not. 
+             * We'll turn it off again at the conclusion of the export.
+             */
+            if(c.ignoreAuthorization())
+            {
+                c.restoreAuthSystemState();
+            }
+
+            // Return the opposite of the value retured by the method call.
+            return AuthorizeManager.authorizeActionBoolean(c, bsList[0], Constants.READ); 
+        }
+        
+        return true;
+    }
+    
+    private static boolean exportedAlready(Context c, Item i)
+        throws Exception
+    {
+        String fileName = "exportedETDs.txt";
+        FileInputStream inFile = new FileInputStream(getExportWorkDirectory()+File.separator+fileName);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inFile));
+        String strLine;
+                
+        try
+        {
+            while((strLine = reader.readLine()) != null)
+            {
+                if(i.getHandle().equals(strLine))
+                {
+                    return true;
+                }
+            }
+        }
+        catch(IOException e)
+        {
+            System.err.println(e.getMessage());
+        }
+        finally
+        {
+            inFile.close();
+        }
+        
+        return false;
+    }
+    
+    private static List filterAndSortItems(Context c, ItemIterator it, boolean bypass)
+        throws Exception
+    {
+        List<Item> itemList = new ArrayList<Item>();
+        
+        while(it.hasNext())
+        {
+            Item item = it.next();
+            
+            // Don't filter out the collection if the list is being migrated.
+            if(!bypass)
+            {
+                itemList.add(item);
+            }
+            else
+            {
+                // Only add items to the array that are authorized to exported,
+                // and have not been exported already.
+                if(isAuthorized(c, item) && !exportedAlready(c, item))
+                {
+                    itemList.add(item);
+                }  
+            }
+
+            
+        }
+        
+        //System.out.println("Size of filtered item IDs list = "+itemList.size());
+        
+        if(!itemList.isEmpty())
+        {            
+            if(itemList.size() > 2)
+            {
+                Collections.sort(itemList, new Comparator<Item>()
+                {
+                    @Override
+                    public int compare(Item item1, Item item2)
+                    {
+                        int itemID1 = item1.getID();
+                        int itemID2 = item2.getID();
+                        
+                        return (itemID1 < itemID2 ? -1 : (itemID1 == itemID2 ? 0 : 1));
+                    }
+                });
+            }
+        }
+        
+        return itemList;
+    }
+    
+    private static String outputItemInfo(Context c, Item item)
+        throws Exception
+    {
+        String output = "";
+        String itemAccessionedDateMDV = EmbargoManager.getDateAccessionedMDV(c, item);
+        String itemIssuedDateMDV = EmbargoManager.getDateIssuedMDV(c, item);
+        
+        output += "------------------------------------------------\n";
+        output += "ITEM INFORMATION \n";
+        output += "------------------------------------------------\n";
+        output += " ID: " + item.getID()+"\n";
+        output += " Title: " + item.getName()+"\n";
+        output += " Handle: "+item.getHandle()+"\n";
+        output += " In Archive: "+(item.isArchived() ? "Yes" : "No")+"\n";
+        output += " Accession Date: " + ((itemAccessionedDateMDV != null) ? itemAccessionedDateMDV : "N/A")+"\n";
+        output += " Issued Date: " + ((itemIssuedDateMDV != null) ? itemIssuedDateMDV : "N/A")+"\n";
+        output += "------------------------------------------------\n";
+        output += "ITEM BITSTREAMS INFORMATION \n";
+        output += "------------------------------------------------\n";
+        
+        Bundle[] bndlList = item.getBundles();
+                
+        if (bndlList.length > 0)
+        {
+            if(bndlList.length == 1)
+            {
+                if(bndlList[0].getName().equals(Constants.LICENSE_BUNDLE_NAME))
+                {
+                    output += "No ETD Bitstream was found.\n";
+                }
+            }
+            else
+            {
+                for(Bundle bndl : bndlList)
+                {                 
+                    if(!bndl.getName().equals(Constants.LICENSE_BUNDLE_NAME))
+                    {
+                        Bitstream[] bsList = bndl.getBitstreams();
+
+                        int bsCounter = 0;
+
+                        for (Bitstream bs : bsList)
+                        {
+                            output += "Bitstream: \n";
+                            output += " ID: " + bs.getID()+"\n";
+                            output += " Title: " + bs.getName()+"\n";
+                            output += " Size: " + toNumInUnits(bs.getSize())+"\n";
+                            output += " Format MIME Type: " + bs.getFormat().getMIMEType()+"\n";
+                            output += " Format Description: " + bs.getFormatDescription()+"\n";
+                            output += " Owning Bundle Name: "+bndl.getName()+"\n";
+
+                            if(bsCounter < bsList.length)
+                            {
+                                output += "-----------------------\n";
+                            }
+
+                            bsCounter++;
+                        }
+                    }
+                }
+            }
+        }     
+        
+        return output;
+    }
+    
+    
+    
+    
     
     /** 
      * ORIGINAL CODE
@@ -965,8 +1318,7 @@ public class ItemExport
         }
 
         // export the items using normal export method
-        //exportItem(context, items, workDir, seqStart, migrate);
-        exportItem(context, items, workDir, migrate);
+        exportItem(context, items, workDir, seqStart, migrate);
         
         System.out.println("********************************************");
         System.out.println("*  Zipping up "+wkDir+" into "+zipFileName+".");
@@ -974,11 +1326,6 @@ public class ItemExport
 
         // now zip up the export directory created above
         zip(workDir, destDirName + System.getProperty("file.separator") + zipFileName);
-        
-        System.out.println("********************************************");
-        System.out.println("* Compression is done");
-        System.out.println("* Execution ended at "+ dft.print(DateTime.now()));
-        System.out.println("********************************************");
     }
 
     /**
@@ -1780,111 +2127,6 @@ public class ItemExport
         return (pathDeleted);
     }
         
-    private static String toNumInUnits(long bytes) 
-    {
-        int u = 0;
-        for (;bytes > 1024*1024; bytes >>= 10) {
-            u++;
-        }
-        if (bytes > 1024){
-            u++;
-        }
-        return String.format("%.1f %cB", bytes/1024f, " kMGTPE".charAt(u));
-    }
     
-    private static boolean isAuthorized(Context c, Item item)
-        throws Exception
-    {        
-        Bundle[] bndlList = item.getBundles(Constants.CONTENT_BUNDLE_NAME);
-        
-        if(bndlList.length > 0)
-        {
-            Bitstream[] bsList = bndlList[0].getBitstreams();
-
-            /**
-             * The system's authorization system is currently turned off. We 
-             * need to turn it back so we can verify items are under embargo 
-             * or not. 
-             * We'll turn it off again at the conclusion of the export.
-             */
-            if(c.ignoreAuthorization())
-            {
-                c.restoreAuthSystemState();
-            }
-
-            // Return the opposite of the value retured by the method call.
-            return AuthorizeManager.authorizeActionBoolean(c, bsList[0], Constants.READ); 
-        }
-        
-        return true;
-    }
-    
-    private static String outputItemInfo(Context c, Item item)
-        throws Exception
-    {
-        String output = "";
-        String itemAccessionedDateMDV = EmbargoManager.getDateAccessionedMDV(c, item);
-        String itemIssuedDateMDV = EmbargoManager.getDateIssuedMDV(c, item);
-        
-        output += "------------------------------------------------\n";
-        output += "ITEM INFORMATION \n";
-        output += "------------------------------------------------\n";
-        output += " ID: " + item.getID()+"\n";
-        output += " Title: " + item.getName()+"\n";
-        output += " Handle: "+item.getHandle()+"\n";
-        output += " In Archive: "+(item.isArchived() ? "Yes" : "No")+"\n";
-        output += " Accession Date: " + ((itemAccessionedDateMDV != null) ? itemAccessionedDateMDV : "N/A")+"\n";
-        output += " Issued Date: " + ((itemIssuedDateMDV != null) ? itemIssuedDateMDV : "N/A")+"\n";
-        output += "------------------------------------------------\n";
-        output += "ITEM BITSTREAMS INFORMATION \n";
-        output += "------------------------------------------------\n";
-        
-        Bundle[] bndlList = item.getBundles();
-                
-        if (bndlList.length > 0)
-        {
-            if(bndlList.length == 1)
-            {
-                if(bndlList[0].getName().equals(Constants.LICENSE_BUNDLE_NAME))
-                {
-                    output += "No ETD Bitstream was found.\n";
-                }
-            }
-            else
-            {
-                for(Bundle bndl : bndlList)
-                {                 
-                    if(!bndl.getName().equals(Constants.LICENSE_BUNDLE_NAME))
-                    {
-                        Bitstream[] bsList = bndl.getBitstreams();
-
-                        int bsCounter = 0;
-
-                        for (Bitstream bs : bsList)
-                        {
-                            output += "Bitstream: \n";
-                            output += " ID: " + bs.getID()+"\n";
-                            output += " Title: " + bs.getName()+"\n";
-                            output += " Size: " + toNumInUnits(bs.getSize())+"\n";
-                            output += " Format MIME Type: " + bs.getFormat().getMIMEType()+"\n";
-                            output += " Format Description: " + bs.getFormatDescription()+"\n";
-                            output += " Owning Bundle Name: "+bndl.getName()+"\n";
-
-                            if(bsCounter < bsList.length)
-                            {
-                                output += "-----------------------\n";
-                            }
-
-                            bsCounter++;
-                        }
-                    }
-                }
-            }
-        }
-        
-        
-        
-        return output;
-    }
 
 }
