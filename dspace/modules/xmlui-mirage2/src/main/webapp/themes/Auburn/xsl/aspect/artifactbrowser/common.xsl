@@ -203,7 +203,13 @@
             <xsl:text>cocoon:/</xsl:text>
             <xsl:value-of select="@url"/>
             <!-- Since this is a summary only grab the descriptive metadata, and the thumbnails -->
-            <xsl:text>?sections=dmdSec,fileSec&amp;fileGrpTypes=THUMBNAIL</xsl:text>
+            <!--<xsl:text>?sections=dmdSec,fileSec&amp;fileGrpTypes=THUMBNAIL</xsl:text>-->
+            
+            <!--Note: Custom version of the above query string. Our version removes the 
+                      constraint of only grabbing the thumbnails file group type. 
+            -->
+            <xsl:text>?sections=dmdSec,fileSec</xsl:text>
+            
             <!-- An example of requesting a specific metadata standard (MODS and QDC crosswalks only work for items)->
             <xsl:if test="@type='DSpace Item'">
                 <xsl:text>&amp;dmdTypes=DC</xsl:text>

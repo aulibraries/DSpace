@@ -58,7 +58,13 @@
             <xsl:value-of select="$handle"/>
             <xsl:text>/mets.xml</xsl:text>
             <!-- Since this is a summary only grab the descriptive metadata, and the thumbnails -->
-            <xsl:text>?sections=dmdSec,fileSec&amp;fileGrpTypes=THUMBNAIL</xsl:text>
+            <!--<xsl:text>?sections=dmdSec,fileSec&amp;fileGrpTypes=THUMBNAIL</xsl:text>-->
+            
+            <!--Note: Custom version of the above query string. Our version removes the 
+                      constraint of only grabbing the thumbnails file group type. 
+            -->
+            <xsl:text>?sections=dmdSec,fileSec</xsl:text>
+            
             <!-- An example of requesting a specific metadata standard (MODS and QDC crosswalks only work for items)->
             <xsl:if test="@type='DSpace Item'">
                     <xsl:text>&amp;dmdTypes=DC</xsl:text>
@@ -259,6 +265,14 @@
                             </small>
                         </span>
                     </xsl:if>
+                    <xsl:choose>
+                        <xsl:when test="contains(//mets:fileSec/mets:fileGrp[@USE='CONTENT']/mets:file/mets:FLocat[@LOCTYPE='URL']/@xlink:href, 'isAllowed=n')">
+                            <span class="embargo-info">
+                                &#160;<i aria-hidden="true" class="fa fa-lock hidden-print"></i>
+                                <small>&#160; Under Embargo</small>
+                            </span>
+                        </xsl:when>
+                    </xsl:choose>
                     <xsl:choose>
                         <xsl:when test="dri:list[@n=(concat($handle, ':dc.description.abstract'))]/dri:item/dri:hi">
                             <div class="abstract">

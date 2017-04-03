@@ -503,6 +503,14 @@ label {
                 > div.artifact-info {
                     > span {
                         color: #999;
+                        &.embargo-info {
+                            margin-left: 15px;
+                            > i {
+                                &.fa-lock {
+                                    color: #ff0000;
+                                }
+                            }
+                        }
                     }
                 }
             }

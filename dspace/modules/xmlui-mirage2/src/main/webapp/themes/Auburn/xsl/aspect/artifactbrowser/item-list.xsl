@@ -154,6 +154,14 @@
                         <xsl:text>)</xsl:text>
                     </small>
                 </span>
+                <xsl:choose>
+                    <xsl:when test="contains(//mets:fileSec/mets:fileGrp[@USE='CONTENT']/mets:file/mets:FLocat[@LOCTYPE='URL']/@xlink:href, 'isAllowed=n')">
+                        <span class="embargo-info">
+                            &#160;<i aria-hidden="true" class="fa fa-lock hidden-print"></i>
+                            <small>&#160; Under Embargo</small>
+                        </span>
+                    </xsl:when>
+                </xsl:choose>
             </div>
             <xsl:if test="dim:field[@element = 'description' and @qualifier='abstract']">
                 <xsl:variable name="abstract" select="dim:field[@element = 'description' and @qualifier='abstract']/node()"/>
