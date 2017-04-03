@@ -480,7 +480,7 @@ public class ItemExport
             destDirPath += File.separator+"auetd-collection";
         }
         
-        System.out.println("itemArrayList size = "+items.size());
+        //System.out.println("itemArrayList size = "+items.size());
 
         for(Item item : items)
         {
