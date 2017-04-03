@@ -266,10 +266,10 @@
                         </span>
                     </xsl:if>
                     <xsl:choose>
-                        <xsl:when test="contains(//mets:fileSec/mets:fileGrp[@USE='CONTENT']/mets:file/mets:FLocat[@LOCTYPE='URL']/@xlink:href, 'isAllowed=n')">
+                        <xsl:when test="contains($metsDoc/mets:METS/mets:fileSec/mets:fileGrp[@USE='CONTENT']/mets:file/mets:FLocat[@LOCTYPE='URL']/@xlink:href, 'isAllowed=n')">
                             <span class="embargo-info">
-                                &#160;<i aria-hidden="true" class="fa fa-lock hidden-print"></i>
-                                <small>&#160; Under Embargo</small>
+                                <i aria-hidden="true" class="fa fa-lock hidden-print"></i>
+                                <small>&#160; Embargoed</small>
                             </span>
                         </xsl:when>
                     </xsl:choose>
