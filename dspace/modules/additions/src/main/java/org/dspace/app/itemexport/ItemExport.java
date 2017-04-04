@@ -812,8 +812,6 @@ public class ItemExport
                     itemList.add(item);
                 }  
             }
-
-            
         }
         
         //System.out.println("Size of filtered item IDs list = "+itemList.size());
