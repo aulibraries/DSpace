@@ -116,14 +116,14 @@ public class ItemExport
         options.addOption("i", "id", true, "ID or handle of thing to export");
         options.addOption("d", "dest", true,
                           "destination where you want items to go");
-        options.addOption("m", "migrate", false, "export for migration (remove handle and metadata that will be re-created in new system)");
+        options.addOption("m", "migrate", false, "export for migration (remove handle and metadata that will be re-created in new system), and do not record the exported item's handle in the list of exported ETDs file (exports/exportedETDs.txt).");
         options.addOption("n", "number", false,
                           "sequence number to begin exporting items with");
         options.addOption("z", "zip", true, "export as zip file (specify filename e.g. export.zip)");
         options.addOption("h", "help", false, "help");
         
         // Custom option
-        options.addOption("b", "bypass", false, "by pass authorization and other filters.");
+        options.addOption("b", "bypass", false, "Bypass authorization and any other filters, and do not record the exported item's handle in the list of exported ETDs file (exports/exportedETDs.txt).");
 
         CommandLine line = parser.parse(options, argv);
 
@@ -132,8 +132,7 @@ public class ItemExport
         String myIDString = null;
         int seqStart = -1;
         int myType = -1;
-        DateTimeFormatter dft = DateTimeFormat.forPattern("h:m:s a");
-        boolean record = true;
+        
         
         Item myItem = null;
         Collection mycollection = null;
@@ -194,10 +193,22 @@ public class ItemExport
         }
         
         // Custom code
+        DateTimeFormatter dft = DateTimeFormat.forPattern("h:m:s a");
+        boolean record = true;
+        boolean filter = true;
         boolean bypass = false;
         if(line.hasOption('b'))
         {
             bypass = true;
+        }
+        
+        if(bypass || migrate)
+        {
+            filter = false;
+            record = false;
+            
+            System.out.println("");
+            System.out.println("The"+(bypass ? " bypass " : (migrate ? " migrate " : " "))+"flag has been provided, filtering is turned off.");
         }
 
         // now validate the args
@@ -286,12 +297,10 @@ public class ItemExport
 
         if (zip)
         {
-            //ItemIterator items;
             List<Item> itemsList = new ArrayList<Item>();
             
             if (myItem != null)
             {
-                //List<Integer> myItems = new ArrayList<Integer>();
                 System.out.println("");
                 System.out.println("Attempting to export item: " + myIDString);
                 System.out.println("");
@@ -303,11 +312,8 @@ public class ItemExport
                 System.out.println(EmbargoManager.printEmbargoInfo(c, myItem));
                 System.out.println("");
                 System.out.println("------------------------------------------------");
-                System.out.println("Is item " + myItem.getHandle() + " currently under embargo (Yes/No)?");
-                System.out.println("");
-                System.out.println((isAuthorized(c, myItem) ? "No, item "+myItem.getHandle()+" is not under embargo." : "Yes, item "+myItem.getHandle()+" is under embargo."));
-                
-                if(migrate || bypass)
+                                
+                if(!filter)
                 {
                     itemsList.add(myItem);
                 }
@@ -315,22 +321,12 @@ public class ItemExport
                 {
                     if(isAuthorized(c, myItem))
                     {
-                        //myItems.add(myItem.getID());
                         itemsList.add(myItem);
                     }
                 }
             }
             else
-            {
-                System.out.println("");
-                System.out.println("Exporting from collection: " + myIDString);
-                System.out.println("");
-                
-                boolean filter = true;
-                if(migrate || bypass)
-                {
-                    filter = false;
-                }
+            {                
                 itemsList = filterAndSortItems(c, mycollection.getItems(), filter); 
             }
             
@@ -342,11 +338,6 @@ public class ItemExport
 
                 try
                 {
-                    if(migrate || bypass)
-                    {
-                        record = false;
-                    }
-                    
                     exportAsZip(c, itemsList, destDirName, zipFileName, migrate, record);
                 }
                 finally
@@ -384,10 +375,7 @@ public class ItemExport
                 System.out.println(EmbargoManager.printEmbargoInfo(c, myItem));
                 System.out.println("");
                 System.out.println("------------------------------------------------");
-                System.out.println("Is item " + myItem.getHandle() + " currently under embargo (Yes/No)?");
-                System.out.println("");
-                System.out.println((isAuthorized(c, myItem) ? "No, item "+myItem.getHandle()+" is not under embargo." : "Yes, item "+myItem.getHandle()+" is under embargo."));
-                
+                                
                 if(bypass || migrate)
                 {
                     exportItem(c, myItem, destDirName, migrate);
@@ -407,28 +395,13 @@ public class ItemExport
                 System.out.println("Exporting from collection: " + myIDString);
                 System.out.println("");
                 
-                boolean filter = true;
-                if(migrate || bypass)
-                {
-                    filter = false;
-                    record = false;
-                }
-                
                 // it's a collection, so do a bunch of items
                 List<Item> iList = filterAndSortItems(c, mycollection.getItems(), filter);
                 
-                if(iList.size() > 0)
-                {
-                    System.out.println("");
-                    System.out.println(iList.size()+" items to be exported.");
-                    System.out.println("");
-                    
+                if(!iList.isEmpty())
+                {                    
                     try
                     {
-                        if(migrate || bypass)
-                        {
-                            record = false;
-                        }
                         exportItem(c, iList, destDirName, migrate, zip, record);
                     }
                     finally
@@ -480,7 +453,10 @@ public class ItemExport
             destDirPath += File.separator+"auetd-collection";
         }
         
-        //System.out.println("itemArrayList size = "+items.size());
+        
+        System.out.println("-----------------------------------");
+        System.out.println("CREATING YEAR DIRECTORY LIST");
+        
 
         for(Item item : items)
         {
@@ -502,9 +478,13 @@ public class ItemExport
                 yearDirNames.add(year);
             }
         }
+        
+        System.out.println("-----------------------------------");
+        System.out.println("YEAR DIRECTORY LIST CREATED");
+        System.out.println("-----------------------------------");
 
-        if(!yearDirNames.isEmpty() && yearDirNames.size() > 0)
-        {
+        if(!yearDirNames.isEmpty())
+        {           
             for(String yearDirName : yearDirNames)
             {
                 File yearDestDir = new File(destDirPath+File.separator+yearDirName);
@@ -561,9 +541,7 @@ public class ItemExport
             System.out.println(EmbargoManager.printEmbargoInfo(c, item));
             System.out.println("");
             System.out.println("------------------------------------------------");
-            System.out.println("Is item " + item.getHandle() + " currently under embargo (Yes/No)?");
-            System.out.println("");
-            System.out.println((isAuthorized(c, item) ? "No, item "+item.getHandle()+" is not under embargo." : "Yes, item "+item.getHandle()+" is under embargo."));
+            
             System.out.println("");
             System.out.println("Exporting item "+item.getHandle()+" to "+newDestDir+" now.");
             System.out.println("");
@@ -789,37 +767,68 @@ public class ItemExport
         return false;
     }
     
-    private static List filterAndSortItems(Context c, ItemIterator it, boolean bypass)
+    private static List filterAndSortItems(Context c, ItemIterator it, boolean filter)
         throws Exception
     {
         List<Item> itemList = new ArrayList<Item>();
         
+        if(filter)
+        {
+            System.out.println("-----------------------------------");
+            System.out.println("FILTERING ITEM LIST");
+            System.out.println("-----------------------------------");
+        }
+        
         while(it.hasNext())
         {
             Item item = it.next();
+            boolean authorized = false;
+            boolean exportedYet = false;
             
             // Don't filter out the collection if the list is being migrated.
-            if(!bypass)
+            if(!filter)
             {
                 itemList.add(item);
             }
             else
             {
+                authorized = isAuthorized(c, item);
+                exportedYet = exportedAlready(c, item);
+                
                 // Only add items to the array that are authorized to exported,
                 // and have not been exported already.
-                if(isAuthorized(c, item) && !exportedAlready(c, item))
-                {
+                if(authorized && !exportedYet)
+                {                                        
                     itemList.add(item);
-                }  
+                }                
             }
         }
         
         //System.out.println("Size of filtered item IDs list = "+itemList.size());
+        if(filter)
+        {
+            System.out.println("Filtering has concluded.");
+            
+            if(!itemList.isEmpty())
+            {
+                System.out.println("");
+                System.out.println("There are "+itemList.size()+" items to be exported");
+            }
+            
+            System.out.println("-----------------------------------");
+        }
+
         
         if(!itemList.isEmpty())
-        {            
-            if(itemList.size() > 2)
+        {     
+            if(itemList.size() >= 2)
             {
+                System.out.println("");
+                System.out.println("-----------------------------------");
+                System.out.println("SORTING ITEM LIST");
+                System.out.println("-----------------------------------");
+                System.out.println("");
+                
                 Collections.sort(itemList, new Comparator<Item>()
                 {
                     @Override
@@ -831,9 +840,13 @@ public class ItemExport
                         return (itemID1 < itemID2 ? -1 : (itemID1 == itemID2 ? 0 : 1));
                     }
                 });
+                
+                System.out.println("Sorting has concluded.");
+                System.out.println("");
+                System.out.println("------------------------------------------------------");
             }
         }
-        
+                
         return itemList;
     }
     
