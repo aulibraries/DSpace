@@ -158,7 +158,7 @@
                     <xsl:when test="contains(//mets:fileSec/mets:fileGrp[@USE='CONTENT']/mets:file/mets:FLocat[@LOCTYPE='URL']/@xlink:href, 'isAllowed=n')">
                         <span class="embargo-info">
                             <i aria-hidden="true" class="fa fa-lock hidden-print"></i>
-                            <small>&#160; Embargoed</small>
+                            <small>&#160; ETD File Embargoed</small>
                         </span>
                     </xsl:when>
                 </xsl:choose>
