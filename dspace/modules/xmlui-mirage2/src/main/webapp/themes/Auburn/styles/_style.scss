@@ -139,15 +139,15 @@ div.list-group-item {
 
 
 h2.page-header {
-	padding: 9px 0;
-	margin: 0 0 10px 0;
-	border-bottom: 1px solid #eee;
+    padding: 9px 0;
+    margin: 0 0 10px 0;
+    border-bottom: 1px solid #eee;
     font-weight: normal;
 }
 h3.page-header {
-	padding: 9px 0;
-	margin: 0;
-	border: none;
+    padding: 9px 0;
+    margin: 0;
+    border: none;
     font-weight: normal;
 }
 
@@ -184,6 +184,10 @@ h3.page-header {
     font-weight: 500;
     margin: 0;
     padding: 0 0 0 15px;
+}
+
+.submissionMsgRow {
+    margin-bottom: 15px;
 }
 
 /** *************** Footer ************** */
@@ -253,8 +257,8 @@ h3.page-header {
 .ds-option-set-head {
     color: #000;
     min-height: 1px;
-	padding-right: 15px;
-	padding-left: 1px;
+    padding-right: 15px;
+    padding-left: 1px;
     font-variant: small-caps;
 }
 
@@ -398,11 +402,11 @@ label {
 }
 
 .searchActionsBlock {
-	padding-bottom: 20px;
+    padding-bottom: 20px;
 }
 
 .ds-radio-field {
-	padding-left: 11px;
+    padding-left: 11px;
 }
 
 /*********** End Forms *****************/

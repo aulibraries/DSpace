@@ -2486,7 +2486,7 @@
     <message key="xmlui.Submission.submit.SelectCollection.ETD_seleted_collection_head">Selected Collection</message>
 
     <message key="xmlui.Submission.submit.UploadWithEmbargoStep.ETD_head">Upload File</message>
-    <message key="xmlui.Submission.submit.UploadWithEmbargoStep.ETD_file_help">Clicking the folder icon will open a new window allowing you to select the file from your computer. Please upload only a PDF formatted version of your electronic thesis or dissertation.  If you encounter problems uploading your thesis or dissertation, please check for and remove all special characters (e.g. &#38; ; : ' , % * ^ $ # @ ( ) ! + = …) in the file's name.  If you continue to experience problems uploading your file, please contact <a href="mailto: etdhelp@auburn.edu">Clint Lovelace</a> at 334-844-4112.</message>
+    <message key="xmlui.Submission.submit.UploadWithEmbargoStep.ETD_file_help">Clicking the folder icon will open a new window allowing you to select the file from your computer. Please upload only a PDF formatted version of your electronic thesis or dissertation.  If you encounter problems uploading your thesis or dissertation, please check for and remove all special characters (e.g. &#38; ; : ' , % * ^ $ # @ ( ) ! + = …) in the file's name.  If you continue to experience problems uploading your file, please contact <a href="mailto: etdhelp@auburn.edu">Sarah Beckum</a> at 334-844-2124.</message>
     <message key="xmlui.Submission.submit.UploadWithEmbargoStep.ETD_invalid_file_format_error">The file you're attempting to upload is not a PDF. Please
     upload a PDF version of your electronic thesis or dissertation.</message>
     <message key="xmlui.Submission.submit.UploadWithEmbargoStep.ETD_submit_upload">Upload File</message>

@@ -681,18 +681,23 @@
             <div class="col-lg-12">
                 <h3>Submitting Your Thesis or Dissertation</h3>
                 <p>The Auburn University Graduate School handles submissions to the AUETD system. For information on how to submit your thesis or dissertation, please consult the Graduate School's <a target="_blank" title="Thesis and Dissertation Guide" href="http://graduate.auburn.edu/current-students/electronic-thesis-dissertation-guide/">Thesis and Dissertation Guide</a>. For questions about the status of your thesis or dissertation in AUETD, please contact the Graduate School at <a title="Email the Graduate School" href="mailto:etdhelp@auburn.edu">etdhelp@auburn.edu</a>.</p>
-                <xsl:if test="/dri:document/dri:meta/dri:userMeta/@authenticated = 'yes' and /dri:document/dri:meta/dri:userMeta/dri:metadata[@element='identifier'][@qualifier='authorized-submitter'] = 'yes'">
-                    <xsl:choose>
-                        <xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker') or contains($serverName, 'dstest')">
-                            <p><a href="/auetd/handle/123456789/2/submit">Submit an Electronic Thesis or Dissertation</a></p>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <p><a href="/handle/10415/2/submit">Submit an Electronic Thesis or Dissertation</a></p>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:if>
             </div>
         </div>
+        <xsl:if test="/dri:document/dri:meta/dri:userMeta/@authenticated = 'yes' and /dri:document/dri:meta/dri:userMeta/dri:metadata[@element='identifier'][@qualifier='authorized-submitter'] = 'yes'">
+        <div class="row submissionBttnRow">
+            <div class="col-lg-12">
+                <xsl:choose>
+                    <xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker') or contains($serverName, 'dstest')">
+                        <p><a class="btn btn-default submissionBttn" href="/auetd/handle/123456789/2/submit">Submit an Electronic Thesis or Dissertation</a></p>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <p><a class="btn btn-default submissionBttn" href="/handle/10415/2/submit">Submit an Electronic Thesis or Dissertation</a></p>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </div>
+        </div>
+        </xsl:if>
+
     </xsl:template>
 	
     <xsl:template name="FrontPageSearch">
@@ -726,7 +731,8 @@
         <div class="row">
             <div id="file_news_div_news" class="ds-static-div col-lg-12">
                 <p class="ds-paragraph">Welcome to AUETD, Auburn University's database of Master's theses and Ph.D. dissertations. The database contains a PDF version of every thesis or dissertation successfully defended at Auburn since the Fall 2005 semester.</p>
-                <p class="ds-paragraph">Auburn University librarians are available to answer questions about searching the AUETD database via <a onclick="window.open('https://libanswers.com/chati.php?k=46e359161925724&amp;w=1&amp;d=0&amp;i=809&amp;r=http%3A%2F%2Faskalibrarian.auburn.edu%2F&amp;sr=0', 'libchat', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width=300, height=400');return false;" href="#">online text-chat</a>.</p>
+                <!--<p class="ds-paragraph">Auburn University librarians are available to answer questions about searching the AUETD database via <a onclick="window.open('https://libanswers.com/chati.php?k=46e359161925724&amp;w=1&amp;d=0&amp;i=809&amp;r=http%3A%2F%2Faskalibrarian.auburn.edu%2F&amp;sr=0', 'libchat', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width=300, height=400');return false;" href="#">online text-chat</a>.</p>-->
+                <p class="ds-paragraph">Auburn University librarians are available to answer questions about searching the AUETD database via <a href="http://askalibrarian.auburn.edu/" alt="Ask a Librarian" target="_blank">Ask a Librarian</a>.</p>
             </div>
         </div>
     </xsl:template>

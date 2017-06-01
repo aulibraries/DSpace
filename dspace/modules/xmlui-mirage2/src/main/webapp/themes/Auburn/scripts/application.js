@@ -153,8 +153,27 @@ $(function()
             });
         }
     }
+    
+    function changeSubmissionBttnSize()
+    {  
+        $("a").each(function()
+        {
+            if($(this).hasClass("submissionBttn"))
+            {
+                if($(window).width() <= 480)
+                {
+                    $(this).addClass("btn-sm");
+                }
+                else if($(window).width() > 480 && $(this).hasClass("btn-sm"))
+                {
+                    $(this).removeClass("btn-sm");
+                }
+            }
+        });
+    }
 
     ConvertMultiSelect();
+    changeSubmissionBttnSize();
     
     /* TOGGLE ARROW FOR MAIN NAVIGATION LINK IN MOBILE VIEW */
     $(".header-wrap .navbar-brand").click(
@@ -182,5 +201,6 @@ $(function()
     $(window).resize(function()
     {
         ConvertMultiSelect();
+        changeSubmissionBttnSize();
     });
 });

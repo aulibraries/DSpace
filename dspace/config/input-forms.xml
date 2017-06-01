@@ -337,10 +337,6 @@
                 <stored-value>Agricultural Economics and Rural Sociology</stored-value>
             </pair>
             <pair>
-                <displayed-value>General Agriculture</displayed-value>
-                <stored-value>General Agriculture</stored-value>
-            </pair>
-            <pair>
                 <displayed-value>Crop Soils and Environmental Sciences</displayed-value>
                 <stored-value>Crop Soils and Environmental Sciences</stored-value>
             </pair>
@@ -373,10 +369,6 @@
                 <stored-value>School of Architecture, Planning and Landscape Architecture</stored-value>
             </pair>
             <pair>
-                <displayed-value>General Architecture</displayed-value>
-                <stored-value>General Architecture</stored-value>
-            </pair>
-            <pair>
                 <displayed-value>Building Science</displayed-value>
                 <stored-value>Building Science</stored-value>
             </pair>
@@ -393,10 +385,6 @@
                 <stored-value>School of Accountancy</stored-value>
             </pair>
             <pair>
-                <displayed-value>Aviation and Supply Chain Management</displayed-value>
-                <stored-value>Aviation and Supply Chain Management</stored-value>
-            </pair>
-            <pair>
                 <displayed-value>Finance</displayed-value>
                 <stored-value>Finance</stored-value>
             </pair>
@@ -405,8 +393,8 @@
                 <stored-value>Management</stored-value>
             </pair>
             <pair>
-                <displayed-value>Marketing</displayed-value>
-                <stored-value>Marketing</stored-value>
+                <displayed-value>Systems and Technology</displayed-value>
+                <stored-value>Systems and Technology</stored-value>
             </pair>
             <pair>
                 <displayed-value>----- Education -----</displayed-value>
@@ -509,10 +497,6 @@
                 <stored-value> </stored-value>
             </pair>
             <pair>
-                <displayed-value>Art</displayed-value>
-                <stored-value>Art</stored-value>
-            </pair>
-            <pair>
                 <displayed-value>Communication Disorders</displayed-value>
                 <stored-value>Communication Disorders</stored-value>
             </pair>
@@ -537,14 +521,6 @@
                 <stored-value>History</stored-value>
             </pair>
             <pair>
-                <displayed-value>Music</displayed-value>
-                <stored-value>Music</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Philosophy</displayed-value>
-                <stored-value>Philosophy</stored-value>
-            </pair>
-            <pair>
                 <displayed-value>Political Science</displayed-value>
                 <stored-value>Political Science</stored-value>
             </pair>
@@ -555,10 +531,6 @@
             <pair>
                 <displayed-value>Sociology, Anthropology and Social Work</displayed-value>
                 <stored-value>Sociology, Anthropology and Social Work</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Theatre</displayed-value>
-                <stored-value>Theatre</stored-value>
             </pair>
             <pair>
                 <displayed-value>----- Nursing -----</displayed-value>
@@ -589,12 +561,8 @@
                 <stored-value>Chemistry and Biochemistry</stored-value>
             </pair>
             <pair>
-                <displayed-value>General Sciences and Mathematics</displayed-value>
-                <stored-value>General Sciences and Mathematics</stored-value>
-            </pair>
-            <pair>
-                <displayed-value>Geology and Geography</displayed-value>
-                <stored-value>Geology and Geography</stored-value>
+                <displayed-value>Geosciences</displayed-value>
+                <stored-value>Geosciences</stored-value>
             </pair>
             <pair>
                 <displayed-value>Mathematics and Statistics</displayed-value>
