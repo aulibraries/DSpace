@@ -209,6 +209,14 @@ h3.page-header {
 
 /** *************** Footer ************** */
 .footer-wrap {
+    
+    @media(min-width: $screen-sm-min) {
+        background: none;
+    }
+    @media(min-width: $screen-md-min) {
+        background: none;
+    }
+    
     footer {
         p:first-of-type {
             padding-bottom: 7px;     
