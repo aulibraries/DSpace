@@ -135,7 +135,8 @@ public class Submissions extends AbstractDSpaceTransformer
         IOException, AuthorizeException
     {
         pageMeta.addMetadata("title").addContent(T_title);
-
+        pageMeta.addMetadata("javascript", "static").addContent("static/js/workflow-multiSelect.js");
+        
         pageMeta.addTrailLink(contextPath + "/",T_dspace_home);
         pageMeta.addTrailLink(null,T_trail);
     }

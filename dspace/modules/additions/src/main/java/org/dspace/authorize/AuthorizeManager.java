@@ -463,7 +463,7 @@ public class AuthorizeManager
                     return true; // match
                 }
 
-                if ((rp.getGroupID() != -1) && (Group.isMember(c, rp.getGroupID())))
+                if ((rp.getGroupID() != -1) && (Group.isMember(c, e, rp.getGroupID())))
                 {
                     // group was set, and eperson is a member
                     // of that group
