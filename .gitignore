@@ -39,3 +39,6 @@ META-INF/
 
 ##Mac noise
 .DS_Store
+
+## Ignore project files created by Microsoft Visual Studio Code
+.vscode/
