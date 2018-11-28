@@ -24,6 +24,10 @@ nbactions.xml
 nb-configuration.xml
 META-INF/
 
+## Ignore project files created by Microsoft Visual Studio Code
+.vscode/
+.factorypath
+
 ## Ignore all *.properties file in root folder, EXCEPT build.properties (the default)
 /*.properties
 !/build.properties
