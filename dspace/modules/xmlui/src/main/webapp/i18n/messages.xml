@@ -200,7 +200,7 @@
 	<message key="xmlui.ArtifactBrowser.ItemViewer.show_full">Show full item record</message>
 	<message key="xmlui.ArtifactBrowser.ItemViewer.withdrawn">This item has been withdrawn and is no longer available.</message>
 	<!-- org.dspace.app.xmlui.artifactbrowser.Navigation.java -->
-	<!-- Note: As of AUETD 6.0, org.dspace.app.xmlui.aspect.artifactbrowser.Navigation has been removed. -->
+	<!-- Note: As of DSpace 6.0, org.dspace.app.xmlui.aspect.artifactbrowser.Navigation has been removed. -->
 	<!-- The following i18n keys will be left as is as they're referenced by the Discovery's Navigation
          but in future, they should be refactored to a more relevant key prefix -->
 	<message key="xmlui.ArtifactBrowser.Navigation.head_browse">Browse</message>
@@ -232,12 +232,16 @@
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.head_bitstream">This bitstream is restricted</message>
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.para_resource">You do not have the credentials to access the restricted resource.</message>
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.para_community">You do not have the credentials to access the restricted community <b>{0}</b>.
+	
 	</message>
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.para_collection">You do not have the credentials to access the restricted collection <b>{0}</b>.
+	
 	</message>
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.para_item">You do not have the credentials to access the restricted item <b>{0}</b>.
+	
 	</message>
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.para_bitstream">You do not have the credentials to access the restricted bitstream <b>{0}</b>.
+	
 	</message>
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.type_collection">collection</message>
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.type_community">community</message>
@@ -368,6 +372,7 @@
 	<message key="xmlui.EPerson.CannotRegister.title">Registration unavailable</message>
 	<message key="xmlui.EPerson.CannotRegister.head">Registration unavailable</message>
 	<message key="xmlui.EPerson.CannotRegister.para1">The configuration of this DSpace repository does not allow registration in this context. Please contact the <a href="../contact">site administrator</a> with questions or comments.
+	
 	</message>
 	<!-- org.dspace.app.xmlui.eperson.EditProfile.java -->
 	<message key="xmlui.EPerson.EditProfile.title_update">Update Profile</message>
@@ -683,6 +688,7 @@
 	<message key="xmlui.Submission.submit.AccessStep.table_delete_button">Remove</message>
 	<message key="xmlui.administrative.authorization.AccessStep.label_date_help">The first day from which access is allowed. Accepted format: yyyy, yyyy-mm, yyyy-mm-dd</message>
 	<message key="xmlui.administrative.authorization.AccessStep.label_date_displayonly_help">The first day from which access is allowed. <b>This date cannot be modified on this form.</b> To set an embargo date for a bitstream, go to the <i>Item Status</i> tab, click <i>Authorizations...</i>, create or edit the bitstream's <i>READ</i> policy, and set the <i>Start Date</i> as desired.
+	
 	</message>
 	<message key="xmlui.Submission.submit.AccessStep.review_policy_line">Name: {0}; action: {1}, group: {2}, start date: {3}, end date: {4}</message>
 	<message key="xmlui.Submission.submit.AccessStep.review_public_item">The item will be searchable</message>
@@ -699,6 +705,7 @@
 	<message key="xmlui.Submission.submit.UploadStep.virus_checker_error">A technical problem was encountered whilst attempting to scan the file for viruses. Please contact the system administrator.</message>
 	<message key="xmlui.Submission.submit.UploadStep.description">File Description</message>
 	<message key="xmlui.Submission.submit.UploadStep.description_help">Optionally, provide a brief description of the file, for example "<i>Main article</i>", or "<i>Experiment data readings</i>".
+	
 	</message>
 	<message key="xmlui.Submission.submit.UploadStep.submit_upload">Upload file &amp; add another</message>
 	<message key="xmlui.Submission.submit.UploadStep.head2">Files Uploaded</message>
@@ -726,6 +733,7 @@
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.virus_checker_error">A technical problem was encountered whilst attempting to scan the file for viruses. Please contact the system administrator.</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.description">File Description</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.description_help">Optionally, provide a brief description of the file, for example "<i>Main article</i>", or "<i>Experiment data readings</i>".
+	
 	</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.submit_upload">Upload file &amp; add another</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.head2">Files Uploaded</message>
@@ -750,16 +758,20 @@
 	<message key="xmlui.Submission.submit.EditFileStep.file">File</message>
 	<message key="xmlui.Submission.submit.EditFileStep.description">File Description</message>
 	<message key="xmlui.Submission.submit.EditFileStep.description_help">Optionally, provide a brief description of the contents; for example, "<i>Main article</i>", or "<i>Experiment data readings</i>".
+	
 	</message>
 	<message key="xmlui.Submission.submit.EditFileStep.info1">Select the format of the file from the list below, for example "<i>Adobe PDF</i>" or "<i>Microsoft Word</i>." <strong>If the format is not in the list</strong>, please describe it in the input box below the list.
+	
 	</message>
 	<message key="xmlui.Submission.submit.EditFileStep.format_detected">Detected Format</message>
 	<message key="xmlui.Submission.submit.EditFileStep.format_selected">Selected Format</message>
 	<message key="xmlui.Submission.submit.EditFileStep.format_default">Format not in list</message>
 	<message key="xmlui.Submission.submit.EditFileStep.info2">If the format is not in the above list, <strong>select "format not in list" above</strong> and describe the file's format in the box below.
+	
 	</message>
 	<message key="xmlui.Submission.submit.EditFileStep.format_user">Other Format</message>
 	<message key="xmlui.Submission.submit.EditFileStep.format_user_help">The application's name you used to create the file, and the version number (for example, "<i>ACMESoft SuperApp version 1.5</i>").
+	
 	</message>
 	<!-- org.dspace.app.xmlui.Submission.submit.EditBitstreamPolicies -->
 	<message key="xmlui.Submission.submit.EditBitstreamPolicies.head">Bitstream Access</message>
@@ -793,6 +805,7 @@
 	<message key="xmlui.Submission.submit.LicenseStep.head">Distribution License</message>
 	<message key="xmlui.Submission.submit.LicenseStep.info1">
 		<strong>There is one last step:</strong> In order for DSpace to reproduce, translate and distribute your submission worldwide, you must agree to the following terms.
+	
 	</message>
 	<message key="xmlui.Submission.submit.LicenseStep.info2">Grant the standard distribution license by selecting 'I Grant the License'; and then click 'Complete Submission'.</message>
 	<message key="xmlui.Submission.submit.LicenseStep.info3">If you have questions regarding this license please contact the system administrators.</message>
@@ -819,6 +832,7 @@
 	<message key="xmlui.Submission.workflow.PerformTaskStep.commit_help">Once you've edited the item, use this option to commit the item to the archive.</message>
 	<message key="xmlui.Submission.workflow.PerformTaskStep.commit_submit">Commit to archive</message>
 	<message key="xmlui.Submission.workflow.PerformTaskStep.reject_help">If you have reviewed the item and found it is <strong>not</strong> suitable for inclusion in the collection, select "Reject".  You will then be asked to enter a message indicating why the item is unsuitable, and whether the submitter should change something and resubmit.
+	
 	</message>
 	<message key="xmlui.Submission.workflow.PerformTaskStep.reject_submit">Reject item</message>
 	<message key="xmlui.Submission.workflow.PerformTaskStep.edit_help">Select this option to change the item's metadata.</message>
@@ -1067,6 +1081,7 @@
 	<message key="xmlui.administrative.registries.DeleteMetadataFieldsConfirm.trail">Delete fields</message>
 	<message key="xmlui.administrative.registries.DeleteMetadataFieldsConfirm.head">Confirm Deletion</message>
 	<message key="xmlui.administrative.registries.DeleteMetadataFieldsConfirm.para1">Are you <b>absolutely</b> sure you want to delete these fields? If any items contain metadata for these fields, the field(s) cannot be deleted. You must ensure that no items use these fields.
+	
 	</message>
 	<message key="xmlui.administrative.registries.DeleteMetadataFieldsConfirm.warning">WARNING: </message>
 	<message key="xmlui.administrative.registries.DeleteMetadataFieldsConfirm.para2">This will cause an error if any item contains metadata for these fields.</message>
@@ -1078,6 +1093,7 @@
 	<message key="xmlui.administrative.registries.DeleteMetadataSchemaConfirm.trail">Delete schema</message>
 	<message key="xmlui.administrative.registries.DeleteMetadataSchemaConfirm.head">Confirm Deletion</message>
 	<message key="xmlui.administrative.registries.DeleteMetadataSchemaConfirm.para1">Are you <b>absolutely</b> sure you want to delete this schema? If any items contain metadata for fields contained within this schema, the schema cannot be deleted. You must ensure that no items contain metadata in this schema.
+	
 	</message>
 	<message key="xmlui.administrative.registries.DeleteMetadataSchemaConfirm.warning">WARNING: </message>
 	<message key="xmlui.administrative.registries.DeleteMetadataSchemaConfirm.para2">This will cause an error if any item contains metadata within this schema.</message>
@@ -1143,6 +1159,7 @@
 	<message key="xmlui.administrative.registries.FormatRegistryMain.column4">MIME Type</message>
 	<message key="xmlui.administrative.registries.FormatRegistryMain.column5">Support Level</message>
 	<message key="xmlui.administrative.registries.FormatRegistryMain.internal">(<i>internal</i>)
+	
 	</message>
 	<message key="xmlui.administrative.registries.FormatRegistryMain.support_0">Unknown</message>
 	<message key="xmlui.administrative.registries.FormatRegistryMain.support_1">Known</message>
@@ -1329,6 +1346,7 @@
 	<message key="xmlui.administrative.item.AddBitstreamForm.file_help">Please enter the name of the file on your computer corresponding to your item. If you click "Browse...", a new window will appear in which you can locate and select the file from your computer.</message>
 	<message key="xmlui.administrative.item.AddBitstreamForm.description_label">Description</message>
 	<message key="xmlui.administrative.item.AddBitstreamForm.description_help">Optionally, provide a brief description of the file, for example "<i>Main article</i>", or "<i>Experiment data readings</i>".
+	
 	</message>
 	<message key="xmlui.administrative.item.AddBitstreamForm.submit_upload">Upload</message>
 	<message key="xmlui.administrative.item.AddBitstreamForm.no_bundles">You need the ADD &amp; WRITE privilege on at least one bundle to be able to upload new bitstreams.</message>
@@ -1374,15 +1392,19 @@
 	<message key="xmlui.administrative.item.EditBitstreamForm.primary_option_no">no</message>
 	<message key="xmlui.administrative.item.EditBitstreamForm.description_label">Description</message>
 	<message key="xmlui.administrative.item.EditBitstreamForm.description_help">Optionally, provide a brief description of the file, for example "<i>Main article</i>", or "<i>Experiment data readings</i>"."
+	
 	</message>
 	<message key="xmlui.administrative.item.EditBitstreamForm.para1">Select the format of the file from the list below, for example "<i>Adobe PDF</i>" or "<i>Microsoft Word</i>", <b>OR</b> if the format is not in the list, please describe it in the box below.
+	
 	</message>
 	<message key="xmlui.administrative.item.EditBitstreamForm.format_label">Selected Format</message>
 	<message key="xmlui.administrative.item.EditBitstreamForm.format_default">Format not in list</message>
 	<message key="xmlui.administrative.item.EditBitstreamForm.para2">If the format is not in the above list, <strong>select "format not in list" above</strong> and describe it in the field below.
+	
 	</message>
 	<message key="xmlui.administrative.item.EditBitstreamForm.user_label">Other Format</message>
 	<message key="xmlui.administrative.item.EditBitstreamForm.user_help">The application you used to create the file, and the version number (for example, "<i>ACMESoft SuperApp version 1.5</i>").
+	
 	</message>
 	<message key="xmlui.administrative.item.EditBitstreamForm.name_label">Filename</message>
 	<message key="xmlui.administrative.item.EditBitstreamForm.name_help">Change the filename for this bitstream. Note that this will change the display bitstream URL, but old links will still resolve as long as the sequence ID does not change.</message>
@@ -1512,11 +1534,13 @@
 	<message key="xmlui.administrative.mapper.MapperMain.title">Item Mapper</message>
 	<message key="xmlui.administrative.mapper.MapperMain.head1">Item Mapper - Map Items from Other Collections</message>
 	<message key="xmlui.administrative.mapper.MapperMain.para1">Collection: "<strong>{0}</strong>"
+	
 	</message>
 	<message key="xmlui.administrative.mapper.MapperMain.para2">This is the item mapper tool that allows collection administrators to map items from other collections into this collection. You can search for items from other collections and map them, or browse the list of currently mapped items.</message>
 	<message key="xmlui.administrative.mapper.MapperMain.stat_label">Statistics</message>
 	<message key="xmlui.administrative.mapper.MapperMain.stat_info">
 		<strong>{0} of {1}</strong> items in this collection are mapped in from other collections
+	
 	</message>
 	<message key="xmlui.administrative.mapper.MapperMain.search_label">Search</message>
 	<message key="xmlui.administrative.mapper.MapperMain.submit_search">Search Items</message>
@@ -1578,6 +1602,7 @@
 	</message>
 	<message key="xmlui.administrative.collection.AssignCollectionRoles.repository_role">
 		<br />(Repository level group, system administrators only)
+	
 	</message>
 	<message key="xmlui.administrative.collection.AssignCollectionRoles.not_allowed">
 		<nobr>(you are not allowed to configure this)</nobr>
@@ -1801,6 +1826,7 @@
 	<message key="xmlui.administrative.ControlPanel.alerts_head">System-wide Alerts</message>
 	<message key="xmlui.administrative.ControlPanel.alerts_warning">
 		<strong>Warning for load balanced systems</strong>: System-wide alerts are only effective for the node on which it is activated. You need to ensure that each node in the set receives the activate alert command.
+	
 	</message>
 	<message key="xmlui.administrative.ControlPanel.alerts_message_label">Alert message</message>
 	<message key="xmlui.administrative.ControlPanel.alerts_message_default">The system will be going down for regular maintenance. Please save your work and logout.</message>
@@ -1817,6 +1843,7 @@
 	<message key="xmlui.administrative.ControlPanel.alerts_session_only_administrative_sessions">Restrict authentication and kill current sessions</message>
 	<message key="xmlui.administrative.ControlPanel.alerts_session_note">
 		<strong>Note:</strong> Site administrators are exempt from session management.
+	
 	</message>
 	<message key="xmlui.administrative.ControlPanel.alerts_submit_activate">Activate</message>
 	<message key="xmlui.administrative.ControlPanel.alerts_submit_deactivate">Deactivate</message>
@@ -1847,6 +1874,7 @@
 	<!-- org.dspace.app.xmlui.administrative.SystemwideAlerts -->
 	<message key="xmlui.administrative.SystemwideAlerts.countdown">
 		<strong>In {0} minutes</strong>: 
+	
 	</message>
 	<!-- org.dspace.app.xmlui.administrative.NotAuthorized -->
 	<message key="xmlui.administrative.NotAuthorized.title">Not Authorized</message>
@@ -2002,6 +2030,7 @@
 	<message key="xmlui.dri2xhtml.METS-1.0.item-files-view">View</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.item-files-description">Description</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.item-files-viewOpen">View/<wbr />Open
+	
 	</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.item-no-files">There are no files associated with this item.</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.size-bytes">bytes</message>
@@ -2208,6 +2237,7 @@
 	<message key="xmlui.aspect.versioning.VersionNoticeTransformer.notice.workflow_version_head">Notice</message>
 	<message key="xmlui.aspect.versioning.VersionNoticeTransformer.notice.workflow_version_help">A more recent version of this item is in the Workflow.</message>
 	<message key="xmlui.aspect.sherpa.submission.consult">To check the copyright and self-archiving policies per journal or publisher, please consult <a href="http://www.sherpa.ac.uk/">SHERPA/RoMEO</a>.
+	
 	</message>
 	<message key="xmlui.aspect.sherpa.submission.title">Publisher information</message>
 	<message key="xmlui.aspect.sherpa.submission.journal">Journal: </message>
@@ -2245,4 +2275,58 @@
 	<message key="xmlui.Submission.submit.StartSubmissionLookupStep.lookup_help">Fill in a publication ID, DOI, Title or Author and then press "Search".  A list of all matching publications will be shown to you to select in order to proceed with the submission process.</message>
 	<message key="xmlui.Submission.submit.StartSubmissionLookupStep.submit_publication_item">Imported publication Record</message>
 	<message key="xmlui.Submission.submit.progressbar.lookup">Lookup</message>
+	<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                   AUETD Custom Messages
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+	<message key="xmlui.general.search.placeholder.AUETD_placeholder">Search AUETD</message>
+	<message key="xmlui.Submission.submit.SelectCollection.AUETD_seleted_collection_head">Selected Collection</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_head">Upload File</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_file_help">Clicking the folder icon will open a new window allowing you to select the file from your computer. Please upload only a PDF formatted version of your electronic thesis or dissertation.  If you encounter problems uploading your thesis or dissertation, please check for and remove all special characters (e.g. &#38; ; : ' , % * ^ $ # @ ( ) ! + = …) in the file's name.  If you continue to experience problems uploading your file, please contact <a href="mailto: etdhelp@auburn.edu">Sarah Beckum</a> at 334-844-2124.
+	</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_invalid_file_format_error">The file you're attempting to upload is not a PDF. Please
+    upload a PDF version of your electronic thesis or dissertation.</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_submit_upload">Upload File</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_label">Should access to your electronic thesis or dissertation be restricted?</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_label">Specify a date to end the restriction</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_help">Click in the field above to open a calendar widget and then select a date. Leaving this field blank will cause an error.</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_radio_button1_text">No, don't restrict access to my thesis or dissertation</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_radio_button2_text">Yes, limit access to my thesis or dissertation to Auburn University users only</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_radio_button3_text">Yes, block access to my thesis or dissertation to everyone</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_required_error">This field is required. Please select one of the boxes above.</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_required_error">This field is required. Please enter a date into this field.</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_format_error">The date you're trying to submit is not properly formatted. Please enter a date in this format (yyyy-mm-dd). </message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_in_past_error">The date provided is in the past which is not allowed. Please enter a date that is at least one day after today.</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_is_too_long_error">The date provided is to far into the future. Please enter a date that is no more than 5 years in the future.</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_is_current_error">The date provided is today which is not allowed. Please enter a date that is at least one day after today.</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_summary_head">Restriction Summary Information</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_status_column">Restricted Access</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_enddate_column">Restriction End Date</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_submit_remove_button_name">Remove File and Restriction Settings</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_submit_edit_restrictions_button_name">Change Restriction Settings</message>
+	<message key="xmlui.Submission.Submissions.AUETD_submit_column5">Status</message>
+	<message key="xmlui.Submission.Submissions.AUETD_submit_column6">Reason for Rejection</message>
+	<message key="xmlui.Submission.submit.DescribeStep.instance_remove_bttn_name">Remove Selected</message>
+	<!--  Workflow messages -->
+	<message key="xmlui.Submission.workflow.RejectTaskStep.AUETD_file_upload_field_label">Upload Attachement</message>
+	<message key="xmlui.Submission.workflow.RejectTaskStep.AUETD_file_upload_field_help">Please enter the full path of the file on your computer corresponding to your item. If you click "Browse...", a new window will allow you to select the file from your computer.</message>
+	<message key="xmlui.Submission.workflow.RejectTaskStep.AUETD_file_upload_error">There was a problem uploading your file.  Either the filename you entered was incorrect, there was a network problem which prevented the file from reaching us correctly, or you have attempted to upload a file format marked for internal system use only.  Please try again.</message>
+	<message key="xmlui.Submission.Submissions.others_workflow_head">Tasks Already Owned</message>
+	<message key="xmlui.Submission.Submissions.others_workflow_column1">Task</message>
+	<message key="xmlui.Submission.Submissions.others_workflow_column2">Item</message>
+	<message key="xmlui.Submission.Submissions.others_workflow_column3">Collection</message>
+	<message key="xmlui.Submission.Submissions.others_workflow_column4">Task Owner</message>
+	<message key="xmlui.ArtifactBrowser.RestrictedItem.para_resource">You are <b>NOT</b> authorized to access the restricted resource.
+	</message>
+	<message key="xmlui.ArtifactBrowser.RestrictedItem.para_community">You are <b>NOT</b> authorized to access the restricted community <b>{0}</b>.
+	</message>
+	<message key="xmlui.ArtifactBrowser.RestrictedItem.para_collection">You are <b>NOT</b> authorized to access the restricted collection <b>{0}</b>.
+	</message>
+	<message key="xmlui.ArtifactBrowser.RestrictedItem.para_item">You are <b>NOT</b> authorized to access the restricted item <b>{0}</b>.
+	</message>
+	<message key="xmlui.ArtifactBrowser.RestrictedItem.para_bitstream">You are <b>NOT</b> authorized to access the restricted file <b>{0}</b>.
+	</message>
+	<message key="xmlui.administrative.item.EditItemStatusForm.submit_edit_embargo">File and Embargo...</message>
+	<message key="xmlui.administrative.item.EditItemStatusForm.label_edit_embargo">Edit item's file and embargo settings</message>
+	<message key="xmlui.BitstreamReader.auth_message_nologin">The file you are attempting to access is restricted.</message>
+	<message key="xmlui.ArtifactBrowser.AdvancedSearch.type_embargoStatus">Embargo Status</message>
 </catalogue>
