@@ -22,10 +22,10 @@
 		   particular java class.
 	-->
 	<!-- General keys -->
-	<message key="xmlui.general.dspace_home">DSpace Home</message>
+	<message key="xmlui.general.dspace_home">AUETD Home</message>
 	<message key="xmlui.general.search">Search</message>
 	<message key="xmlui.general.go">Go</message>
-	<message key="xmlui.general.go_home">Go to DSpace home</message>
+	<message key="xmlui.general.go_home">Go to AUETD home</message>
 	<message key="xmlui.general.save">Save</message>
 	<message key="xmlui.general.cancel">Cancel</message>
 	<message key="xmlui.general.return">Return</message>
@@ -75,7 +75,7 @@
 	<!-- Note: As of DSpace 6.0, org.dspace.app.xmlui.aspect.artifactbrowser.AbstractSearch has been removed. -->
 	<!-- The following keys are still in use by Discovery's AbstractSearch -->
 	<message key="xmlui.ArtifactBrowser.AbstractSearch.no_results">Search produced no results.</message>
-	<message key="xmlui.ArtifactBrowser.AbstractSearch.all_of_dspace">All of DSpace</message>
+	<message key="xmlui.ArtifactBrowser.AbstractSearch.all_of_dspace">All of AUETD</message>
 	<!-- org.dspace.app.xmlui.artifactbrowser.AdvancedSearch.java -->
 	<!-- Note: As of DSpace 6.0, org.dspace.app.xmlui.aspect.artifactbrowser.AdvancedSearch has been removed. -->
 	<!-- The following "type_*" i18n keys will be left as is as they're referenced by the Discovery's SidebarFacetsTransformer
@@ -200,11 +200,11 @@
 	<message key="xmlui.ArtifactBrowser.ItemViewer.show_full">Show full item record</message>
 	<message key="xmlui.ArtifactBrowser.ItemViewer.withdrawn">This item has been withdrawn and is no longer available.</message>
 	<!-- org.dspace.app.xmlui.artifactbrowser.Navigation.java -->
-	<!-- Note: As of DSpace 6.0, org.dspace.app.xmlui.aspect.artifactbrowser.Navigation has been removed. -->
+	<!-- Note: As of AUETD 6.0, org.dspace.app.xmlui.aspect.artifactbrowser.Navigation has been removed. -->
 	<!-- The following i18n keys will be left as is as they're referenced by the Discovery's Navigation
          but in future, they should be refactored to a more relevant key prefix -->
 	<message key="xmlui.ArtifactBrowser.Navigation.head_browse">Browse</message>
-	<message key="xmlui.ArtifactBrowser.Navigation.head_all_of_dspace">All of DSpace</message>
+	<message key="xmlui.ArtifactBrowser.Navigation.head_all_of_dspace">All of AUETD</message>
 	<message key="xmlui.ArtifactBrowser.Navigation.communities_and_collections">Communities &amp; Collections</message>
 	<message key="xmlui.ArtifactBrowser.Navigation.browse_title">Titles</message>
 	<message key="xmlui.ArtifactBrowser.Navigation.browse_author">Authors</message>
@@ -434,7 +434,7 @@
 	<!-- org.dspace.app.xmlui.eperson.LDAPLogin.java -->
 	<message key="xmlui.EPerson.LDAPLogin.title">Sign in</message>
 	<message key="xmlui.EPerson.LDAPLogin.trail">Sign in</message>
-	<message key="xmlui.EPerson.LDAPLogin.head1">Sign in to DSpace</message>
+	<message key="xmlui.EPerson.LDAPLogin.head1">Sign in to AUETD</message>
 	<message key="xmlui.EPerson.LDAPLogin.username">User Name</message>
 	<message key="xmlui.EPerson.LDAPLogin.error_bad_login">The user name and/or password supplied were not valid.</message>
 	<message key="xmlui.EPerson.LDAPLogin.password">Password</message>
@@ -509,8 +509,8 @@
 
 		!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
 	<!-- general submission aspect messages -->
-	<message key="xmlui.Submission.general.mydspace_home">MyDSpace Home</message>
-	<message key="xmlui.Submission.general.go_mydspace">Go to MyDSpace Home</message>
+	<message key="xmlui.Submission.general.mydspace_home">MyAUETD Home</message>
+	<message key="xmlui.Submission.general.go_mydspace">Go to MyAUETD Home</message>
 	<message key="xmlui.Submission.general.submission.title">Item submission</message>
 	<message key="xmlui.Submission.general.submission.trail">Item submission</message>
 	<message key="xmlui.Submission.general.submission.head">Item submission</message>
@@ -586,7 +586,7 @@
 	<message key="xmlui.Submission.Submissions.status_unknown">Unknown state</message>
 	<!-- Same transformer, completed submissions section -->
 	<message key="xmlui.Submission.Submissions.completed.head">Archived Submissions</message>
-	<message key="xmlui.Submission.Submissions.completed.info">These are your completed submissions which have been accepted into DSpace.</message>
+	<message key="xmlui.Submission.Submissions.completed.info">These are your completed submissions which have been accepted into AUETD.</message>
 	<message key="xmlui.Submission.Submissions.completed.column1">Date accepted</message>
 	<message key="xmlui.Submission.Submissions.completed.column2">Title</message>
 	<message key="xmlui.Submission.Submissions.completed.column3">Collection</message>
