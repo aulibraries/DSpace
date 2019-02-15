@@ -9,13 +9,13 @@ package org.dspace.embargo;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.*;
+import org.dspace.content.factory.ContentServiceFactory;
 import org.dspace.content.service.ItemService;
 import org.dspace.core.Context;
 import org.dspace.core.service.PluginService;
@@ -74,6 +74,8 @@ public class EmbargoServiceImpl implements EmbargoService
     @Autowired(required = true)
     protected PluginService pluginService;
 
+    protected ContentServiceFactory serviceFactory;
+
     protected EmbargoServiceImpl()
     {
 
@@ -83,22 +85,12 @@ public class EmbargoServiceImpl implements EmbargoService
     public void setEmbargo(Context context, Item item)
         throws SQLException, AuthorizeException
     {
-        // if lift is null, we might be restoring an item from an AIP
-        DCDate myLift = getEmbargoTermsAsDate(context, item);
-        if (myLift == null)
-        {
-             if ((myLift = recoverEmbargoDate(item)) == null)
-             {
-                 return;
-             }
-        }
-        String slift = myLift.toString();
         try
         {
             context.turnOffAuthorisationSystem();
-            itemService.clearMetadata(context, item, lift_schema, lift_element, lift_qualifier, Item.ANY);
+            /*itemService.clearMetadata(context, item, lift_schema, lift_element, lift_qualifier, Item.ANY);
             itemService.addMetadata(context, item, lift_schema, lift_element, lift_qualifier, null, slift);
-            log.info("Set embargo on Item "+item.getHandle()+", expires on: "+slift);
+            log.info("Set embargo on Item "+item.getHandle()+", expires on: "+slift);*/
 
             setter.setEmbargo(context, item);
 
@@ -114,7 +106,7 @@ public class EmbargoServiceImpl implements EmbargoService
     public DCDate getEmbargoTermsAsDate(Context context, Item item)
         throws SQLException, AuthorizeException
     {
-        List<MetadataValue> terms = itemService.getMetadata(item, terms_schema, terms_element,
+        /*List<MetadataValue> terms = itemService.getMetadata(item, terms_schema, terms_element,
                 terms_qualifier, Item.ANY);
 
         DCDate result = null;
@@ -136,13 +128,14 @@ public class EmbargoServiceImpl implements EmbargoService
             throw new IllegalArgumentException(
                     "Embargo lift date is uninterpretable:  "
                             + result.toString());
-        }
+        }*/
 
         /*
          * NOTE: We do not check here for past dates as it can result in errors during AIP restoration. 
          * Therefore, UIs should perform any such date validation on input. See DS-3348
          */
-        return result;
+        //return result;
+        return null;
     }
 
 
@@ -150,6 +143,7 @@ public class EmbargoServiceImpl implements EmbargoService
     public void liftEmbargo(Context context, Item item)
         throws SQLException, AuthorizeException, IOException
     {
+        /*
         // Since 3.0 the lift process for all embargoes is performed through the dates on the authorization process (see DS-2588)
         // lifter.liftEmbargo(context, item);
         itemService.clearMetadata(context, item, lift_schema, lift_element, lift_qualifier, Item.ANY);
@@ -160,6 +154,7 @@ public class EmbargoServiceImpl implements EmbargoService
 
         log.info("Lifting embargo on Item "+item.getHandle());
         itemService.update(context, item);
+        */
     }
 
 
@@ -223,7 +218,7 @@ public class EmbargoServiceImpl implements EmbargoService
     // return the lift date assigned when embargo was set, or null, if either:
     // it was never under embargo, or the lift date has passed.
     protected DCDate recoverEmbargoDate(Item item) {
-        DCDate liftDate = null;
+        /*DCDate liftDate = null;
         List<MetadataValue> lift = itemService.getMetadata(item, lift_schema, lift_element, lift_qualifier, Item.ANY);
         if (lift.size() > 0)
         {
@@ -234,7 +229,8 @@ public class EmbargoServiceImpl implements EmbargoService
                 liftDate = null;
             }
         }
-        return liftDate;
+        return liftDate;*/
+        return null;
     }
 
     @Override
@@ -251,5 +247,55 @@ public class EmbargoServiceImpl implements EmbargoService
     @Override
     public Iterator<Item> findItemsByLiftMetadata(Context context) throws SQLException, IOException, AuthorizeException {
         return itemService.findByMetadataField(context, lift_schema, lift_element, lift_qualifier, Item.ANY);
+    }
+
+    public String getEmbargoMetadataValue(Context context, Item item, String element, String qualifier) throws AuthorizeException, IOException, SQLException
+    {
+        List<MetadataValue> metadataValueList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, element, qualifier, Item.ANY);
+
+        if (!metadataValueList.isEmpty()) {
+            for(MetadataValue metadataValue : metadataValueList) {
+                if (metadataValue != null)
+                {
+                    return metadataValue.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
+    public void removeEmbargoMetadataValue(Context context, Item item, String element, String qualifier) throws AuthorizeException, IOException, SQLException
+    {
+        itemService.clearMetadata(context, item, MetadataSchema.DC_SCHEMA, element, qualifier, Item.ANY);
+    }
+
+    public void CreateOrModifyEmbargoMetadataValue(Context context, Item item, String element, String qualifier, String value) throws SQLException, IOException, AuthorizeException
+    {
+        if (getEmbargoMetadataValue(context, item, element, qualifier) != null)
+        {
+            List<MetadataValue> metadataValueList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, element, qualifier, Item.ANY);
+
+            if (!metadataValueList.isEmpty())
+            {
+                for(MetadataValue metdataValue : metadataValueList)
+                {
+                    metdataValue.setValue(value);
+                    metdataValue.setDSpaceObject(item);
+                    serviceFactory.getMetadataValueService().update(context, metdataValue);
+                }
+            }
+        }
+        else
+        {
+            MetadataField metadataField = serviceFactory.getMetadataFieldService().findByElement(context, MetadataSchema.DC_SCHEMA, element, qualifier);
+            MetadataValue metdataValue = serviceFactory.getMetadataValueService().create(context, item, metadataField);
+
+            metdataValue.setValue(value);
+            metdataValue.setLanguage("en_US");
+            metdataValue.setPlace(1);
+            metdataValue.setAuthority(null);
+            metdataValue.setConfidence(-1);
+            serviceFactory.getMetadataValueService().update(context, metdataValue);
+        }
     }
 }

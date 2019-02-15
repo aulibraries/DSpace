@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
-import org.dspace.authorize.ResourcePolicy;
+//import org.dspace.authorize.ResourcePolicy;
 
 /**
  * Public interface to the embargo subsystem.
@@ -107,26 +107,10 @@ public interface EmbargoService {
     public List<MetadataValue> getLiftMetadata(Context context, Item item);
 
     public Iterator<Item> findItemsByLiftMetadata(Context context) throws SQLException, IOException, AuthorizeException;
+
+    public String getEmbargoMetadataValue(Context context, Item item, String element, String qualifier) throws AuthorizeException, IOException, SQLException;
     
-    public String getEmbargoEndDateMDV(Context context, Item item) throws SQLException, AuthorizeException, IOException;
+    public void removeEmbargoMetadataValue(Context context, Item item, String element, String qualifier) throws AuthorizeException, IOException, SQLException;
     
-    public String getEmbargoLengthMDV(Context context, Item item) throws SQLException, AuthorizeException, IOException;
-    
-    public String getEmbargoRightsMDV(Context context, Item item) throws SQLException, AuthorizeException, IOException;
-    
-    public String getEmbargoStatusMDV(Context context, Item item) throws SQLException, AuthorizeException, IOException;
-    
-    public void removeEmbargoEndDateMDV(Context context, Item item) throws AuthorizeException, IOException, SQLException;
-    
-    public void removeEmbargoLengthMDV(Context context, Item item) throws AuthorizeException, IOException, SQLException;
-    
-    public void removeEmbargoRightsMDV(Context context, Item item) throws AuthorizeException, IOException, SQLException;
-    
-    public void removeEmbargoStatusMDV(Context context, Item item) throws AuthorizeException, IOException, SQLException;
-    
-    public void printRPInfo(Context context, ResourcePolicy rp);
-    
-    public void printMDVInfo(Context context, MetadataValue mdv) throws SQLException, AuthorizeException;
-    
-    public String printEmbargoInfo(Context context, Item item) throws SQLException, IOException, AuthorizeException;
+    public void CreateOrModifyEmbargoMetadataValue(Context context, Item item, String element, String qualifier, String value) throws SQLException, IOException, AuthorizeException;
 }
