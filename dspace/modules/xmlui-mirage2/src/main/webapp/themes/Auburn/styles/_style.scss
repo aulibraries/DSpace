@@ -54,17 +54,15 @@
 
     .horizontal-slider  {
         //does nothing except force hardware accelerated css animations
-        @include transform(translate3d(0, 0, 0));
+        @include translate3d(0, 0, 0);
 
         #sidebar {
             @media(min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
-                /*@include box-shadow(inset 2px 2px 1px rgba(0,0,0,.05));*/
                 border-right: none;
             }
         }
     }
 }
-
 
 .main-content {
     background-color: transparent;
