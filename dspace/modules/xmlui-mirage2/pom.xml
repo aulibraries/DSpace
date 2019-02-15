@@ -24,12 +24,12 @@
         <mirage2.deps.included>true</mirage2.deps.included>
         <!-- Versions of build dependencies to be auto-installed when "mirage2.deps.included=true" -->
         <!-- These versions should be kept in sync with ./.travis.yml -->
-        <sass.version>3.4.25</sass.version>
-        <compass.version>1.0.1</compass.version>
-        <node.version>6.5.0</node.version>
-        <npm.version>3.10.8</npm.version>
+        <!--<sass.version>3.4.25</sass.version>
+        <compass.version>1.0.1</compass.version>-->
+        <node.version>10.15.1</node.version>
+        <npm.version>6.4.1</npm.version>
         <!-- Override version of JRuby that gem-maven-plugin installs when "mirage2.deps.included=true" -->
-        <jruby.version>9.1.17.0</jruby.version>
+        <!--<jruby.version>9.1.17.0</jruby.version>-->
     </properties>
 
     <build>
@@ -323,7 +323,7 @@
                     <value>true</value>
                 </property>
             </activation>
-            <repositories>
+            <!--<repositories>
                 <repository>
                     <id>rubygems-release</id>
                     <url>http://rubygems-proxy.torquebox.org/releases</url>
@@ -342,16 +342,16 @@
                     <version>${compass.version}</version>
                     <type>gem</type>
                 </dependency>
-            </dependencies>
+            </dependencies>-->
             <build>
                 <!-- Centrally manage the versions of all plugins used by this profile -->
                 <pluginManagement>
                     <plugins>
-                        <plugin>
+                        <!--<plugin>
                             <groupId>de.saumya.mojo</groupId>
                             <artifactId>gem-maven-plugin</artifactId>
                             <version>1.0.6</version>
-                        </plugin>
+                        </plugin>-->
                         <plugin>
                             <groupId>com.github.eirslett</groupId>
                             <artifactId>frontend-maven-plugin</artifactId>
@@ -360,7 +360,7 @@
                     </plugins>
                 </pluginManagement>
                 <plugins>
-                    <plugin>
+                    <!--<plugin>
                         <groupId>de.saumya.mojo</groupId>
                         <artifactId>gem-maven-plugin</artifactId>
                         <executions>
@@ -370,7 +370,7 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
+                    </plugin>-->
                     <plugin>
                         <groupId>com.soebes.maven.plugins</groupId>
                         <artifactId>iterator-maven-plugin</artifactId>
@@ -460,12 +460,12 @@
                                             <goal>grunt</goal>
                                             <!--<phase>prepare-package</phase>-->
                                             <configuration>
-                                                <arguments>${grunt.color.scheme} no-compass-${grunt.environment}
-                                                </arguments>
+                                                <!--<arguments>${grunt.color.scheme} no-compass-${grunt.environment}
+                                                </arguments>-->
                                                 <workingDirectory>${project.build.directory}/themes/@item@</workingDirectory>
                                             </configuration>
                                         </pluginExecutor>
-                                        <pluginExecutor>
+                                        <!--<pluginExecutor>
                                             <plugin>
                                                 <groupId>de.saumya.mojo</groupId>
                                                 <artifactId>gem-maven-plugin</artifactId>
@@ -477,7 +477,7 @@
                                                     config-${grunt.environment}.rb
                                                 </execArgs>
                                             </configuration>
-                                        </pluginExecutor>
+                                        </pluginExecutor>-->
                                     </pluginExecutors>
                                 </configuration>
                             </execution>
