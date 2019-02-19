@@ -193,9 +193,16 @@ public class ResourcePolicyServiceImpl implements ResourcePolicyService
         }
 
         // now expiration date
-        if (ed != null && now.after(ed))
+        /*if (ed != null && now.after(ed))
         {
             // end date is set, return false if we're after it
+            return false;
+        }*/
+
+        if(ed != null && now.before(ed))
+        {
+            // end date is set, return false if the current date
+            // is before the end date
             return false;
         }
 

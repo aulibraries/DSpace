@@ -7,6 +7,7 @@
  */
 package org.dspace.app.xmlui.aspect.artifactbrowser;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.cocoon.environment.ObjectModelHelper;
 import org.apache.cocoon.environment.Request;
 import org.apache.log4j.Logger;
@@ -18,10 +19,14 @@ import org.dspace.app.xmlui.wing.Message;
 import org.dspace.app.xmlui.wing.WingException;
 import org.dspace.app.xmlui.wing.element.*;
 import org.dspace.authorize.AuthorizeException;
+import org.dspace.authorize.factory.AuthorizeServiceFactory;
+import org.dspace.authorize.service.AuthorizeService;
 import org.dspace.content.*;
 import org.dspace.content.Item;
 import org.dspace.content.factory.ContentServiceFactory;
 import org.dspace.content.service.BitstreamService;
+import org.dspace.embargo.AUETDEmbargoSetter;
+import org.dspace.embargo.factory.EmbargoServiceFactory;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
@@ -101,13 +106,17 @@ public class RestrictedItem extends AbstractDSpaceTransformer //implements Cache
 
     protected BitstreamService bitstreamService = ContentServiceFactory.getInstance().getBitstreamService();
 
+    protected AuthorizeService authorizeService = AuthorizeServiceFactory.getInstance().getAuthorizeService();
+
 
     public void addPageMeta(PageMeta pageMeta) throws SAXException,
             WingException, UIException, SQLException, IOException,
             AuthorizeException 
     {
         DSpaceObject dso = HandleUtil.obtainHandle(objectModel);
-
+        Request request = ObjectModelHelper.getRequest(objectModel);
+        Item item = null;
+		
         pageMeta.addMetadata("title").addContent(T_title);
 
         pageMeta.addTrailLink(contextPath + "/", T_dspace_home);
@@ -116,12 +125,26 @@ public class RestrictedItem extends AbstractDSpaceTransformer //implements Cache
         }
         pageMeta.addTrail().addContent(T_trail);
 
+        if(StringUtils.isNotBlank(request.getParameter("bitstreamId"))) {
+			Bitstream bitstream = bitstreamService.find(context, UUID.fromString(request.getParameter("bitstreamId")));
+        
+            if(authorizeService.isAccessRestrictedToAllNonAdminUsers(context, bitstream))
+            {
+                pageMeta.addMetadata("view-account-nav").addContent("false");
+            }
+            else
+            {
+                pageMeta.addMetadata("view-account-nav").addContent("true");
+            }
+        } else {
+            pageMeta.addMetadata("view-account-nav").addContent("true");
+        }
     }
 
 
     public void addBody(Body body) throws SAXException, WingException,
-            UIException, SQLException, IOException, AuthorizeException, 
-            ResourceNotFoundException 
+        UIException, SQLException, IOException, AuthorizeException, 
+        ResourceNotFoundException 
     {
         Request request = ObjectModelHelper.getRequest(objectModel);
         DSpaceObject dso = HandleUtil.obtainHandle(objectModel);
@@ -152,10 +175,10 @@ public class RestrictedItem extends AbstractDSpaceTransformer //implements Cache
         else if (dso instanceof Item) 
         {
             // The dso may be an item but it could still be an item's bitstream. So let's check for the parameter.
-            if (request.getParameter("bitstreamId") != null) {
+            if (StringUtils.isNotBlank(request.getParameter("bitstreamId"))) {
                 String identifier = "unknown";
                 try {
-                    Bitstream bit = bitstreamService.find(context, UUID.fromString(request.getParameter("bitstreamId")));
+                    Bitstream bit = bitstreamService.find(context, UUID.fromString(request.getParameter("bitstreamId")));                    
                     if (bit != null) {
                         identifier = bit.getName();
                     }
@@ -197,7 +220,6 @@ public class RestrictedItem extends AbstractDSpaceTransformer //implements Cache
                 unauthorized.setHead(title);
                 unauthorized.addPara(T_para_item.parameterize(identifier));
                 unauthorized.addPara("item_status", status.getKey()).addContent(status);
-
             }
         } // end if Item 
         else 
@@ -208,10 +230,10 @@ public class RestrictedItem extends AbstractDSpaceTransformer //implements Cache
             unauthorized.addPara(T_para_resource);
         }
 
-        // add a login link if !loggedIn & not withdrawn
+        // Interrupt the request if the current user is not loggedIn, and the item is not withdrawn
         if (!isWithdrawn && context.getCurrentUser() == null) 
         {
-            unauthorized.addPara().addXref(contextPath+"/login", T_para_login);
+            //unauthorized.addPara().addXref(contextPath+"/login", T_para_login);
 
             // Interrupt request if the user is not authenticated, so they may come back to
             // the restricted resource afterwards.

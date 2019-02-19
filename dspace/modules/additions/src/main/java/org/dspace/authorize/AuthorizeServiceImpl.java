@@ -9,6 +9,7 @@ package org.dspace.authorize;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.dspace.authorize.service.AuthorizeService;
 import org.dspace.authorize.service.ResourcePolicyService;
 import org.dspace.content.*;
@@ -18,12 +19,17 @@ import org.dspace.content.service.BitstreamService;
 import org.dspace.content.service.WorkspaceItemService;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
+import org.dspace.core.LogManager;
+import org.dspace.embargo.factory.EmbargoServiceFactory;
+import org.dspace.embargo.AUETDEmbargoSetter;
 import org.dspace.eperson.EPerson;
 import org.dspace.eperson.Group;
 import org.dspace.eperson.service.GroupService;
+import org.dspace.services.factory.DSpaceServicesFactory;
 import org.dspace.workflow.WorkflowItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -56,6 +62,8 @@ public class AuthorizeServiceImpl implements AuthorizeService
     protected WorkspaceItemService workspaceItemService;
     @Autowired(required = true)
     protected WorkflowItemService workflowItemService;
+
+    private static final Logger log = Logger.getLogger(AuthorizeServiceImpl.class);
 
     protected AuthorizeServiceImpl()
     {
@@ -259,7 +267,7 @@ public class AuthorizeServiceImpl implements AuthorizeService
             // perform isAdmin check to see
             // if user is an Admin on this object
             DSpaceObject adminObject = useInheritance ? serviceFactory.getDSpaceObjectService(o).getAdminObject(c, o, action) : null;
-
+            
             if (isAdmin(c, e, adminObject))
             {
                 c.cacheAuthorizedAction(o, action, e, true, null);
@@ -296,7 +304,6 @@ public class AuthorizeServiceImpl implements AuthorizeService
                 ignoreCustomPolicies = true;
             }
         }
-
 
         for (ResourcePolicy rp : getPoliciesActionFilter(c, o, action))
         {
@@ -335,6 +342,24 @@ public class AuthorizeServiceImpl implements AuthorizeService
                 //When we are in read-only mode, we will cache authorized actions in a different way
                 //So we remove this resource policy from the cache.
                 c.uncacheEntity(rp);
+            }
+        }
+
+        // If the DSpace Object being checked for authorization
+        // is a bitstream (file) then grant access to the bitstream
+        // if the authenticated user is the owner of the bitstream's 
+        // parent item. Also grant access if the 
+        // system admiminstrators.
+        if (o instanceof Bitstream)
+        {
+            if (userToCheck != null && isOwner(c, userToCheck, o)) {
+                c.cacheAuthorizedAction(o, action, e, true, null);
+                return true;
+            }
+
+            if (isAuthorizedByGroup(c, o)) {
+                c.cacheAuthorizedAction(o, action, e, true, null);
+                return true;
             }
         }
 
@@ -831,4 +856,127 @@ public class AuthorizeServiceImpl implements AuthorizeService
         return policy;
     }
 
+    private boolean isOwner(Context c, EPerson e, DSpaceObject o) throws SQLException
+    {
+        if (o != null && e != null) {
+            Item item = null;
+            if (o instanceof Bitstream) {
+                DSpaceObject parent = serviceFactory.getDSpaceObjectService(o).getParentObject(c, o);
+
+                if (parent != null) {
+                    item = serviceFactory.getItemService().find(c, parent.getID());
+                }
+            } else if (o instanceof Item) {
+                item = (Item) o;
+            }
+
+            if (item != null) {
+                return item.getSubmitter().equals(e);
+            }
+        }
+        return false;
+    }
+    
+    public boolean isAccessRestrictedToNonAdminAuburnUsers(Context c, DSpaceObject o) throws SQLException 
+    {
+        if (o != null) {
+            Item item = null;
+            String embargoRights = null;
+
+            if (o instanceof Bitstream) {
+                DSpaceObject parent = serviceFactory.getDSpaceObjectService(o).getParentObject(c, o);
+
+                if (parent != null) {
+                    if (parent instanceof Item) {
+                        item = serviceFactory.getItemService().find(c, parent.getID());
+                    }
+                }
+            } else if (o instanceof Item) {
+                item = (Item) o;
+            }
+
+            if (item != null) {
+                try {
+                    embargoRights = EmbargoServiceFactory.getInstance().getEmbargoService().getEmbargoMetadataValue(c, item, "rights", null);
+                } catch(AuthorizeException | IOException ex) {
+
+                }
+            }
+            
+            if(StringUtils.isNotBlank(embargoRights)) {
+                return embargoRights.equalsIgnoreCase(AUETDEmbargoSetter.EMBARGO_NOT_AUBURN_STR);
+            }
+        }
+        return false; 
+    }
+
+    public boolean isAccessRestrictedToAllNonAdminUsers(Context c, DSpaceObject o) throws SQLException 
+    {
+        if (o != null) {
+            Item item = null;
+            String embargoRights = null;
+
+            if (o instanceof Bitstream) {
+                DSpaceObject parent = serviceFactory.getDSpaceObjectService(o).getParentObject(c, o);
+
+                if (parent != null) {
+                    if (parent instanceof Item) {
+                        item = serviceFactory.getItemService().find(c, parent.getID());
+                    }
+                }
+            } else if (o instanceof Item) {
+                item = (Item) o;
+            }
+
+            if (item != null) {
+                try {
+                    embargoRights = EmbargoServiceFactory.getInstance().getEmbargoService().getEmbargoMetadataValue(c, item, "rights", null);
+                } catch(AuthorizeException | IOException ex) {
+
+                }
+            }
+            
+            if(StringUtils.isNotBlank(embargoRights)) {
+                return embargoRights.equalsIgnoreCase(AUETDEmbargoSetter.EMBARGO_GLOBAL_STR);
+            }
+        }
+        return false;  
+    }
+    
+    public boolean isAuthorizedByGroup(Context c, DSpaceObject o) throws SQLException
+    {
+        if (o != null) {
+            Item item = null;
+            String embargoRights = null;
+
+            if (o instanceof Bitstream) {
+                DSpaceObject parent = serviceFactory.getDSpaceObjectService(o).getParentObject(c, o);
+
+                if (parent != null) {
+                    if (parent instanceof Item) {
+                        item = serviceFactory.getItemService().find(c, parent.getID());
+                    }
+                }
+            } else if (o instanceof Item) {
+                item = (Item) o;
+            }
+
+            if (item != null) {
+                try {
+                    embargoRights = EmbargoServiceFactory.getInstance().getEmbargoService().getEmbargoMetadataValue(c, item, "rights", null);
+                } catch(AuthorizeException | IOException ex) {
+
+                }
+            }
+
+            if(StringUtils.isNotBlank(embargoRights)) {
+                if (isAccessRestrictedToNonAdminAuburnUsers(c, o) && 
+                    groupService.isMember(c, groupService.findByName(c, DSpaceServicesFactory.getInstance().getConfigurationService().getProperty("auetd.authorization.group.2"))))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

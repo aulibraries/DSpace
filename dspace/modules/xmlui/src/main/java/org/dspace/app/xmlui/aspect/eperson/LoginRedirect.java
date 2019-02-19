@@ -75,7 +75,7 @@ public class LoginRedirect extends AbstractAction {
                 ContextUtil.obtainContext(objectModel), httpRequest,
                 httpResponse);
 
-	      
+
 		// now we want to check for the force ssl property
 		if (DSpaceServicesFactory.getInstance().getConfigurationService().getBooleanProperty("xmlui.force.ssl")) {
 
@@ -86,10 +86,12 @@ public class LoginRedirect extends AbstractAction {
 								: ("?" + httpRequest.getQueryString()));
 				httpResponse.sendRedirect(location.toString());
 			} else {
-				httpResponse.sendRedirect(url);
+				//httpResponse.sendRedirect(url);
+				httpResponse.sendRedirect(url+(httpRequest.getQueryString() == null ? "" : ("?" + httpRequest.getQueryString())));
 			}
 		} else {
-			httpResponse.sendRedirect(url);
+			//httpResponse.sendRedirect(url);
+			httpResponse.sendRedirect(url+(httpRequest.getQueryString() == null ? "" : ("?" + httpRequest.getQueryString())));
 		}
 
 		return new HashMap();

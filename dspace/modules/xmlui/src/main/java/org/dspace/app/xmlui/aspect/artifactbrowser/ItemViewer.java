@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import javax.servlet.http.HttpServletResponse;
 import org.apache.cocoon.caching.CacheableProcessingComponent;
@@ -43,6 +45,7 @@ import org.dspace.content.Collection;
 import org.dspace.content.MetadataValue;
 import org.dspace.content.DSpaceObject;
 import org.dspace.content.Item;
+import org.dspace.content.MetadataSchema;
 import org.dspace.app.util.GoogleMetadata;
 import org.dspace.content.crosswalk.CrosswalkException;
 import org.dspace.content.crosswalk.DisseminationCrosswalk;
@@ -56,6 +59,8 @@ import org.dspace.app.xmlui.wing.element.Metadata;
 import org.dspace.core.factory.CoreServiceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.dspace.embargo.factory.EmbargoServiceFactory;
+import org.dspace.embargo.service.EmbargoService;
 
 /**
  * Display a single item.
@@ -94,6 +99,8 @@ public class ItemViewer extends AbstractDSpaceTransformer implements CacheablePr
     private static final Logger log = LoggerFactory.getLogger(ItemViewer.class);
 
     protected SFXFileReaderService sfxFileReaderService = SfxServiceFactory.getInstance().getSfxFileReaderService();
+
+    protected EmbargoService embargoService =  EmbargoServiceFactory.getInstance().getEmbargoService();
 
     /**
      * Generate the unique caching key.
@@ -324,6 +331,61 @@ public class ItemViewer extends AbstractDSpaceTransformer implements CacheablePr
             // TODO: Is this the right exception class?
             throw new WingException(ce);
         }
+
+        /**
+         * The following custom code gets the value of an item's embargo.enddate metadata
+         * field, converts the date to a timestamp formatted string and then creates a 
+         * new metadata field for the page being viewed.
+         * 
+         * This code was added in order to restrict site visitors ability to view or even 
+         * download an embargoed item's files while still allowing them to view the item's
+         * bibliographical information. 
+         */
+
+        String embargoEndDateMetadataValue = embargoService.getEmbargoMetadataValue(context, item, "embargo", "enddate");
+        LocalDateTime embargoEndDate = null;
+        ZoneId localTimeZone = ZoneId.of("America/Chicago");
+        int year = 0;
+        int month = 0;
+        int day = 0;
+        String[] tempEmbargoEndDateStrArray = null;
+
+        if (embargoEndDateMetadataValue != null)
+        {
+            tempEmbargoEndDateStrArray = embargoEndDateMetadataValue.split("-");
+        }
+
+        if(tempEmbargoEndDateStrArray != null)
+        {
+            // If the embargo end date is of the form: year-month-day,
+            // otherwise the date is of the form: month-day-year
+            if(tempEmbargoEndDateStrArray[0].length() > 2)
+            {
+                year = Integer.parseInt(tempEmbargoEndDateStrArray[0]);
+                month = Integer.parseInt(tempEmbargoEndDateStrArray[1]);
+                day = Integer.parseInt(tempEmbargoEndDateStrArray[2]);
+            }
+            else 
+            {
+                month = Integer.parseInt(tempEmbargoEndDateStrArray[0]);
+                day = Integer.parseInt(tempEmbargoEndDateStrArray[1]);
+                year = Integer.parseInt(tempEmbargoEndDateStrArray[2]);
+            }
+        }
+
+        if(year > 0 && month > 0 && day > 0)
+        {
+            embargoEndDate = LocalDateTime.of(year, month, day, 0, 01);
+        }
+
+        if(embargoEndDate != null)
+        {
+            long embargoEnddDateTs = embargoEndDate.atZone(localTimeZone).toInstant().toEpochMilli();
+            pageMeta.addMetadata("enddateTs").addContent(String.valueOf(embargoEnddDateTs));
+        }
+
+        long currentTs = LocalDateTime.now().atZone(localTimeZone).toInstant().toEpochMilli();
+        pageMeta.addMetadata("currentTs").addContent(String.valueOf(currentTs));
     }
 
     /**
@@ -337,9 +399,8 @@ public class ItemViewer extends AbstractDSpaceTransformer implements CacheablePr
      */
     @Override
     public void addBody(Body body) throws SAXException, WingException,
-            UIException, SQLException, IOException, AuthorizeException
+        UIException, SQLException, IOException, AuthorizeException
     {
-
         DSpaceObject dso = HandleUtil.obtainHandle(objectModel);
         if (!(dso instanceof Item))
         {
