@@ -2280,32 +2280,58 @@
         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 	<message key="xmlui.general.search.placeholder.AUETD_placeholder">Search AUETD</message>
 	<message key="xmlui.Submission.submit.SelectCollection.AUETD_seleted_collection_head">Selected Collection</message>
+
+    <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                Custom Submission Form Messages
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+    <!-- License Form -->
+    <message key="xmlui.Submission.submit.LicenseStep.AUETD_decision_accepted">You have already read and accepted the AUETD embargo policy. Click the Next button to proceed to the next step.</message>
+
+    <!-- File Upload Field -->
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_head">Upload File</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_file_help">Clicking the folder icon will open a new window allowing you to select the file from your computer. Please upload only a PDF formatted version of your electronic thesis or dissertation.  If you encounter problems uploading your thesis or dissertation, please check for and remove all special characters (e.g. &#38; ; : ' , % * ^ $ # @ ( ) ! + = …) in the file's name.  If you continue to experience problems uploading your file, please contact <a href="mailto: etdhelp@auburn.edu">Sarah Beckum</a> at 334-844-2124.
 	</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_invalid_file_format_error">The file you're attempting to upload is not a PDF. Please
     upload a PDF version of your electronic thesis or dissertation.</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_submit_upload">Upload File</message>
+    
+    <!-- Embargo Creation Question Submission Field -->
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_label">Should access to your electronic thesis or dissertation be restricted?</message>
-	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_label">Specify a date to end the restriction</message>
+	
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_radio_button1_text">No, don't restrict access to my thesis or dissertation</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_radio_button2_text">Yes, limit access to my thesis or dissertation to Auburn University users only</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_radio_button3_text">Yes, block access to my thesis or dissertation to everyone</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_required_error">This field is required. Please select one of the boxes above.</message>
+
+    <!-- Embargo Length Submission Field -->
+    <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_label">How much time should access to your electronic thesis or dissertation be restricted?</message>
+    <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_help">Set the length of time of the restriction by choosing one of the options above. Leaving this field blank will cause an error.</message>
+    <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_radio_option1_text">Restrict access for one year.</message>
+    <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_radio_option2_text">Restrict access for two years.</message>
+    <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_radio_option3_text">Restrict access for three years.</message>
+    <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_radio_option4_text">Restrict access for four years.</message>
+    <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_radio_option5_text">Restrict access for five years.</message>
+    <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_required_error">This field requires an answer. Please answer this question by selecting one of the options above.</message>
+
+	<!--<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_label">Specify a date to end the restriction</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_help">Click in the field above to open a calendar widget and then select a date. Leaving this field blank will cause an error.</message>
-	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_radio_button1_text">No, don't restrict access to my thesis or dissertation</message>
-	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_radio_button2_text">Yes, limit access to my thesis or dissertation to Auburn University users only</message>
-	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_radio_button3_text">Yes, block access to my thesis or dissertation to everyone</message>
-	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_required_error">This field is required. Please select one of the boxes above.</message>
-	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_required_error">This field is required. Please enter a date into this field.</message>
+    <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_required_error">This field is required. Please enter a date into this field.</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_format_error">The date you're trying to submit is not properly formatted. Please enter a date in this format (yyyy-mm-dd). </message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_in_past_error">The date provided is in the past which is not allowed. Please enter a date that is at least one day after today.</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_is_too_long_error">The date provided is to far into the future. Please enter a date that is no more than 5 years in the future.</message>
-	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_is_current_error">The date provided is today which is not allowed. Please enter a date that is at least one day after today.</message>
-	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_summary_head">Restriction Summary Information</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_is_current_error">The date provided is today which is not allowed. Please enter a date that is at least one day after today.</message>-->
+	
+    <!-- Embargo Review/Summary Screen -->
+    <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_summary_head">Restriction Summary Information</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_status_column">Restricted Access</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_enddate_column">Restriction End Date</message>
+    <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_column">Restriction Length</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_submit_remove_button_name">Remove File and Restriction Settings</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_submit_edit_restrictions_button_name">Change Restriction Settings</message>
 	<message key="xmlui.Submission.Submissions.AUETD_submit_column5">Status</message>
 	<message key="xmlui.Submission.Submissions.AUETD_submit_column6">Reason for Rejection</message>
-	<message key="xmlui.Submission.submit.DescribeStep.instance_remove_bttn_name">Remove Selected</message>
+
+	<message key="xmlui.Submission.submit.DescribeStep.AUETD_instance_remove_bttn_name">Remove Selected</message>
 	<!--  Workflow messages -->
 	<message key="xmlui.Submission.workflow.RejectTaskStep.AUETD_file_upload_field_label">Upload Attachement</message>
 	<message key="xmlui.Submission.workflow.RejectTaskStep.AUETD_file_upload_field_help">Please enter the full path of the file on your computer corresponding to your item. If you click "Browse...", a new window will allow you to select the file from your computer.</message>
