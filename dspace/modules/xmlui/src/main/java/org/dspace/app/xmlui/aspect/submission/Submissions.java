@@ -18,6 +18,7 @@ import org.dspace.app.xmlui.wing.element.*;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.Collection;
 import org.dspace.content.Item;
+import org.dspace.content.MetadataSchema;
 import org.dspace.content.MetadataValue;
 import org.dspace.content.WorkspaceItem;
 import org.dspace.content.factory.ContentServiceFactory;
@@ -105,6 +106,12 @@ public class Submissions extends AbstractDSpaceTransformer
     protected static final Message T_c_displayall =
             message("xmlui.Submission.Submissions.completed.displayall");
 
+    // Custom Messages
+    protected static final Message AUETD_T_column5 =
+        message("xmlui.Submission.Submissions.AUETD_submit_column5");
+    protected static final Message AUETD_T_column6 =
+        message("xmlui.Submission.Submissions.AUETD_submit_column6");
+
     protected ItemService itemService = ContentServiceFactory.getInstance().getItemService();
     protected WorkspaceItemService workspaceItemService = ContentServiceFactory.getInstance().getWorkspaceItemService();
     protected CollectionService collectionService = ContentServiceFactory.getInstance().getCollectionService();
@@ -118,8 +125,8 @@ public class Submissions extends AbstractDSpaceTransformer
         pageMeta.addMetadata("title").addContent(T_title);
         pageMeta.addMetadata("javascript", "static").addContent("static/js/workflow-multiSelect.js");
 
-            pageMeta.addTrailLink(contextPath + "/",T_dspace_home);
-            pageMeta.addTrailLink(null,T_trail);
+        pageMeta.addTrailLink(contextPath + "/",T_dspace_home);
+        pageMeta.addTrailLink(null,T_trail);
 	}
 
     @Override
@@ -200,8 +207,8 @@ public class Submissions extends AbstractDSpaceTransformer
     	unfinished.setHead(T_s_head2);
     	Para p = unfinished.addPara();
     	p.addContent(T_s_info2a);
-    	p.addHighlight("bold").addXref(contextPath+"/submit",T_s_info2b);
-    	p.addContent(T_s_info2c);
+        //p.addHighlight("bold").addXref(contextPath+"/submit",T_s_info2b);
+        //p.addContent(T_s_info2c);
 
     	// Calculate the number of rows.
     	// Each list pluss the top header and bottom row for the button.
@@ -219,8 +226,10 @@ public class Submissions extends AbstractDSpaceTransformer
         Row header = table.addRow(Row.ROLE_HEADER);
         header.addCellContent(T_s_column1);
         header.addCellContent(T_s_column2);
-        header.addCellContent(T_s_column3);
+        //header.addCellContent(T_s_column3);
         header.addCellContent(T_s_column4);
+        header.addCellContent(AUETD_T_column5);
+        header.addCellContent(AUETD_T_column6);
 
         if (supervisedItems.size() > 0 && unfinishedItems.size() > 0)
         {
@@ -239,25 +248,28 @@ public class Submissions extends AbstractDSpaceTransformer
                 String url = contextPath+"/submit?workspaceID="+workspaceItemID;
                 String submitterName = submitterEPerson.getFullName();
                 String submitterEmail = submitterEPerson.getEmail();
-                String collectionName = workspaceItem.getCollection().getName();
+                //String collectionName = workspaceItem.getCollection().getName();
 
                 Row row = table.addRow(Row.ROLE_DATA);
                 CheckBox remove = row.addCell().addCheckBox("workspaceID");
                 remove.setLabel("remove");
                 remove.addOption(workspaceItemID);
 
-                if (StringUtils.isNotBlank(title))
-                {
-                    if (title.length() > 50)
+                if (StringUtils.isNotBlank(title)) {
+                    if (title.length() > 50) {
                         title = title.substring(0, 50) + " ...";
+                    }
                     row.addCell().addXref(url,title);
                 }
-                else
+                else {
                     row.addCell().addXref(url,T_untitled);
-                row.addCell().addXref(url,collectionName);
+                }
+
                 Cell cell = row.addCell();
                 cell.addContent(T_email);
                 cell.addXref("mailto:"+submitterEmail,submitterName);
+
+                addStatusAndReasonCells(workspaceItem, row);
             }
         } 
         else
@@ -274,7 +286,6 @@ public class Submissions extends AbstractDSpaceTransformer
 
         for (WorkspaceItem workspaceItem : supervisedItems) 
         {
-
             String title = workspaceItem.getItem().getName();
             EPerson submitterEPerson = workspaceItem.getItem().getSubmitter();
 
@@ -435,4 +446,40 @@ public class Submissions extends AbstractDSpaceTransformer
         }    
     }
 
+    private void addStatusAndReasonCells(WorkspaceItem wsi, Row row)
+        throws WingException
+    {
+        String reasonMessage = null;
+
+        List<MetadataValue> provenanceMDVList = itemService.getMetadata(wsi.getItem(), MetadataSchema.DC_SCHEMA, "description", "provenance", Item.ANY, Item.ANY);
+        String rejectedProvenanceMessage = null;
+        Cell statusCell = row.addCell();
+        Cell reasonCell = row.addCell();
+
+        if (provenanceMDVList.size() > 0) {
+            for (MetadataValue provenance : provenanceMDVList) {
+                if (provenance.getValue().startsWith("Rejected")) {
+                    rejectedProvenanceMessage = provenance.getValue();
+                    statusCell.addContent("Rejected");
+                }
+            }
+        }
+
+        if(StringUtils.isNotBlank(rejectedProvenanceMessage)) {
+            int startIndex = rejectedProvenanceMessage.indexOf("reason:");
+            int stopIndex = rejectedProvenanceMessage.indexOf(" # ");
+            int start = startIndex + ("reason:".length()+1);
+
+            if(stopIndex == -1)
+            {
+                stopIndex = rejectedProvenanceMessage.length();
+            }
+
+            reasonMessage = rejectedProvenanceMessage.substring(start, stopIndex);
+        }
+
+        if (StringUtils.isNotBlank(reasonMessage)) {
+            reasonCell.addContent(reasonMessage);
+        }
+    }
 }
