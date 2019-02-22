@@ -20,11 +20,11 @@ import org.dspace.content.service.WorkspaceItemService;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.core.LogManager;
-import org.dspace.embargo.factory.EmbargoServiceFactory;
-import org.dspace.embargo.AUETDEmbargoSetter;
+import org.dspace.embargo.service.EmbargoService;
 import org.dspace.eperson.EPerson;
 import org.dspace.eperson.Group;
 import org.dspace.eperson.service.GroupService;
+import org.dspace.services.ConfigurationService;
 import org.dspace.services.factory.DSpaceServicesFactory;
 import org.dspace.workflow.WorkflowItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +62,12 @@ public class AuthorizeServiceImpl implements AuthorizeService
     protected WorkspaceItemService workspaceItemService;
     @Autowired(required = true)
     protected WorkflowItemService workflowItemService;
+
+    // Custom code
+    @Autowired(required = true)
+    protected ConfigurationService configurationService;
+    @Autowired(required = true)
+    protected EmbargoService embargoService;
 
     private static final Logger log = Logger.getLogger(AuthorizeServiceImpl.class);
 
@@ -897,14 +903,14 @@ public class AuthorizeServiceImpl implements AuthorizeService
 
             if (item != null) {
                 try {
-                    embargoRights = EmbargoServiceFactory.getInstance().getEmbargoService().getEmbargoMetadataValue(c, item, "rights", null);
+                    embargoRights = embargoService.getEmbargoMetadataValue(c, item, "rights", null);
                 } catch(AuthorizeException | IOException ex) {
 
                 }
             }
             
             if(StringUtils.isNotBlank(embargoRights)) {
-                return embargoRights.equalsIgnoreCase(AUETDEmbargoSetter.EMBARGO_NOT_AUBURN_STR);
+                return embargoRights.equalsIgnoreCase(EmbargoService.EMBARGO_NOT_AUBURN_STR);
             }
         }
         return false; 
@@ -930,14 +936,14 @@ public class AuthorizeServiceImpl implements AuthorizeService
 
             if (item != null) {
                 try {
-                    embargoRights = EmbargoServiceFactory.getInstance().getEmbargoService().getEmbargoMetadataValue(c, item, "rights", null);
+                    embargoRights = embargoService.getEmbargoMetadataValue(c, item, "rights", null);
                 } catch(AuthorizeException | IOException ex) {
 
                 }
             }
             
             if(StringUtils.isNotBlank(embargoRights)) {
-                return embargoRights.equalsIgnoreCase(AUETDEmbargoSetter.EMBARGO_GLOBAL_STR);
+                return embargoRights.equalsIgnoreCase(EmbargoService.EMBARGO_GLOBAL_STR);
             }
         }
         return false;  
@@ -963,7 +969,7 @@ public class AuthorizeServiceImpl implements AuthorizeService
 
             if (item != null) {
                 try {
-                    embargoRights = EmbargoServiceFactory.getInstance().getEmbargoService().getEmbargoMetadataValue(c, item, "rights", null);
+                    embargoRights = embargoService.getEmbargoMetadataValue(c, item, "rights", null);
                 } catch(AuthorizeException | IOException ex) {
 
                 }
@@ -971,7 +977,7 @@ public class AuthorizeServiceImpl implements AuthorizeService
 
             if(StringUtils.isNotBlank(embargoRights)) {
                 if (isAccessRestrictedToNonAdminAuburnUsers(c, o) && 
-                    groupService.isMember(c, groupService.findByName(c, DSpaceServicesFactory.getInstance().getConfigurationService().getProperty("auetd.authorization.group.2"))))
+                    groupService.isMember(c, groupService.findByName(c, configurationService.getProperty("auetd.authorization.group.2"))))
                 {
                     return true;
                 }
