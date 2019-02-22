@@ -9,6 +9,7 @@ package org.dspace.app.xmlui.aspect.submission.submit;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 import org.dspace.app.xmlui.utils.UIException;
@@ -20,8 +21,13 @@ import org.dspace.app.xmlui.wing.element.CheckBox;
 import org.dspace.app.xmlui.wing.element.Division;
 import org.dspace.app.xmlui.wing.element.List;
 import org.dspace.authorize.AuthorizeException;
+import org.dspace.content.Bitstream;
+import org.dspace.content.Bundle;
 import org.dspace.content.Collection;
 import org.dspace.content.LicenseUtils;
+import org.dspace.content.service.ItemService;
+import org.dspace.content.factory.ContentServiceFactory;
+import org.dspace.core.Constants;
 import org.dspace.core.LogManager;
 import org.xml.sax.SAXException;
 
@@ -61,9 +67,12 @@ public class LicenseStep extends AbstractSubmissionStep
         message("xmlui.Submission.submit.LicenseStep.submit_remove");
     protected static final Message T_submit_complete = 
         message("xmlui.Submission.submit.LicenseStep.submit_complete");
-	
 
-    
+    // Custom Message object
+    protected static final Message AUETD_T_accepted =
+        message("xmlui.Submission.submit.LicenseStep.AUETD_decision_accepted");
+
+    protected ItemService itemService = ContentServiceFactory.getInstance().getItemService();
     /**
 	 * Establish our required parameters, abstractStep will enforce these.
 	 */
@@ -73,17 +82,29 @@ public class LicenseStep extends AbstractSubmissionStep
 		this.requireStep = true;
 	}
 
-    
 	public void addBody(Body body) throws SAXException, WingException,
 	UIException, SQLException, IOException, AuthorizeException
 	{
-
 		// Get the full text for the actual licese
 		Collection collection = submission.getCollection();
 		String actionURL = contextPath + "/handle/"+collection.getHandle() + "/submit/" + knot.getId() + ".continue";
 		String licenseText = LicenseUtils.getLicenseText(context
                 .getCurrentLocale(), collection, submission.getItem(),
                 submission.getSubmitter());
+
+        org.dspace.content.Item item = submission.getItem();
+        java.util.List<Bundle> bundles = itemService.getBundles(item, Constants.LICENSE_BUNDLE_NAME);
+        Bitstream licenseBitstream = null;
+        boolean showCheckbox = true;
+
+        if (bundles.size() > 0)
+        {
+            licenseBitstream = bundles.get(0).getBitstreams().get(0);
+        }
+
+        if (licenseBitstream != null) {
+            showCheckbox = false;
+        }
 		
 		Division div = body.addInteractiveDivision("submit-license",actionURL, Division.METHOD_POST,"primary submission");
 		div.setHead(T_submission_head);
@@ -91,29 +112,32 @@ public class LicenseStep extends AbstractSubmissionStep
 		
 		Division inner = div.addDivision("submit-license-inner");
 		inner.setHead(T_head);
-		inner.addPara(T_info1);
-		inner.addPara(T_info2);
 		
-		
-		// Add the actual text of the license:
-		Division displayLicense = inner.addDivision("submit-license-standard-text","license-text");
-		displayLicense.addSimpleHTMLFragment(true, licenseText);
-		
-		inner.addPara(T_info3);
+		if (showCheckbox) {
+            // Add the actual text of the license:
+            Division displayLicense = inner.addDivision("submit-license-standard-text","license-text");
+            displayLicense.addSimpleHTMLFragment(true, licenseText);
+        } else {
+            inner.addPara(AUETD_T_accepted);
+        }
 		
 		List controls = inner.addList("submit-review", List.TYPE_FORM);
 		
-		CheckBox decision = controls.addItem().addCheckBox("decision");
-		decision.setLabel(T_decision_label);
-		decision.addOption("accept",T_decision_checkbox);
+        if (showCheckbox) {
+            CheckBox decision = controls.addItem().addCheckBox("decision");
+            decision.setLabel(T_decision_label);
+            decision.addOption("accept",T_decision_checkbox);
 
-		// If user did not check the "I accept" checkbox 
-		if(this.errorFlag==org.dspace.submit.step.LicenseStep.STATUS_LICENSE_REJECTED)
-		{
-			log.info(LogManager.getHeader(context, "reject_license", submissionInfo.getSubmissionLogInfo()));
-			
-			decision.addError(T_decision_error);
-		}
+            // If user did not check the "I accept" checkbox
+            if(this.errorFlag==org.dspace.submit.step.LicenseStep.STATUS_LICENSE_REJECTED)
+            {
+                log.info(LogManager.getHeader(context, "reject_license", submissionInfo.getSubmissionLogInfo()));
+
+                decision.addError(T_decision_error);
+            }
+        } else {
+            controls.addItem().addHidden("decision").setValue("accept");
+        }
 		
 		// add standard control/paging buttons
 		addControlButtons(controls);
