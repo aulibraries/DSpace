@@ -183,6 +183,12 @@ public class Constants
 
     public static final String DEFAULT_ENCODING = "UTF-8";
 
+    // Custom Constants Section
+    public static final String EMBARGOED = "EMBARGOED";
+    public static final String NOT_EMBARGOED = "NOT_EMBARGOED";
+    public static final String EMBARGO_NOT_AUBURN_STR = "EMBARGO_NOT_AUBURN";
+    public static final String EMBARGO_GLOBAL_STR = "EMBARGO_GLOBAL";
+
     /**
      * If you know the type string, look up the corresponding type ID constant.
      * 
