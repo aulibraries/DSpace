@@ -82,7 +82,7 @@
          but in future, they should be refactored to a more relevant key prefix -->
 	<message key="xmlui.ArtifactBrowser.AdvancedSearch.type_author">Author</message>
 	<message key="xmlui.ArtifactBrowser.AdvancedSearch.type_title">Title</message>
-	<message key="xmlui.ArtifactBrowser.AdvancedSearch.type_subject">Subject</message>
+	<message key="xmlui.ArtifactBrowser.AdvancedSearch.type_subject">Departments</message>
 	<message key="xmlui.ArtifactBrowser.AdvancedSearch.type_abstract">Abstract</message>
 	<message key="xmlui.ArtifactBrowser.AdvancedSearch.type_series">Series</message>
 	<message key="xmlui.ArtifactBrowser.AdvancedSearch.type_sponsor">Sponsor</message>
@@ -119,11 +119,11 @@
 	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.order.asc">ascending</message>
 	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.order.desc">descending</message>
 	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.author.column_heading">Authors Name</message>
-	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.subject.column_heading">Subject</message>
+	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.subject.column_heading">Department</message>
 	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.title.metadata.author">Browsing {0} by Author {1}</message>
 	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.trail.metadata.author">Browsing {0} by Author</message>
-	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.title.metadata.subject">Browsing {0} by Subject {1}</message>
-	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.trail.metadata.subject">Browsing {0} by Subject</message>
+	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.title.metadata.subject">Browsing {0} by Department {1}</message>
+	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.trail.metadata.subject">Browsing {0} by Department</message>
 	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.title.item.title">Browsing {0} by Title {1}</message>
 	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.trail.item.title">Browsing {0} by Title</message>
 	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.title.item.dateissued">Browsing {0} by Issue Date {1}</message>
@@ -208,7 +208,7 @@
 	<message key="xmlui.ArtifactBrowser.Navigation.communities_and_collections">Communities &amp; Collections</message>
 	<message key="xmlui.ArtifactBrowser.Navigation.browse_title">Titles</message>
 	<message key="xmlui.ArtifactBrowser.Navigation.browse_author">Authors</message>
-	<message key="xmlui.ArtifactBrowser.Navigation.browse_subject">Subjects</message>
+	<message key="xmlui.ArtifactBrowser.Navigation.browse_subject">Departments</message>
 	<message key="xmlui.ArtifactBrowser.Navigation.browse_dateissued">By Issue Date</message>
 	<message key="xmlui.ArtifactBrowser.Navigation.browse_dateaccessioned">By Submit Date</message>
 	<message key="xmlui.ArtifactBrowser.Navigation.head_this_collection">This Collection</message>
@@ -232,16 +232,12 @@
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.head_bitstream">This bitstream is restricted</message>
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.para_resource">You do not have the credentials to access the restricted resource.</message>
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.para_community">You do not have the credentials to access the restricted community <b>{0}</b>.
-	
 	</message>
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.para_collection">You do not have the credentials to access the restricted collection <b>{0}</b>.
-	
 	</message>
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.para_item">You do not have the credentials to access the restricted item <b>{0}</b>.
-	
 	</message>
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.para_bitstream">You do not have the credentials to access the restricted bitstream <b>{0}</b>.
-	
 	</message>
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.type_collection">collection</message>
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.type_community">community</message>
@@ -1826,7 +1822,6 @@
 	<message key="xmlui.administrative.ControlPanel.alerts_head">System-wide Alerts</message>
 	<message key="xmlui.administrative.ControlPanel.alerts_warning">
 		<strong>Warning for load balanced systems</strong>: System-wide alerts are only effective for the node on which it is activated. You need to ensure that each node in the set receives the activate alert command.
-	
 	</message>
 	<message key="xmlui.administrative.ControlPanel.alerts_message_label">Alert message</message>
 	<message key="xmlui.administrative.ControlPanel.alerts_message_default">The system will be going down for regular maintenance. Please save your work and logout.</message>
@@ -1843,7 +1838,6 @@
 	<message key="xmlui.administrative.ControlPanel.alerts_session_only_administrative_sessions">Restrict authentication and kill current sessions</message>
 	<message key="xmlui.administrative.ControlPanel.alerts_session_note">
 		<strong>Note:</strong> Site administrators are exempt from session management.
-	
 	</message>
 	<message key="xmlui.administrative.ControlPanel.alerts_submit_activate">Activate</message>
 	<message key="xmlui.administrative.ControlPanel.alerts_submit_deactivate">Deactivate</message>
@@ -1874,7 +1868,6 @@
 	<!-- org.dspace.app.xmlui.administrative.SystemwideAlerts -->
 	<message key="xmlui.administrative.SystemwideAlerts.countdown">
 		<strong>In {0} minutes</strong>: 
-	
 	</message>
 	<!-- org.dspace.app.xmlui.administrative.NotAuthorized -->
 	<message key="xmlui.administrative.NotAuthorized.title">Not Authorized</message>
@@ -2030,7 +2023,6 @@
 	<message key="xmlui.dri2xhtml.METS-1.0.item-files-view">View</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.item-files-description">Description</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.item-files-viewOpen">View/<wbr />Open
-	
 	</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.item-no-files">There are no files associated with this item.</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.size-bytes">bytes</message>
@@ -2237,7 +2229,6 @@
 	<message key="xmlui.aspect.versioning.VersionNoticeTransformer.notice.workflow_version_head">Notice</message>
 	<message key="xmlui.aspect.versioning.VersionNoticeTransformer.notice.workflow_version_help">A more recent version of this item is in the Workflow.</message>
 	<message key="xmlui.aspect.sherpa.submission.consult">To check the copyright and self-archiving policies per journal or publisher, please consult <a href="http://www.sherpa.ac.uk/">SHERPA/RoMEO</a>.
-	
 	</message>
 	<message key="xmlui.aspect.sherpa.submission.title">Publisher information</message>
 	<message key="xmlui.aspect.sherpa.submission.journal">Journal: </message>
@@ -2285,15 +2276,16 @@
                 Custom Submission Form Messages
         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
     <!-- License Form -->
+    <message key="xmlui.Submission.submit.LicenseStep.AUETD_decision_checkbox">I have read and understand the AUETD embargo policy.</message>
     <message key="xmlui.Submission.submit.LicenseStep.AUETD_decision_accepted">You have already read and accepted the AUETD embargo policy. Click the Next button to proceed to the next step.</message>
 
     <!-- File Upload Field -->
-	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_head">Upload File</message>
-	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_file_help">Clicking the folder icon will open a new window allowing you to select the file from your computer. Please upload only a PDF formatted version of your electronic thesis or dissertation.  If you encounter problems uploading your thesis or dissertation, please check for and remove all special characters (e.g. &#38; ; : ' , % * ^ $ # @ ( ) ! + = …) in the file's name.  If you continue to experience problems uploading your file, please contact <a href="mailto: etdhelp@auburn.edu">Sarah Beckum</a> at 334-844-2124.
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_file_upload_form_head">Upload File</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_file_upload_field_help">Clicking the folder icon will open a new window allowing you to select the file from your computer. Please upload only a PDF formatted version of your electronic thesis or dissertation.  If you encounter problems uploading your thesis or dissertation, please check for and remove all special characters (e.g. &#38; ; : ' , % * ^ $ # @ ( ) ! + = …) in the file's name.  If you continue to experience problems uploading your file, please contact <a href="mailto: etdhelp@auburn.edu">Sarah Beckum</a> at 334-844-2124.
 	</message>
-	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_invalid_file_format_error">The file you're attempting to upload is not a PDF. Please
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_file_upload_invalid_file_format_error">The file you're attempting to upload is not a PDF. Please
     upload a PDF version of your electronic thesis or dissertation.</message>
-	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_submit_upload">Upload File</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_file_upload_submit_button_name">Upload File</message>
     
     <!-- Embargo Creation Question Submission Field -->
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_label">Should access to your electronic thesis or dissertation be restricted?</message>
@@ -2320,7 +2312,7 @@
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_in_past_error">The date provided is in the past which is not allowed. Please enter a date that is at least one day after today.</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_is_too_long_error">The date provided is to far into the future. Please enter a date that is no more than 5 years in the future.</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_is_current_error">The date provided is today which is not allowed. Please enter a date that is at least one day after today.</message>-->
-	
+
     <!-- Embargo Review/Summary Screen -->
     <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_summary_head">Restriction Summary Information</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_status_column">Restricted Access</message>
@@ -2330,17 +2322,17 @@
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_submit_edit_restrictions_button_name">Change Restriction Settings</message>
 	<message key="xmlui.Submission.Submissions.AUETD_submit_column5">Status</message>
 	<message key="xmlui.Submission.Submissions.AUETD_submit_column6">Reason for Rejection</message>
-
 	<message key="xmlui.Submission.submit.DescribeStep.AUETD_instance_remove_bttn_name">Remove Selected</message>
+
 	<!--  Workflow messages -->
-	<message key="xmlui.Submission.workflow.RejectTaskStep.AUETD_file_upload_field_label">Upload Attachement</message>
-	<message key="xmlui.Submission.workflow.RejectTaskStep.AUETD_file_upload_field_help">Please enter the full path of the file on your computer corresponding to your item. If you click "Browse...", a new window will allow you to select the file from your computer.</message>
-	<message key="xmlui.Submission.workflow.RejectTaskStep.AUETD_file_upload_error">There was a problem uploading your file.  Either the filename you entered was incorrect, there was a network problem which prevented the file from reaching us correctly, or you have attempted to upload a file format marked for internal system use only.  Please try again.</message>
-	<message key="xmlui.Submission.Submissions.others_workflow_head">Tasks Already Owned</message>
-	<message key="xmlui.Submission.Submissions.others_workflow_column1">Task</message>
-	<message key="xmlui.Submission.Submissions.others_workflow_column2">Item</message>
-	<message key="xmlui.Submission.Submissions.others_workflow_column3">Collection</message>
-	<message key="xmlui.Submission.Submissions.others_workflow_column4">Task Owner</message>
+	<message key="xmlui.Submission.workflow.RejectTaskStep.AUETD_reject_file_upload_field_label">Upload Attachement</message>
+	<message key="xmlui.Submission.workflow.RejectTaskStep.AUETD_reject_file_upload_field_help">Please enter the full path of the file on your computer corresponding to your item. If you click "Browse...", a new window will allow you to select the file from your computer.</message>
+	<message key="xmlui.Submission.workflow.RejectTaskStep.AUETD_reject_file_upload_field_error">There was a problem uploading your file.  Either the filename you entered was incorrect, there was a network problem which prevented the file from reaching us correctly, or you have attempted to upload a file format marked for internal system use only.  Please try again.</message>
+	<message key="xmlui.Submission.Submissions.AUETD_others_workflow_head">Tasks Already Owned</message>
+	<message key="xmlui.Submission.Submissions.AUETD_others_workflow_column1">Task</message>
+	<message key="xmlui.Submission.Submissions.AUETD_others_workflow_column2">Item</message>
+	<message key="xmlui.Submission.Submissions.AUETD_others_workflow_column3">Collection</message>
+	<message key="xmlui.Submission.Submissions.AUETD_others_workflow_column4">Task Owner</message>
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.para_resource">You are <b>NOT</b> authorized to access the restricted resource.
 	</message>
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.para_community">You are <b>NOT</b> authorized to access the restricted community <b>{0}</b>.
@@ -2351,8 +2343,8 @@
 	</message>
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.para_bitstream">You are <b>NOT</b> authorized to access the restricted file <b>{0}</b>.
 	</message>
-	<message key="xmlui.administrative.item.EditItemStatusForm.submit_edit_embargo">File and Embargo...</message>
-	<message key="xmlui.administrative.item.EditItemStatusForm.label_edit_embargo">Edit item's file and embargo settings</message>
+	<message key="xmlui.administrative.item.EditItemStatusForm.AUETD_edit_embargo_submit_button_name">File and Embargo...</message>
+	<message key="xmlui.administrative.item.EditItemStatusForm.AUETD_edit_embargo_section_label">Edit item's file and embargo settings</message>
 	<message key="xmlui.BitstreamReader.auth_message_nologin">The file you are attempting to access is restricted.</message>
 	<message key="xmlui.ArtifactBrowser.AdvancedSearch.type_embargoStatus">Embargo Status</message>
 </catalogue>
