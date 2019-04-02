@@ -26,6 +26,7 @@ import org.apache.cocoon.environment.ObjectModelHelper;
 import org.apache.cocoon.environment.Request;
 import org.apache.cocoon.environment.http.HttpEnvironment;
 import org.apache.cocoon.util.HashUtil;
+
 import org.apache.excalibur.source.SourceValidity;
 import org.dspace.app.sfx.factory.SfxServiceFactory;
 import org.dspace.app.sfx.service.SFXFileReaderService;
@@ -45,7 +46,6 @@ import org.dspace.content.Collection;
 import org.dspace.content.MetadataValue;
 import org.dspace.content.DSpaceObject;
 import org.dspace.content.Item;
-import org.dspace.content.MetadataSchema;
 import org.dspace.app.util.GoogleMetadata;
 import org.dspace.content.crosswalk.CrosswalkException;
 import org.dspace.content.crosswalk.DisseminationCrosswalk;
@@ -333,59 +333,20 @@ public class ItemViewer extends AbstractDSpaceTransformer implements CacheablePr
         }
 
         /**
-         * The following custom code gets the value of an item's embargo.enddate metadata
-         * field, converts the date to a timestamp formatted string and then creates a 
-         * new metadata field for the page being viewed.
-         * 
-         * This code was added in order to restrict site visitors ability to view or even 
-         * download an embargoed item's files while still allowing them to view the item's
-         * bibliographical information. 
+         * The following custom code renders an item's embargo end date and the current 
+         * date as timestamps. The values of these two fields is used to determine when
+         * to display an item's embargo information if it's under embargo.
          */
+        long embargoEndDateTs = embargoService.generateEmbargoEndDateTimeStamp(context, item);
+        /*if(embargoService.generateEmbargoEndDateTimeStamp(context, item) > 0) {
+            pageMeta.addMetadata("enddateTs").addContent(String.valueOf(embargoService.generateEmbargoEndDateTimeStamp(context, item)));
+        }*/
 
-        String embargoEndDateMetadataValue = embargoService.getEmbargoMetadataValue(context, item, "embargo", "enddate");
-        LocalDateTime embargoEndDate = null;
-        ZoneId localTimeZone = ZoneId.of("America/Chicago");
-        int year = 0;
-        int month = 0;
-        int day = 0;
-        String[] tempEmbargoEndDateStrArray = null;
+        pageMeta.addMetadata("enddateTs").addContent(String.valueOf(embargoEndDateTs));
 
-        if (embargoEndDateMetadataValue != null)
-        {
-            tempEmbargoEndDateStrArray = embargoEndDateMetadataValue.split("-");
-        }
-
-        if(tempEmbargoEndDateStrArray != null)
-        {
-            // If the embargo end date is of the form: year-month-day,
-            // otherwise the date is of the form: month-day-year
-            if(tempEmbargoEndDateStrArray[0].length() > 2)
-            {
-                year = Integer.parseInt(tempEmbargoEndDateStrArray[0]);
-                month = Integer.parseInt(tempEmbargoEndDateStrArray[1]);
-                day = Integer.parseInt(tempEmbargoEndDateStrArray[2]);
-            }
-            else 
-            {
-                month = Integer.parseInt(tempEmbargoEndDateStrArray[0]);
-                day = Integer.parseInt(tempEmbargoEndDateStrArray[1]);
-                year = Integer.parseInt(tempEmbargoEndDateStrArray[2]);
-            }
-        }
-
-        if(year > 0 && month > 0 && day > 0)
-        {
-            embargoEndDate = LocalDateTime.of(year, month, day, 0, 01);
-        }
-
-        if(embargoEndDate != null)
-        {
-            long embargoEnddDateTs = embargoEndDate.atZone(localTimeZone).toInstant().toEpochMilli();
-            pageMeta.addMetadata("enddateTs").addContent(String.valueOf(embargoEnddDateTs));
-        }
-
-        long currentTs = LocalDateTime.now().atZone(localTimeZone).toInstant().toEpochMilli();
-        pageMeta.addMetadata("currentTs").addContent(String.valueOf(currentTs));
+        //long currentTs = Instant.now().toEpochMilli();
+        long currentTS = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        pageMeta.addMetadata("currentTs").addContent(String.valueOf(currentTS));
     }
 
     /**
