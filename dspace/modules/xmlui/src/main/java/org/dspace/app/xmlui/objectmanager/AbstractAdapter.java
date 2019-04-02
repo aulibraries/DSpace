@@ -10,6 +10,7 @@ package org.dspace.app.xmlui.objectmanager;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -535,6 +536,16 @@ public abstract class AbstractAdapter
         }
         
         url += "?sequence="+bitstream.getSequenceID();
+
+        // Adding this information to the link's query string prevents
+        // browsers from rendering cached versions of a previously
+        // viewed file. In most cases using a cached copy of a file
+        // is desirable, but when you're trying to enforce embargo
+        // policies this practice is not desirable because it
+        // allows an unauthenticated user to hijack the session of
+        // an authenticated user who logged out of the site but
+        // didn't bother closing the browser, ending their session.
+        url += "&ts="+Instant.now().toEpochMilli();
         
         
         // //////////////////////
