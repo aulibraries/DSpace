@@ -68,7 +68,6 @@ public class SaveOrRemoveStep extends AbstractStep
 
 		Division div = body.addInteractiveDivision("submit-save-or-cancel",actionURL, Division.METHOD_POST,"primary submission");
 		div.setHead(T_submission_head);
-		addSubmissionProgressList(div);
 		
 		List saveOrCancel = div.addList("submit-review", List.TYPE_FORM);
 	
