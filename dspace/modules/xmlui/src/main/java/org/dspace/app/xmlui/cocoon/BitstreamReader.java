@@ -29,7 +29,6 @@ import org.apache.cocoon.environment.http.HttpEnvironment;
 import org.apache.cocoon.environment.http.HttpResponse;
 import org.apache.cocoon.reading.AbstractReader;
 import org.apache.cocoon.util.ByteRange;
-import org.apache.commons.lang.StringUtils;
 import org.dspace.app.xmlui.utils.AuthenticationUtil;
 import org.dspace.app.xmlui.utils.ContextUtil;
 import org.dspace.authorize.AuthorizeException;
@@ -55,7 +54,6 @@ import org.apache.log4j.Logger;
 import org.dspace.core.LogManager;
 import org.dspace.embargo.factory.EmbargoServiceFactory;
 import org.dspace.embargo.service.EmbargoService;
-import org.dspace.embargo.AUETDEmbargoSetter;
 
 /**
  * The BitstreamReader will query DSpace for a particular bitstream and transmit
@@ -331,12 +329,15 @@ public class BitstreamReader extends AbstractReader implements Recyclable
             }
             // It item-request is enabled to all request we redirect to restricted-resource immediately without login request  
             //String requestItemType = DSpaceServicesFactory.getInstance().getConfigurationService().getProperty("request.item.type");
-            if (!isAuthorized)
-            {
+            if (!isAuthorized) {
                 String redirectURL = request.getContextPath();
-                String embargoRights = embargoService.getEmbargoMetadataValue(context, item, "rights", null);
-                
-                if (StringUtils.isBlank(embargoRights)) {
+
+                // The user does not have read access to the requested bitstream. If the dc.rights metadata value of the 
+                // bitstream's parent item is set to EMBARGO_GLOBAL then display a custom restricted access message to
+                // the user. Otherwise... 
+                if (authorizeService.isAccessRestrictedToAllNonAdminUsers(context, bitstream)) {
+                    AuthenticationUtil.interruptRequest(objectModel, AUTH_REQUIRED_HEADER, AUTH_REQUIRED_MESSAGE_NOLOGIN, null);
+
                     redirectURL += "/handle/";
                     if (item!=null) {
                         redirectURL += item.getHandle();
@@ -346,95 +347,29 @@ public class BitstreamReader extends AbstractReader implements Recyclable
                     }
 
                     redirectURL += "/restricted-resource?bitstreamId=" + bitstream.getID();
+
+                } else if (authorizeService.isAccessRestrictedToNonAdminAuburnUsers(context, bitstream)) {
+                    // The user does not have read access to this bitstream. Interrupt this current request
+                    // and then forward them to the login page so that they can be authenticated. Once that is
+                    // successful, their request will be resumed.
+                    AuthenticationUtil.interruptRequest(objectModel, AUTH_REQUIRED_HEADER, AUTH_REQUIRED_MESSAGE, null);
+                    redirectURL += "/login?bitstreamId="+ bitstream.getID();
                 } else {
-                    // The user does not have read access to the requested bitstream. If the dc.rights metadata value of the 
-                    // bitstream's parent item is set to EMBARGO_GLOBAL then display a custom restricted access message to
-                    // the user. Otherwise... 
-                    if (authorizeService.isAccessRestrictedToAllNonAdminUsers(context, bitstream))
-                    {
-                        AuthenticationUtil.interruptRequest(objectModel, AUTH_REQUIRED_HEADER, AUTH_REQUIRED_MESSAGE_NOLOGIN, null);
-
-                        redirectURL += "/handle/";
-                        if (item!=null) {
-                            redirectURL += item.getHandle();
-                        }
-                        else if (dso!=null) {
-                            redirectURL += dso.getHandle();
-                        }
-
-                        redirectURL += "/restricted-resource?bitstreamId=" + bitstream.getID();
-
-                    } else if (authorizeService.isAccessRestrictedToNonAdminAuburnUsers(context, bitstream)) {
-                        // The user does not have read access to this bitstream. Interrupt this current request
-                        // and then forward them to the login page so that they can be authenticated. Once that is
-                        // successful, their request will be resumed.
-                        AuthenticationUtil.interruptRequest(objectModel, AUTH_REQUIRED_HEADER, AUTH_REQUIRED_MESSAGE, null);
-                        redirectURL += "/login?bitstreamId="+ bitstream.getID();
+                    redirectURL += "/handle/";
+                    if (item!=null) {
+                        redirectURL += item.getHandle();
                     }
+                    else if (dso!=null) {
+                        redirectURL += dso.getHandle();
+                    }
+
+                    redirectURL += "/restricted-resource?bitstreamId=" + bitstream.getID();
                 }
 
                 HttpServletResponse httpResponse = (HttpServletResponse)
                 objectModel.get(HttpEnvironment.HTTP_RESPONSE_OBJECT);
                 httpResponse.sendRedirect(redirectURL);
                 return;
-
-
-                /*if (context.getCurrentUser() != null || StringUtils.equalsIgnoreCase("all", requestItemType)) {
-                    // A user is logged in, but they are not authorized to read this bitstream,
-                    // instead of asking them to login again we'll point them to a friendly error
-                    // message that tells them the bitstream is restricted.
-                    //String redirectURL = request.getContextPath() + "/handle/";
-                    redirectURL += "/handle/";
-
-                    if (item!=null) {
-                        redirectURL += item.getHandle();
-                    }
-                    else if (dso!=null) {
-                        redirectURL += dso.getHandle();
-                    }
-                    redirectURL += "/restricted-resource?bitstreamId=" + bitstream.getID();
-
-                    HttpServletResponse httpResponse = (HttpServletResponse)
-                    objectModel.get(HttpEnvironment.HTTP_RESPONSE_OBJECT);
-                    httpResponse.sendRedirect(redirectURL);
-                    return;
-                }
-                else {
-                	if (StringUtils.isBlank(requestItemType) || requestItemType.equalsIgnoreCase("logged")) {        
-                        // The user does not have read access to the requested bitstream. If the dc.rights metadata value of the 
-                        // bitstream's parent item is set to EMBARGO_GLOBAL then display a custom restricted access message to
-                        // the user. Otherwise... 
-                        if (embargoRights.equalsIgnoreCase(AUETDEmbargoSetter.EMBARGO_GLOBAL_STR))
-                        {
-                            AuthenticationUtil.interruptRequest(objectModel, AUTH_REQUIRED_HEADER, AUTH_REQUIRED_MESSAGE_NOLOGIN, null);
-
-                            redirectURL += "/handle/";
-                            if (item!=null) {
-                                redirectURL += item.getHandle();
-                            }
-                            else if (dso!=null) {
-                                redirectURL += dso.getHandle();
-                            }
-
-                            redirectURL += "/restricted-resource?bitstreamId=" + bitstream.getID();
-
-                        } else if (embargoRights.equalsIgnoreCase(AUETDEmbargoSetter.EMBARGO_NOT_AUBURN_STR)) {
-                            // The user does not have read access to this bitstream. Interrupt this current request
-                            // and then forward them to the login page so that they can be authenticated. Once that is
-                            // successful, their request will be resumed.
-                            AuthenticationUtil.interruptRequest(objectModel, AUTH_REQUIRED_HEADER, AUTH_REQUIRED_MESSAGE, null);
-                            redirectURL += "/login?bitstreamId="+ bitstream.getID();
-                        }                      
-
-                        // Redirect
-                        //String redictURL = request.getContextPath() + "/login?bitstreamId="+ bitstream.getID();
-
-                        HttpServletResponse httpResponse = (HttpServletResponse)
-                        objectModel.get(HttpEnvironment.HTTP_RESPONSE_OBJECT);
-                        httpResponse.sendRedirect(redirectURL);
-                        return;
-                	}
-                }*/
             }
             
             if (this.hasNotBeenModified) {
