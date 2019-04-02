@@ -9,6 +9,7 @@ package org.dspace.submit.step;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,8 +22,7 @@ import org.dspace.app.util.SubmissionInfo;
 import org.dspace.submit.AbstractProcessingStep;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.WorkspaceItem;
-import org.dspace.core.Context;
-import org.dspace.core.LogManager;
+import org.dspace.core.*;
 import org.dspace.workflow.WorkflowService;
 import org.dspace.workflow.factory.WorkflowServiceFactory;
 
@@ -97,9 +97,12 @@ public class CompleteStep extends AbstractProcessingStep
         }
         finally
         {
-        // commit changes to database
-            if (success)
-            {
+            
+            if (success) {
+                // notify the submitter their submission was successful.
+                notifyOfSubmission(context, subInfo);
+
+                // commit changes to database
                 context.commit();
             }
         }
@@ -136,5 +139,27 @@ public class CompleteStep extends AbstractProcessingStep
         // that occurs just *before* the final confirmation page!
         // (so it should only be processed once!)
         return 1;
+    }
+
+    private void notifyOfSubmission(Context context, SubmissionInfo subInfo)
+        throws AuthorizeException, IOException, SQLException
+    {
+        try {
+            String title = subInfo.getSubmissionItem().getItem().getName();
+            Locale supportedLocale = I18nUtil.getEPersonLocale(subInfo.getSubmissionItem().getItem().getSubmitter());
+            Email email = Email.getEmail(I18nUtil.getEmailFilename(supportedLocale,"submit_notify"));
+
+            email.addRecipient(subInfo.getSubmissionItem().getItem().getSubmitter().getEmail());
+            email.addArgument(title);
+            email.addArgument(configurationService.getProperty("dspace.url") + "/mydspace");
+
+            email.send();
+
+        } catch (Exception ex) {
+            log.warn(LogManager.getHeader(context, "notify_of_submission",
+                    "cannot email user" + " eperson_id" + subInfo.getSubmissionItem().getItem().getSubmitter().getID()
+                            + " eperson_email" + subInfo.getSubmissionItem().getItem().getSubmitter().getEmail()
+                            + " submitted_item_id" + subInfo.getSubmissionItem().getItem().getID()));
+        }
     }
 }
