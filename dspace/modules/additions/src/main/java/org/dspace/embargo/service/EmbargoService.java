@@ -8,6 +8,8 @@
 package org.dspace.embargo.service;
 
 import org.dspace.authorize.AuthorizeException;
+import org.dspace.content.Collection;
+import org.dspace.content.DSpaceObject;
 import org.dspace.content.DCDate;
 import org.dspace.content.Item;
 import org.dspace.content.MetadataValue;
@@ -15,6 +17,8 @@ import org.dspace.core.Context;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.DateTimeException;
+import java.time.Instant;
 import java.util.Iterator;
 import java.util.List;
 //import org.dspace.authorize.ResourcePolicy;
@@ -44,7 +48,6 @@ public interface EmbargoService {
      ** The actual date is the first day of the year 10,000 UTC.
      **/
     public static final DCDate FOREVER = new DCDate("10000-01-01");
-
 
     /**
      * Put an Item under embargo until the specified lift date.
@@ -110,7 +113,13 @@ public interface EmbargoService {
 
     public String getEmbargoMetadataValue(Context context, Item item, String element, String qualifier) throws AuthorizeException, IOException, SQLException;
     
-    public void removeEmbargoMetadataValue(Context context, Item item, String element, String qualifier) throws AuthorizeException, IOException, SQLException;
-    
-    public void CreateOrModifyEmbargoMetadataValue(Context context, Item item, String element, String qualifier, String value) throws SQLException, IOException, AuthorizeException;
+    public void createOrModifyEmbargoMetadataValue(Context context, Item item, String element, String qualifier, String value) throws SQLException, IOException, AuthorizeException;
+
+    public String generateEmbargoLength(Context context, Item item, String selectedLength) throws AuthorizeException, IOException, SQLException;
+
+    public Instant getEmbargoEndDate(Context context, Item item) throws AuthorizeException, DateTimeException, IOException, SQLException;
+
+    public void generateAUETDEmbargoPolicies(Context context, DSpaceObject dso, int embargoType, Collection owningCollection) throws AuthorizeException, IOException, SQLException;
+
+    public long generateEmbargoEndDateTimeStamp(Context context, Item item) throws AuthorizeException, IOException, SQLException;
 }

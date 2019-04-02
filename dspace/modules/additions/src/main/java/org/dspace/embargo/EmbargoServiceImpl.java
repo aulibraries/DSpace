@@ -9,17 +9,35 @@ package org.dspace.embargo;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.DateTimeException;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dspace.authorize.AuthorizeException;
+import org.dspace.authorize.ResourcePolicy;
+import org.dspace.authorize.service.AuthorizeService;
+import org.dspace.authorize.service.ResourcePolicyService;
 import org.dspace.content.*;
-import org.dspace.content.factory.ContentServiceFactory;
+import org.dspace.content.service.BitstreamService;
 import org.dspace.content.service.ItemService;
+import org.dspace.content.service.MetadataValueService;
+import org.dspace.core.Constants;
 import org.dspace.core.Context;
+import org.dspace.core.LogManager;
 import org.dspace.core.service.PluginService;
 import org.dspace.embargo.service.EmbargoService;
+import org.dspace.eperson.Group;
 import org.dspace.services.ConfigurationService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -74,7 +92,24 @@ public class EmbargoServiceImpl implements EmbargoService
     @Autowired(required = true)
     protected PluginService pluginService;
 
-    protected ContentServiceFactory serviceFactory;
+    // Custom property declarations
+    @Autowired(required = true)
+    protected AuthorizeService authorizeService;
+    
+    @Autowired(required = true)
+    protected BitstreamService bitstreamService;
+
+    @Autowired(required = true)
+    protected MetadataValueService metadataValueService;
+
+    @Autowired(required = true)
+    protected ResourcePolicyService resourcePolicyService;
+
+    // Custom Constant Assignments
+    public static final String EMBARGOED = "EMBARGOED";
+    public static final String NOT_EMBARGOED = "NOT_EMBARGOED";
+    public static final String EMBARGO_NOT_AUBURN_STR = "EMBARGO_NOT_AUBURN";
+    public static final String EMBARGO_GLOBAL_STR = "EMBARGO_GLOBAL";
 
     protected EmbargoServiceImpl()
     {
@@ -85,19 +120,44 @@ public class EmbargoServiceImpl implements EmbargoService
     public void setEmbargo(Context context, Item item)
         throws SQLException, AuthorizeException
     {
-        try
-        {
+        try {
             context.turnOffAuthorisationSystem();
             /*itemService.clearMetadata(context, item, lift_schema, lift_element, lift_qualifier, Item.ANY);
             itemService.addMetadata(context, item, lift_schema, lift_element, lift_qualifier, null, slift);
             log.info("Set embargo on Item "+item.getHandle()+", expires on: "+slift);*/
 
-            setter.setEmbargo(context, item);
+            //setter.setEmbargo(context, item);
+            Bitstream bitstream = getItemBitstream(context, item);
+            Instant embargoEndDateInstant = getEmbargoEndDate(context, item);
 
-            itemService.update(context, item);
+            if (bitstream != null && embargoEndDateInstant != null) {
+                LocalDateTime embargoEndDateLDT = LocalDateTime.ofInstant(embargoEndDateInstant, ZoneId.systemDefault());
+                List<ResourcePolicy> bitstreamResourcePolicyList = authorizeService.getPolicies(context, bitstream);
+                
+                log.debug(LogManager.getHeader(context, "setting_auetd_embargo ", " Date.from(embargoEndDateInstant).toString() = "+Date.from(embargoEndDateInstant).toString()));
+
+                for (ResourcePolicy rp : bitstreamResourcePolicyList) {
+                    log.debug(LogManager.getHeader(context, "setting_auetd_embargo ", " rp.id = "+String.valueOf(rp.getID())));
+                    rp.setEndDate(Date.from(embargoEndDateInstant));
+                    
+                    resourcePolicyService.update(context, rp);
+                    
+                    log.debug(LogManager.getHeader(context, "setting_auetd_embargo ", " rp.enddate = "+rp.getEndDate().toInstant().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+                }
+                
+                String embargoEndDateMDVStr = embargoEndDateLDT.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                log.debug(LogManager.getHeader(context, "setting_auetd_embargo ", " embargoEndDate = "+embargoEndDateMDVStr));
+
+                createOrModifyEmbargoMetadataValue(context, item, "embargo", "enddate", embargoEndDateMDVStr);
+                
+                itemService.update(context, item);
+            }
+        } catch (DateTimeException | IOException e) {
+            // TODO Auto-generated catch block
+            log.error(LogManager.getHeader(context, "setting_auetd_embargo ", e.getMessage()));
+            e.printStackTrace();
         }
-        finally
-        {
+        finally {
             context.restoreAuthSystemState();
         }
     }
@@ -253,49 +313,256 @@ public class EmbargoServiceImpl implements EmbargoService
     {
         List<MetadataValue> metadataValueList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, element, qualifier, Item.ANY);
 
-        if (!metadataValueList.isEmpty()) {
+        if (metadataValueList.size() > 0) {
             for(MetadataValue metadataValue : metadataValueList) {
-                if (metadataValue != null)
-                {
+                if (StringUtils.isNotBlank(metadataValue.getValue())) {
                     return metadataValue.getValue();
                 }
             }
         }
         return null;
     }
-
-    public void removeEmbargoMetadataValue(Context context, Item item, String element, String qualifier) throws AuthorizeException, IOException, SQLException
+    
+    @Override
+    public void createOrModifyEmbargoMetadataValue(Context context, Item item, String element, String qualifier, String value) throws AuthorizeException, IOException, SQLException
     {
-        itemService.clearMetadata(context, item, MetadataSchema.DC_SCHEMA, element, qualifier, Item.ANY);
-    }
-
-    public void CreateOrModifyEmbargoMetadataValue(Context context, Item item, String element, String qualifier, String value) throws SQLException, IOException, AuthorizeException
-    {
-        if (getEmbargoMetadataValue(context, item, element, qualifier) != null)
-        {
-            List<MetadataValue> metadataValueList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, element, qualifier, Item.ANY);
-
-            if (!metadataValueList.isEmpty())
-            {
-                for(MetadataValue metdataValue : metadataValueList)
-                {
-                    metdataValue.setValue(value);
-                    metdataValue.setDSpaceObject(item);
-                    serviceFactory.getMetadataValueService().update(context, metdataValue);
-                }
+        if (StringUtils.isNotBlank(getEmbargoMetadataValue(context, item, element, qualifier))) {           
+            itemService.clearMetadata(context, item, MetadataSchema.DC_SCHEMA, element, qualifier, Item.ANY);
+            itemService.addMetadata(context, item, MetadataSchema.DC_SCHEMA, element, qualifier, "en_US", value);
+        } else {
+            if (StringUtils.isNotBlank(element) && StringUtils.isNotBlank(value)) {
+                itemService.addMetadata(context, item, MetadataSchema.DC_SCHEMA, element, qualifier, "en_US", value);
             }
         }
-        else
-        {
-            MetadataField metadataField = serviceFactory.getMetadataFieldService().findByElement(context, MetadataSchema.DC_SCHEMA, element, qualifier);
-            MetadataValue metdataValue = serviceFactory.getMetadataValueService().create(context, item, metadataField);
+    }
 
-            metdataValue.setValue(value);
-            metdataValue.setLanguage("en_US");
-            metdataValue.setPlace(1);
-            metdataValue.setAuthority(null);
-            metdataValue.setConfidence(-1);
-            serviceFactory.getMetadataValueService().update(context, metdataValue);
+    @Override
+    public String generateEmbargoLength(Context context, Item item, String selectedLength) 
+        throws AuthorizeException, IOException, SQLException
+    {
+        long months = 0;
+        String lengthStr = null;
+
+        if (StringUtils.isNotBlank(selectedLength)) {
+            int length = 0;
+            length = Integer.parseInt(selectedLength);
+            
+            months = 12 * length;
+        } else {
+            Instant embargoEndDateInstant = getEmbargoEndDate(context, item);
+
+            if(embargoEndDateInstant != null) {
+                LocalDate embargoStartDate = LocalDate.parse(getEmbargoMetadataValue(context, item, "date", "accessioned"));
+                LocalDate embargoEndDate = LocalDate.from(embargoEndDateInstant);
+
+                months = ChronoUnit.MONTHS.between(embargoStartDate, embargoEndDate);
+            }
         }
+
+        if(months > 0) {
+            lengthStr = "MONTHS_WITHHELD:"+months;
+        }
+        return lengthStr;
+    }
+
+    public Instant getEmbargoEndDate(Context context, Item item) throws AuthorizeException, DateTimeException, IOException, SQLException
+    {
+        Instant embargoEndDate = null;
+        
+        embargoEndDate = generateNewEmbargoEndDate(context, item);
+        log.debug(LogManager.getHeader(context, "get_embargo_enddate", " Is embargoEndDate null "+String.valueOf(embargoEndDate == null)));
+
+        if (embargoEndDate != null) {
+            LocalDateTime embargoEndDateLDT = LocalDateTime.ofInstant(embargoEndDate, ZoneId.systemDefault());
+            log.info(LogManager.getHeader(context, "get_embargo_enddate", " embargoEndDate = "+embargoEndDateLDT.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+        }
+
+        return embargoEndDate;
+    }
+
+    private Instant generateNewEmbargoEndDate(Context context, Item item) throws AuthorizeException, IOException, SQLException
+    {
+        long lengthNum = 0;
+        Instant calculatedEmbargoEndDate = null;
+        String accessionedDateMDV = null;
+        Instant startDate = null;
+        LocalDateTime accessionedDateLDT = null;
+
+        log.debug(LogManager.getHeader(context, "calculating_embargo_enddate", "Item id pre embargo setting = "+item.getID().toString()));
+        
+        List<MetadataValue> accessionedDateList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "date", "accessioned", Item.ANY);
+
+        if (accessionedDateList != null && accessionedDateList.size() > 0) {
+            accessionedDateMDV = accessionedDateList.get(0).getValue();
+        }
+
+        if (StringUtils.isNotBlank(accessionedDateMDV)) {
+            CharSequence accessionedDateCS = accessionedDateMDV.subSequence(0, accessionedDateMDV.length()-1);
+            accessionedDateLDT = LocalDateTime.parse(accessionedDateCS, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            startDate = LocalDateTime.of(accessionedDateLDT.getYear(), accessionedDateLDT.getMonthValue(), accessionedDateLDT.getDayOfMonth(), accessionedDateLDT.getHour(), accessionedDateLDT.getMinute(), accessionedDateLDT.getSecond()).atZone(ZoneId.systemDefault()).toInstant();
+        } else {
+            startDate = Instant.now();
+        }
+        
+        List<MetadataValue> embargoLengthList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "length", "en_US");
+        log.debug(LogManager.getHeader(context, "calculating_embargo_enddate ", " Is embargoLengthList null? "+String.valueOf(embargoLengthList == null)));
+        log.debug(LogManager.getHeader(context, "calculating_embargo_enddate ", " Size of embargoLengthList = "+String.valueOf(embargoLengthList.size())));
+        
+        if (embargoLengthList != null && embargoLengthList.size() > 0) {
+
+            log.debug(LogManager.getHeader(context, "calculating_embargo_enddate ", " Is dc.embargo.length null? "+String.valueOf(StringUtils.isNotBlank(embargoLengthList.get(0).getValue()))));
+            log.debug(LogManager.getHeader(context, "calculating_embargo_enddate ", " dc.embargo.length = "+embargoLengthList.get(0).getValue()));
+
+            ArrayList<String> embargoLengths = new ArrayList<String>();
+            embargoLengths.addAll(Arrays.asList(embargoLengthList.get(0).getValue().split(":")));
+            log.debug(LogManager.getHeader(context, "calculating_embargo_enddate ", " Size of embargoLengths = "+String.valueOf(embargoLengths.size())));
+            if (embargoLengths.size() > 0) {
+                log.debug(LogManager.getHeader(context, "calculating_embargo_enddate ", " embargoLengths[0] = "+embargoLengths.get(0)));
+                log.debug(LogManager.getHeader(context, "calculating_embargo_enddate ", " embargoLengths[1] = "+embargoLengths.get(1)));
+                lengthNum = Long.parseLong(embargoLengths.get(1));
+            }
+        }
+        log.debug(LogManager.getHeader(context, "calculating_embargo_enddate ", " lengthNum = "+String.valueOf(lengthNum)));
+
+        if (lengthNum > 0) {
+            try {
+                LocalDateTime embargoEndDateLDT = LocalDateTime.ofInstant(startDate, ZoneId.systemDefault());
+                calculatedEmbargoEndDate = embargoEndDateLDT.atZone(ZoneId.systemDefault()).plusMonths(lengthNum).toInstant();
+            } catch (DateTimeException dtEx) {
+                log.error(LogManager.getHeader(context, "calculating_embargo_enddate", " Could not generate an "));
+                dtEx.printStackTrace();
+                System.exit(1);
+            }            
+        }
+
+        log.debug(LogManager.getHeader(context, "calculating_embargo_enddate ", " Is calculatedEmbargoEndDate null "+String.valueOf(calculatedEmbargoEndDate == null)));
+
+        return calculatedEmbargoEndDate;
+    }
+
+    public long generateEmbargoEndDateTimeStamp(Context context, Item item) throws AuthorizeException, IOException, SQLException
+    {
+        String embargoEndDateMDV = null;
+        String accessionedDateMDV = null;
+        LocalDate embargoEndDateLD = null;
+        LocalDateTime accessionedDateLDT = null;
+        long embargoEndDateTimeStamp = 0;
+
+        if (StringUtils.isNotBlank(getEmbargoMetadataValue(context, item, "embargo", "enddate"))) {
+            embargoEndDateMDV = getEmbargoMetadataValue(context, item, "embargo", "enddate");
+        }
+
+        if (StringUtils.isNotBlank(getEmbargoMetadataValue(context, item, "date", "accessioned"))) {
+            accessionedDateMDV = getEmbargoMetadataValue(context, item, "date", "accessioned");
+        }
+        
+        if (StringUtils.isNotBlank(accessionedDateMDV) && StringUtils.isNotBlank(embargoEndDateMDV)) {
+            CharSequence accessionedDateCS = accessionedDateMDV.subSequence(0, accessionedDateMDV.length()-1);
+            accessionedDateLDT = LocalDateTime.parse(accessionedDateCS, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+
+            CharSequence embargoEndDateCS = embargoEndDateMDV.subSequence(0, embargoEndDateMDV.length());
+            embargoEndDateLD = LocalDate.parse(embargoEndDateCS, DateTimeFormatter.ISO_LOCAL_DATE);
+
+            LocalDateTime embargoEndDateLDT = LocalDateTime.of(embargoEndDateLD.getYear(), embargoEndDateLD.getMonthValue(), embargoEndDateLD.getDayOfMonth(), accessionedDateLDT.getHour(), accessionedDateLDT.getMinute(), accessionedDateLDT.getSecond());
+            embargoEndDateTimeStamp = embargoEndDateLDT.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        }
+
+        return embargoEndDateTimeStamp;
+    }
+
+    @Override
+    public void generateAUETDEmbargoPolicies(Context context, DSpaceObject dso, int embargoType, Collection owningCollection)
+        throws AuthorizeException, IOException, SQLException
+    {
+        Item item = null;
+        List<ResourcePolicy> owningCollReadResourcePolicyList = null;
+        Bitstream bitstream = null;
+
+        if (embargoType < 0 || embargoType > 3) {
+            log.error(LogManager.getHeader(context, "generate_auetd_embargo_policies ", " The supplied embargo type value "+String.valueOf(embargoType)+" is invalid."));
+            throw new IllegalArgumentException("The supplied embargo type value "+String.valueOf(embargoType)+" is invalid.");
+        }
+
+        if (dso instanceof Bitstream) {
+            bitstream = bitstreamService.find(context, dso.getID());
+            DSpaceObject parent = bitstreamService.getParentObject(context, bitstream);
+
+            if (parent != null) {
+                item = itemService.find(context, parent.getID());
+            }
+        } else if (dso instanceof Item) {
+            item = itemService.find(context, dso.getID());
+
+            bitstream = getItemBitstream(context, item);
+        }
+
+        if (bitstream != null) {
+            authorizeService.removeAllPolicies(context, bitstream);
+        }
+        
+        if (owningCollection != null) {
+            owningCollReadResourcePolicyList = authorizeService.getPoliciesActionFilter(context, owningCollection, Constants.READ);
+        }
+
+        if (owningCollReadResourcePolicyList != null && owningCollReadResourcePolicyList.size() > 0 && bitstream != null) {
+            if (embargoType == 2) {
+                /**
+                 * If the user has chosen to hide the bitstream from the public only
+                 * then create a resource policy only for the Anonymous user group.
+                 */
+                for(ResourcePolicy resourcePolicy : owningCollReadResourcePolicyList) {
+                    if(StringUtils.equals(resourcePolicy.getGroup().getName(), Group.ANONYMOUS) && StringUtils.equalsIgnoreCase(resourcePolicy.getRpName(), "Public_Read")) {
+                        ResourcePolicy newResourcePolicy = resourcePolicyService.clone(context, resourcePolicy);
+                        newResourcePolicy.setdSpaceObject(bitstream);
+                        newResourcePolicy.setRpName(resourcePolicy.getRpName());
+                        resourcePolicyService.update(context, newResourcePolicy);
+                    }
+                }
+            } else if (embargoType == 3) {
+                /**
+                 * Else if the submitter has chosen to restrict access
+                 * from everyone then create a resource policy record
+                 * for each policy in the policies list.
+                 */
+                for(ResourcePolicy resourcePolicy : owningCollReadResourcePolicyList) {
+                    ResourcePolicy newResourcePolicy = resourcePolicyService.clone(context, resourcePolicy);
+                    newResourcePolicy.setdSpaceObject(bitstream);
+                    newResourcePolicy.setRpName(resourcePolicy.getRpName());
+                    newResourcePolicy.setRpType(resourcePolicy.getRpType());
+                    resourcePolicyService.update(context, newResourcePolicy);
+                }
+            }
+        } else {
+            log.error(LogManager.getHeader(context, "generate_auetd_embargo_policies ", " Owning collection has no resource policies."));
+        }
+    }
+
+    private Bitstream getItemBitstream(Context context, Item item)
+        throws AuthorizeException, SQLException 
+    {
+        Bitstream localBitstream = null;
+
+        log.debug(LogManager.getHeader(context, "get_item_bitstream ", " Is item null? "+String.valueOf(item == null)));
+        log.debug(LogManager.getHeader(context, "get_item_bitstream ", " Item id = "+item.getID().toString()));
+
+        if (item != null) {
+            for (Bundle bundle : itemService.getBundles(item, "ORIGINAL")) {
+                log.debug(LogManager.getHeader(context, "get_item_bitstream ", " Is bundle null? "+String.valueOf(bundle == null)));
+                if (bundle != null) {
+                    log.debug(LogManager.getHeader(context, "get_item_bitstream ", " Bundle id = "+bundle.getID().toString()));
+                    for (Bitstream bitstream : bundle.getBitstreams()) {
+                        localBitstream = bitstream;
+                    }
+                }          
+            }
+        }
+
+        log.debug(LogManager.getHeader(context, "get_item_bitstream ", "Is localBitstream null? "+String.valueOf(localBitstream == null)));
+
+        if (localBitstream != null) {
+            log.debug(LogManager.getHeader(context, "get_item_bitstream ", " Bistream id = "+localBitstream.getID().toString()));
+        }
+
+        return localBitstream;
     }
 }
