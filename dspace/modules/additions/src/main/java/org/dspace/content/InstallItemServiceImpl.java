@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.factory.ContentServiceFactory;
 import org.dspace.content.service.CollectionService;
@@ -18,6 +19,7 @@ import org.dspace.content.service.InstallItemService;
 import org.dspace.content.service.ItemService;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
+import org.dspace.core.LogManager;
 import org.dspace.embargo.service.EmbargoService;
 import org.dspace.event.Event;
 import org.dspace.identifier.IdentifierException;
@@ -43,6 +45,8 @@ public class InstallItemServiceImpl implements InstallItemService
     protected IdentifierService identifierService;
     @Autowired(required = true)
     protected ItemService itemService;
+    
+    private final Logger log = Logger.getLogger(InstallItemServiceImpl.class);
 
     protected InstallItemServiceImpl()
     {
@@ -74,7 +78,13 @@ public class InstallItemServiceImpl implements InstallItemService
             throw new RuntimeException("Can't create an Identifier!", e);
         }
 
+        log.debug(LogManager.getHeader(c, "installing_item ", " Is item null post identifier registration? "+String.valueOf(item == null)));
+        log.debug(LogManager.getHeader(c, "installing_item ", " Item id post identifier registration = "+item.getID().toString()));
+
         populateMetadata(c, item);
+
+        log.debug(LogManager.getHeader(c, "installing_item ", " Is item null post metadata population? "+String.valueOf(item == null)));
+        log.debug(LogManager.getHeader(c, "installing_item ", " Item id post metadata population = "+item.getID().toString()));
 
         // Finish up / archive the item
         item = finishItem(c, item, is);
@@ -183,7 +193,7 @@ public class InstallItemServiceImpl implements InstallItemService
 
         // If an issue date was passed in and it wasn't set to "today" (literal string)
         // then note this previous issue date in provenance message
-        if (!currentDateIssued.isEmpty())
+        if (!currentDateIssued.isEmpty() || currentDateIssued.size() > 0)
         {
             String previousDateIssued = currentDateIssued.get(0).getValue();
             if(previousDateIssued!=null && !previousDateIssued.equalsIgnoreCase("today"))
@@ -192,6 +202,9 @@ public class InstallItemServiceImpl implements InstallItemService
                 provDescription = provDescription + "  Previous issue date: "
                         + d.toString();
             }
+        } else {
+            DCDate issued = new DCDate(now.getYear(),now.getMonth(),now.getDay(),-1,-1,-1);
+            itemService.addMetadata(c, item, MetadataSchema.DC_SCHEMA, "date", "issued", null, issued.toString());
         }
 
         // Add provenance description
@@ -213,6 +226,9 @@ public class InstallItemServiceImpl implements InstallItemService
     protected Item finishItem(Context c, Item item, InProgressSubmission is)
         throws SQLException, AuthorizeException
     {
+        log.debug(LogManager.getHeader(c, "finishing_item ", " Is item null pre collection2item mapping? "+String.valueOf(item == null)));
+        log.debug(LogManager.getHeader(c, "finishing_item ", " Item id pre collection2item mapping = "+item.getID().toString()));
+
         // create collection2item mapping
         collectionService.addItem(c, is.getCollection(), item);
 
@@ -221,9 +237,15 @@ public class InstallItemServiceImpl implements InstallItemService
 
         // set in_archive=true
         item.setArchived(true);
+
+        log.debug(LogManager.getHeader(c, "finishing_item ", " Is item null pre update? "+String.valueOf(item == null)));
+        log.debug(LogManager.getHeader(c, "finishing_item ", " Item id pre update = "+item.getID().toString()));
         
         // save changes ;-)
         itemService.update(c, item);
+
+        log.debug(LogManager.getHeader(c, "finishing_item ", " Is item null post update? "+String.valueOf(item == null)));
+        log.debug(LogManager.getHeader(c, "finishing_item ", " Item id post update = "+item.getID().toString()));
 
         // Notify interested parties of newly archived Item
         c.addEvent(new Event(Event.INSTALL, Constants.ITEM, item.getID(),
@@ -231,6 +253,9 @@ public class InstallItemServiceImpl implements InstallItemService
 
         // remove in-progress submission
         contentServiceFactory.getInProgressSubmissionService(is).deleteWrapper(c, is);
+
+        log.debug(LogManager.getHeader(c, "finishing_item ", " Is item null pre embargo setting? "+String.valueOf(item == null)));
+        log.debug(LogManager.getHeader(c, "finishing_item ", " Item id pre embargo setting = "+item.getID().toString()));
 
         // set embargo lift date and take away read access if indicated.
         embargoService.setEmbargo(c, item);
