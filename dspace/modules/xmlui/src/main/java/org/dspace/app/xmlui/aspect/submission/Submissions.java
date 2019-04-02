@@ -196,7 +196,7 @@ public class Submissions extends AbstractDSpaceTransformer
                 start.setHead(T_s_head1);
                 Para p = start.addPara();
                 p.addContent(T_s_info1a);
-                p.addXref(contextPath+"/submit",T_s_info1b);
+                p.addXref(contextPath+"/handle/123456789/2/submit",T_s_info1b);
                 Para secondP = start.addPara();
                 secondP.addContent(T_s_info1c);
                 return;
