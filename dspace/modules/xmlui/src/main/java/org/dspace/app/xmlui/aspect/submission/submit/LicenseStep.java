@@ -72,6 +72,9 @@ public class LicenseStep extends AbstractSubmissionStep
     protected static final Message AUETD_T_accepted =
         message("xmlui.Submission.submit.LicenseStep.AUETD_decision_accepted");
 
+    protected static final Message AUETD_T_decision_checkbox =
+        message("xmlui.Submission.submit.LicenseStep.AUETD_decision_checkbox");
+
     protected ItemService itemService = ContentServiceFactory.getInstance().getItemService();
     /**
 	 * Establish our required parameters, abstractStep will enforce these.
@@ -125,8 +128,7 @@ public class LicenseStep extends AbstractSubmissionStep
 		
         if (showCheckbox) {
             CheckBox decision = controls.addItem().addCheckBox("decision");
-            decision.setLabel(T_decision_label);
-            decision.addOption("accept",T_decision_checkbox);
+            decision.addOption("accept", AUETD_T_decision_checkbox);
 
             // If user did not check the "I accept" checkbox
             if(this.errorFlag==org.dspace.submit.step.LicenseStep.STATUS_LICENSE_REJECTED)
