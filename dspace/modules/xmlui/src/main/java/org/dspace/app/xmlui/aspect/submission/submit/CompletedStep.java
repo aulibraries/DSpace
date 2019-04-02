@@ -59,8 +59,7 @@ public class CompletedStep extends AbstractSubmissionStep
 		div.addPara(T_info1);
 		
 		div.addPara().addXref(contextPath+"/submissions",T_go_submission);
-	     
-	    //div.addPara().addButton("submit_again").setValue(T_submit_again);
+
 	    div.addHidden("handle").setValue(handle);
 	}
     
