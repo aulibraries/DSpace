@@ -9,6 +9,7 @@ package org.dspace.app.xmlui.aspect.xmlworkflow.actions.processingaction;
 
 import org.apache.cocoon.environment.ObjectModelHelper;
 import org.apache.cocoon.environment.Request;
+import org.apache.commons.lang3.StringUtils;
 import org.dspace.app.xmlui.aspect.xmlworkflow.AbstractXMLUIAction;
 import org.dspace.app.xmlui.wing.Message;
 import org.dspace.app.xmlui.wing.WingException;
@@ -67,14 +68,20 @@ public class AcceptEditRejectAction extends AbstractXMLUIAction {
 
     protected static final Message T_submit_cancel =
         message("xmlui.general.cancel");
-    
-
-
 
     protected static final Message T_workflow_head =
         message("xmlui.Submission.general.workflow.head");
     protected static final Message T_cancel_submit =
         message("xmlui.general.cancel");
+
+    //Custom constants
+    protected static final Message AUETD_REJECTED_FILE_FIELD_LABEL =
+        message("xmlui.Submission.workflow.RejectTaskStep.AUETD_reject_file_upload_field_label");
+    protected static final Message AUETD_REJECTED_FILE_FIELD_HELP =
+        message("xmlui.Submission.workflow.RejectTaskStep.AUETD_reject_file_upload_field_help");
+    protected static final Message AUETD_REJECTED_FILE_FIELD_ERROR =
+        message("xmlui.Submission.workflow.RejectTaskStep.AUETD_reject_file_upload_field_error");
+    protected static final String AUETD_REJECTED_FILE_FIELD_NAME = "rejected-file";
 
 
     @Override
@@ -93,7 +100,7 @@ public class AcceptEditRejectAction extends AbstractXMLUIAction {
 
         // Generate a from asking the user two questions: multiple
         // titles & published before.
-    	Division div = body.addInteractiveDivision("perform-task", actionURL, Division.METHOD_POST, "primary workflow");
+    	Division div = body.addInteractiveDivision("perform-task", actionURL, Division.METHOD_MULTIPART, "primary workflow");
         div.setHead(T_HEAD);
 
         addWorkflowItemInformation(div, item, request);
@@ -150,15 +157,25 @@ public class AcceptEditRejectAction extends AbstractXMLUIAction {
         reason.setRequired();
         reason.setSize(15, 50);
 
-        if (Action.getErrorFields(request).contains("reason"))
-        	reason.addError(T_reason_required);
+        if (Action.getErrorFields(request).contains("reason")) {
+            reason.addError(T_reason_required);
+        }
 
+        File rejectedFileField = form.addItem().addFile(AUETD_REJECTED_FILE_FIELD_NAME);
+        rejectedFileField.setLabel(AUETD_REJECTED_FILE_FIELD_LABEL);
+        rejectedFileField.setHelp(AUETD_REJECTED_FILE_FIELD_HELP);
+
+        if (Action.getErrorFields(request).contains("invalid-reject-file")) {
+            if (StringUtils.isNotBlank(request.getParameter("reason"))) {
+                reason.setValue(request.getParameter("reason"));
+            }
+            rejectedFileField.addError(AUETD_REJECTED_FILE_FIELD_ERROR);
+        }
 
         div.addHidden("page").setValue(ReviewAction.REJECT_PAGE);
 
         org.dspace.app.xmlui.wing.element.Item actions = form.addItem();
         actions.addButton("submit_reject").setValue(T_submit_reject);
         actions.addButton("submit_cancel").setValue(T_submit_cancel);
-
     }
 }

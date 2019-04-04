@@ -9,6 +9,7 @@ package org.dspace.xmlworkflow.service;
 
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.Item;
+import org.dspace.content.WorkspaceItem;
 import org.dspace.core.Context;
 import org.dspace.eperson.EPerson;
 import org.dspace.workflow.WorkflowService;
@@ -65,4 +66,7 @@ public interface XmlWorkflowService extends WorkflowService<XmlWorkflowItem> {
     public void removeUserItemPolicies(Context context, Item item, EPerson e) throws SQLException, AuthorizeException;
 
     public String getEPersonName(EPerson ePerson);
+
+    public WorkspaceItem sendWorkflowItemBackSubmissionWithRejectionFile(Context context, XmlWorkflowItem wi, EPerson e, String provenance,
+        String rejection_message, String rejectionFilePath) throws SQLException, AuthorizeException, IOException;
 }

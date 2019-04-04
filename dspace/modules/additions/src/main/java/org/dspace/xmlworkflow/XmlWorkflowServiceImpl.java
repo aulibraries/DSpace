@@ -8,6 +8,7 @@
 package org.dspace.xmlworkflow;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.authorize.ResourcePolicy;
@@ -18,11 +19,13 @@ import org.dspace.content.service.InstallItemService;
 import org.dspace.content.service.ItemService;
 import org.dspace.content.service.WorkspaceItemService;
 import org.dspace.core.*;
+import org.dspace.embargo.service.EmbargoService;
 import org.dspace.eperson.EPerson;
 import org.dspace.eperson.Group;
 import org.dspace.eperson.service.GroupService;
 import org.dspace.handle.service.HandleService;
 import org.dspace.services.factory.DSpaceServicesFactory;
+import org.dspace.services.ConfigurationService;
 import org.dspace.usage.UsageWorkflowEvent;
 import org.dspace.workflow.WorkflowException;
 import org.dspace.xmlworkflow.factory.XmlWorkflowFactory;
@@ -37,8 +40,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -85,6 +91,10 @@ public class XmlWorkflowServiceImpl implements XmlWorkflowService {
     protected XmlWorkflowItemService xmlWorkflowItemService;
     @Autowired(required = true)
     protected GroupService groupService;
+    @Autowired(required = true)
+    protected ConfigurationService configurationService;
+    @Autowired(required = true)
+    protected EmbargoService embargoService;
 
     protected XmlWorkflowServiceImpl()
     {
@@ -473,12 +483,12 @@ public class XmlWorkflowServiceImpl implements XmlWorkflowService {
 
         installItemService.installItem(context, wfi);
 
-        //Notify
-        notifyOfArchive(context, item, collection);
-
         //Clear any remaining workflow metadata
         itemService.clearMetadata(context, item, WorkflowRequirementsService.WORKFLOW_SCHEMA, Item.ANY, Item.ANY, Item.ANY);
         itemService.update(context, item);
+
+        //Notify
+        notifyOfArchive(context, item, collection);
 
         // Log the event
         log.info(LogManager.getHeader(context, "install_item", "workflow_item_id="
@@ -491,7 +501,7 @@ public class XmlWorkflowServiceImpl implements XmlWorkflowService {
      * notify the submitter that the item is archived
      */
     protected void notifyOfArchive(Context context, Item item, Collection coll)
-            throws SQLException, IOException {
+        throws SQLException, IOException {
         try {
             // Get submitter
             EPerson ep = item.getSubmitter();
@@ -501,6 +511,12 @@ public class XmlWorkflowServiceImpl implements XmlWorkflowService {
 
             // Get the item handle to email to user
             String handle = handleService.findHandle(context, item);
+
+            String embargoRights = null;
+            String embargoStatus = null;
+            String embargoRightsEmailTxt = null;
+            String embargoInfoEmailStr = "";
+            String embargoEndDateMDV = null;
 
             // Get title
             List<MetadataValue> titles = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "title", null, Item.ANY);
@@ -515,10 +531,69 @@ public class XmlWorkflowServiceImpl implements XmlWorkflowService {
                 title = titles.iterator().next().getValue();
             }
 
+            List<MetadataValue> embargoEndDateList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "enddate", Item.ANY);
+            List<MetadataValue> embargoRightsList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "rights", null, Item.ANY);
+            List<MetadataValue> embargoStatusList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "status", Item.ANY);
+
+            log.debug(LogManager.getHeader(context, "notify_of_archive ", " Size of embargoEndDateList = "+String.valueOf(embargoEndDateList.size())));
+            if (embargoEndDateList != null && embargoEndDateList.size() > 0) {
+                embargoEndDateMDV = embargoEndDateList.get(0).getValue();
+                log.debug(LogManager.getHeader(context, "notify_of_archive ", " embargoEndDateMDV = "+embargoEndDateMDV));
+            }
+
+            log.debug(LogManager.getHeader(context, "notify_of_archive ", " Size of embargoRightsList = "+String.valueOf(embargoRightsList.size())));
+            if (embargoRightsList != null && embargoRightsList.size() > 0) {
+                embargoRights = embargoRightsList.get(0).getValue();
+                log.debug(LogManager.getHeader(context, "notify_of_archive ", " embargoRights = "+embargoRights));
+            }
+
+            log.debug(LogManager.getHeader(context, "notify_of_archive ", " Size of embargoStatusList = "+String.valueOf(embargoStatusList.size())));
+            if (embargoStatusList != null & embargoStatusList.size() > 0) {
+                embargoStatus = embargoStatusList.get(0).getValue();
+                log.debug(LogManager.getHeader(context, "notify_of_archive ", " embargoStatus = "+embargoStatus));
+            }
+            
+            String embargoEndDateFinal = null;
+
+            if (StringUtils.isNotBlank(embargoEndDateMDV)) {
+                CharSequence embargoEndDateCS = embargoEndDateMDV.subSequence(0, embargoEndDateMDV.length());
+                LocalDate embargoEndDateLD = LocalDate.parse(embargoEndDateCS, DateTimeFormatter.ISO_DATE);
+                embargoEndDateFinal = embargoEndDateLD.format(DateTimeFormatter.ofPattern("MM-dd-yyyy"));
+            }
+
+            log.debug(LogManager.getHeader(context, "notify_of_archive ", " Is embargoEndDateMDV null "+String.valueOf(StringUtils.isBlank(embargoEndDateMDV))));
+            log.debug(LogManager.getHeader(context, "notify_of_archive ", " embargoEndDateMDV = "+embargoEndDateMDV));
+
+            if (StringUtils.isNotBlank(embargoStatus)) {
+                switch(embargoStatus) {
+                    case Constants.EMBARGOED:
+                        if (StringUtils.isNotBlank(embargoRights)) {
+                            switch(embargoRights) {
+                                case Constants.EMBARGO_NOT_AUBURN_STR:
+                                    embargoRightsEmailTxt = "limited to Auburn University users only.";
+                                    break;
+                                case Constants.EMBARGO_GLOBAL_STR:
+                                    embargoRightsEmailTxt = "blocked from everyone.";
+                                    break;
+                            }
+                        }
+                        embargoInfoEmailStr += "Restricted: Yes, access to my thesis or dissertation is " + embargoRightsEmailTxt;
+                        embargoInfoEmailStr += "\n";
+                        if (StringUtils.isNotBlank(embargoEndDateFinal)) {
+                            embargoInfoEmailStr += "Restriction Lift Date: "+embargoEndDateFinal;
+                        }
+                        break;
+                    case Constants.NOT_EMBARGOED:
+                        embargoInfoEmailStr += "Restricted: NO, access to my thesis or dissertation is not resticted.";
+                        break;
+                }
+            }
+
             email.addRecipient(ep.getEmail());
             email.addArgument(title);
             email.addArgument(coll.getName());
             email.addArgument(handleService.getCanonicalForm(handle));
+            email.addArgument(embargoInfoEmailStr);
 
             email.send();
         }
@@ -884,7 +959,7 @@ public class XmlWorkflowServiceImpl implements XmlWorkflowService {
     {
         String submitter = ePerson.getFullName();
 
-        submitter = submitter + "(" + ePerson.getEmail() + ")";
+        submitter = submitter + " (" + ePerson.getEmail() + ")";
 
         return submitter;
     }
@@ -958,5 +1033,106 @@ public class XmlWorkflowServiceImpl implements XmlWorkflowService {
     @Override
     public String getMyDSpaceLink() {
         return ConfigurationManager.getProperty("dspace.url") + "/mydspace";
+    }
+
+    public WorkspaceItem sendWorkflowItemBackSubmissionWithRejectionFile(Context context, XmlWorkflowItem wi, EPerson e, String provenance,
+            String rejection_message, String rejectionFilePath) throws SQLException, AuthorizeException,
+            IOException
+    {
+        String workflowID = null;
+        String currentStepId = null;
+        String currentActionConfigId = null;
+        ClaimedTask claimedTask = claimedTaskService.findByWorkflowIdAndEPerson(context, wi, e);
+        if(claimedTask != null){
+            //Log it
+            workflowID = claimedTask.getWorkflowID();
+            currentStepId = claimedTask.getStepID();
+            currentActionConfigId = claimedTask.getActionID();
+        }
+        context.turnOffAuthorisationSystem();
+
+        // rejection provenance
+        Item myitem = wi.getItem();
+
+        // Get current date
+        String now = DCDate.getCurrent().toString();
+
+        // Get user's name + email address
+        String usersName = getEPersonName(e);
+
+        // Here's what happened
+        String provDescription = provenance + " Rejected by " + usersName + ", reason: "
+                + rejection_message + " on " + now + " (GMT) ";
+
+        // Add to item as a DC field
+        itemService.addMetadata(context, myitem, MetadataSchema.DC_SCHEMA, "description", "provenance", "en", provDescription);
+
+        //Clear any workflow schema related metadata
+        itemService.clearMetadata(context, myitem, WorkflowRequirementsService.WORKFLOW_SCHEMA, Item.ANY, Item.ANY, Item.ANY);
+
+        itemService.update(context, myitem);
+
+        // convert into personal workspace
+        WorkspaceItem wsi = returnToWorkspace(context, wi);
+
+        // notify that it's been rejected
+        if (StringUtils.isNotBlank(rejectionFilePath)) {
+            notifyOfRejectWithRejectionFile(context, wi, e, rejection_message, rejectionFilePath);
+        }
+
+        log.info(LogManager.getHeader(context, "reject_workflow", "workflow_item_id="
+                + wi.getID() + "item_id=" + wi.getItem().getID()
+                + "collection_id=" + wi.getCollection().getID() + "eperson_id="
+                + e.getID()));
+
+        logWorkflowEvent(context, workflowID, currentStepId, currentActionConfigId, wi, e, null, null);
+
+        context.restoreAuthSystemState();
+        return wsi;
+    }
+
+    protected void notifyOfRejectWithRejectionFile(Context c, XmlWorkflowItem wi, EPerson e,
+        String reason, String rejectionFilePath)
+    {
+        try {
+            File rejectionFile = null;
+
+            // Get the item title
+            String title = wi.getItem().getName();
+
+            // Get the collection
+            Collection coll = wi.getCollection();
+
+            // Get rejector's name
+            String rejector = getEPersonName(e);
+            Locale supportedLocale = I18nUtil.getEPersonLocale(e);
+            Email email = Email.getEmail(I18nUtil.getEmailFilename(supportedLocale,"submit_reject"));
+
+            email.addRecipient(wi.getSubmitter().getEmail());
+            email.addArgument(title);
+            email.addArgument(coll.getName());
+            email.addArgument(rejector);
+            email.addArgument(reason);
+            email.addArgument(configurationService.getProperty("dspace.url") + "/mydspace");
+
+            if (StringUtils.isNotBlank(rejectionFilePath)) {
+                rejectionFile = new File(rejectionFilePath);
+                log.info(LogManager.getHeader(c, "Attaching file:  ", rejectionFile.getName()));
+                email.addAttachment(rejectionFile.getAbsoluteFile(), rejectionFile.getName());
+            }
+
+            email.send();
+
+            if (null != rejectionFile) {
+                rejectionFile.delete();
+            }
+
+        } catch (Exception ex) {
+            // log this email error
+            log.warn(LogManager.getHeader(c, "notify_of_reject",
+                    "cannot email user" + " eperson_id" + e.getID()
+                            + " eperson_email" + e.getEmail()
+                            + " workflow_item_id" + wi.getID()));
+        }
     }
 }

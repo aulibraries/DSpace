@@ -10,6 +10,7 @@ importClass(Packages.java.lang.ClassLoader);
 
 importClass(Packages.org.dspace.app.xmlui.utils.FlowscriptUtils);
 importClass(Packages.org.apache.cocoon.environment.http.HttpEnvironment);
+importClass(Packages.org.apache.cocoon.servlet.multipart.Part);
 importClass(Packages.org.dspace.xmlworkflow.storedcomponents.XmlWorkflowItem);
 importClass(Packages.org.dspace.xmlworkflow.factory.XmlWorkflowServiceFactory);
 
@@ -155,6 +156,14 @@ function doWorkflow()
             //Don't do anything just go back to the start of the loop
         }else{
             try{
+                var contentType = getHttpRequest().getContentType();
+                cocoon.log.info("Content Type = "+contentType);
+                if ((contentType != null) && (contentType.indexOf("multipart/form-data") != -1)) {
+                    //load info about uploaded file, so that it can be
+                    //saved properly by the step's doProcessing() method below
+                    loadFileUploadInfo();
+                }
+
                 action = getWorkflowService().doState(getDSContext(), getDSContext().getCurrentUser(), getHttpRequest(), workflowItemId, workflow, action);
             }catch(exception){
                 sendPage("handle/"+handle+"/xmlworkflow/workflowexception",{"error":exception.toString()});
@@ -167,7 +176,51 @@ function doWorkflow()
                 cocoon.exit();
             }
         }
+    } while(true);
+}
 
-    }while(true);
+/**
+ * This function loads information about a file automatically
+ * uploaded by Cocoon.  A file will only be automatically uploaded
+ * by Cocoon if 'enable-uploads' is set to 'true' in the web.xml
+ * (which is the default setting for Manakin).
+ *
+ * The uploaded files will be added to the Request object as two
+ * separate attributes: [name]-path and [name]-inputstream. The first
+ * attribute contains the full path to the uploaded file on the client's
+ * Operating System. The second attribute contains an inputstream to the
+ * file. These two attributes will be created for any file uploaded.
+ */
+function loadFileUploadInfo()
+{
+    // Get the name of all parameters in the current request
+    var paramNames = cocoon.request.getParameterNames();
 
+    while(paramNames.hasMoreElements()) {
+        var fileParam = paramNames.nextElement();
+
+        cocoon.log.info("reject_workflow_file_upload - File Param = " + fileParam);
+
+        var fileObject = cocoon.request.get(fileParam);
+
+        //check if this is actually a file
+        if (!(fileObject instanceof Part)) {
+            continue;
+        }
+
+        //load uploaded file information
+        if (fileObject != null && fileObject.getSize() > 0) {
+            //Now, save information to HTTP request which
+            //the step processing class will use to actually
+            //save the file as a DSpace bitstream object.
+
+            //save original filename to request attribute
+            getHttpRequest().setAttribute(fileParam + "-path", fileObject.getUploadName());
+
+            cocoon.log.info("reject_workflow_file_upload - File Upload Name = "+fileObject.getUploadName());
+
+            //save inputstream of file contents to request attribute
+            getHttpRequest().setAttribute(fileParam + "-inputstream", fileObject.getInputStream());
+        }
+    }
 }
