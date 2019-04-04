@@ -103,4 +103,19 @@
     <message key="xmlui.XMLWorkflow.scoreReview.scoreReviewStep.scorereviewaction">Score review</message>
     <message key="xmlui.XMLWorkflow.scoreReview.scoreReviewStep">Score review</message>
 
+    <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                   AUETD Custom Messages
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+    
+    <message key="xmlui.XMLWorkflow.AUETD.reviewstep">Accept/Reject</message>
+    <message key="xmlui.XMLWorkflow.AUETD.reviewstep.claimaction">Accept/Reject</message>
+    <message key="xmlui.XMLWorkflow.AUETD.reviewstep.reviewaction">Accept/Reject</message>
+
+    <message key="xmlui.XMLWorkflow.AUETD.editstep">Accept/Edit/Reject step</message>
+    <message key="xmlui.XMLWorkflow.AUETD.editstep.claimaction">Accept/Edit/Reject</message>
+    <message key="xmlui.XMLWorkflow.AUETD.editstep.editaction">Accept/Edit/Reject</message>
+
+    <message key="xmlui.XMLWorkflow.AUETD.finaleditstep">Final Accept/Edit</message>
+    <message key="xmlui.XMLWorkflow.AUETD.finaleditstep.claimaction">Final Accept/Edit</message>
+    <message key="xmlui.XMLWorkflow.AUETD.finaleditstep.finaleditaction">Final Accept/Edit</message>
   </catalogue>
