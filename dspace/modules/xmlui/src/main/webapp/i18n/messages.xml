@@ -2304,6 +2304,7 @@
     <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_radio_option4_text">Restrict access for four years.</message>
     <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_radio_option5_text">Restrict access for five years.</message>
     <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_required_error">This field requires an answer. Please answer this question by selecting one of the options above.</message>
+    <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_outofdate_error">This item is more than 5 years old, and thus has passed the maximum time an item can be embargoed.</message>
 
 	<!--<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_label">Specify a date to end the restriction</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_help">Click in the field above to open a calendar widget and then select a date. Leaving this field blank will cause an error.</message>
