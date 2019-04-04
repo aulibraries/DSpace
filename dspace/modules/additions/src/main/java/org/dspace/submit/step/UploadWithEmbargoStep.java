@@ -89,19 +89,14 @@ public class UploadWithEmbargoStep extends UploadStep {
     public static final String AUETD_SUBMIT_REMOVE_PREFIX = "submit_remove_";
     public static final String AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME = "create_embargo_radio";
     public static final String AUETD_EMBARGO_LENGTH_FIELD_NAME = "embargo_length";
-    public static final String AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME_ERROR = AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME
-            + "_ERROR";
+    public static final String AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME_ERROR = AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME+ "_ERROR";
     public static final String AUETD_FILE_ERROR_NAME = "file_error";
     public static final String AUETD_EMBARGO_LENGTH_FIELD_NAME_ERROR = AUETD_EMBARGO_LENGTH_FIELD_NAME + "_ERROR";
 
     public static final int AUETD_STATUS_UNACCEPTABLE_FORMAT = 11;
-    // public static final int AUETD_STATUS_ERROR_DATE_IN_PAST = 35;
     public static final int AUETD_STATUS_ERROR = 35;
     public static final int AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED = 36;
     public static final int AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED = 37;
-    // public static final int AUETD_STATUS_ERROR_DATE_IS_CURRENT = 37;
-    // public static final int AUETD_STATUS_ERROR = 38;
-    // public static final int AUETD_STATUS_ERROR_EMBARGO_LENGTH_TOO_LONG = 39;
 
     /**
      * Do any processing of the information input by the user, and/or perform step
