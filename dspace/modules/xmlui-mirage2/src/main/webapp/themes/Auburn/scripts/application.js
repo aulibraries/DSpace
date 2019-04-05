@@ -1,16 +1,19 @@
 $(function()
 {
     var elements = {
-        embargoUntilDate: $('input[name="embargo_until_date"]'),
+        //embargoUntilDate: $('input[name="embargo_until_date"]'),
         createEmbargoRadio: $('input[name="create_embargo_radio"]'),
-        dateListItem: $('input[name="embargo_until_date"]').parent("div").parent("div"),
-        datefieldDisplay: $('input[name="datefieldDisplay"]'),
+        //dateListItem: $('input[name="embargo_until_date"]').parent("div").parent("div"),
+        //datefieldDisplay: $('input[name="datefieldDisplay"]'),
+        embargoLength: $('input[name="embargo_length"]'),
+        embargoLengthItem: $('input[name="embargo_length"]:first').parent("label").parent("div").parent("fieldset").parent("div").parent("div"),
+        embargoLengthFieldDisplay: $('input[name="embargoLengthFieldDisplay"]'),
         file: $(':file'),
         errorStack: $("#errorstack"),
         errorStackLink: $('#errorStackLink'),
     };
 
-    elements.dateListItem.hide();
+    /*elements.dateListItem.hide();
     elements.embargoUntilDate.datepicker("destroy");
     elements.embargoUntilDate.datepicker(
     {
@@ -26,6 +29,16 @@ $(function()
         {
             elements.dateListItem.show();
         }
+    }*/
+
+    elements.embargoLengthItem.hide();
+
+    if(elements.embargoLengthFieldDisplay.val() != "")
+    {
+        if(parseInt(elements.embargoLengthFieldDisplay.val()) === 1)
+        {
+            elements.embargoLengthItem.show();
+        }
     }
 
     // Hide or show the date input field and embargoed group select field
@@ -40,11 +53,13 @@ $(function()
 
         if(checkedVal == 2 || checkedVal == 3)
         {
-            elements.dateListItem.show();
+            //elements.dateListItem.show();
+            elements.embargoLengthItem.show();
         }
         else if(checkedVal == 1)
         {
-            elements.dateListItem.hide();
+            //elements.dateListItem.hide();
+            elements.embargoLengthItem.hide();
         }
     });
 
@@ -73,16 +88,27 @@ $(function()
 
             if(selectedVal == 2 || selectedVal == 3)
             {
-                elements.dateListItem.show();
+                //elements.dateListItem.show();
+                elements.embargoLengthItem.show();
             }
             else if(selectedVal <= 1)
             {
-                elements.dateListItem.hide();
+                /*elements.dateListItem.hide();
 
                 if(elements.embargoUntilDate.val() !== "")
                 {
                     elements.embargoUntilDate.val('');
-                }
+                }*/
+
+                elements.embargoLengthItem.hide();
+
+                elements.embargoLength.each(function()
+                {
+                    if($(this).is(":checked"))
+                    {
+                        $(this).prop("checked", false);
+                    }
+                });
             }
 
             /**
@@ -100,12 +126,22 @@ $(function()
             }
         });
 
-        elements.embargoUntilDate.on("change", function()
+        /*elements.embargoUntilDate.on("change", function()
         {
             if($(this).parent('div').hasClass('has-error'))
             {
                 $(this).parent('div').removeClass('has-error');
                 $(this).parent('div').find('.alert').remove();
+            }
+        });*/
+
+        elements.embargoLength.on("click", function()
+        {
+            if($(this).parent('label').parent('div').parent('fieldset').hasClass('error') && $(this).parent('label').parent('div').parent('fieldset').parent('div').hasClass('has-error'))
+            {
+                $(this).parent('label').parent('div').parent('fieldset').removeClass('error');
+                $(this).parent('label').parent('div').parent('fieldset').parent('div').removeClass('has-error');
+                $(this).parent('label').parent('div').parent('fieldset').parent('div').find('.alert').remove();
             }
         });
 
@@ -153,9 +189,9 @@ $(function()
             });
         }
     }
-    
+
     function changeSubmissionBttnSize()
-    {  
+    {
         $("a").each(function()
         {
             if($(this).hasClass("submissionBttn"))
@@ -174,7 +210,7 @@ $(function()
 
     ConvertMultiSelect();
     changeSubmissionBttnSize();
-    
+
     /* TOGGLE ARROW FOR MAIN NAVIGATION LINK IN MOBILE VIEW */
     $(".header-wrap .navbar-brand").click(
         function(){
@@ -187,7 +223,7 @@ $(function()
             }
         }
     );
-    
+
     /* TRIGGER FOR THE SEARCH COLLAPSIBLE AREA FOR MOBILE LAYOUT */
     $(".search-icon").click(
         function(){
