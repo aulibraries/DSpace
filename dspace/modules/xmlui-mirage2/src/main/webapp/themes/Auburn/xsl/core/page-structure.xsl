@@ -190,7 +190,7 @@
                     </xsl:attribute>
                 </link>
             </xsl:for-each>
-            
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
             <link rel="stylesheet" href="{concat($theme-path, 'vendor/jquery-ui/themes/base/jquery-ui.css')}"/>
             <link rel="stylesheet" href="{concat($theme-path, 'styles/main.css')}"/>
 
@@ -319,8 +319,8 @@
     <xsl:template name="buildHeader">
         <header role="banner">
             <div class="logo hidden-print"><a href="http://www.auburn.edu/" title="AU Homepage" aria-label="Auburn University Homepage"><img src="https://cdn.auburn.edu/2016/_assets/images/auburn-logo-horizontal.svg" alt="Auburn University Homepage"/></a></div>
-            <div class="menu-icon-header hidden-print hidden-sm hidden-md hidden-lg" data-toggle="offcanvas"><i class="fa fa-reorder" title="Open the main navigation menu"></i></div>
-            <div class="search-icon hidden-print"><i class="fa fa-search"></i></div>
+            <div class="menu-icon-header hidden-print hidden-sm hidden-md hidden-lg" data-toggle="offcanvas"><i class="fas fa-bars" title="Open the main navigation menu"></i></div>
+            <div class="search-icon hidden-print"><i class="fas fa-search"></i></div>
             <div class="header-title">
                 <div class="top-links hidden-print"><a href="http://www.auburn.edu/main/sitemap.php">A-Z Index</a> | <a href="http://www.auburn.edu/map">Map</a> | <a href="http://www.auburn.edu/main/auweb_campus_directory.html" class="lastTopLink">People Finder</a></div>
                 <form action="https://search.auburn.edu" class="search-form form-group hidden-print" method="get">
@@ -388,7 +388,7 @@
                             </xsl:attribute>AUETD Home</a></li>
                         <li><a href="http://www.grad.auburn.edu/" title="Graduate School" target="_blank">Graduate School</a></li>
                     </ul>
-                    <div class="menu-icon-nav hidden-print hidden-xs hidden-md hidden-lg" data-toggle="offcanvas"><i class="fa fa-reorder" title="Open a navigation menu"></i></div>
+                    <div class="menu-icon-nav hidden-print hidden-xs hidden-md hidden-lg" data-toggle="offcanvas"><i class="fas fa-bars" title="Open a navigation menu"></i></div>
                 </div>
             </div>
         </nav>
@@ -598,7 +598,7 @@
     <xsl:template name="buildFooter">
         <footer>
             <p style="font-size:11px; text-align:center;">Auburn University Libraries | 231 Mell Street | Auburn, Alabama 36849 | (334) 844-4500 or (800) 446-0387  | <script type="text/javascript">emailE='auburn.edu'; emailE=('etdhelp' + '@' + emailE); document.write('<a href="mailto:'+emailE+'">' + emailE + '</a>');</script></p>
-            <p class="social"><a href="https://twitter.com/aulibraries" class="social twitter" aria-label="Follow The Libraries on Twitter" title="Follow The Libraries on Twitter" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a> <a href="https://www.flickr.com/photos/aulibraries" class="social flickr" aria-label="Follow The Libraries on Flickr" title="Follow the Auburn Libraries on Flickr" target="_blank"><i class="fa fa-flickr" aria-hidden="true"></i></a> <a href="https://www.facebook.com/auburnlibraries" class="social facebook" aria-label="Follow The Libraries on Facebook" title="Follow the Auburn Libraries on Facebook" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a> <a href="https://instagram.com/aulibraries" class="social instagram" aria-label="Follow The Libraries on Instagram" title="Follow the Auburn Libraries on Instagram" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a><a href="https://vimeo.com/aulibraries" class="social vimeo" aria-label="Follow The Libraries on Vimeo" title="Follow the Auburn Libraries on Vimeo" target="_blank"><i class="fa fa-vimeo" aria-hidden="true"></i></a> <a href="https://www.youtube.com/user/auburnlibraries" class="social youtube" aria-label="Follow The Libraries on YouTube" title="Follow the Auburn Libraries on YouTube" target="_blank"><i class="fa fa-youtube" aria-hidden="true"></i></a></p>
+            <p class="social"><a href="https://twitter.com/aulibraries" class="social twitter" aria-label="Follow The Libraries on Twitter" title="Follow The Libraries on Twitter" target="_blank"><i class="fab fa-twitter" aria-hidden="true"></i></a> <a href="https://www.flickr.com/photos/aulibraries" class="social flickr" aria-label="Follow The Libraries on Flickr" title="Follow the Auburn Libraries on Flickr" target="_blank"><i class="fab fa-flickr" aria-hidden="true"></i></a> <a href="https://www.facebook.com/auburnlibraries" class="social facebook" aria-label="Follow The Libraries on Facebook" title="Follow the Auburn Libraries on Facebook" target="_blank"><i class="fab fa-facebook" aria-hidden="true"></i></a> <a href="https://instagram.com/aulibraries" class="social instagram" aria-label="Follow The Libraries on Instagram" title="Follow the Auburn Libraries on Instagram" target="_blank"><i class="fab fa-instagram" aria-hidden="true"></i></a><a href="https://vimeo.com/aulibraries" class="social vimeo" aria-label="Follow The Libraries on Vimeo" title="Follow the Auburn Libraries on Vimeo" target="_blank"><i class="fab fa-vimeo" aria-hidden="true"></i></a> <a href="https://www.youtube.com/user/auburnlibraries" class="social youtube" aria-label="Follow The Libraries on YouTube" title="Follow the Auburn Libraries on YouTube" target="_blank"><i class="fab fa-youtube" aria-hidden="true"></i></a></p>
             <!--Invisible link to HTML sitemap (for search engines) -->
             <a class="hidden">
                 <xsl:attribute name="href">
@@ -688,7 +688,7 @@
         <div class="row submissionBttnRow">
             <div class="col-lg-12">
                 <xsl:choose>
-                    <xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker') or contains($serverName, 'dstest')">
+                    <xsl:when test="contains($serverName, 'dspace.localhost') or contains($serverName, 'localhost') or contains($serverName, 'aucompbiker') or contains($serverName, 'dstest')">
                         <p><a class="btn btn-default submissionBttn" href="/auetd/handle/123456789/2/submit">Submit an Electronic Thesis or Dissertation</a></p>
                     </xsl:when>
                     <xsl:otherwise>
@@ -713,10 +713,10 @@
                             <label class="control-label col-sm-4 frontPageSrchFormLabel" for="aspect_artifactbrowser_FrontPageSearch_field_query">Search AUETD</label>
                             <div class="col-sm-6">
                                 <div class="input-group">
-                                    <input id="aspect_artifactbrowser_FrontPageSearch_field_query" class="ds-text-field form-control" name="query" type="text" placeholder="xmlui.general.search.placeholder.auetd_placeholder" i18n:attr="placeholder" value=""/>
+                                    <input id="aspect_artifactbrowser_FrontPageSearch_field_query" class="ds-text-field form-control" name="query" type="text" placeholder="xmlui.general.search.placeholder.AUETD_placeholder" i18n:attr="placeholder" value=""/>
                                     <span class="input-group-btn">
                                         <button id="aspect_artifactbrowser_FrontPageSearch_field_submit" class="ds-button-field btn btn-default" name="submit" title="Click to submit the search form" type="submit">
-                                            <i class="glyphicon glyphicon-search" aria-hidden="true" title="Click here to submit the search form"/>&#160;
+                                            <i class="fas fa-search" aria-hidden="true" title="Click here to submit the search form"/>&#160;
                                         </button>
                                     </span>
                                 </div>
