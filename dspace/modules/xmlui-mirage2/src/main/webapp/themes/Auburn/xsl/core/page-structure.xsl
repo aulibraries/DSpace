@@ -190,7 +190,7 @@
                     </xsl:attribute>
                 </link>
             </xsl:for-each>
-            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
             <link rel="stylesheet" href="{concat($theme-path, 'vendor/jquery-ui/themes/base/jquery-ui.css')}"/>
             <link rel="stylesheet" href="{concat($theme-path, 'styles/main.css')}"/>
 
