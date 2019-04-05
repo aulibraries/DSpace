@@ -79,14 +79,14 @@
                 </xsl:attribute>
                 <fieldset>
                     <div class="input-group">
-                        <input class="ds-text-field form-control" type="text" placeholder="xmlui.general.search.placeholder.auetd_placeholder" i18n:attr="placeholder">
+                        <input class="ds-text-field form-control" type="text" placeholder="xmlui.general.search.placeholder.AUETD_placeholder" i18n:attr="placeholder">
                             <xsl:attribute name="name">
                                 <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='search'][@qualifier='queryField']"/>
                             </xsl:attribute>
                         </input>
                         <span class="input-group-btn">
                             <button class="ds-button-field btn btn-default" title="xmlui.general.go" i18n:attr="title">
-                                <span class="glyphicon glyphicon-search" aria-hidden="true"/>
+                                <span class="fas fa-search" aria-hidden="true"/>
                             </button>
                         </span>
                     </div>

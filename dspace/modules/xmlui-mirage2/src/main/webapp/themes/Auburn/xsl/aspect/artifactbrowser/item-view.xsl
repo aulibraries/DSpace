@@ -754,10 +754,10 @@
                             <xsl:value-of select="mets:FLocat[@LOCTYPE='URL']/@xlink:title"/>
                             <xsl:choose>
                                 <xsl:when test="contains(mets:FLocat[@LOCTYPE='URL']/@xlink:href,'isAllowed=n')">
-                                    &#160;<i aria-hidden="true" class="fa fa-lock hidden-print hidden-md hidden-lg"></i>
+                                    &#160;<i aria-hidden="true" class="fas fa-lock hidden-print hidden-md hidden-lg"></i>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    &#160;<i aria-hidden="true" class="fa fa-file-pdf-o hidden-print hidden-md hidden-lg"></i>
+                                    &#160;<i aria-hidden="true" class="far fa-file-pdf hidden-print hidden-md hidden-lg"></i>
                                 </xsl:otherwise>
                             </xsl:choose>
                         </a>
@@ -895,19 +895,19 @@
         <xsl:param name="showLarge"/>
         <i aria-hidden="true">
             <xsl:attribute name="class">
-                <!-- <xsl:text>glyphicon </xsl:text> -->
-                <xsl:text>fa </xsl:text>
+                <!-- <xsl:text>glyphicon </xsl:text> 
+                <xsl:text>fa </xsl:text>-->
                 <xsl:choose>
                     <xsl:when test="contains(mets:FLocat[@LOCTYPE='URL']/@xlink:href,'isAllowed=n')">
-                        <xsl:text>fa-lock</xsl:text>
+                        <xsl:text>fas fa-lock</xsl:text>
                     </xsl:when>                 
                     <xsl:otherwise>
                         <xsl:choose>
                             <xsl:when test="$mimetype = 'plain' or $mimetype='text/plain'">
-                                <xsl:text>fa-file-text-o</xsl:text>
+                                <xsl:text>far fa-file</xsl:text>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:text>fa-file-pdf-o</xsl:text>
+                                <xsl:text>far fa-file-pdf</xsl:text>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:otherwise>
