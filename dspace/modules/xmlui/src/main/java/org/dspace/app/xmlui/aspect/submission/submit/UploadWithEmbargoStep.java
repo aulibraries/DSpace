@@ -8,6 +8,7 @@
 package org.dspace.app.xmlui.aspect.submission.submit;
 
 import org.apache.avalon.framework.parameters.Parameters;
+import org.apache.log4j.Logger;
 import org.apache.cocoon.ProcessingException;
 import org.apache.cocoon.environment.SourceResolver;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +23,7 @@ import org.dspace.content.*;
 import org.dspace.content.Collection;
 import org.dspace.content.Item;
 import org.dspace.core.Constants;
+import org.dspace.core.LogManager;
 import org.dspace.embargo.factory.EmbargoServiceFactory;
 import org.dspace.embargo.service.EmbargoService;
 import org.dspace.services.factory.DSpaceServicesFactory;
@@ -297,21 +299,18 @@ public class UploadWithEmbargoStep extends UploadStep
             uploadActions.addButton(org.dspace.submit.step.UploadStep.SUBMIT_UPLOAD_BUTTON).setValue(AUETD_FILE_UPLOAD_SUBMIT_BUTTON_NAME);
 
     	} else {
+            Bitstream bitstream = bitstreams.get(0);
             Division fileSummaryDiv = null;
             fileSummaryDiv = div.addDivision("submit-file-summary");
             fileSummaryDiv.setHead(T_head2);
 
-            for(Bitstream bs : bitstreams) {
-                printFileSummary(fileSummaryDiv, item, bs);
-            }
+            printFileSummary(fileSummaryDiv, item, bitstream);
 
             Division embargoSummaryDiv = null;
             embargoSummaryDiv = div.addDivision("submit-embargo-summary");
             embargoSummaryDiv.setHead(AUETD_EMBARGO_SUMMARY_HEAD);
 
-            for(Bitstream bs : bitstreams) {
-                printEmbargoSummary(embargoSummaryDiv, item, bs);
-            }
+            printEmbargoSummary(embargoSummaryDiv, item, bitstream);
 
             Para p1 = div.addPara();
             Button b1 = p1.addButton("submit_remove_selected");
@@ -387,54 +386,8 @@ public class UploadWithEmbargoStep extends UploadStep
         }
 
         uploadSection.addLabel(AUETD_T_COLUMN_STATUS);
-
-        /*String embargoRights = null;
-        String embargoStatus = null;
         
-        java.util.List<MetadataValue> embargoRightsList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "rights", null, org.dspace.content.Item.ANY);
-        java.util.List<MetadataValue> embargoStatusList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "status", org.dspace.content.Item.ANY);
-
-        if (embargoRightsList != null && embargoRightsList.size() > 0) {
-            embargoRights = embargoRightsList.get(0).getValue();
-        }
-
-        if (embargoStatusList != null & embargoStatusList.size() > 0) {
-            embargoStatus = embargoStatusList.get(0).getValue();
-        }
-
-        if(StringUtils.isNotBlank(embargoStatus) && StringUtils.isNotBlank(embargoRights)) {
-            if(embargoStatus.equals(Constants.EMBARGOED)) {
-                switch(embargoRights) {
-                    case Constants.EMBARGO_NOT_AUBURN_STR:
-                        uploadSection.addItem().addContent(AUETD_CREATE_EMBARGO_RADIO_BUTTON2);
-                        break;
-                    case Constants.EMBARGO_GLOBAL_STR:
-                        uploadSection.addItem().addContent(AUETD_CREATE_EMBARGO_RADIO_BUTTON3);
-                        break;
-                }
-
-                int embargoLengthNum = getEmbargoLengthInYears(item);
-
-                Map<String, String> embargoLengthMap = new HashMap<>();
-                embargoLengthMap.put("1", "One year");
-                embargoLengthMap.put("2", "Two years");
-                embargoLengthMap.put("3", "Three years");
-                embargoLengthMap.put("4", "Four years");
-                embargoLengthMap.put("5", "Five years");
-
-                if(embargoLengthNum > 0) {
-                    uploadSection.addLabel(AUETD_EMBARGO_LENGTH_COLUMN);
-                    uploadSection.addItem().addContent(embargoLengthMap.get(String.valueOf(embargoLengthNum)));
-                }
-            } else {
-                uploadSection.addItem().addContent(AUETD_CREATE_EMBARGO_RADIO_BUTTON1);
-            }
-        } else {
-            uploadSection.addItem().addContent(AUETD_CREATE_EMBARGO_RADIO_BUTTON1);
-        }*/
-
         Message statusTxt = null;
-        int embargoCreationAnswer = 0;
         Map<String, String> embargoLengthMap = new HashMap<>();
         embargoLengthMap.put("1", "One year");
         embargoLengthMap.put("2", "Two years");
@@ -444,6 +397,7 @@ public class UploadWithEmbargoStep extends UploadStep
 
         if (submissionInfo.containsKey(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME) &&
                 StringUtils.isNotBlank(submissionInfo.get(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME).toString())) {
+            int embargoCreationAnswer = 0;
             embargoCreationAnswer = Integer.parseInt(submissionInfo.get(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME).toString());
 
             if (embargoCreationAnswer == 1) {
@@ -455,6 +409,34 @@ public class UploadWithEmbargoStep extends UploadStep
             } else {
                 statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON1;
             }
+        } else {
+            String embargoRights = null;
+            String embargoStatus = null;
+            java.util.List<MetadataValue> embargoRightsList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "rights", null, org.dspace.content.Item.ANY);
+            java.util.List<MetadataValue> embargoStatusList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "status", org.dspace.content.Item.ANY);
+
+            if (embargoRightsList != null && embargoRightsList.size() > 0) {
+                embargoRights = embargoRightsList.get(0).getValue();
+            }
+
+            if (embargoStatusList != null & embargoStatusList.size() > 0) {
+                embargoStatus = embargoStatusList.get(0).getValue();
+            }
+
+            if(StringUtils.isNotBlank(embargoStatus) && StringUtils.isNotBlank(embargoRights)) {
+                if(embargoStatus.equals(Constants.EMBARGOED)) {
+                    if(embargoRights.equals(Constants.EMBARGO_NOT_AUBURN_STR)) {
+                        statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON2;
+                        
+                    } else if(embargoRights.equals(Constants.EMBARGO_GLOBAL_STR)) {
+                        statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON3;
+                    }
+                } else {
+                    statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON1;
+                }
+            } else if(StringUtils.isNotBlank(embargoStatus) && StringUtils.isBlank(embargoRights)) {
+                statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON1;
+            }
         }
 
         uploadSection.addItem().addContent(statusTxt);
@@ -463,6 +445,12 @@ public class UploadWithEmbargoStep extends UploadStep
                 StringUtils.isNotBlank(submissionInfo.get(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME).toString())) {
             uploadSection.addLabel(AUETD_EMBARGO_LENGTH_COLUMN);
             uploadSection.addItem().addContent(embargoLengthMap.get(submissionInfo.get(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME).toString()));
+        } else {
+            int embargoLengthNum = getEmbargoLengthInYears(item);
+            if (embargoLengthNum > 0) {
+                uploadSection.addLabel(AUETD_EMBARGO_LENGTH_COLUMN);
+                uploadSection.addItem().addContent(embargoLengthMap.get(String.valueOf(embargoLengthNum)));
+            }
         }
 
         // return this new "upload" section
@@ -617,9 +605,6 @@ public class UploadWithEmbargoStep extends UploadStep
         Division statusRow = div.addDivision("statusRow");
         statusRow.setHead(AUETD_T_COLUMN_STATUS);
         Message statusTxt = null;
-        //String embargoRights = null;
-        //String embargoStatus = null;
-        int embargoCreationAnswer = 0;
         Map<String, String> embargoLengthMap = new HashMap<>();
         embargoLengthMap.put("1", "One year");
         embargoLengthMap.put("2", "Two years");
@@ -627,34 +612,9 @@ public class UploadWithEmbargoStep extends UploadStep
         embargoLengthMap.put("4", "Four years");
         embargoLengthMap.put("5", "Five years");
 
-        /*java.util.List<MetadataValue> embargoRightsList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "rights", null, org.dspace.content.Item.ANY);
-        java.util.List<MetadataValue> embargoStatusList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "status", org.dspace.content.Item.ANY);
-
-        if (embargoRightsList != null && embargoRightsList.size() > 0) {
-            embargoRights = embargoRightsList.get(0).getValue();
-        }
-
-        if (embargoStatusList != null & embargoStatusList.size() > 0) {
-            embargoStatus = embargoStatusList.get(0).getValue();
-        }*/
-
-        /*if(StringUtils.isNotBlank(embargoStatus) && StringUtils.isNotBlank(embargoRights)) {
-            if(embargoStatus.equals(Constants.EMBARGOED)) {
-                if(embargoRights.equals(Constants.EMBARGO_NOT_AUBURN_STR)) {
-                    statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON2;
-                    
-                } else if(embargoRights.equals(Constants.EMBARGO_GLOBAL_STR)) {
-                    statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON3;
-                }
-            } else {
-                statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON1;
-            }
-        } else if(StringUtils.isNotBlank(embargoStatus) && StringUtils.isBlank(embargoRights)) {
-            statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON1;
-        }*/
-
         if (submissionInfo.containsKey(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME) &&
                 StringUtils.isNotBlank(submissionInfo.get(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME).toString())) {
+            int embargoCreationAnswer = 0;
             embargoCreationAnswer = Integer.parseInt(submissionInfo.get(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME).toString());
 
             if (embargoCreationAnswer == 1) {
@@ -666,30 +626,50 @@ public class UploadWithEmbargoStep extends UploadStep
             } else {
                 statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON1;
             }
+        } else {
+            String embargoRights = null;
+            String embargoStatus = null;
+            java.util.List<MetadataValue> embargoRightsList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "rights", null, org.dspace.content.Item.ANY);
+            java.util.List<MetadataValue> embargoStatusList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "status", org.dspace.content.Item.ANY);
+
+            if (embargoRightsList != null && embargoRightsList.size() > 0) {
+                embargoRights = embargoRightsList.get(0).getValue();
+            }
+
+            if (embargoStatusList != null & embargoStatusList.size() > 0) {
+                embargoStatus = embargoStatusList.get(0).getValue();
+            }
+
+            if(StringUtils.isNotBlank(embargoStatus) && StringUtils.isNotBlank(embargoRights)) {
+                if(embargoStatus.equals(Constants.EMBARGOED)) {
+                    if(embargoRights.equals(Constants.EMBARGO_NOT_AUBURN_STR)) {
+                        statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON2;
+                        
+                    } else if(embargoRights.equals(Constants.EMBARGO_GLOBAL_STR)) {
+                        statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON3;
+                    }
+                } else {
+                    statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON1;
+                }
+            } else if(StringUtils.isNotBlank(embargoStatus) && StringUtils.isBlank(embargoRights)) {
+                statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON1;
+            }
         }
 
         statusRow.addPara(statusTxt);
-
-        /*int embargoLengthNum = getEmbargoLengthInYears(item);
-        
-        Map<String, String> embargoLengthMap = new HashMap<>();
-        embargoLengthMap.put("1", "One year");
-        embargoLengthMap.put("2", "Two years");
-        embargoLengthMap.put("3", "Three years");
-        embargoLengthMap.put("4", "Four years");
-        embargoLengthMap.put("5", "Five years");
-        
-        if(embargoLengthNum > 0) {
-            Division endDateRow = div.addDivision("enddateRow");
-            endDateRow.setHead(AUETD_EMBARGO_LENGTH_COLUMN);
-            endDateRow.addPara(embargoLengthMap.get(String.valueOf(embargoLengthNum)));
-        }*/
 
         if (submissionInfo.containsKey(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME) &&
                 StringUtils.isNotBlank(submissionInfo.get(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME).toString())) {
             Division endDateRow = div.addDivision("enddateRow");
             endDateRow.setHead(AUETD_EMBARGO_LENGTH_COLUMN);
             endDateRow.addPara(embargoLengthMap.get(submissionInfo.get(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME).toString()));
+        } else {
+            int embargoLengthNum = getEmbargoLengthInYears(item);
+            if(embargoLengthNum > 0) {
+                Division endDateRow = div.addDivision("enddateRow");
+                endDateRow.setHead(AUETD_EMBARGO_LENGTH_COLUMN);
+                endDateRow.addPara(embargoLengthMap.get(String.valueOf(embargoLengthNum)));
+            }
         }
 
         Para p1 = div.addPara();
@@ -697,7 +677,7 @@ public class UploadWithEmbargoStep extends UploadStep
         b1.setValue(AUETD_SUBMIT_EDIT_RESTRICTIONS_BUTTON_NAME);
     }
 
-    /*private int getEmbargoLengthInYears(Item item)
+    private int getEmbargoLengthInYears(Item item)
         throws AuthorizeException, IOException, SQLException
     {
         int embargoLength = 0;
@@ -707,7 +687,6 @@ public class UploadWithEmbargoStep extends UploadStep
             if (embargoLengthList != null && embargoLengthList.size() > 0) {
                 ArrayList<String> embargoLengths = new ArrayList<String>();
                 embargoLengths.addAll(Arrays.asList(embargoLengthList.get(0).getValue().split(":")));
-                log.debug(LogManager.getHeader(context, "getting_embargo_length ", " Size of embargoLengths = "+String.valueOf(embargoLengths.size())));
                 int lengthNum = Integer.parseInt(embargoLengths.get(1));
                 if (lengthNum > 0) {
                     embargoLength = lengthNum / 12;
@@ -716,6 +695,6 @@ public class UploadWithEmbargoStep extends UploadStep
         }
 
         return embargoLength;
-    }*/
+    }
 }
         
