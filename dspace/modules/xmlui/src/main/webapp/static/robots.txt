@@ -146,3 +146,10 @@ Disallow: /
 # http://www.webreaper.net/
 User-agent: WebReaper
 Disallow: /
+
+#
+# The SemrushBot is being blocked due to an excessive amount of requests
+# in a short period of time. See LibHelp tickets #85871, #109710
+#
+User-agent: SemrushBot
+Disallow: /
