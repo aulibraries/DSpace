@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wf-config>
     <workflow-map>
-        <name-map collection="default" workflow="default"/>
+        <!-- <name-map collection="default" workflow="default"/> -->
         <!--<name-map collection="123456789/4" workflow="selectSingleReviewer"/>-->
         <!--<name-map collection="123456789/5" workflow="scoreReview"/>-->
+        <!-- Development / Testing -->
+        <name-map collection="123456789/2" workflow="default"/>
+        <!-- Production -->
+        <name-map collection="10415/2" workflow="default"/>
     </workflow-map>
 
     <!--Standard workflow step-->
