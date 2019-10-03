@@ -853,8 +853,8 @@ public class XmlWorkflowServiceImpl implements XmlWorkflowService {
         String usersName = getEPersonName(e);
 
         // Here's what happened
-        String provDescription = provenance + " Rejected by " + usersName + ", reason: "
-                + rejection_message + " on " + now + " (GMT) ";
+        String provDescription = provenance + " Rejected by " + usersName + " Reason: "
+                + rejection_message + " Rejected on " + now + " (GMT) ";
 
         // Add to item as a DC field
         itemService.addMetadata(context, myitem, MetadataSchema.DC_SCHEMA, "description", "provenance", "en", provDescription);
@@ -1061,8 +1061,8 @@ public class XmlWorkflowServiceImpl implements XmlWorkflowService {
         String usersName = getEPersonName(e);
 
         // Here's what happened
-        String provDescription = provenance + " Rejected by " + usersName + ", reason: "
-                + rejection_message + " on " + now + " (GMT) ";
+        String provDescription = provenance + " Rejected by " + usersName + " Reason: "
+                + rejection_message + " Rejected on " + now + " (GMT) ";
 
         // Add to item as a DC field
         itemService.addMetadata(context, myitem, MetadataSchema.DC_SCHEMA, "description", "provenance", "en", provDescription);

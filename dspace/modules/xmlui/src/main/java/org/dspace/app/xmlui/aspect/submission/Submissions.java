@@ -33,6 +33,14 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.DateTimeException;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -131,7 +139,7 @@ public class Submissions extends AbstractDSpaceTransformer
 
     @Override
     public void addBody(Body body) throws SAXException, WingException,
-            UIException, SQLException, IOException, AuthorizeException
+        UIException, SQLException, IOException, AuthorizeException
     {
         Context.Mode originalMode = context.getCurrentMode();
         context.setMode(Context.Mode.READ_ONLY);
@@ -166,7 +174,7 @@ public class Submissions extends AbstractDSpaceTransformer
      */
     private void addWorkflowTasksDiv(Division division) throws SQLException, WingException, AuthorizeException, IOException {
     	division.addDivision("workflow-tasks");
-        }
+    }
 
     /**
      * There are two options:  the user has some unfinished submissions 
@@ -332,7 +340,7 @@ public class Submissions extends AbstractDSpaceTransformer
      * If the user has none, this nothing is displayed.
      */
     private void addSubmissionsInWorkflowDiv(Division division)
-            throws SQLException, WingException, AuthorizeException, IOException
+        throws SQLException, WingException, AuthorizeException, IOException
     {
         division.addDivision("submissions-inprogress");
     }
@@ -348,7 +356,7 @@ public class Submissions extends AbstractDSpaceTransformer
      * @param displayAll whether to display all or just a limited number.
      */
     private void addPreviousSubmissions(Division division, boolean displayAll)
-            throws SQLException,WingException
+        throws SQLException, WingException
     {
         // Turn the iterator into a list (to get size info, in order to put in a table)
         List<Item> subList = new LinkedList<>();
@@ -449,37 +457,44 @@ public class Submissions extends AbstractDSpaceTransformer
     private void addStatusAndReasonCells(WorkspaceItem wsi, Row row)
         throws WingException
     {
-        String reasonMessage = null;
-
+        List<String> rejectionMessages = new ArrayList<>();
         List<MetadataValue> provenanceMDVList = itemService.getMetadata(wsi.getItem(), MetadataSchema.DC_SCHEMA, "description", "provenance", Item.ANY, Item.ANY);
         String rejectedProvenanceMessage = null;
         Cell statusCell = row.addCell();
         Cell reasonCell = row.addCell();
 
         if (provenanceMDVList.size() > 0) {
-            for (MetadataValue provenance : provenanceMDVList) {
-                if (provenance.getValue().startsWith("Rejected")) {
-                    rejectedProvenanceMessage = provenance.getValue();
-                    statusCell.addContent("Rejected");
+            for (MetadataValue provenanceMDV : provenanceMDVList) {
+                if (provenanceMDV.getValue().contains("Rejected")) {
+                    String provenance = provenanceMDV.getValue();
+
+                    int startIndex = provenance.indexOf("Rejected");
+                    String rejectionMessage = provenance.substring(startIndex, provenance.length());
+                    rejectionMessages.add(rejectionMessage);
                 }
             }
         }
 
-        if(StringUtils.isNotBlank(rejectedProvenanceMessage)) {
-            int startIndex = rejectedProvenanceMessage.indexOf("reason:");
-            int stopIndex = rejectedProvenanceMessage.indexOf(" # ");
-            int start = startIndex + ("reason:".length()+1);
+        if (rejectionMessages.size() > 0) {
+            statusCell.addContent("Rejected");
+            Collections.reverse(rejectionMessages);
 
-            if(stopIndex == -1)
-            {
-                stopIndex = rejectedProvenanceMessage.length();
+            String latestRejectionMessage = rejectionMessages.get(0);
+
+            String rejectionReason = null;
+            String rejectionDateTime = null;
+            
+            int rejectionReasonSectionStart = latestRejectionMessage.indexOf("Reason:");
+            int rejectionReasonSectionStop = latestRejectionMessage.lastIndexOf("Rejected on");
+            int rejectionReasonSectionStartOffset = rejectionReasonSectionStart + ("Reason:".length()+1);
+
+            rejectionReason = latestRejectionMessage.substring(rejectionReasonSectionStartOffset, rejectionReasonSectionStop-1);
+
+            if (StringUtils.isNotBlank(rejectionReason)) {
+                reasonCell.addContent(rejectionReason);
+            } else {
+                reasonCell.addContent("");
             }
-
-            reasonMessage = rejectedProvenanceMessage.substring(start, stopIndex);
-        }
-
-        if (StringUtils.isNotBlank(reasonMessage)) {
-            reasonCell.addContent(reasonMessage);
         }
     }
 }
