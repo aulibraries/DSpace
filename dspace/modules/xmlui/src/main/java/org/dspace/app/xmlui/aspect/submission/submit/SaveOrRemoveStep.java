@@ -24,12 +24,12 @@ import org.xml.sax.SAXException;
 
 /**
  * This is sort-of a step of the submission processes (not
- * an official "step", since it does not extend AbstractSubmissionStep). 
+ * an official "step", since it does not extend AbstractSubmissionStep).
  * <P>
  * At any time during submission the user may leave the processe and either
  * leave it for later or remove the submission.
  * <P>
- * This form presents three options, 1) Go back, 2) save the work, 
+ * This form presents three options, 1) Go back, 2) save the work,
  * or 3) remove it.
  * 
  * @author Scott Phillips
@@ -49,8 +49,7 @@ public class SaveOrRemoveStep extends AbstractStep
         message("xmlui.Submission.submit.SaveOrRemoveStep.submit_save");
     protected static final Message T_submit_remove = 
         message("xmlui.Submission.submit.SaveOrRemoveStep.submit_remove");
-	
-    
+
     /**
 	 * Establish our required parameters, abstractStep will enforce these.
 	 */
@@ -59,21 +58,21 @@ public class SaveOrRemoveStep extends AbstractStep
 		this.requireSubmission = true;
 		this.requireStep = true;
 	}
-    
+
 	public void addBody(Body body) throws SAXException, WingException,
 	UIException, SQLException, IOException, AuthorizeException
-	{	
+	{
 		Collection collection = submission.getCollection();
 		String actionURL = contextPath + "/handle/"+collection.getHandle() + "/submit/" + knot.getId() + ".continue";
 
 		Division div = body.addInteractiveDivision("submit-save-or-cancel",actionURL, Division.METHOD_POST,"primary submission");
 		div.setHead(T_submission_head);
-		
+
 		List saveOrCancel = div.addList("submit-review", List.TYPE_FORM);
-	
+
 		saveOrCancel.setHead(T_head);
 		saveOrCancel.addItem(T_info1);
-		
+
         org.dspace.app.xmlui.wing.element.Item actions = saveOrCancel.addItem();
         actions.addButton("submit_back").setValue(T_submit_back);
         actions.addButton("submit_save").setValue(T_submit_save);

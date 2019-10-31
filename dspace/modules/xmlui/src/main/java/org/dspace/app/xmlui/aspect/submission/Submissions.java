@@ -54,7 +54,7 @@ public class Submissions extends AbstractDSpaceTransformer
     protected static final Message T_title = 
         message("xmlui.Submission.Submissions.title");
     protected static final Message T_dspace_home = 
-        message("xmlui.general.dspace_home"); 
+        message("xmlui.general.dspace_home");
     protected static final Message T_trail = 
         message("xmlui.Submission.Submissions.trail");
     protected static final Message T_head = 
@@ -66,37 +66,37 @@ public class Submissions extends AbstractDSpaceTransformer
 
     // used by the unfinished submissions section
     protected static final Message T_s_head1 = 
-        message("xmlui.Submission.Submissions.submit_head1"); 
+        message("xmlui.Submission.Submissions.submit_head1");
     protected static final Message T_s_info1a = 
-        message("xmlui.Submission.Submissions.submit_info1a"); 
+        message("xmlui.Submission.Submissions.submit_info1a");
     protected static final Message T_s_info1b = 
-        message("xmlui.Submission.Submissions.submit_info1b"); 
+        message("xmlui.Submission.Submissions.submit_info1b");
     protected static final Message T_s_info1c = 
-        message("xmlui.Submission.Submissions.submit_info1c"); 
+        message("xmlui.Submission.Submissions.submit_info1c");
     protected static final Message T_s_head2 = 
-        message("xmlui.Submission.Submissions.submit_head2"); 
+        message("xmlui.Submission.Submissions.submit_head2");
     protected static final Message T_s_info2a = 
-        message("xmlui.Submission.Submissions.submit_info2a"); 
+        message("xmlui.Submission.Submissions.submit_info2a");
     protected static final Message T_s_info2b = 
-        message("xmlui.Submission.Submissions.submit_info2b"); 
+        message("xmlui.Submission.Submissions.submit_info2b");
     protected static final Message T_s_info2c = 
-        message("xmlui.Submission.Submissions.submit_info2c"); 
+        message("xmlui.Submission.Submissions.submit_info2c");
     protected static final Message T_s_column1 = 
-        message("xmlui.Submission.Submissions.submit_column1"); 
+        message("xmlui.Submission.Submissions.submit_column1");
     protected static final Message T_s_column2 = 
-        message("xmlui.Submission.Submissions.submit_column2"); 
+        message("xmlui.Submission.Submissions.submit_column2");
     protected static final Message T_s_column3 = 
-        message("xmlui.Submission.Submissions.submit_column3"); 
+        message("xmlui.Submission.Submissions.submit_column3");
     protected static final Message T_s_column4 = 
-        message("xmlui.Submission.Submissions.submit_column4"); 
+        message("xmlui.Submission.Submissions.submit_column4");
     protected static final Message T_s_head3 = 
-        message("xmlui.Submission.Submissions.submit_head3"); 
+        message("xmlui.Submission.Submissions.submit_head3");
     protected static final Message T_s_info3 = 
-        message("xmlui.Submission.Submissions.submit_info3"); 
+        message("xmlui.Submission.Submissions.submit_info3");
     protected static final Message T_s_head4 = 
-        message("xmlui.Submission.Submissions.submit_head4"); 
+        message("xmlui.Submission.Submissions.submit_head4");
     protected static final Message T_s_submit_remove = 
-        message("xmlui.Submission.Submissions.submit_submit_remove"); 
+        message("xmlui.Submission.Submissions.submit_submit_remove");
 
     // Used in the completed submissions section
     protected static final Message T_c_head =
@@ -279,7 +279,7 @@ public class Submissions extends AbstractDSpaceTransformer
 
                 addStatusAndReasonCells(workspaceItem, row);
             }
-        } 
+        }
         else
         {
             header = table.addRow();
@@ -292,7 +292,7 @@ public class Submissions extends AbstractDSpaceTransformer
             header.addCell(null,Cell.ROLE_HEADER,0,5,null).addContent(T_s_head4);
         }
 
-        for (WorkspaceItem workspaceItem : supervisedItems) 
+        for (WorkspaceItem workspaceItem : supervisedItems)
         {
             String title = workspaceItem.getItem().getName();
             EPerson submitterEPerson = workspaceItem.getItem().getSubmitter();
@@ -372,7 +372,7 @@ public class Submissions extends AbstractDSpaceTransformer
         Iterator<Item> subs = itemService.findBySubmitterDateSorted(context, context.getCurrentUser(), limit);
 
         //NOTE: notice we are adding each item to this list in *reverse* order...
-        // this is a very basic attempt at making more recent submissions float 
+        // this is a very basic attempt at making more recent submissions float
         // up to the top of the list (findBySubmitter() doesn't guarrantee
         // chronological order, but tends to return older items near top of the list)
         while (subs.hasNext())
@@ -396,7 +396,7 @@ public class Submissions extends AbstractDSpaceTransformer
         header.addCellContent(T_c_column3); // COLLECTION NAME (LINKED)
 
         //Limit to showing just 50 archived submissions, unless overridden
-        //(This is a saftey measure for Admins who may have submitted 
+        //(This is a saftey measure for Admins who may have submitted
         // thousands of items under their account via bulk ingest tools, etc.)
         int count = 0;
 
@@ -451,7 +451,7 @@ public class Submissions extends AbstractDSpaceTransformer
             Para limitedList = completedSubmissions.addPara();
             limitedList.addContent(T_c_limit);
             limitedList.addXref(contextPath + "/submissions?all", T_c_displayall);
-        }    
+        }
     }
 
     private void addStatusAndReasonCells(WorkspaceItem wsi, Row row)
@@ -483,7 +483,7 @@ public class Submissions extends AbstractDSpaceTransformer
 
             String rejectionReason = null;
             String rejectionDateTime = null;
-            
+
             int rejectionReasonSectionStart = latestRejectionMessage.indexOf("Reason:");
             int rejectionReasonSectionStop = latestRejectionMessage.lastIndexOf("Rejected on");
             int rejectionReasonSectionStartOffset = rejectionReasonSectionStart + ("Reason:".length()+1);

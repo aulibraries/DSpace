@@ -140,7 +140,7 @@ public class Context
     }
 
     /**
-     * Initializes a new context object. 
+     * Initializes a new context object.
      *
      * @exception SQLException
      *                if there was an error obtaining a database connection
@@ -287,7 +287,7 @@ public class Context
      * <code>
      *     mycontext.turnOffAuthorisationSystem();
      *     some java code that require no authorisation check
-     *     mycontext.restoreAuthSystemState(); 
+     *     mycontext.restoreAuthSystemState();
          * </code> If Context debug is enabled, the correct sequence calling will be
      * checked and a warning will be displayed if not.
      */

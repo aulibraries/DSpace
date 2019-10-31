@@ -59,16 +59,16 @@ public class Navigation extends AbstractDSpaceTransformer implements CacheablePr
     /** Language Strings */
     private static final Message T_my_account =
         message("xmlui.EPerson.Navigation.my_account");
-    
+
     private static final Message T_profile =
         message("xmlui.EPerson.Navigation.profile");
-    
+
     private static final Message T_logout =
         message("xmlui.EPerson.Navigation.logout");
-    
+
     private static final Message T_login =
         message("xmlui.EPerson.Navigation.login");
-    
+
     private static final Message T_register =
         message("xmlui.EPerson.Navigation.register");
 
@@ -87,10 +87,10 @@ public class Navigation extends AbstractDSpaceTransformer implements CacheablePr
      *
      * @return The generated key hashes the src
      */
-    public Serializable getKey() 
+    public Serializable getKey()
     {
         Request request = ObjectModelHelper.getRequest(objectModel);
-        
+
         // Special case, don't cache anything if the user is logging 
         // in. The problem occures because of timming, this cache key
         // is generated before we know whether the operation has 
@@ -102,7 +102,7 @@ public class Navigation extends AbstractDSpaceTransformer implements CacheablePr
         {
             return null;
         }
-                
+
         // FIXME:
         // Do not cache the home page. There is a bug that is causing the
         // homepage to be cached with user's data after a logout. This
@@ -112,7 +112,7 @@ public class Navigation extends AbstractDSpaceTransformer implements CacheablePr
         {
         	return null;
         }
-        
+
     	StringBuilder key;
         if (context.getCurrentUser() != null)
         {
@@ -122,7 +122,7 @@ public class Navigation extends AbstractDSpaceTransformer implements CacheablePr
         {
             key = new StringBuilder("anonymous");
         }
-        
+
         // Add the user's language
         Enumeration locales = request.getLocales();
         while (locales.hasMoreElements())
@@ -130,7 +130,7 @@ public class Navigation extends AbstractDSpaceTransformer implements CacheablePr
             Locale locale = (Locale) locales.nextElement();
             key.append("-").append(locale.toString());
         }
-        
+
         return HashUtil.hash(key.toString());
     }
 
@@ -149,17 +149,17 @@ public class Navigation extends AbstractDSpaceTransformer implements CacheablePr
     		{
 		        try {
 		            DSpaceValidity validity = new DSpaceValidity();
-		            
+
 		            validity.add(context, eperson);
-		            
+
 		            java.util.Set<Group> groups = groupService.allMemberGroupsSet(context, eperson);
 		            for (Group group : groups)
 		            {
 		            	validity.add(context, group);
 		            }
-		            
+
 		            this.validity = validity.complete();
-		        } 
+		        }
 		        catch (SQLException sqle)
 		        {
 		            // Just ignore it and return invalid.
@@ -172,7 +172,7 @@ public class Navigation extends AbstractDSpaceTransformer implements CacheablePr
     	}
     	return this.validity;
     }
-    
+
     /**
      * Add the eperson aspect navigational options.
      */
@@ -180,13 +180,13 @@ public class Navigation extends AbstractDSpaceTransformer implements CacheablePr
             UIException, SQLException, IOException, AuthorizeException
     {
     	/* Create skeleton menu structure to ensure consistent order between aspects,
-    	 * even if they are never used 
+    	 * even if they are never used
     	 */
         options.addList("browse");
         List account = options.addList("account");
         options.addList("context");
         options.addList("administrative");
-        
+
         account.setHead(T_my_account);
         EPerson eperson = this.context.getCurrentUser();
         if (eperson != null)
@@ -194,8 +194,8 @@ public class Navigation extends AbstractDSpaceTransformer implements CacheablePr
             String fullName = eperson.getFullName();
             account.addItemXref(contextPath+"/logout",T_logout);
             account.addItemXref(contextPath+"/profile",T_profile.parameterize(fullName));
-        } 
-        else 
+        }
+        else
         {
             account.addItemXref(contextPath+"/login",T_login);
             if (DSpaceServicesFactory.getInstance().getConfigurationService().getBooleanProperty("xmlui.user.registration", true))
@@ -228,7 +228,7 @@ public class Navigation extends AbstractDSpaceTransformer implements CacheablePr
             }
 
             if (groupService.isMember(context, eperson, groupService.findByName(context, configurationService.getProperty("auetd.authorization.group.2")))) {
-                userMeta.addMetadata("identifier", "authorized-submitter").addContent("yes");   
+                userMeta.addMetadata("identifier", "authorized-submitter").addContent("yes");
             }
         }
         else
@@ -238,17 +238,17 @@ public class Navigation extends AbstractDSpaceTransformer implements CacheablePr
 
         // Always have a login URL.
         userMeta.addMetadata("identifier","loginURL").addContent(contextPath+"/login");
-        
+
         // Always add language information
         Request request = ObjectModelHelper.getRequest(objectModel);
         Enumeration locales = request.getLocales();
         while (locales.hasMoreElements())
         {
             Locale locale = (Locale) locales.nextElement();
-            userMeta.addMetadata("language","RFC3066").addContent(locale.toString());    
+            userMeta.addMetadata("language","RFC3066").addContent(locale.toString());
         }
     }
-    
+
     /**
      * recycle
      */
@@ -257,5 +257,5 @@ public class Navigation extends AbstractDSpaceTransformer implements CacheablePr
         this.validity = null;
         super.recycle();
     }
-    
+
 }

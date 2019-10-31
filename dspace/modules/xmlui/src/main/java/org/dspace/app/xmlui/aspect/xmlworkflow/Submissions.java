@@ -95,7 +95,7 @@ public class Submissions extends AbstractDSpaceTransformer
     protected static final Message T_p_column2 =
         message("xmlui.Submission.Submissions.progress_column2");
     protected static final Message T_p_column3 =
-        message("xmlui.Submission.Submissions.progress_column3");   
+        message("xmlui.Submission.Submissions.progress_column3");
 
     // Custom messages
     protected static final Message AUETD_others_workflow_head =
@@ -154,7 +154,7 @@ public class Submissions extends AbstractDSpaceTransformer
     	java.util.List<ClaimedTask> ownedItems = claimedTaskService.findByEperson(context, context.getCurrentUser());
     	@SuppressWarnings("unchecked") // This cast is correct.
     	java.util.List<PoolTask> pooledItems = poolTaskService.findByEperson(context, context.getCurrentUser());
-        
+
         //Custom code
         @SuppressWarnings("unchecked")
         java.util.List<ClaimedTask> allClaimedItems = claimedTaskService.findAllInStep(context, "editstep");

@@ -66,7 +66,7 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
 	private static final Message T_submit_save = message("xmlui.general.save");
 	private static final Message T_submit_cancel = message("xmlui.general.cancel");
 	private static final Message T_item_trail = message("xmlui.administrative.item.general.item_trail");
-	
+
 	private static final Message T_title = message("xmlui.administrative.item.EditBitstreamForm.title");
 	private static final Message T_trail = message("xmlui.administrative.item.EditBitstreamForm.trail");
 	private static final Message T_head1 = message("xmlui.administrative.item.EditBitstreamForm.head1");
@@ -175,7 +175,7 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
         /*java.util.List<BitstreamFormat> bitstreamFormats = authorizeService.isAdmin(context) ?
 					bitstreamFormatService.findAll(context) :
 					bitstreamFormatService.findNonInternal(context);*/
-		
+
 		/*boolean primaryBitstream = false;
 		java.util.List<Bundle> bundles = bitstream.getBundles();
 		if (bundles != null && bundles.size() > 0) {
@@ -189,7 +189,7 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
 		String fileName = bitstream.getName();
 
 		// DIVISION: main
-		Division div = body.addInteractiveDivision("edit-bitstream", contextPath+"/admin/item", Division.METHOD_MULTIPART, "primary administrative item");    	
+		Division div = body.addInteractiveDivision("edit-bitstream", contextPath+"/admin/item", Division.METHOD_MULTIPART, "primary administrative item");
 		div.setHead(T_head1);
 
 		// LIST: edit form
@@ -201,7 +201,7 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
         bitstreamName.setLabel(T_filename_label);
         bitstreamName.setHelp(T_filename_help);
         bitstreamName.setValue(fileName);
-		
+
         // EMBARGO FIELDS
         addEmbargoFieldSection(bitstream, edit);
 
@@ -236,7 +236,7 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
         embargoTypeRadio.addOption("2", AUETD_CREATE_EMBARGO_RADIO_BUTTON2);
         embargoTypeRadio.addOption("3", AUETD_CREATE_EMBARGO_RADIO_BUTTON3);
 
-        // Embargo Length Radio Button Group        
+        // Embargo Length Radio Button Group
         Radio embargoLengthField = form.addItem().addRadio(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME);
         embargoLengthField.setLabel(AUETD_EMBARGO_LENGTH_LABEL);
         embargoLengthField.setHelp(AUETD_EMBARGO_LENGTH_HELP);
@@ -257,7 +257,7 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
 
                 if (errors.contains(org.dspace.app.xmlui.aspect.administrative.FlowItemUtils.AUETD_EMBARGO_LENGTH_FIELD_NAME_REQUIRED_ERROR) ||
                         errors.contains(org.dspace.app.xmlui.aspect.administrative.FlowItemUtils.AUETD_EMBARGO_LENGTH_FIELD_NAME_OUT0FDATE_ERROR)) {
-                    
+
                     if (errors.contains(org.dspace.app.xmlui.aspect.administrative.FlowItemUtils.AUETD_EMBARGO_LENGTH_FIELD_NAME_REQUIRED_ERROR)) {
                         embargoLengthField.addError(AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED);
                     } else if (errors.contains(org.dspace.app.xmlui.aspect.administrative.FlowItemUtils.AUETD_EMBARGO_LENGTH_FIELD_NAME_OUT0FDATE_ERROR)) {
@@ -278,10 +278,10 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
             embargoTypeRadio.setOptionSelected(String.valueOf(embargoType));
 
             if (embargoType == 2 || embargoType == 3) {
-                embargoLengthFieldDisplayInput.setValue(1);               
+                embargoLengthFieldDisplayInput.setValue(1);
             }
         }
-        
+
         if (embargoLength >= 1 && embargoLength <= 5) {
             embargoLengthField.setOptionSelected(String.valueOf(embargoLength));
         } else {
@@ -319,7 +319,7 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
             if (embargoStatusList != null & embargoStatusList.size() > 0) {
                 embargoStatus = embargoStatusList.get(0).getValue();
             }
-        
+
             if (StringUtils.isNotBlank(embargoStatus)) {
                 switch (embargoStatus) {
                     case Constants.EMBARGOED:

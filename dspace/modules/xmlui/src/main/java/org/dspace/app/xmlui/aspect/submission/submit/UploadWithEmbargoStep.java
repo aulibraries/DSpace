@@ -382,11 +382,11 @@ public class UploadWithEmbargoStep extends UploadStep
             org.dspace.app.xmlui.wing.element.Item file = uploadSection.addItem();
             file.addXref(url,name);
             file.addContent(" - "+ format + " ");
-            file.addContent(support);    
+            file.addContent(support);
         }
 
         uploadSection.addLabel(AUETD_T_COLUMN_STATUS);
-        
+
         Message statusTxt = null;
         Map<String, String> embargoLengthMap = new HashMap<>();
         embargoLengthMap.put("1", "One year");
@@ -427,7 +427,7 @@ public class UploadWithEmbargoStep extends UploadStep
                 if(embargoStatus.equals(Constants.EMBARGOED)) {
                     if(embargoRights.equals(Constants.EMBARGO_NOT_AUBURN_STR)) {
                         statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON2;
-                        
+
                     } else if(embargoRights.equals(Constants.EMBARGO_GLOBAL_STR)) {
                         statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON3;
                     }
@@ -520,7 +520,7 @@ public class UploadWithEmbargoStep extends UploadStep
         embargoTypeRadio.addOption("2", AUETD_CREATE_EMBARGO_RADIO_BUTTON2);
         embargoTypeRadio.addOption("3", AUETD_CREATE_EMBARGO_RADIO_BUTTON3);
 
-        // Embargo Length Radio Button Group        
+        // Embargo Length Radio Button Group
         Radio embargoLengthField = form.addItem().addRadio(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME);
         embargoLengthField.setLabel(AUETD_EMBARGO_LENGTH_LABEL);
         embargoLengthField.setHelp(AUETD_EMBARGO_LENGTH_HELP);
@@ -644,7 +644,7 @@ public class UploadWithEmbargoStep extends UploadStep
                 if(embargoStatus.equals(Constants.EMBARGOED)) {
                     if(embargoRights.equals(Constants.EMBARGO_NOT_AUBURN_STR)) {
                         statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON2;
-                        
+
                     } else if(embargoRights.equals(Constants.EMBARGO_GLOBAL_STR)) {
                         statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON3;
                     }
@@ -697,4 +697,4 @@ public class UploadWithEmbargoStep extends UploadStep
         return embargoLength;
     }
 }
-        
+

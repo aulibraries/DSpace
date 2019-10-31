@@ -40,7 +40,7 @@ public class AcceptEditRejectAction extends AbstractXMLUIAction {
 
     protected static final Message T_info2=
         message("xmlui.Submission.workflow.RejectTaskStep.info1");
-    
+
 
     private static final Message T_HEAD = message("xmlui.XMLWorkflow.workflow.EditMetadataAction.head");
 

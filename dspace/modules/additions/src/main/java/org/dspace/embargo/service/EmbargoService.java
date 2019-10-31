@@ -112,7 +112,7 @@ public interface EmbargoService {
     public Iterator<Item> findItemsByLiftMetadata(Context context) throws SQLException, IOException, AuthorizeException;
 
     public String getEmbargoMetadataValue(Context context, Item item, String element, String qualifier) throws AuthorizeException, IOException, SQLException;
-    
+
     public void createOrModifyEmbargoMetadataValue(Context context, Item item, String element, String qualifier, String value) throws SQLException, IOException, AuthorizeException;
 
     public String generateEmbargoLength(Context context, Item item, String selectedLength) throws AuthorizeException, IOException, SQLException;

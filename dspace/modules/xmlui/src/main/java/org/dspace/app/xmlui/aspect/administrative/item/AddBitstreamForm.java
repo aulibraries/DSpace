@@ -50,7 +50,7 @@ import org.xml.sax.SAXException;
  */
 public class AddBitstreamForm extends AbstractDSpaceTransformer
 {
-	
+
 	/** Language strings */
 	private static final Message T_dspace_home = message("xmlui.general.dspace_home");
 	private static final Message T_submit_cancel = message("xmlui.general.cancel");
@@ -211,7 +211,7 @@ public class AddBitstreamForm extends AbstractDSpaceTransformer
 
         div.addHidden("administrative-continue").setValue(knot.getId());
     }
-	
+
 	/**
      * Add the bundleName to the list of bundles available to submit to. 
      * Performs an authorization check that the current user has privileges 
@@ -222,7 +222,7 @@ public class AddBitstreamForm extends AbstractDSpaceTransformer
      * @throws SQLException passed through.
      * @throws WingException passed through.
      */
-    public boolean addBundleOption(org.dspace.content.Item item, Select select, String bundleName) 
+    public boolean addBundleOption(org.dspace.content.Item item, Select select, String bundleName)
         throws SQLException, WingException
 	{
         java.util.List<Bundle> bundles = itemService.getBundles(item, bundleName);
@@ -270,7 +270,7 @@ public class AddBitstreamForm extends AbstractDSpaceTransformer
         embargoTypeRadio.addOption("2", AUETD_CREATE_EMBARGO_RADIO_BUTTON2);
         embargoTypeRadio.addOption("3", AUETD_CREATE_EMBARGO_RADIO_BUTTON3);
 
-        // Embargo Length Radio Button Group        
+        // Embargo Length Radio Button Group
         Radio embargoLengthField = form.addItem().addRadio(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME);
         embargoLengthField.setLabel(AUETD_EMBARGO_LENGTH_LABEL);
         embargoLengthField.setHelp(AUETD_EMBARGO_LENGTH_HELP);
@@ -289,5 +289,4 @@ public class AddBitstreamForm extends AbstractDSpaceTransformer
             embargoLengthField.addError(AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED);
         }
     }
-	
 }

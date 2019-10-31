@@ -95,7 +95,7 @@ public class EmbargoServiceImpl implements EmbargoService
     // Custom property declarations
     @Autowired(required = true)
     protected AuthorizeService authorizeService;
-    
+
     @Autowired(required = true)
     protected BitstreamService bitstreamService;
 
@@ -133,23 +133,23 @@ public class EmbargoServiceImpl implements EmbargoService
             if (bitstream != null && embargoEndDateInstant != null) {
                 LocalDateTime embargoEndDateLDT = LocalDateTime.ofInstant(embargoEndDateInstant, ZoneId.systemDefault());
                 List<ResourcePolicy> bitstreamResourcePolicyList = authorizeService.getPolicies(context, bitstream);
-                
+
                 log.debug(LogManager.getHeader(context, "setting_auetd_embargo ", " Date.from(embargoEndDateInstant).toString() = "+Date.from(embargoEndDateInstant).toString()));
 
                 for (ResourcePolicy rp : bitstreamResourcePolicyList) {
                     log.debug(LogManager.getHeader(context, "setting_auetd_embargo ", " rp.id = "+String.valueOf(rp.getID())));
                     rp.setEndDate(Date.from(embargoEndDateInstant));
-                    
+
                     resourcePolicyService.update(context, rp);
-                    
+
                     log.debug(LogManager.getHeader(context, "setting_auetd_embargo ", " rp.enddate = "+rp.getEndDate().toInstant().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
                 }
-                
+
                 String embargoEndDateMDVStr = embargoEndDateLDT.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 log.debug(LogManager.getHeader(context, "setting_auetd_embargo ", " embargoEndDate = "+embargoEndDateMDVStr));
 
                 createOrModifyEmbargoMetadataValue(context, item, "embargo", "enddate", embargoEndDateMDVStr);
-                
+
                 itemService.update(context, item);
             }
         } catch (DateTimeException | IOException e) {
@@ -322,11 +322,11 @@ public class EmbargoServiceImpl implements EmbargoService
         }
         return null;
     }
-    
+
     @Override
     public void createOrModifyEmbargoMetadataValue(Context context, Item item, String element, String qualifier, String value) throws AuthorizeException, IOException, SQLException
     {
-        if (StringUtils.isNotBlank(getEmbargoMetadataValue(context, item, element, qualifier))) {           
+        if (StringUtils.isNotBlank(getEmbargoMetadataValue(context, item, element, qualifier))) {
             itemService.clearMetadata(context, item, MetadataSchema.DC_SCHEMA, element, qualifier, Item.ANY);
             itemService.addMetadata(context, item, MetadataSchema.DC_SCHEMA, element, qualifier, "en_US", value);
         } else {
@@ -337,7 +337,7 @@ public class EmbargoServiceImpl implements EmbargoService
     }
 
     @Override
-    public String generateEmbargoLength(Context context, Item item, String selectedLength) 
+    public String generateEmbargoLength(Context context, Item item, String selectedLength)
         throws AuthorizeException, IOException, SQLException
     {
         long months = 0;
@@ -346,7 +346,7 @@ public class EmbargoServiceImpl implements EmbargoService
         if (StringUtils.isNotBlank(selectedLength)) {
             int length = 0;
             length = Integer.parseInt(selectedLength);
-            
+
             months = 12 * length;
         } else {
             Instant embargoEndDateInstant = getEmbargoEndDate(context, item);
@@ -368,7 +368,7 @@ public class EmbargoServiceImpl implements EmbargoService
     public Instant getEmbargoEndDate(Context context, Item item) throws AuthorizeException, DateTimeException, IOException, SQLException
     {
         Instant embargoEndDate = null;
-        
+
         embargoEndDate = generateNewEmbargoEndDate(context, item);
         log.debug(LogManager.getHeader(context, "get_embargo_enddate", " Is embargoEndDate null "+String.valueOf(embargoEndDate == null)));
 
@@ -389,7 +389,7 @@ public class EmbargoServiceImpl implements EmbargoService
         LocalDateTime accessionedDateLDT = null;
 
         log.debug(LogManager.getHeader(context, "calculating_embargo_enddate", "Item id pre embargo setting = "+item.getID().toString()));
-        
+
         List<MetadataValue> accessionedDateList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "date", "accessioned", Item.ANY);
 
         if (accessionedDateList != null && accessionedDateList.size() > 0) {
@@ -403,11 +403,11 @@ public class EmbargoServiceImpl implements EmbargoService
         } else {
             startDate = Instant.now();
         }
-        
+
         List<MetadataValue> embargoLengthList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "length", "en_US");
         log.debug(LogManager.getHeader(context, "calculating_embargo_enddate ", " Is embargoLengthList null? "+String.valueOf(embargoLengthList == null)));
         log.debug(LogManager.getHeader(context, "calculating_embargo_enddate ", " Size of embargoLengthList = "+String.valueOf(embargoLengthList.size())));
-        
+
         if (embargoLengthList != null && embargoLengthList.size() > 0) {
 
             log.debug(LogManager.getHeader(context, "calculating_embargo_enddate ", " Is dc.embargo.length null? "+String.valueOf(StringUtils.isNotBlank(embargoLengthList.get(0).getValue()))));
@@ -432,7 +432,7 @@ public class EmbargoServiceImpl implements EmbargoService
                 log.error(LogManager.getHeader(context, "calculating_embargo_enddate", " Could not generate an "));
                 dtEx.printStackTrace();
                 System.exit(1);
-            }            
+            }
         }
 
         log.debug(LogManager.getHeader(context, "calculating_embargo_enddate ", " Is calculatedEmbargoEndDate null "+String.valueOf(calculatedEmbargoEndDate == null)));
@@ -455,7 +455,7 @@ public class EmbargoServiceImpl implements EmbargoService
         if (StringUtils.isNotBlank(getEmbargoMetadataValue(context, item, "date", "accessioned"))) {
             accessionedDateMDV = getEmbargoMetadataValue(context, item, "date", "accessioned");
         }
-        
+
         if (StringUtils.isNotBlank(accessionedDateMDV) && StringUtils.isNotBlank(embargoEndDateMDV)) {
             CharSequence accessionedDateCS = accessionedDateMDV.subSequence(0, accessionedDateMDV.length()-1);
             accessionedDateLDT = LocalDateTime.parse(accessionedDateCS, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
@@ -499,7 +499,7 @@ public class EmbargoServiceImpl implements EmbargoService
         if (bitstream != null) {
             authorizeService.removeAllPolicies(context, bitstream);
         }
-        
+
         if (owningCollection != null) {
             owningCollReadResourcePolicyList = authorizeService.getPoliciesActionFilter(context, owningCollection, Constants.READ);
         }
@@ -538,7 +538,7 @@ public class EmbargoServiceImpl implements EmbargoService
     }
 
     private Bitstream getItemBitstream(Context context, Item item)
-        throws AuthorizeException, SQLException 
+        throws AuthorizeException, SQLException
     {
         Bitstream localBitstream = null;
 
@@ -553,7 +553,7 @@ public class EmbargoServiceImpl implements EmbargoService
                     for (Bitstream bitstream : bundle.getBitstreams()) {
                         localBitstream = bitstream;
                     }
-                }          
+                }
             }
         }
 

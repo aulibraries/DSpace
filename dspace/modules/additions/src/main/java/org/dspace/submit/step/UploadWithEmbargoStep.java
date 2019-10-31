@@ -118,7 +118,7 @@ public class UploadWithEmbargoStep extends UploadStep {
      */
     @Override
     public int doProcessing(Context context, HttpServletRequest request, HttpServletResponse response, SubmissionInfo subInfo)
-        throws AuthorizeException, IOException, ServletException, SQLException 
+        throws AuthorizeException, IOException, ServletException, SQLException
     {
         // get button user pressed
         String buttonPressed = Util.getSubmitButton(request, NEXT_BUTTON);
@@ -276,9 +276,9 @@ public class UploadWithEmbargoStep extends UploadStep {
             Bitstream b = bitstreamService.find(context, UUID.fromString(bitstreamID));
 
             // save bitstream to submission info
-            subInfo.setBitstream(b);            
+            subInfo.setBitstream(b);
 
-            subInfo.put(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME, String.valueOf(getSelectedEmbargoType(context, item)));            
+            subInfo.put(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME, String.valueOf(getSelectedEmbargoType(context, item)));
             subInfo.put(AUETD_EMBARGO_LENGTH_FIELD_NAME, String.valueOf(getEmbargoLengthInYears(context, item)));
 
             // return appropriate status flag to say we are now editing the
@@ -542,7 +542,7 @@ public class UploadWithEmbargoStep extends UploadStep {
                 if (subInfo.getBitstream() != null) {
                     authorizeService.generateAutomaticPolicies(context, null, null, subInfo.getBitstream(), 
                         (Collection) handleService.resolveToObject(context, subInfo.getCollectionHandle()));
-                }               
+                }
             }
         }
     }
@@ -635,7 +635,7 @@ public class UploadWithEmbargoStep extends UploadStep {
         int embargoType = 0;
         String embargoRights = null;
         String embargoStatus = null;
-        
+
         List<MetadataValue> embargoRightsList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "rights", null, Item.ANY);
         List<MetadataValue> embargoStatusList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "status", Item.ANY);
 

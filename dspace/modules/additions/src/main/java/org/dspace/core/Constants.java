@@ -126,9 +126,9 @@ public class Constants
      * Administrative actions - System Admin, Community Admin, Collection Admin
      */
     public static final int ADMIN = 11;
-    
+
     public static final int WITHDRAWN_READ = 12;
-    
+
     /** Position of front page news item -- top box */
     public static final int NEWS_TOP = 0;
 

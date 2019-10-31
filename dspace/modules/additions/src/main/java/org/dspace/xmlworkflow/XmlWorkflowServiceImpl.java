@@ -552,7 +552,7 @@ public class XmlWorkflowServiceImpl implements XmlWorkflowService {
                 embargoStatus = embargoStatusList.get(0).getValue();
                 log.debug(LogManager.getHeader(context, "notify_of_archive ", " embargoStatus = "+embargoStatus));
             }
-            
+
             String embargoEndDateFinal = null;
 
             if (StringUtils.isNotBlank(embargoEndDateMDV)) {

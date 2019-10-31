@@ -87,7 +87,7 @@ public interface AuthorizeService {
      * otherwise the method call does nothing.
      *
      * @param c context
-     * @param e the eperson to use for the authorization check        
+     * @param e the eperson to use for the authorization check
      * @param o a DSpaceObject
      * @param useInheritance
      *         flag to say if ADMIN action on the current object or parent
@@ -98,7 +98,7 @@ public interface AuthorizeService {
      */
     public void authorizeAction(Context c, EPerson e, DSpaceObject o, int action, boolean useInheritance)
             throws AuthorizeException, SQLException;
-    
+
     /**
      * same authorize, returns boolean for those who don't want to deal with
      * catching exceptions.
@@ -129,13 +129,13 @@ public interface AuthorizeService {
      * @throws SQLException if database error
      */
     public boolean authorizeActionBoolean(Context c, DSpaceObject o, int a, boolean useInheritance) throws SQLException;
-    
+
     /**
      * same authorize with a specif eperson (not the current user), returns boolean for those who don't want to deal with
      * catching exceptions.
      *
      * @param c DSpace context
-     * @param e EPerson to use in the check        
+     * @param e EPerson to use in the check
      * @param o DSpaceObject
      * @param a action being attempted, from
      *         <code>org.dspace.core.Constants</code>
@@ -207,9 +207,9 @@ public interface AuthorizeService {
      * @throws SQLException if database error
      */
     public boolean isAdmin(Context c, EPerson e) throws SQLException;
-    
+
     public boolean isCommunityAdmin(Context c) throws SQLException;
-    
+
     public boolean isCollectionAdmin(Context c) throws SQLException; 
 
     ///////////////////////////////////////////////
@@ -438,7 +438,7 @@ public interface AuthorizeService {
      * @throws SQLException if there's a database problem
      */
     public boolean isAnIdenticalPolicyAlreadyInPlace(Context c, DSpaceObject o, Group group, int actionID, int policyID) throws SQLException;
-    
+
     public ResourcePolicy findByTypeGroupAction(Context c, DSpaceObject dso, Group group, int action) throws SQLException;
 
 

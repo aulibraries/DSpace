@@ -86,7 +86,7 @@ public class ItemViewer extends AbstractDSpaceTransformer implements CacheablePr
         message("xmlui.ArtifactBrowser.ItemViewer.head_parent_collections");
 
     private static final Message T_withdrawn = message("xmlui.ArtifactBrowser.ItemViewer.withdrawn");
-    
+
 	/** Cached validity object */
 	private SourceValidity validity = null;
 
@@ -219,7 +219,7 @@ public class ItemViewer extends AbstractDSpaceTransformer implements CacheablePr
             sfxserverUrl = sfxserverUrl.trim() +"&" + sfxQuery.trim();
             pageMeta.addMetadata("sfx","server").addContent(sfxserverUrl);
         }
-        
+
         // Add persistent identifiers
         /* Temporarily switch to using metadata directly.
          * FIXME Proper fix is to have IdentifierService handle all durable

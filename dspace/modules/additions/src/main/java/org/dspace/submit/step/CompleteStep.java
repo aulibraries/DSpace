@@ -97,7 +97,7 @@ public class CompleteStep extends AbstractProcessingStep
         }
         finally
         {
-            
+
             if (success) {
                 // notify the submitter their submission was successful.
                 notifyOfSubmission(context, subInfo);

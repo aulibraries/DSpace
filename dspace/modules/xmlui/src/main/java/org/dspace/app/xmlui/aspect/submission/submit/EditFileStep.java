@@ -48,7 +48,7 @@ import org.xml.sax.SAXException;
  */
 public class EditFileStep extends AbstractStep
 {
-	
+
 	/** Language Strings **/
     protected static final Message T_head = 
         message("xmlui.Submission.submit.EditFileStep.head");
@@ -141,52 +141,52 @@ public class EditFileStep extends AbstractStep
 		this.requireSubmission = true;
 		this.requireStep = true;
 	}
-	
-	
+
+
 	/**
 	 * Get the bitstream we are editing
 	 */
 	public void setup(SourceResolver resolver, Map objectModel, String src, Parameters parameters) 
 	throws ProcessingException, SAXException, IOException
-	{ 
+	{
 		super.setup(resolver,objectModel,src,parameters);
-		
+
 		//the bitstream should be stored in our Submission Info object
         this.bitstream = submissionInfo.getBitstream();
 	}
 
-  
+
     public void addBody(Body body) throws SAXException, WingException,
             UIException, SQLException, IOException, AuthorizeException
     {
 		Collection collection = submission.getCollection();
 		String actionURL = contextPath + "/handle/"+collection.getHandle() + "/submit/" + knot.getId() + ".continue";
-    	
+
         UUID itemID = submissionInfo.getSubmissionItem().getItem().getID();
     	String fileUrl = contextPath + "/bitstream/item/" + itemID + "/" + bitstream.getName();
     	String fileName = bitstream.getName();
-    	
+
     	// Build the form that describes an item.
     	Division div = body.addInteractiveDivision("submit-edit-file", actionURL, Division.METHOD_POST, "primary submission");
     	div.setHead(T_submission_head);
     	addSubmissionProgressList(div);
-    	
+
     	List edit = div.addList("submit-edit-file", List.TYPE_FORM);
-        edit.setHead(T_head);    
-        
+        edit.setHead(T_head);
+
         edit.addLabel(T_file);
         edit.addItem().addXref(fileUrl, fileName);
 
         //Add the embargo editing field section
         addEmbargoFieldSection(edit);
-        
+
         // add ID of bitstream we're editing
         div.addHidden("bitstream_id").setValue(bitstream.getID().toString());
-        
+
         // Note, not standard control actions, this page just goes back to the upload step.
         org.dspace.app.xmlui.wing.element.Item actions = edit.addItem();
         actions.addButton("submit_save").setValue(T_submit_save);
-		actions.addButton("submit_edit_cancel").setValue(T_submit_cancel);        
+		actions.addButton("submit_edit_cancel").setValue(T_submit_cancel);
     }
 
     /**
@@ -221,7 +221,7 @@ public class EditFileStep extends AbstractStep
         embargoTypeRadio.addOption("2", AUETD_CREATE_EMBARGO_RADIO_BUTTON2);
         embargoTypeRadio.addOption("3", AUETD_CREATE_EMBARGO_RADIO_BUTTON3);
 
-        // Embargo Length Radio Button Group        
+        // Embargo Length Radio Button Group
         Radio embargoLengthField = form.addItem().addRadio(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME);
         embargoLengthField.setLabel(AUETD_EMBARGO_LENGTH_LABEL);
         embargoLengthField.setHelp(AUETD_EMBARGO_LENGTH_HELP);

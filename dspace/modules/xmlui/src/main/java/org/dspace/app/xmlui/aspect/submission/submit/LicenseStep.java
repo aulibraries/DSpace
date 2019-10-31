@@ -47,7 +47,7 @@ import org.xml.sax.SAXException;
 public class LicenseStep extends AbstractSubmissionStep
 {
     private static final Logger log = Logger.getLogger(LicenseStep.class);
-    
+
     /** Language Strings **/
     protected static final Message T_head = 
         message("xmlui.Submission.submit.LicenseStep.head");
@@ -108,14 +108,14 @@ public class LicenseStep extends AbstractSubmissionStep
         if (licenseBitstream != null) {
             showCheckbox = false;
         }
-		
+
 		Division div = body.addInteractiveDivision("submit-license",actionURL, Division.METHOD_POST,"primary submission");
 		div.setHead(T_submission_head);
 		addSubmissionProgressList(div);
-		
+
 		Division inner = div.addDivision("submit-license-inner");
 		inner.setHead(T_head);
-		
+
 		if (showCheckbox) {
             // Add the actual text of the license:
             Division displayLicense = inner.addDivision("submit-license-standard-text","license-text");
@@ -123,9 +123,9 @@ public class LicenseStep extends AbstractSubmissionStep
         } else {
             inner.addPara(AUETD_T_accepted);
         }
-		
+
 		List controls = inner.addList("submit-review", List.TYPE_FORM);
-		
+
         if (showCheckbox) {
             CheckBox decision = controls.addItem().addCheckBox("decision");
             decision.addOption("accept", AUETD_T_decision_checkbox);
@@ -140,12 +140,12 @@ public class LicenseStep extends AbstractSubmissionStep
         } else {
             controls.addItem().addHidden("decision").setValue("accept");
         }
-		
+
 		// add standard control/paging buttons
 		addControlButtons(controls);
 	}
-    
-    /** 
+
+    /**
      * Each submission step must define its own information to be reviewed
      * during the final Review/Verify Step in the submission process.
      * <P>
@@ -162,7 +162,7 @@ public class LicenseStep extends AbstractSubmissionStep
      * @return 
      *      The new sub-List object created by this step, which contains
      *      all the reviewable information.  If this step has nothing to
-     *      review, then return null!   
+     *      review, then return null!
      */
     public List addReviewSection(List reviewList) throws SAXException,
         WingException, UIException, SQLException, IOException,

@@ -75,7 +75,7 @@ public class DescribeStep extends AbstractProcessingStep
 
     // there were required fields that were not filled out
     public static final int STATUS_MISSING_REQUIRED_FIELDS = 2;
-    
+
     // the metadata language qualifier
     public static final String LANGUAGE_QUALIFIER = getDefaultLanguageQualifier();
 
@@ -92,7 +92,7 @@ public class DescribeStep extends AbstractProcessingStep
         choiceAuthorityService = ContentAuthorityServiceFactory.getInstance().getChoiceAuthorityService();
     }
 
-   
+
 
     /**
      * Do any processing of the information input by the user, and/or perform
@@ -155,14 +155,14 @@ public class DescribeStep extends AbstractProcessingStep
         {
             documentType = itemService.getMetadataByMetadataString(item, "dc.type").get(0).getValue();
         }
-        
+
         // Step 1:
         // clear out all item metadata defined on this page
         for (int i = 0; i < inputs.length; i++)
         {
 
         	// Allow the clearing out of the metadata defined for other document types, provided it can change anytime
-        	
+
             if (!inputs[i]
                     .isVisible(subInfo.isInWorkflow() ? DCInput.WORKFLOW_SCOPE
                             : DCInput.SUBMISSION_SCOPE))
@@ -363,7 +363,7 @@ public class DescribeStep extends AbstractProcessingStep
         return STATUS_COMPLETE;
     }
 
-    
+
 
     /**
      * Retrieves the number of pages that this "step" extends over. This method
@@ -430,10 +430,10 @@ public class DescribeStep extends AbstractProcessingStep
                 throw new ServletException(e);
             }
         }
-        
+
         return inputsReader;
     }
-    
+
     /**
      * @param filename
      *        file to get the input reader for
@@ -451,11 +451,11 @@ public class DescribeStep extends AbstractProcessingStep
         }
         return inputsReader;
     }
-    
+
     /**
      * @return the default language qualifier for metadata
      */
-    
+
     public static String getDefaultLanguageQualifier()
     {
        String language = "";
@@ -466,7 +466,7 @@ public class DescribeStep extends AbstractProcessingStep
        }
        return language;
     }
-    
+
     // ****************************************************************
     // ****************************************************************
     // METHODS FOR FILLING DC FIELDS FROM METADATA FORMS
@@ -718,8 +718,8 @@ public class DescribeStep extends AbstractProcessingStep
             {
                 int valToRemove = Integer.parseInt(buttonPressed
                         .substring(removeButton.length()));
-                                
-                //find the key from the given position 
+
+                //find the key from the given position
                 //for more information take a look at < Edit-metadata.jsp>
                 int key = vals.keySet().toArray(new Integer[vals.size()])[valToRemove];
                 vals.remove(key);
@@ -759,23 +759,23 @@ public class DescribeStep extends AbstractProcessingStep
         for(Map.Entry<Integer, String> entry: vals.entrySet())
         {
             // Add to the database if non-empty
-            
+
             String s = entry.getValue();
             int key = entry.getKey();
             if ((s != null) && !s.equals(""))
             {
-                if (hasLanguageTag && !repeated && key == 0) 
+                if (hasLanguageTag && !repeated && key == 0)
                 {
                     // the field is like dc_title[lang] for none repeatable element,
                     // dc_title_alternative_2[lang] otherwise
                     lang = request.getParameter(metadataField + "[lang]");
 
-                } 
-                else if (hasLanguageTag && repeated) 
+                }
+                else if (hasLanguageTag && repeated)
                 {
                     lang = request.getParameter(metadataField + "_" + key + "[lang]");
                 }
-                
+
                 if (isAuthorityControlled)
                 {
                     String authKey = auths.size() > i ? auths.get(i) : null;
@@ -1027,21 +1027,21 @@ public class DescribeStep extends AbstractProcessingStep
 
         return vals;
     }
-    
-    /** 
+
+    /**
      * This Methode has the same function as the getRepeatedParameter.
      * For repeated values with language tag their indices are needed to
      * properly identify their language tag
      * 
-     * @param request    
+     * @param request
      *               the HTTP request containing the form information
-     * @param metadataField    
+     * @param metadataField
      *               the metadata field which can store repeated values
-     * @param param  
+     * @param param
      *               the repeated parameter on the page (used to fill out the
-     *               metadataField)  
+     *               metadataField)
      * @return     a TreeMap of Integer and Strings
-    */ 
+    */
     protected TreeMap<Integer, String> getRepeatedParameterWithTheirIndices(HttpServletRequest request,
             String metadataField, String param)
     {

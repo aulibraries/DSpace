@@ -45,7 +45,7 @@ public class InstallItemServiceImpl implements InstallItemService
     protected IdentifierService identifierService;
     @Autowired(required = true)
     protected ItemService itemService;
-    
+
     private final Logger log = Logger.getLogger(InstallItemServiceImpl.class);
 
     protected InstallItemServiceImpl()
@@ -118,14 +118,14 @@ public class InstallItemServiceImpl implements InstallItemService
         // Even though we are restoring an item it may not have the proper dates. So let's
         // double check its associated date(s)
         DCDate now = DCDate.getCurrent();
-        
+
         // If the item doesn't have a date.accessioned, set it to today
         List<MetadataValue> dateAccessioned = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "date", "accessioned", Item.ANY);
         if (dateAccessioned.isEmpty())
         {
 	        itemService.addMetadata(c, item, MetadataSchema.DC_SCHEMA, "date", "accessioned", null, now.toString());
         }
-        
+
         // If issue date is set as "today" (literal string), then set it to current date
         // In the below loop, we temporarily clear all issued dates and re-add, one-by-one,
         // replacing "today" with today's date.
@@ -144,7 +144,7 @@ public class InstallItemServiceImpl implements InstallItemService
                 itemService.addMetadata(c, item, dcv.getMetadataField(), dcv.getLanguage(), dcv.getValue());
             }
         }
-        
+
         // Record that the item was restored
         String provDescription = "Restored into DSpace on "+ now + " (GMT).";
         itemService.addMetadata(c, item, MetadataSchema.DC_SCHEMA, "description", "provenance", "en", provDescription);
@@ -240,7 +240,7 @@ public class InstallItemServiceImpl implements InstallItemService
 
         log.debug(LogManager.getHeader(c, "finishing_item ", " Is item null pre update? "+String.valueOf(item == null)));
         log.debug(LogManager.getHeader(c, "finishing_item ", " Item id pre update = "+item.getID().toString()));
-        
+
         // save changes ;-)
         itemService.update(c, item);
 

@@ -52,7 +52,7 @@ public class AcceptEditRejectAction extends ProcessingAction {
 
     protected ConfigurationService configurationService = DSpaceServicesFactory.getInstance().getConfigurationService();
     protected ItemService itemService = ContentServiceFactory.getInstance().getItemService();
-    
+
     protected static final String AUETD_REJECTED_FILE_FIELD_NAME = "rejected-file";
 
     //TODO: rename to AcceptAndEditMetadataAction
@@ -76,7 +76,7 @@ public class AcceptEditRejectAction extends ProcessingAction {
 
         return new ActionResult(ActionResult.TYPE.TYPE_CANCEL);
     }
-    
+
     public ActionResult processMainPage(Context c, XmlWorkflowItem wfi, Step step, HttpServletRequest request) throws SQLException, AuthorizeException {
         if(request.getParameter("submit_approve") != null){
             //Delete the tasks
@@ -104,7 +104,7 @@ public class AcceptEditRejectAction extends ProcessingAction {
             }
 
             String rejectedFilePath = createRejectionTempFile(c, request);
-        
+
             // If content was returned and the content equals 'rejection
             if (StringUtils.isNotBlank(rejectedFilePath)) {
                 log.info(LogManager.getHeader(c, "rejected_file_upload", " Rejected file path = "+rejectedFilePath));
@@ -174,11 +174,11 @@ public class AcceptEditRejectAction extends ProcessingAction {
 
                 if (StringUtils.isNotBlank(filePath.toString())) {
                     log.info(LogManager.getHeader(context, "reject_file_upload_request", " File Path = "+filePath.toString()));
-                    
+
                     if (!isAuthorizedFile(context, filePath.getFileName().toString())) {
                         return "invalid-reject-file";
                     }
-                    
+
                     newFilePath = Paths.get(configurationService.getProperty("upload.temp.dir")+"/"+filePath.getFileName().toString());
                     log.info(LogManager.getHeader(context, "reject_file_upload_request", " New File Path = "+newFilePath.toString()));
 
@@ -188,7 +188,7 @@ public class AcceptEditRejectAction extends ProcessingAction {
 
                     return newFilePath.toString();
                 }
-            }     
+            }
         }
         return null;
     }
@@ -203,7 +203,7 @@ public class AcceptEditRejectAction extends ProcessingAction {
         acceptableExtensionsList.add("txt");
 
         log.info(LogManager.getHeader(context, "reject_file_upload_request", " File Name = "+String.valueOf(fileName)));
-        
+
         if (StringUtils.isNotBlank(fileName)) {
             String newFilename = null;
             String[] fna = fileName.split("\\s");
@@ -221,14 +221,14 @@ public class AcceptEditRejectAction extends ProcessingAction {
             String extension = null;
 
             log.info(LogManager.getHeader(context, "reject_file_upload_request", " Index of last dot = "+String.valueOf(lastDot)));
-            
+
             if (lastDot != -1) {
                 extension = newFilename.substring(lastDot + 1);
             }
 
             log.info(LogManager.getHeader(context, "reject_file_upload_request", " File Extension = "+String.valueOf(extension)));
 
-            if(StringUtils.isNotBlank(extension)) {                
+            if(StringUtils.isNotBlank(extension)) {
                 if(!acceptableExtensionsList.contains(extension)) {
                     return false;
                 }

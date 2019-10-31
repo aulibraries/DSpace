@@ -785,7 +785,7 @@ public class FlowItemUtils {
         // Step 3:
         // Save our changes
         bitstreamService.update(context, bitstream);
-        
+
         createEmbargoEditProvenanceMessage(context, item);
         notifyEmabargoAdminGroup(context, item);
 
@@ -1014,7 +1014,7 @@ public class FlowItemUtils {
                 } else if (embargoCreationAnswer == 3) {
                     embargoRights = Constants.EMBARGO_GLOBAL_STR;
                 }
-                
+
                 if (StringUtils.isNotBlank(embargoRights)) {
                     log.debug(LogManager.getHeader(context, "process_auetd_embargo_access_fields", " embargo rights = "+embargoRights));
                     embargoService.createOrModifyEmbargoMetadataValue(context, item, "rights", null, embargoRights);
@@ -1159,7 +1159,7 @@ public class FlowItemUtils {
         embargoEditMessage.append("Information for this item's bitstream was adjusted by ").append(context.getCurrentUser().getFullName()).append(" (")
             .append(context.getCurrentUser().getEmail()).append(") on ").append(currentDT).append("\n")
             .append("Changes include: ").append("\n");
-        
+
         if (embargoData.containsKey(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME)) {
             embargoEditMessage.append("Bitstream's Name - Previous: ").append(embargoData.get(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME)).append("\n");
         }
@@ -1212,7 +1212,7 @@ public class FlowItemUtils {
         if (embargoData.containsKey(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME)
                 && StringUtils.isNotBlank(embargoData.get(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME).toString())) {
             embargoEditMessage.append("dc.rights - New: ").append(embargoData.get(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME).toString()).append("\n");
-        }        
+        }
 
         itemService.addMetadata(context, item, MetadataSchema.DC_SCHEMA, "description", "provenance", "en_US", embargoEditMessage.toString());
     }
@@ -1237,12 +1237,12 @@ public class FlowItemUtils {
             String embargoLength = null;
             String embargoRights = null;
             String embargoStatus = null;
-            
+
             List<MetadataValue> embargoEndDateList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "enddate", Item.ANY);
             List<MetadataValue> embargoLengthList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "length", Item.ANY);
             List<MetadataValue> embargoRightsList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "rights", null, Item.ANY);
             List<MetadataValue> embargoStatusList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "status", Item.ANY);
-            
+
             if (embargoEndDateList != null && embargoEndDateList.size() > 0) {
                 embargoEndDate = embargoEndDateList.get(0).getValue();
             }
@@ -1264,7 +1264,7 @@ public class FlowItemUtils {
             } else {
                 embargoData.put(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME, "");
             }
- 
+
             if (StringUtils.isNotBlank(embargoRights)) {
                 embargoData.put(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME, embargoRights);
             } else {
@@ -1299,18 +1299,18 @@ public class FlowItemUtils {
         if (embargoData.containsKey(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME)) {
             embargoData.remove(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME);
         }
-        
+
         if (item != null) {
             String embargoEndDate = null;
             String embargoLength = null;
             String embargoRights = null;
             String embargoStatus = null;
-            
+
             List<MetadataValue> embargoEndDateList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "enddate", Item.ANY);
             List<MetadataValue> embargoLengthList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "length", Item.ANY);
             List<MetadataValue> embargoRightsList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "rights", null, Item.ANY);
             List<MetadataValue> embargoStatusList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "status", Item.ANY);
-            
+
             if (embargoEndDateList != null && embargoEndDateList.size() > 0) {
                 embargoEndDate = embargoEndDateList.get(0).getValue();
             }
