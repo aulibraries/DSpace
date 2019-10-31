@@ -928,7 +928,7 @@
 	<message key="xmlui.administrative.ItemExport.available.head">Available export archives for download:</message>
 	<!-- org.dspace.app.xmlui.administrative.eperson.ManageEPeopleMain -->
 	<message key="xmlui.administrative.eperson.ManageEPeopleMain.title">Manage E-people</message>
-	<message key="xmlui.administrative.eperson.ManageEPeopleMain.main_head">E-person management</message>
+	<message key="xmlui.administrative.eperson.ManageEPeopleMain.main_head">E-person Management</message>
 	<message key="xmlui.administrative.eperson.ManageEPeopleMain.actions_head">Actions</message>
 	<message key="xmlui.administrative.eperson.ManageEPeopleMain.actions_create">Create a new E-Person</message>
 	<message key="xmlui.administrative.eperson.ManageEPeopleMain.actions_create_link">Click here to add a new E-Person.</message>
@@ -995,11 +995,11 @@
 	<message key="xmlui.administrative.group.general.group_trail">Manage Groups</message>
 	<!-- org.dspace.app.xmlui.administrative.group.ManageGroupsMain -->
 	<message key="xmlui.administrative.group.ManageGroupsMain.title">Manage Groups</message>
-	<message key="xmlui.administrative.group.ManageGroupsMain.main_head">Group management</message>
+	<message key="xmlui.administrative.group.ManageGroupsMain.main_head">Group Management</message>
 	<message key="xmlui.administrative.group.ManageGroupsMain.actions_head">Actions</message>
 	<message key="xmlui.administrative.group.ManageGroupsMain.actions_create">Create a new group</message>
 	<message key="xmlui.administrative.group.ManageGroupsMain.actions_create_link">Click here to add a new Group.</message>
-	<message key="xmlui.administrative.group.ManageGroupsMain.actions_browse">Browse groups</message>
+	<message key="xmlui.administrative.group.ManageGroupsMain.actions_browse">Browse Groups</message>
 	<message key="xmlui.administrative.group.ManageGroupsMain.actions_browse_link">Click here to browse all Groups.</message>
 	<message key="xmlui.administrative.group.ManageGroupsMain.actions_search">Search for groups</message>
 	<message key="xmlui.administrative.group.ManageGroupsMain.search_help">Groups are searched by any partial match on their name</message>
