@@ -169,7 +169,7 @@ public class Submissions extends AbstractDSpaceTransformer
     	workflow.addPara(T_w_info1);
 
     	// Tasks you own
-    	Table table = workflow.addTable("workflow-tasks",ownedItems.size() + 2,5);
+    	Table table = workflow.addTable("owned-workflow-tasks",ownedItems.size() + 2,5);
         table.setHead(T_w_head2);
         Row header = table.addRow(Row.ROLE_HEADER);
         header.addCellContent(T_w_column1);
@@ -250,7 +250,7 @@ public class Submissions extends AbstractDSpaceTransformer
         }
 
         // Tasks in the pool
-        table = workflow.addTable("workflow-tasks",pooledItems.size()+2,5);
+        table = workflow.addTable("pooled-workflow-tasks",pooledItems.size()+2,5);
         table.setHead(T_w_head3);
 
         header = table.addRow(Row.ROLE_HEADER);
@@ -317,7 +317,7 @@ public class Submissions extends AbstractDSpaceTransformer
         }
 
         // Tasks owned by Others
-        table = workflow.addTable("workflow-tasks",pooledItems.size()+2,5);
+        table = workflow.addTable("others-claimed-workflow-tasks",pooledItems.size()+2,5);
         table.setHead(AUETD_others_workflow_head);
 
         header = table.addRow(Row.ROLE_HEADER);
