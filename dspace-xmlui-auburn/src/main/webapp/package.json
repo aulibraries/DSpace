@@ -1,0 +1,39 @@
+{
+    "name": "auburn2",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+        "build-prod": "webpack --config webpack.prod.js --colors --progress",
+        "build-dev": "webpack --config webpack.dev.js --colors --progress",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "watch": "webpack --config webpack.dev.js --colors --progress --watch"
+    },
+    "author": "Auburn University Libraries",
+    "license": "MIT",
+    "devDependencies": {
+        "clean-webpack-plugin": "^3.0.0",
+        "css-loader": "^3.2.0",
+        "eslint": "^6.6.0",
+        "exports-loader": "^0.7.0",
+        "grunt": "^1.0.4",
+        "grunt-cli": "^1.3.2",
+        "grunt-contrib-handlebars": "^2.0.0",
+        "handlebars": "^4.5.2",
+        "handlebars-loader": "^1.7.1",
+        "load-grunt-tasks": "^5.1.0",
+        "mini-css-extract-plugin": "^0.8.0",
+        "node-sass": "^4.13.0",
+        "optimize-css-assets-webpack-plugin": "^5.0.3",
+        "postcss-loader": "^3.0.0",
+        "sass": "^1.23.3",
+        "sass-loader": "^8.0.0",
+        "source-map-loader": "^0.2.4",
+        "style-loader": "^1.0.0",
+        "uglifyjs-webpack-plugin": "^2.2.0",
+        "webpack": "^4.41.2",
+        "webpack-cli": "^3.3.10",
+        "webpack-merge": "^4.2.2"
+    },
+    "dependencies": {}
+}

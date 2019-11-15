@@ -724,6 +724,21 @@
                <module>dspace-xmlui-mirage2</module>
            </modules>
         </profile>
+
+        <!-- 
+            Builds AUBURN2 WAR for DSpace
+        -->
+        <profile>
+            <id>dspace-xmlui-auburn</id>
+            <activation>
+                <file>
+                    <exists>dspace-xmlui-auburn/pom.xml</exists>
+                </file>
+            </activation>
+            <modules>
+                <module>dspace-xmlui-auburn</module>
+            </modules>
+        </profile>
         
         <!--
            Builds XMLUI WAR for DSpace
@@ -764,6 +779,7 @@
                 <module>dspace-sword</module>
                 <module>dspace-swordv2</module>
                 <module>dspace-xmlui-mirage2</module>
+                <module>dspace-xmlui-auburn</module>
                 <module>dspace-xmlui</module>
             </modules>
             <build>

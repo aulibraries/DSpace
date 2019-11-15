@@ -142,5 +142,17 @@
                 <module>xmlui-mirage2</module>
             </modules>
         </profile>
+
+        <profile>
+            <id>auburn</id>
+            <activation>
+                <property>
+                    <name>auburn.on</name>
+                </property>
+            </activation>
+            <modules>
+                <module>xmlui-auburn</module>
+            </modules>
+        </profile>
     </profiles>
 </project>

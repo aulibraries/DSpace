@@ -213,6 +213,85 @@
                 </dependency>
             </dependencies>
         </profile>
+        <profile>
+            <id>auburn-war</id>
+            <activation>
+                <property>
+                    <name>auburn.on</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <configuration>
+                            <archiveClasses>false</archiveClasses>
+                            <!-- Filter the web.xml (needed for IDE compatibility/debugging) -->
+                            <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+                            <!-- Copy any 'additions' (see m-dependency-p above) into WEB-INF/classes.
+                                 This ensures they are loaded prior to dependencies in WEB-INF/lib
+                                (per Servlet 3.0 spec, section 10.5), and allows them to override
+                                 default classes in this WAR -->
+                            <webResources>
+                                <resource>
+                                    <directory>${project.build.directory}/additions</directory>
+                                    <targetPath>WEB-INF/classes</targetPath>
+                                </resource>
+                            </webResources>
+                            <overlays>
+                                <!--
+                                   the priority of overlays is determined here
+                                   1.) default: anything in the current project has highest
+                                   2.) anything defined here has precedence in the order defined
+                                   3.) any war found transitively in the dependencies will be applied
+                                   next. the order is unpredictable.
+                                -->
+                                <overlay>
+                                    <groupId>org.dspace.modules</groupId>
+                                    <artifactId>xmlui-auburn</artifactId>
+                                    <type>war</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>org.dspace</groupId>
+                                    <artifactId>dspace-xmlui-lang</artifactId>
+                                    <type>war</type>
+                                    <excludes>
+                                        <!--
+                                           keep lang web.xml from overiding xmlui
+                                        -->
+                                        <exclude>WEB-INF/web.xml</exclude>
+                                        <exclude>WEB-INF/classes/**</exclude>
+                                    </excludes>
+                                </overlay>
+                                <overlay>
+                                    <groupId>org.dspace</groupId>
+                                    <artifactId>dspace-xmlui</artifactId>
+                                    <type>war</type>
+                                    <excludes>
+                                        <exclude>WEB-INF/classes/**</exclude>
+                                    </excludes>
+                                </overlay>
+                            </overlays>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>prepare-package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+            <dependencies>
+                <dependency>
+                    <groupId>org.dspace.modules</groupId>
+                    <artifactId>xmlui-auburn</artifactId>
+                    <version>6.3</version>
+                    <type>war</type>
+                </dependency>
+            </dependencies>
+        </profile>
     </profiles>
 
     <dependencies>

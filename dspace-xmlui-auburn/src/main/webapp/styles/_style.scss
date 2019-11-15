@@ -1,0 +1,693 @@
+/**
+ * The contents of this file are subject to the license and copyright
+ * detailed in the LICENSE and NOTICE files at the root of the source
+ * tree and available online at
+ *
+ * http://www.dspace.org/license/
+ */
+
+/**
+ * You can put your own style in this file.
+ * It will be included in all color schemes
+ */
+
+@import "auetd_variables";
+
+//example mixin to set the text-selection style
+@mixin selection {
+    ::-moz-selection { @content; }
+    ::selection { @content; }
+}
+
+@include selection {
+    color: white;
+    background: #F68026;
+}
+
+/** Auburn University CSS */
+/** @import "auburn_auetd_styles";*/
+
+.page_content {
+    position: relative;
+    overflow-x: hidden;
+}
+
+ul.ds-simple-list.vocabulary ul {
+    list-style: none;
+}
+
+header .navbar-brand img{
+    height: 22px;
+}
+
+@media (max-width: 767px) {
+    table.ds-gloss-list{
+
+        -ms-word-break: break-all;
+        word-break: break-all;
+        word-break: break-word;
+        -webkit-hyphens: auto;
+        -moz-hyphens: auto;
+        hyphens: auto;
+    }
+}
+
+table#aspect_administrative_ControlPanel_table_users a{
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+}
+
+/*
+ * Sidebar
+ * -------
+ */
+
+
+/* Fixes an issue where checkboxes in tables are positioned much too low */
+.ds-table .checkbox {
+    margin-top:0;
+    margin-bottom:0;
+
+    input[type="checkbox"]{
+        top: 0;
+    }
+}
+
+
+/*
+ * Themed error page (exception2dri.xsl) styles
+ * -------
+ */
+span.bold {
+    font-weight: bold;
+}
+/* Preserve whitespace. Used to display error stack in a readable way. */
+p.pre {
+    white-space:pre;
+}
+.break-all{
+  -ms-word-break:   break-all;
+  word-break:       break-all;
+  word-wrap:        break-word;
+}
+
+/** ********** AUETD Customizations *************** */
+
+
+
+.menu-icon-header {
+    color: $color_white;
+    font-size:24px;
+    position: absolute;
+    left: 0;
+    top: 20px;
+}
+
+.menu-icon-nav {
+    color: $color_white;
+    display: block;
+    font-size: 18px;
+    position: relative;
+    right: -380px;
+}
+
+
+h2.page-header {
+    padding: 9px 0;
+    margin: 0 0 10px 0;
+    border-bottom: 1px solid #eee;
+    font-weight: normal;
+}
+h3.page-header {
+    padding: 9px 0;
+    margin: 0;
+    border: none;
+    font-weight: normal;
+}
+
+.pagination > .disabled > span,
+.pagination > .disabled > span:hover,
+.pagination > .disabled > span:focus,
+.pagination > .disabled > a,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > a:focus {
+    color: #6c757d;
+    pointer-events: none;
+    cursor: auto;
+    background-color: #fff;
+    border-color: #dee2e6;
+}
+
+/************** Home page Styles *********************/
+
+.frontPageSrchBlock {
+    display: block;
+    padding: 30px 0 30px 0;
+    
+    &>span:nth-child(2) {
+        &>form {
+            margin-left: 15px;
+            width: 90%;
+        }
+    }
+}
+
+.frontPageSrchFormLabel {
+    color: #666;
+    font-size: 2.1em;
+    font-weight: 500;
+    text-align: left;
+    padding: 0 0 0 15px;
+}
+
+.searchBlockHdr {
+    display: block;
+    color: #666;
+    font-size: 2.1em;
+    font-weight: 500;
+    margin: 0;
+    padding: 0 0 0 15px;
+}
+
+.submissionMsgRow {
+    margin-bottom: 15px;
+}
+
+/**************** Sidebar Styles ****************/
+
+a.list-group-item {
+    padding-right: 0;
+
+    &.active {
+        background-color: #496e9c;
+        border-color: #496e9c;
+        color: $color_white;
+    }
+}
+
+div.list-group-item {
+    &.ds-option
+    {
+        &.selected {
+            padding: 7px 15px;
+            color: $color_black;
+        }
+    }
+}
+
+.btn.active {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    &:focus {
+        outline: 0;
+        outline-offset: 0;
+    }
+}
+
+.btn-default.active {
+    color: $color_white;
+    background-color:#f68026;
+    border-color: #f68026;
+    &:focus {
+        color: $color_white;
+        background-color:#f68026;
+        border-color: #f68026;
+    }
+    &:hover {
+        color: $color_white;
+        background-color:#f68026;
+        border-color: #f68026;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    /*
+     * Off Canvas : improved version of http://getbootstrap.com/examples/offcanvas/
+     * --------------------------------------------------
+     */
+
+    .row-offcanvas {
+        position: relative;
+        -webkit-transition: all .25s ease-out;
+        -moz-transition: all .25s ease-out;
+        transition: all .25s ease-out;
+    }
+
+    .row-offcanvas-right {
+        right: 0;
+    }
+
+    .row-offcanvas-left {
+        left: 0;
+    }
+
+    .row-offcanvas-right
+    .col-xs-6.col-sm-3.sidebar-offcanvas {
+        right: -50%; /* 6 columns */
+    }
+
+    .row-offcanvas-left
+    .col-xs-6.col-sm-3.sidebar-offcanvas {
+        left: -50%; /* 6 columns */
+    }
+
+    .row-offcanvas-right.active {
+        right: 50%; /* 6 columns */
+    }
+
+    .row-offcanvas-left.active {
+        left: 50%; /* 6 columns */
+    }
+
+    .col-xs-6.col-sm-3.sidebar-offcanvas {
+        position: absolute;
+        top: 0;
+        width: 50%; /* 6 columns */
+    }
+}
+
+@media screen and (max-width: 767px) {
+
+    .row-offcanvas-right
+    .col-xs-6.col-sm-3.sidebar-offcanvas {
+        right: -100%; /* 6 columns */
+    }
+
+    .row-offcanvas-left
+    .col-xs-6.col-sm-3.sidebar-offcanvas {
+        left: -100%; /* 6 columns */
+    }
+
+    .row-offcanvas-right.active {
+
+       #main-content {
+            padding-right: $grid-gutter-width;
+        }
+
+        .col-xs-6.col-sm-3.sidebar-offcanvas {
+            margin-right: $grid-gutter-width;
+        }
+
+        right: 100%; /* 6 columns */
+    }
+
+    .row-offcanvas-left.active {
+
+       #main-content {
+            padding-left: $grid-gutter-width;
+        }
+
+        .col-xs-6.col-sm-3.sidebar-offcanvas {
+            margin-left: $grid-gutter-width;
+        }
+
+        left: 95%; /* 6 columns */
+    }
+
+    .col-xs-6.col-sm-3.sidebar-offcanvas {
+        width: 100%; /* 6 columns */
+    }
+}
+
+.sidebar-content {   
+    a {        
+        &:focus,
+        &:hover {
+            border-left:4px solid $color_blue;
+            color: $color_black;
+            background-color: transparent;
+        }
+    }
+}
+
+.ds-option-set-head {
+    color: $color_black;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 1px;
+    font-variant: small-caps;
+}
+
+/* ******************** Submission Form Styles ************************ */
+@mixin progress-bar-button-variant($color, $background, $border, $disabled-background, $disabled-border, $disabled-color) {
+    color: $color;
+    background-color: $background;
+    border-color: $border;
+
+    &:hover,
+    &:focus,
+    &.focus,
+    &:active,
+    &.active,
+    .open > &.dropdown-toggle {
+        color: $color;
+        background-color: #496e9c;
+        border-color: #eee;
+    }
+    &:active,
+    &.active,
+    .open > &.dropdown-toggle {
+        background-image: none;
+        color: #333;
+        background-color: #e6e6e6;
+        border-color: #adadad;
+    }
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        &,
+        &:hover,
+        &:focus,
+        &.focus,
+        &:active,
+        &.active {
+            opacity: 0.65;
+        }
+    }
+
+    .badge {
+        color: $background;
+        background-color: $color;
+    }
+}
+
+.progress-btn {
+    &.btn-success {
+        @include progress-bar-button-variant($btn-success-color, $progress-btn-success-bg, $progress-btn-success-border, $progress-btn-success-disabled-bg, $progress-btn-success-disabled-border, $progresss-btn-success-disabled-color);
+    }
+}
+
+/************** Form Styles ********************/
+
+/* ********* Labels ***************/
+label {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+span {
+    &.control-label {
+        font-weight: bold;
+        font-size: 1.1em;
+        &.required {
+            &:before {
+                content: "*";
+                padding-right: 4px;
+                color: $color_red;
+                font-weight: normal;
+                font-size: 1em;
+            }
+            &:after {
+                content: "";
+            }
+        }
+    }
+}
+.control-label {
+    &.required {
+        &:before {
+            content: "*";
+            padding-right: 4px;
+            color: $color_red;
+            font-weight: normal;
+            font-size: 1em;
+        }
+        &:after {
+            content: "";
+        }
+    }
+}
+
+.ds-form-label {
+    font-size: 1em;
+    font-weight: 700;
+    
+    &.browse-form-label {
+        padding-bottom: 3px;
+    }
+}
+
+.ds-gloss-list-label {
+    font-size: 1em;
+    font-weight: 700;
+    padding-bottom: 3px;
+}
+
+.ds-composite-component {
+    &.control-label {
+        font-size: 1em;
+        font-weight: normal;
+        color: $color_black;
+    }
+}
+
+.checkbox, .radio {
+    >label {
+        margin: 0;
+        font-size: 1em;
+    }
+}
+
+.ds-previous-values {
+    > div {
+        padding: 5px 0 5px 30px;
+        margin-bottom: 5px;
+        
+        &:nth-child(odd) {
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+    }
+    
+    & button {
+        margin-top: 10px;
+    }
+}
+
+.btn-group {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.ds-form-list {
+    & > div {
+        &.ds-form-item {
+            margin-bottom: 7px;
+        }
+        &.ds-form-sublist {
+            margin-bottom: 5px;
+        }
+        &:last-child {
+            margin-top: 15px;
+        }
+    }
+}
+
+.searchActionsBlock {
+    padding-bottom: 20px;
+}
+
+.ds-radio-field {
+    padding-left: 11px;
+}
+
+.help-block {
+    color: $color_black;
+}
+
+/*********** End Forms *****************/
+
+/* **************** Browse and Search Results Lists *************************/
+.ds-simple-list, dropdown-menu, .ds-artifact-list, .nav-tabs, .ds-progress-list, .list-unstyled {
+    li {
+        background: none;
+    }
+}
+.ds-artifact-list, .ds-info-list {
+    > li {
+        padding-bottom: 10px;
+        padding-left: 0;
+        padding-right: 8px;
+        
+        &:nth-child(even) {
+            border: 1px solid #eee;
+            background-color: #f9f9f9;
+        }
+    }
+}
+
+.ds-info-list {
+    margin-bottom: 20px;
+    
+    > div {
+        &.ds-info-row {
+            padding: 10px 0;
+        
+            &:nth-child(even) {
+                border: 1px solid #ddd;
+                background-color: #f9f9f9;
+            }
+            
+            > div {
+                > span {
+                    &.ds-gloss-list-label {
+                        font-weight: normal;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.recent-submission{
+    div {
+        &.row {
+            margin-bottom: 0;
+            padding-bottom: 10px;
+            padding-left: 12px;
+            padding-right: 8px;
+        }
+        &.ds-artifact-item {
+            margin-bottom: 0;
+            
+            &:nth-child(even) {
+                border: 1px solid #eee;
+                background-color: #f9f9f9;
+            }
+        }
+        &.artifact-title {
+            margin-bottom: 3px;
+            margin-top: 7px;
+        }
+        &.author,
+        &.publisher-date
+        {
+            color: $color_black;
+        }
+    }
+}
+
+#aspect_discovery_SimpleSearch_div_search-results,
+#aspect_artifactbrowser_ConfigurableBrowse_div_browse-by-dateissued-results,
+#aspect_artifactbrowser_ConfigurableBrowse_div_browse-by-title-results,
+#aspect_artifactbrowser_ConfigurableBrowse_div_browse-by-author-results,
+#aspect_artifactbrowser_ConfigurableBrowse_div_browse-by-subject-results {
+
+    .ds-artifact-item {
+        margin-bottom: 7px;
+        padding-bottom: 10px;
+        padding-left: 0;
+        padding-right: 8px;
+        
+        &.even {
+            border: 1px solid #eee;
+            background-color: #f9f9f9;
+        }
+        
+        > div {
+            &.artifact-description {
+                > a {
+                    &:visited {
+                        color: purple;
+                    }
+                }
+
+                > div.artifact-info {
+                    > span {
+                        &.embargo-info {
+                            margin-left: 15px;
+                            > i {
+                                &.fa-lock {
+                                    color: $color_red;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.pagination {
+    > li {
+        background: none;
+        display: inline;
+    }
+}
+
+.simple-item-view-description {
+    &> div {
+        padding-right:10px;
+    }
+}
+
+/************** Item Information View Styles *********************/
+.item-view-toggle {
+    padding-top: 15px;
+}
+
+.file-wrapper {
+    margin-bottom: 10px;
+    
+    &.fa-file-pdf-o {
+        color: #496e9c;
+    }
+    &.fa-file-text-o {
+        color: #496e9c;
+    }
+
+    &.pdf-icon {
+        color: $color_red;
+    }
+}
+
+.fa-lock {
+    color: $color_red;
+}
+
+dd, dt {
+    margin-bottom: 3px;
+}
+
+.ds-gloss-list {
+    &> div {
+        &.row {
+            padding-bottom: 5px;
+            & >div {
+                &:first-child {
+                    padding-left: 0;
+                }
+            }
+        }
+    }
+}
+
+/** *********** Control Panel Styles *************** */
+.control-panel-list {
+    border: 1px solid #eee;
+    background-color: #f9f9f9;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    
+    dt {
+        text-align: left;
+        width: 50%;
+    }
+    dd, dt {
+        margin-bottom: 3px;
+    }
+}
+
+/** ************* Select 2 Customizations **************** */
+.select2-container--default .select2-selection--multiple {
+    border-color: $input-border;
+}
+.select2-selection__rendered > li,
+.select2-results__options > li {
+    background: none;
+}
