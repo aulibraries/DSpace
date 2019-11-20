@@ -5,8 +5,8 @@
     <packaging>war</packaging>
     <name>DSpace XML-UI Auburn Theme :: Local Customisations</name>
     <description>
-        This project allows you to overlay your own local Auburn2 Theme customizations
-        on top of the default Auburn2 Theme provided with DSpace.
+        This project allows you to overlay your own local Auburn Theme customizations
+        on top of the default Auburn Theme provided with DSpace.
     </description>
 
     <parent>
