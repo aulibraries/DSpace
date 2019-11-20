@@ -11,8 +11,6 @@
  * It will be included in all color schemes
  */
 
-@import "auetd_variables";
-
 //example mixin to set the text-selection style
 @mixin selection {
     ::-moz-selection { @content; }
