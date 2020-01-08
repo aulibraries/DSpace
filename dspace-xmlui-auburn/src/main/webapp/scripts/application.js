@@ -42,8 +42,9 @@ $(function () {
     // Hide or show the date input field and embargoed group select field
     // based on the value of embargoSelectedVal.
     elements.createEmbargoRadio.each(function () {
+        var checkedVal = 0;
         if ($(this).is(":checked")) {
-            var checkedVal = $(this).val();
+            checkedVal = $(this).val();
             checkedVal = parseInt(checkedVal);
         }
 
@@ -56,7 +57,9 @@ $(function () {
         }
     });
 
-    GATC();
+    if (typeof GATC === 'function') {
+        GATC();
+    }
     $('#cookieAcknowledge').on('click', function () {
         var d = new Date();
         // set expiration date for one year
