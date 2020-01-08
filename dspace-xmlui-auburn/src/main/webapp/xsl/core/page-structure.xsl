@@ -1060,20 +1060,14 @@
     </xsl:template>
 
     <xsl:template name="buildAuburnGDPR">
-        <div class="content_row" id="gdpr" style="display: none;">
-            <div class="alert" role="alert">
-                <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+        <div class="content_row" id="gdpr" style="display:none;">
+            <div class="alert alert-info" role="contentinfo">
+                <button aria-label="Close" class="close" data-dismiss="alert" id="cookieAcknowledge" type="button">
                     <span aria-hidden="true">x</span>
                 </button>
-                <p class="h4">Cookie Acceptance Needed</p>
-                <p class="h5">This website would like to use cookies to collect information to improve your browsing
-                    experience. Please review
-                    our
-                    <a href="http://www.auburn.edu/privacy" style="font-weight: bold;">Privacy Statement</a> for more
-                    information. Do you accept?</p>
-                <p>
-                    <button class="btn btn-default btn-sm" id="cookieAccept">accept</button>
-                    <button class="btn btn-primary btn-sm" id="cookieDeny">deny</button>
+                <p class="h4">Cookie Acknowledgement</p>
+                <p class="h5">This website uses cookies to collect information to improve your browsing experience. Please review our 
+                    <a href="http://www.auburn.edu/privacy" style="font-weight: bold; border-bottom:1px solid #a1a1a1;">Privacy Statement</a> for more information.
                 </p>
             </div>
         </div>
