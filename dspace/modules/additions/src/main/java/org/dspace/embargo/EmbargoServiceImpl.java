@@ -105,12 +105,6 @@ public class EmbargoServiceImpl implements EmbargoService
     @Autowired(required = true)
     protected ResourcePolicyService resourcePolicyService;
 
-    // Custom Constant Assignments
-    public static final String EMBARGOED = "EMBARGOED";
-    public static final String NOT_EMBARGOED = "NOT_EMBARGOED";
-    public static final String EMBARGO_NOT_AUBURN_STR = "EMBARGO_NOT_AUBURN";
-    public static final String EMBARGO_GLOBAL_STR = "EMBARGO_GLOBAL";
-
     protected EmbargoServiceImpl()
     {
 
