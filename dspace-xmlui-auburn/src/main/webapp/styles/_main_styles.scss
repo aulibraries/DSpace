@@ -13,8 +13,13 @@
 
 //example mixin to set the text-selection style
 @mixin selection {
-    ::-moz-selection { @content; }
-    ::selection { @content; }
+    ::-moz-selection {
+        @content;
+    }
+
+    ::selection {
+        @content;
+    }
 }
 
 @include selection {
@@ -34,12 +39,12 @@ ul.ds-simple-list.vocabulary ul {
     list-style: none;
 }
 
-header .navbar-brand img{
+header .navbar-brand img {
     height: 22px;
 }
 
 @media (max-width: 767px) {
-    table.ds-gloss-list{
+    table.ds-gloss-list {
 
         -ms-word-break: break-all;
         word-break: break-all;
@@ -50,7 +55,7 @@ header .navbar-brand img{
     }
 }
 
-table#aspect_administrative_ControlPanel_table_users a{
+table#aspect_administrative_ControlPanel_table_users a {
     -ms-word-break: break-all;
     word-break: break-all;
     word-break: break-word;
@@ -67,10 +72,10 @@ table#aspect_administrative_ControlPanel_table_users a{
 
 /* Fixes an issue where checkboxes in tables are positioned much too low */
 .ds-table .checkbox {
-    margin-top:0;
-    margin-bottom:0;
+    margin-top: 0;
+    margin-bottom: 0;
 
-    input[type="checkbox"]{
+    input[type="checkbox"] {
         top: 0;
     }
 }
@@ -83,23 +88,23 @@ table#aspect_administrative_ControlPanel_table_users a{
 span.bold {
     font-weight: bold;
 }
+
 /* Preserve whitespace. Used to display error stack in a readable way. */
 p.pre {
-    white-space:pre;
+    white-space: pre;
 }
-.break-all{
-  -ms-word-break:   break-all;
-  word-break:       break-all;
-  word-wrap:        break-word;
+
+.break-all {
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-wrap: break-word;
 }
 
 /** ********** AUETD Customizations *************** */
 
-
-
 .menu-icon-header {
     color: $color_white;
-    font-size:24px;
+    font-size: 24px;
     position: absolute;
     left: 0;
     top: 20px;
@@ -120,6 +125,7 @@ h2.page-header {
     border-bottom: 1px solid #eee;
     font-weight: normal;
 }
+
 h3.page-header {
     padding: 9px 0;
     margin: 0;
@@ -127,12 +133,12 @@ h3.page-header {
     font-weight: normal;
 }
 
-.pagination > .disabled > span,
-.pagination > .disabled > span:hover,
-.pagination > .disabled > span:focus,
-.pagination > .disabled > a,
-.pagination > .disabled > a:hover,
-.pagination > .disabled > a:focus {
+.pagination>.disabled>span,
+.pagination>.disabled>span:hover,
+.pagination>.disabled>span:focus,
+.pagination>.disabled>a,
+.pagination>.disabled>a:hover,
+.pagination>.disabled>a:focus {
     color: #6c757d;
     pointer-events: none;
     cursor: auto;
@@ -145,7 +151,7 @@ h3.page-header {
 .frontPageSrchBlock {
     display: block;
     padding: 30px 0 30px 0;
-    
+
     &>span:nth-child(2) {
         &>form {
             margin-left: 15px;
@@ -188,8 +194,7 @@ a.list-group-item {
 }
 
 div.list-group-item {
-    &.ds-option
-    {
+    &.ds-option {
         &.selected {
             padding: 7px 15px;
             color: $color_black;
@@ -200,6 +205,7 @@ div.list-group-item {
 .btn.active {
     -webkit-box-shadow: none;
     box-shadow: none;
+
     &:focus {
         outline: 0;
         outline-offset: 0;
@@ -208,16 +214,18 @@ div.list-group-item {
 
 .btn-default.active {
     color: $color_white;
-    background-color:#f68026;
+    background-color: #f68026;
     border-color: #f68026;
+
     &:focus {
         color: $color_white;
-        background-color:#f68026;
+        background-color: #f68026;
         border-color: #f68026;
     }
+
     &:hover {
         color: $color_white;
-        background-color:#f68026;
+        background-color: #f68026;
         border-color: #f68026;
     }
 }
@@ -243,46 +251,49 @@ div.list-group-item {
         left: 0;
     }
 
-    .row-offcanvas-right
-    .col-xs-6.col-sm-3.sidebar-offcanvas {
-        right: -50%; /* 6 columns */
+    .row-offcanvas-right .col-xs-6.col-sm-3.sidebar-offcanvas {
+        right: -50%;
+        /* 6 columns */
     }
 
-    .row-offcanvas-left
-    .col-xs-6.col-sm-3.sidebar-offcanvas {
-        left: -50%; /* 6 columns */
+    .row-offcanvas-left .col-xs-6.col-sm-3.sidebar-offcanvas {
+        left: -50%;
+        /* 6 columns */
     }
 
     .row-offcanvas-right.active {
-        right: 50%; /* 6 columns */
+        right: 50%;
+        /* 6 columns */
     }
 
     .row-offcanvas-left.active {
-        left: 50%; /* 6 columns */
+        left: 50%;
+        /* 6 columns */
     }
 
     .col-xs-6.col-sm-3.sidebar-offcanvas {
         position: absolute;
         top: 0;
-        width: 50%; /* 6 columns */
+        width: 50%;
+        /* 6 columns */
     }
 }
 
 @media screen and (max-width: 767px) {
 
-    .row-offcanvas-right
-    .col-xs-6.col-sm-3.sidebar-offcanvas {
-        right: -100%; /* 6 columns */
+    .row-offcanvas-right .col-xs-6.col-sm-3.sidebar-offcanvas {
+        right: -100%;
+        /* 6 columns */
     }
 
-    .row-offcanvas-left
-    .col-xs-6.col-sm-3.sidebar-offcanvas {
-        left: -100%; /* 6 columns */
+    .row-offcanvas-left .col-xs-6.col-sm-3.sidebar-offcanvas {
+        left: -100%;
+        /* 6 columns */
     }
 
     .row-offcanvas-right.active {
 
-       #main-content {
+        #main-content {
             padding-right: $grid-gutter-width;
         }
 
@@ -290,12 +301,13 @@ div.list-group-item {
             margin-right: $grid-gutter-width;
         }
 
-        right: 100%; /* 6 columns */
+        right: 100%;
+        /* 6 columns */
     }
 
     .row-offcanvas-left.active {
 
-       #main-content {
+        #main-content {
             padding-left: $grid-gutter-width;
         }
 
@@ -303,19 +315,23 @@ div.list-group-item {
             margin-left: $grid-gutter-width;
         }
 
-        left: 95%; /* 6 columns */
+        left: 95%;
+        /* 6 columns */
     }
 
     .col-xs-6.col-sm-3.sidebar-offcanvas {
-        width: 100%; /* 6 columns */
+        width: 100%;
+        /* 6 columns */
+        border: 1px solid #ff0000;
     }
 }
 
-.sidebar-content {   
-    a {        
+.sidebar-content {
+    a {
+
         &:focus,
         &:hover {
-            border-left:4px solid $color_blue;
+            border-left: 4px solid $color_blue;
             color: $color_black;
             background-color: transparent;
         }
@@ -341,22 +357,25 @@ div.list-group-item {
     &.focus,
     &:active,
     &.active,
-    .open > &.dropdown-toggle {
+    .open>&.dropdown-toggle {
         color: $color;
         background-color: #496e9c;
         border-color: #eee;
     }
+
     &:active,
     &.active,
-    .open > &.dropdown-toggle {
+    .open>&.dropdown-toggle {
         background-image: none;
         color: #333;
         background-color: #e6e6e6;
         border-color: #adadad;
     }
+
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
+
         &,
         &:hover,
         &:focus,
@@ -391,6 +410,7 @@ span {
     &.control-label {
         font-weight: bold;
         font-size: 1.1em;
+
         &.required {
             &:before {
                 content: "*";
@@ -399,12 +419,14 @@ span {
                 font-weight: normal;
                 font-size: 1em;
             }
+
             &:after {
                 content: "";
             }
         }
     }
 }
+
 .control-label {
     &.required {
         &:before {
@@ -414,6 +436,7 @@ span {
             font-weight: normal;
             font-size: 1em;
         }
+
         &:after {
             content: "";
         }
@@ -423,7 +446,7 @@ span {
 .ds-form-label {
     font-size: 1em;
     font-weight: 700;
-    
+
     &.browse-form-label {
         padding-bottom: 3px;
     }
@@ -443,7 +466,8 @@ span {
     }
 }
 
-.checkbox, .radio {
+.checkbox,
+.radio {
     >label {
         margin: 0;
         font-size: 1em;
@@ -451,34 +475,36 @@ span {
 }
 
 .ds-previous-values {
-    > div {
+    >div {
         padding: 5px 0 5px 30px;
         margin-bottom: 5px;
-        
+
         &:nth-child(odd) {
             border: 1px solid #ddd;
             background-color: #f9f9f9;
         }
     }
-    
+
     & button {
         margin-top: 10px;
     }
 }
 
 .btn-group {
-	padding-top: 10px;
-	padding-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .ds-form-list {
-    & > div {
+    &>div {
         &.ds-form-item {
             margin-bottom: 7px;
         }
+
         &.ds-form-sublist {
             margin-bottom: 5px;
         }
+
         &:last-child {
             margin-top: 15px;
         }
@@ -500,17 +526,24 @@ span {
 /*********** End Forms *****************/
 
 /* **************** Browse and Search Results Lists *************************/
-.ds-simple-list, dropdown-menu, .ds-artifact-list, .nav-tabs, .ds-progress-list, .list-unstyled {
+.ds-simple-list,
+dropdown-menu,
+.ds-artifact-list,
+.nav-tabs,
+.ds-progress-list,
+.list-unstyled {
     li {
         background: none;
     }
 }
-.ds-artifact-list, .ds-info-list {
-    > li {
+
+.ds-artifact-list,
+.ds-info-list {
+    >li {
         padding-bottom: 10px;
         padding-left: 0;
         padding-right: 8px;
-        
+
         &:nth-child(even) {
             border: 1px solid #eee;
             background-color: #f9f9f9;
@@ -520,18 +553,18 @@ span {
 
 .ds-info-list {
     margin-bottom: 20px;
-    
-    > div {
+
+    >div {
         &.ds-info-row {
             padding: 10px 0;
-        
+
             &:nth-child(even) {
                 border: 1px solid #ddd;
                 background-color: #f9f9f9;
             }
-            
-            > div {
-                > span {
+
+            >div {
+                >span {
                     &.ds-gloss-list-label {
                         font-weight: normal;
                     }
@@ -541,7 +574,7 @@ span {
     }
 }
 
-.recent-submission{
+.recent-submission {
     div {
         &.row {
             margin-bottom: 0;
@@ -549,21 +582,23 @@ span {
             padding-left: 12px;
             padding-right: 8px;
         }
+
         &.ds-artifact-item {
             margin-bottom: 0;
-            
+
             &:nth-child(even) {
                 border: 1px solid #eee;
                 background-color: #f9f9f9;
             }
         }
+
         &.artifact-title {
             margin-bottom: 3px;
             margin-top: 7px;
         }
+
         &.author,
-        &.publisher-date
-        {
+        &.publisher-date {
             color: $color_black;
         }
     }
@@ -580,25 +615,26 @@ span {
         padding-bottom: 10px;
         padding-left: 0;
         padding-right: 8px;
-        
+
         &.even {
             border: 1px solid #eee;
             background-color: #f9f9f9;
         }
-        
-        > div {
+
+        >div {
             &.artifact-description {
-                > a {
+                >a {
                     &:visited {
                         color: purple;
                     }
                 }
 
-                > div.artifact-info {
-                    > span {
+                >div.artifact-info {
+                    >span {
                         &.embargo-info {
                             margin-left: 15px;
-                            > i {
+
+                            >i {
                                 &.fa-lock {
                                     color: $color_red;
                                 }
@@ -612,15 +648,15 @@ span {
 }
 
 .pagination {
-    > li {
+    >li {
         background: none;
         display: inline;
     }
 }
 
 .simple-item-view-description {
-    &> div {
-        padding-right:10px;
+    &>div {
+        padding-right: 10px;
     }
 }
 
@@ -631,10 +667,11 @@ span {
 
 .file-wrapper {
     margin-bottom: 10px;
-    
+
     &.fa-file-pdf-o {
         color: #496e9c;
     }
+
     &.fa-file-text-o {
         color: #496e9c;
     }
@@ -648,15 +685,17 @@ span {
     color: $color_red;
 }
 
-dd, dt {
+dd,
+dt {
     margin-bottom: 3px;
 }
 
 .ds-gloss-list {
-    &> div {
+    &>div {
         &.row {
             padding-bottom: 5px;
-            & >div {
+
+            &>div {
                 &:first-child {
                     padding-left: 0;
                 }
@@ -671,12 +710,14 @@ dd, dt {
     background-color: #f9f9f9;
     padding-bottom: 10px;
     margin-bottom: 20px;
-    
+
     dt {
         text-align: left;
         width: 50%;
     }
-    dd, dt {
+
+    dd,
+    dt {
         margin-bottom: 3px;
     }
 }
@@ -685,7 +726,39 @@ dd, dt {
 .select2-container--default .select2-selection--multiple {
     border-color: $input-border;
 }
-.select2-selection__rendered > li,
-.select2-results__options > li {
+
+.select2-selection__rendered>li,
+.select2-results__options>li {
     background: none;
+}
+
+/** ************ Print Styles ************** */
+@media print {
+    .pre_nav_container {
+        display: none;
+    }
+
+    .au_navigation {
+        display: none;
+    }
+
+    .content_topper {
+        display: none;
+    }
+
+    .breadcrumb {
+        display: none;
+    }
+
+    .sidebar-nav {
+        display: none;
+    }
+
+    footer {
+        display: none;
+    }
+
+    .frontPageSrchBlock {
+        display: none;
+    }
 }
