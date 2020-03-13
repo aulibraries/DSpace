@@ -89,7 +89,7 @@
                         </div>
                         <div class="content_row row-offcanvas row-offcanvas-left">
                             <div class="content_container">
-                                <div id="sidebar" class="hidden-print col-xs-6 col-sm-3 sidebar-offcanvas">
+                                <div id="sidebar" class="col-xs-6 col-sm-3 sidebar-offcanvas">
                                     <xsl:apply-templates select="dri:options"/>
                                 </div>
                                 <div id="main-content" class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
@@ -101,51 +101,6 @@
                     </div>
                     <xsl:call-template name="buildFooter"/>
                     <xsl:call-template name="addJavascript"/>
-                    <!-- <div class="container"> -->
-                        <!-- <xsl:choose> -->
-                            <!-- <xsl:when test="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='framing'][@qualifier='popup']">
-                                <xsl:apply-templates select="dri:body/*"/>
-                            </xsl:when> -->
-                            <!-- <xsl:otherwise> -->
-                                <!-- <div id="top" class="row header-wrap">
-                                    <a href="#nav-section" class="skip">Skip to Navigation</a>
-                                    <xsl:call-template name="buildHeader"/>
-                                </div> -->
-
-                                <!--javascript-disabled warning, will be invisible if javascript is enabled-->
-                                <!-- <div id="no-js-warning-wrapper" class="hidden">
-                                    <div id="no-js-warning">
-                                        <div class="notice failure">
-                                            <xsl:text>JavaScript is disabled for your browser. Some features of this site may not work without it.</xsl:text>
-                                        </div>
-                                    </div>
-                                </div> -->
-                                <!-- <div id="main-container" class="container">
-                                    <div class="horizontal-slider clearfix">
-                                        <div id="content" class="row row-offcanvas row-offcanvas-right">
-                                            <div class="col-xs-12 col-sm-12 col-md-9 main-content">
-                                                <xsl:call-template name="buildTrail"/>
-                                                <xsl:apply-templates select="*[not(self::dri:options)]"/>
-                                            </div>
-                                            <div id="sidebar" class="hidden-print col-xs-6 col-sm-3 sidebar-offcanvas">
-                                                <xsl:apply-templates select="dri:options"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
-                                <!--
-                                    The footer div, dropping whatever extra information is needed on the page. It will
-                                    most likely be something similar in structure to the currently given example.
-                                -->
-                                <!-- <div class="footer-wrap hidden-print footer-wrap">
-                                    <xsl:call-template name="buildFooter"/>
-                                </div> -->
-                            <!-- </xsl:otherwise> -->
-                        <!-- </xsl:choose> -->
-                    <!-- </div> --><!-- /container -->
-                   <!--  <div class="to-top" style="display:none;"><a href="#top"></a></div> -->
-                    <!-- Javascript at the bottom for fast page loading -->
-                    <!-- <xsl:call-template name="addJavascript"/> -->
                 </body>
                 <xsl:text disable-output-escaping="yes">&lt;/html&gt;</xsl:text>
 
@@ -197,13 +152,10 @@
             <!-- Add stylesheets -->
             <!-- BOOTSTRAP -->
             <link rel="stylesheet" href="https://cdn.auburn.edu/assets/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
-            <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/> -->
             <!-- FONT AWESOME -->
             <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous"/>
             <!-- AUBURN UNIVERSITY -->
             <link rel="stylesheet" href="https://cdn.auburn.edu/2016/_assets/css/global.min.css" integrity="sha384-DthvczyZCLEYneoTqIn/y5qcCXy0bnwLeJgEfAXQLoDQJnmY7PFy5t271cHWqAxc" crossorigin="anonymous"/>
-            <!-- AUBURN UNIVERSITY LIBRARIES -->
-            <link href="https://www.lib.auburn.edu/css/aulibraries.css" rel="stylesheet"/>
 
             <link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css" integrity="sha384-1UXhfqyOyO+W+XsGhiIFwwD3hsaHRz2XDGMle3b8bXPH5+cMsXVShDoHA3AH/y/p" crossorigin="anonymous"/>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" integrity="sha384-KZO2FRYNmIHerhfYMjCIUaJeGBRXP7CN24SiNSG+wdDzgwvxWbl16wMVtWiJTcMt" crossorigin="anonymous"/>
@@ -461,50 +413,6 @@
                     </div>
                 </div>   
             </div>
-            <!-- <div class="logo hidden-print"><a href="http://www.auburn.edu/" title="AU Homepage" aria-label="Auburn University Homepage"><img src="https://cdn.auburn.edu/2016/_assets/images/auburn-logo-horizontal.svg" alt="Auburn University Homepage"/></a></div>
-            <div class="menu-icon-header hidden-print hidden-sm hidden-md hidden-lg" data-toggle="offcanvas"><i class="fas fa-bars" title="Open the main navigation menu"></i></div>
-            <div class="search-icon hidden-print"><i class="fas fa-search"></i></div>
-            <div class="header-title">
-                <div class="top-links hidden-print"><a href="http://www.auburn.edu/main/sitemap.php">A-Z Index</a> | <a href="http://www.auburn.edu/map">Map</a> | <a href="http://www.auburn.edu/main/auweb_campus_directory.html" class="lastTopLink">People Finder</a></div>
-                <form action="https://search.auburn.edu" class="search-form form-group hidden-print" method="get">
-                    <div class="search-box"><input type="text" name="q" id="q" role="search" accesskey="q" tabindex="0" class="search-field form-control" placeholder="Search AU..." value=""/></div>
-                    <input type="hidden" name="cx" value="006456623919840955604:pinevfah6qm"/>
-                    <input type="hidden" name="ie" value="utf-8"/>
-                    <label for="q" class="form-control" style=" position:absolute; left:-9999px; visibility:hidden;">Enter your search terms</label>
-                </form>
-                <div class="title-area">
-                    <img class="visible-print" src="https://cdn.auburn.edu/2016/_assets/images/auburn-logo-horizontal-bw.png" alt="Auburn University Logo"></img>
-                    <div class="main-heading hidden-print">
-                        <a>
-                            <xsl:attribute name="href">
-                                    <xsl:choose>
-                                        <xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker') or contains($serverName, 'dstest')">
-                                            <xsl:text>/auetd/</xsl:text>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <xsl:text>/</xsl:text>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                            </xsl:attribute>
-                            <xsl:text>Electronic Theses and Dissertations</xsl:text>
-                        </a>
-                    </div>
-                    <div class="sub-heading hidden-print">
-                        <xsl:if test="contains($serverName, 'localhost') or contains($serverName, 'dstest') or contains($serverName, 'aucompbiker')">
-                            <xsl:text>Development/Testing System</xsl:text>
-                        </xsl:if>
-                        <xsl:choose>
-                            <xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker')">
-                                <xsl:text> (Local)</xsl:text>
-                            </xsl:when>
-                            <xsl:when test="contains($serverName, 'dstest')">
-                                <xsl:text> (DSTest)</xsl:text>
-                            </xsl:when>
-                            <xsl:otherwise></xsl:otherwise>
-                        </xsl:choose>
-                    </div>
-                </div>
-            </div> -->
             <xsl:call-template name="buildHeaderNav"/>
         </header>
        
@@ -533,30 +441,6 @@
                 </div>
             </nav>
         </div>
-        <!-- <nav id="nav-section" class="navbar hidden-print" role="navigation">
-            <div class="container-fluid">
-                <div class="navbar-brand collapsed" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                    Main Navigation<span>&#160;</span>
-                </div>
-                <div class="collapse navbar-collapse navbar-ex1-collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a>
-                            <xsl:attribute name="href">
-                                <xsl:choose>
-                                    <xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker') or contains($serverName, 'dstest')">
-                                        <xsl:text>/auetd/</xsl:text>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:text>/</xsl:text>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:attribute>AUETD Home</a></li>
-                        <li><a href="http://www.grad.auburn.edu/" title="Graduate School" target="_blank">Graduate School</a></li>
-                    </ul>
-                    <div class="menu-icon-nav hidden-print hidden-xs hidden-md hidden-lg" data-toggle="offcanvas"><i class="fas fa-bars" title="Open a navigation menu"></i></div>
-                </div>
-            </div>
-        </nav> -->
 	</xsl:template>
 
     <!-- The header (distinct from the HTML head element) contains the title, subtitle, login box and various
@@ -574,46 +458,6 @@
                 </ol>
             </xsl:otherwise>
         </xsl:choose>
-        <!-- <div class="trail-wrapper hidden-print"> -->
-            <!-- <div class="container"> -->
-                <!-- <div class="row"> -->
-                    <!--TODO-->
-                    <!-- <div class="col-xs-12">
-                        <xsl:choose>
-                            <xsl:when test="count(/dri:document/dri:meta/dri:pageMeta/dri:trail) > 1">
-                                <div class="breadcrumb dropdown visible-xs">
-                                    <a id="trail-dropdown-toggle" href="#" role="button" class="dropdown-toggle"
-                                       data-toggle="dropdown">
-                                        <xsl:variable name="last-node" select="/dri:document/dri:meta/dri:pageMeta/dri:trail[last()]"/>
-                                        <xsl:choose>
-                                            <xsl:when test="$last-node/i18n:*">
-                                                <xsl:apply-templates select="$last-node/*"/>
-                                            </xsl:when>
-                                            <xsl:otherwise>
-                                                <xsl:apply-templates select="$last-node/text()"/>
-                                            </xsl:otherwise>
-                                        </xsl:choose>
-                                        <xsl:text>&#160;</xsl:text>
-                                        <b class="caret"/>
-                                    </a>
-                                    <ul class="dropdown-menu" role="menu" aria-labelledby="trail-dropdown-toggle">
-                                        <xsl:apply-templates select="/dri:document/dri:meta/dri:pageMeta/dri:trail[not(contains(@target, '123456789/1'))][not(contains(@target, '123456789/2'))][not(contains(@target, '10415/1'))][not(contains(@target, '10415/2'))]" mode="dropdown"/>
-                                    </ul>
-                                </div>
-                                <ul class="breadcrumb hidden-xs">
-                                    <xsl:apply-templates select="/dri:document/dri:meta/dri:pageMeta/dri:trail[not(contains(@target, '123456789/1'))][not(contains(@target, '123456789/2'))][not(contains(@target, '10415/1'))][not(contains(@target, '10415/2'))]"/>
-                                </ul>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <ul class="breadcrumb">
-                                    <xsl:apply-templates select="/dri:document/dri:meta/dri:pageMeta/dri:trail[not(contains(@target, '123456789/1'))][not(contains(@target, '123456789/2'))][not(contains(@target, '10415/1'))][not(contains(@target, '10415/2'))]"/>
-                                </ul>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </div> -->
-                <!-- </div> -->
-            <!-- </div> -->
-        <!-- </div> -->
     </xsl:template>
 
     <!--The Trail-->
@@ -883,7 +727,6 @@
                                 <span class="input-group-btn">
                                     <button id="aspect_artifactbrowser_FrontPageSearch_field_submit" class="ds-button-field btn btn-default" name="submit" title="Click to submit the search form" type="submit">
                                         <span>Search</span>
-                                        <!-- <span class="fas fa-search" aria-hidden="true" title="Click here to submit the search form"></span> -->
                                     </button>
                                 </span>
                             </div>
@@ -991,15 +834,6 @@
 
         <!-- Add a google analytics script if the key is present -->
         <xsl:if test="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='google'][@qualifier='analytics']">
-            <!-- <script><xsl:text>
-                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-                })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-                ga('create', '</xsl:text><xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='google'][@qualifier='analytics']"/><xsl:text>', '</xsl:text><xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='serverName']"/><xsl:text>');
-                ga('send', 'pageview');
-           </xsl:text></script> -->
            <script>
                <xsl:text>
                    function GATC() {
@@ -1060,7 +894,7 @@
     </xsl:template>
 
     <xsl:template name="buildAuburnGDPR">
-        <div class="content_row" id="gdpr" style="display:none;">
+        <div class="content_row hidden-print" id="gdpr" style="display:none;">
             <div class="alert alert-info" role="contentinfo">
                 <button aria-label="Close" class="close" data-dismiss="alert" id="cookieAcknowledge" type="button">
                     <span aria-hidden="true">x</span>
