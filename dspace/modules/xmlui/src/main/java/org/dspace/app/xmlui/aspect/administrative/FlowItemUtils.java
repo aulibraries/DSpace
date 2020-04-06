@@ -1353,7 +1353,7 @@ public class FlowItemUtils {
         }
     }
 
-    public static Boolean embargoPeriodHasPassed(Item item) throws AuthorizeException, IOException, SQLException
+    public static boolean embargoPeriodHasPassed(Item item) throws AuthorizeException, IOException, SQLException
     {
         List<MetadataValue> accessionedDateList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "date", "accessioned", Item.ANY);
         String accessionedDateMDV = null;
