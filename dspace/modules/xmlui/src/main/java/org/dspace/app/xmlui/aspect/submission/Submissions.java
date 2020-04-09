@@ -485,7 +485,17 @@ public class Submissions extends AbstractDSpaceTransformer
             String rejectionDateTime = null;
 
             int rejectionReasonSectionStart = latestRejectionMessage.indexOf("Reason:");
+
+            if (rejectionReasonSectionStart == -1) {
+                rejectionReasonSectionStart = latestRejectionMessage.indexOf("reason:");
+            }
+
             int rejectionReasonSectionStop = latestRejectionMessage.lastIndexOf("Rejected on");
+
+            if (rejectionReasonSectionStop == -1) {
+                rejectionReasonSectionStop = latestRejectionMessage.lastIndexOf("on");
+            }
+            
             int rejectionReasonSectionStartOffset = rejectionReasonSectionStart + ("Reason:".length()+1);
 
             rejectionReason = latestRejectionMessage.substring(rejectionReasonSectionStartOffset, rejectionReasonSectionStop-1);
