@@ -35,7 +35,7 @@ import org.dspace.authorize.factory.AuthorizeServiceFactory;
 import org.dspace.authorize.service.AuthorizeService;
 import org.dspace.content.Bitstream;
 //import org.dspace.content.BitstreamFormat;
-//import org.dspace.content.Bundle;
+import org.dspace.content.Bundle;
 import org.dspace.content.DSpaceObject;
 import org.dspace.content.Item;
 import org.dspace.content.MetadataSchema;
@@ -184,6 +184,12 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
 			}
 		}*/
 
+        java.util.List<Bundle> bundles = bitstream.getBundles();
+        String bundleName = "";
+		if (bundles != null && bundles.size() > 0) {
+            bundleName = bundles.get(0).getName();
+		}
+
 		// File name & url
 		String fileUrl = contextPath + "/bitstream/id/" +bitstream.getID() + "/" + bitstream.getName();
 		String fileName = bitstream.getName();
@@ -202,8 +208,12 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
         bitstreamName.setHelp(T_filename_help);
         bitstreamName.setValue(fileName);
 
-        // EMBARGO FIELDS
-        addEmbargoFieldSection(bitstream, edit);
+        if (bundleName.equals(Constants.CONTENT_BUNDLE_NAME)) {
+            if (!bitstream.getName().equals(Constants.LICENSE_BITSTREAM_NAME)) {
+                // EMBARGO FIELDS
+                addEmbargoFieldSection(bitstream, edit);
+            }
+        }
 
 		// ITEM: form actions
 		org.dspace.app.xmlui.wing.element.Item actions = edit.addItem();
