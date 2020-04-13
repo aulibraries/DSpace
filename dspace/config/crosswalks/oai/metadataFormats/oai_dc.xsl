@@ -147,6 +147,24 @@
 			<xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='source']/doc:element/doc:element/doc:field[@name='value']">
 				<dc:source><xsl:value-of select="." /></dc:source>
 			</xsl:for-each>
+            <!-- dc.embargo.status -->
+            <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='embargo']/doc:element[@name='status']/doc:element/doc:field[@name='value']">
+                <dc:embargoStatus>
+                    <xsl:value-of select="." />
+                </dc:embargoStatus>
+            </xsl:for-each>
+            <!-- dc.embargo.length -->
+            <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='embargo']/doc:element[@name='length']/doc:element/doc:field[@name='value']">
+                <dc:embargoLength>
+                    <xsl:value-of select="." />
+                </dc:embargoLength>
+            </xsl:for-each>
+            <!-- dc.embargo.enddate -->
+            <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='embargo']/doc:element[@name='enddate']/doc:element/doc:field[@name='value']">
+                <dc:embargoEndDate>
+                    <xsl:value-of select="." />
+                </dc:embargoEndDate>
+            </xsl:for-each>
 		</oai_dc:dc>
 	</xsl:template>
 </xsl:stylesheet>

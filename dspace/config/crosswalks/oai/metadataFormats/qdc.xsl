@@ -141,6 +141,21 @@
 					<xsl:value-of select="." />
 				</dc:source>
 			</xsl:for-each>
+            <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='embargo']/doc:element[@name='status']/doc:element/doc:field[@name='value']">
+                <dc:embargoStatus>
+                    <xsl:value-of select="." />
+                </dc:embargoStatus>
+            </xsl:for-each>
+            <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='embargo']/doc:element[@name='length']/doc:element/doc:field[@name='value']">
+                <dc:embargoLength>
+                    <xsl:value-of select="." />
+                </dc:embargoLength>
+            </xsl:for-each>
+            <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='embargo']/doc:element[@name='enddate']/doc:element/doc:field[@name='value']">
+                <dc:embargoEndDate>
+                    <xsl:value-of select="." />
+                </dc:embargoEndDate>
+            </xsl:for-each>
 		</qdc:qualifieddc>
 	</xsl:template>
 </xsl:stylesheet>
