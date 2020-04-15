@@ -42,16 +42,7 @@
     -->
     <!-- TODO: figure out why i18n tags break the go button -->
     <xsl:template match="dri:options">
-        <!-- <div class="sidebar-content accordion"> -->
         <div class="word-break hidden-print sidebar-content" id="ds-options">
-            <!-- <xsl:choose>
-                <xsl:when test="not(contains(/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='URI'], 'discover'))">
-                    <xsl:call-template name="searchFormBlock" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <div class="ds-option-set col-sm-12 list-group" id="ds-search-option">&#160;</div>
-                </xsl:otherwise>
-            </xsl:choose> -->
             <xsl:apply-templates />
             <!-- DS-984 Add RSS Links to Options Box -->
             <xsl:if test="count(/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='feed']) != 0">
@@ -64,33 +55,6 @@
                     </div>
                 </div>
             </xsl:if>
-        </div>
-    </xsl:template>
-
-    <xsl:template name="searchFormBlock">
-        <div class="ds-option-set col-sm-12 list-group hidden-print hidden-xs hidden-sm" id="ds-search-option">
-            <!-- The form, complete with a text box and a button, all built from
-            attributes referenced from under pageMeta. -->
-            <form id="ds-search-form" class="" method="post">
-                <xsl:attribute name="action">
-                    <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='contextPath']" />
-                    <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='search'][@qualifier='simpleURL']" />
-                </xsl:attribute>
-                <fieldset>
-                    <div class="input-group">
-                        <input class="ds-text-field form-control" type="text" placeholder="xmlui.general.search.placeholder.AUETD_placeholder" i18n:attr="placeholder">
-                            <xsl:attribute name="name">
-                                <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='search'][@qualifier='queryField']" />
-                            </xsl:attribute>
-                        </input>
-                        <span class="input-group-btn">
-                            <button class="ds-button-field btn btn-default" title="xmlui.general.go" i18n:attr="title">
-                                <span class="fas fa-search" aria-hidden="true" />
-                            </button>
-                        </span>
-                    </div>
-                </fieldset>
-            </form>
         </div>
     </xsl:template>
 
@@ -133,10 +97,10 @@
     </xsl:template>
 
     <!-- Prevent the the context (ie community or collection) menu option items from appearing. -->
-    <xsl:template match="dri:list[@id='aspect.viewArtifacts.Navigation.list.context']">
-    </xsl:template>
+    <!-- <xsl:template match="dri:list[@id='aspect.viewArtifacts.Navigation.list.context']">
+    </xsl:template> -->
 
-    <xsl:template match="dri:options/dri:list[not(@n='account')][not(@n='context')]" priority="3">
+    <xsl:template match="dri:options/dri:list[not(@n='account')]" priority="3">
         <xsl:if test="count(child::node()) &gt; 0">
             <xsl:apply-templates select="dri:head" mode="optionHead" />
             <div>
@@ -225,9 +189,6 @@
     </xsl:template>
 
     <xsl:template match="dri:options/dri:list/dri:head" mode="optionHead" priority="1">
-        <!-- <xsl:call-template name="renderHead">
-            <xsl:with-param name="class">ds-option-set-head</xsl:with-param>
-        </xsl:call-template> -->
         <span class="block ds-option-set-head h4">
             <xsl:apply-templates />
         </span>
