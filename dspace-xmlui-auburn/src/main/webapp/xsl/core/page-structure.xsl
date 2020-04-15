@@ -691,7 +691,7 @@
         <div class="row submissionMsgRow">
             <div class="col-lg-12">
                 <h2 class="h3">Submitting Your Thesis or Dissertation</h2>
-                <p>Auburn University students submit their thesis or dissertation through the AUETD system. To start this process, login via the “My Account” tab.  Once you have logged in click the Submit An Electronic Thesis or Dissertation button below, read and accept the Embargo policy, and then follow the upload instructions.  For questions about this process or the status of your thesis or dissertation in AUETD, please contact the Graduate School at <a title="Email the Graduate School" href="mailto:etdhelp@auburn.edu">etdhelp@auburn.edu</a>.</p>
+                <p>Auburn University students submit their thesis or dissertation through the AUETD system. To start this process, login by clicking on the <b>Login</b> link under the "My Account" section of the navigation menu.  Once you have logged in click the Submit An Electronic Thesis or Dissertation button below, read and accept the Embargo policy, and then follow the upload instructions.  For questions about this process or the status of your thesis or dissertation in AUETD, please contact the Graduate School at <a title="Email the Graduate School" href="mailto:etdhelp@auburn.edu">etdhelp@auburn.edu</a>.</p>
             </div>
         </div>
         <xsl:if test="/dri:document/dri:meta/dri:userMeta/@authenticated = 'yes' and /dri:document/dri:meta/dri:userMeta/dri:metadata[@element='identifier'][@qualifier='authorized-submitter'] = 'yes'">
@@ -714,14 +714,15 @@
     <xsl:template name="FrontPageSearch">
         <div class="row">
             <div id="frontPageSrchBlock" class="col-lg-12 frontPageSrchBlock">
+                <h2 class="frontPageSrchFormLabel">Search AUETD</h2>
                 <form id="aspect_artifactbrowser_FrontPageSearch_div_front-page-search" method="post">
                     <xsl:attribute name="action">
                         <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='contextPath']"/>
                         <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='search'][@qualifier='simpleURL']"/>
                     </xsl:attribute>
                     <div class="form-group">
-                        <label class="control-label col-sm-4 frontPageSrchFormLabel" for="aspect_artifactbrowser_FrontPageSearch_field_query">Search AUETD</label>
-                        <div class="col-sm-6">
+                        <label class="contorl-label sr-only frontPageSrchFormLabel" for="aspect_artifactbrowser_FrontPageSearch_field_query">Search AUETD</label>
+                        <div class="col-sm-10">
                             <div class="input-group">
                                 <input id="aspect_artifactbrowser_FrontPageSearch_field_query" class="ds-text-field form-control" name="query" type="text" placeholder="xmlui.general.search.placeholder.AUETD_placeholder" i18n:attr="placeholder" value=""/>
                                 <span class="input-group-btn">
