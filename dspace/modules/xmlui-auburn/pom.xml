@@ -74,11 +74,12 @@
                                     <directory>${basedir}/src/main/webapp/themes</directory>
                                     <excludes>
                                         <exclude>**/*.bmp</exclude>
+                                        <exclude>**/*.gif</exclude>
+                                        <exclude>**/*.ico</exclude>
                                         <exclude>**/*.jpg</exclude>
                                         <exclude>**/*.jpeg</exclude>
-                                        <exclude>**/*.gif</exclude>
+                                        <exclude>**/*.json</exclude>
                                         <exclude>**/*.png</exclude>
-                                        <exclude>**/*.ico</exclude>
                                         <exclude>**/*.svg</exclude>
                                         <exclude>**/*.ttf</exclude>
                                         <exclude>**/*.xsl</exclude>
@@ -89,11 +90,12 @@
                                     <directory>${basedir}/src/main/webapp/themes</directory>
                                     <includes>
                                         <include>**/*.bmp</include>
+                                        <include>**/*.gif</include>
+                                        <include>**/*.ico</include>
                                         <include>**/*.jpg</include>
                                         <include>**/*.jpeg</include>
-                                        <include>**/*.gif</include>
+                                        <include>**/*.json</include>
                                         <include>**/*.png</include>
-                                        <include>**/*.ico</include>
                                         <include>**/*.svg</include>
                                         <include>**/*.ttf</include>
                                         <include>**/*.xsl</include>
