@@ -49,8 +49,8 @@
 		become publicly available after the embargo period they selected has expired. They should also be aware that basic bibliographic information 
 		about all the ETDs in the AUETD database is indexed by Google and other Internet search engines and may appear in search results for those 
 		search engines.</p>
-		<p>Students who have questions or concerns about this policy are encouraged to contact <a href="mailto: etdhelp@auburn.edu">Sarah Beckum</a> at 334-844-2124 before submitting their 
-		ETD to AUETD. The Graduate School will not retroactively place embargoes on ETDs, so it is important to select the correct option during the 
+		<p>Students who have questions or concerns about this policy are encouraged to contact the Graduate School at <a href="mailto:etdhelp@auburn.edu">etdhelp@auburn.edu</a> 
+        or 334-844-2124 before submitting their ETD to AUETD. The Graduate School will not retroactively place embargoes on ETDs, so it is important to select the correct option during the 
 		submission process.</p>
 	</xsl:template>
 	
