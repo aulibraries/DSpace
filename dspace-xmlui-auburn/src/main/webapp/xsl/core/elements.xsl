@@ -42,25 +42,21 @@
         handle the attributes, and then apply the templates for the all children except the head. The id
         attribute is -->
     <xsl:template match="dri:div">
-        <xsl:apply-templates select="dri:head" />
-        <xsl:apply-templates select="@pagination">
-            <xsl:with-param name="position">top</xsl:with-param>
-        </xsl:apply-templates>
-        <div>
-            <xsl:call-template name="standardAttributes">
-                <!-- <xsl:with-param name="class">ds-static-div</xsl:with-param> -->
-            </xsl:call-template>
-            <xsl:choose>
-                <!--  does this element have any children -->
-                <xsl:when test="child::node()">
+        <xsl:choose>
+            <xsl:when test="child::node()">
+                <xsl:apply-templates select="@pagination">
+                    <xsl:with-param name="position">top</xsl:with-param>
+                </xsl:apply-templates>
+                <div>
+                    <xsl:call-template name="standardAttributes">
+                        <!-- <xsl:with-param name="class">ds-static-div</xsl:with-param> -->
+                    </xsl:call-template>
+                    <xsl:apply-templates select="dri:head" />
                     <xsl:apply-templates select="*[not(name()='head')]" />
-                </xsl:when>
-                <!-- if no children are found we add a space to eliminate self closing tags -->
-                <xsl:otherwise>
-                    &#160;
-                </xsl:otherwise>
-            </xsl:choose>
-        </div>
+                </div>
+            </xsl:when>
+            <xsl:otherwise />
+        </xsl:choose>
         <xsl:variable name="itemDivision">
             <xsl:value-of select="@n" />
         </xsl:variable>
@@ -87,12 +83,10 @@
         </div>
     </xsl:template>
 
-
     <!-- Next come the three structural elements that divs that contain: table, p, and list. These are
         responsible for display of static content, forms, and option lists. The fourth element under
         body, referenceSet, is used to reference blocks of metadata and will be discussed further down.
     -->
-
 
     <!-- Header row, most likely filled with header cells -->
     <xsl:template match="dri:row[@role='header']" priority="2">
@@ -126,7 +120,6 @@
             <xsl:apply-templates />
         </th>
     </xsl:template>
-
 
     <!-- Normal row, most likely filled with data cells -->
     <xsl:template match="dri:row" priority="1">
@@ -169,13 +162,12 @@
         and the item element under list are also rich text containers.
     -->
     <xsl:template match="dri:p">
-        <p>
-            <!-- <xsl:call-template name="standardAttributes">
-                <xsl:with-param name="class">ds-paragraph</xsl:with-param>
-            </xsl:call-template> -->
-            <xsl:choose>
-                <!--  does this element have any children -->
-                <xsl:when test="child::node()">
+        <xsl:choose>
+            <xsl:when test="child::node()">
+                <p>
+                    <xsl:call-template name="standardAttributes">
+                        <xsl:with-param name="class">ds-paragraph</xsl:with-param>
+                    </xsl:call-template>
                     <xsl:for-each select="child::node()">
                         <xsl:choose>
                             <xsl:when test="local-name() = 'text' and following-sibling::*[local-name() = 'field']">
@@ -195,16 +187,11 @@
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:for-each>
-                </xsl:when>
-                <!-- if no children are found we add a space to eliminate self closing tags -->
-                <xsl:otherwise>
-                    &#160;
-                </xsl:otherwise>
-            </xsl:choose>
-        </p>
+                </p>
+            </xsl:when>
+            <xsl:otherwise />
+        </xsl:choose>
     </xsl:template>
-
-
 
     <!-- Finally, we have the list element, which is used to display set of data. There are several different
         types of lists, as signified by the type attribute, and several different templates to handle them. -->
@@ -321,16 +308,16 @@
         </div>
     </xsl:template>
 
-    <xsl:template match="dri:list[@n='actions']" mode="ActionsList">
-        <!-- <div>
+    <!-- <xsl:template match="dri:list[@n='actions']" mode="ActionsList">
+        <div>
             <xsl:call-template name="standardAttributes">
                 <xsl:with-param name="class">
                     <xsl:text>ds-gloss-list</xsl:text>
                 </xsl:with-param>
             </xsl:call-template>
             <xsl:apply-templates select="dri:item" mode="ActionsListItem" />
-        </div> -->
-    </xsl:template>
+        </div>
+    </xsl:template> -->
 
     <xsl:template match="dri:list/dri:item" mode="ActionsListItem">
         <div>
@@ -339,104 +326,69 @@
                     <xsl:text>row</xsl:text>
                 </xsl:with-param>
             </xsl:call-template>
-            <!-- <xsl:if test="name(preceding-sibling::*[position()=1]) = 'label'">
-                <xsl:apply-templates select="preceding-sibling::*[position()=1]" mode="actionsLabeled" />
-            </xsl:if> -->
-            <!-- <div>
-                <xsl:call-template name="standardAttributes">
-                    <xsl:with-param name="class">
-                        <xsl:choose>
-                            <xsl:when test="child::dri:p/dri:field/@type='text'">
-                                <xsl:text>col-sm-4 col-xs-pull-1</xsl:text>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:text>col-sm-8 col-xs-pull-1</xsl:text>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:with-param>
-                </xsl:call-template> -->
-                <xsl:choose>
-                    <xsl:when test="count(dri:field) = 2 and dri:field[@type='button'] and dri:field[not(@type='button')]">
-                        <div class="form-group">
-                            <xsl:apply-templates select="preceding-sibling::*[position()=1]" mode="actionsLabeled" />
-                            <div class="col-sm-8">
-                                <div>
-                                    <xsl:call-template name="standardAttributes">
-                                        <xsl:with-param name="class">
-                                            <xsl:text>input-group</xsl:text>
-                                        </xsl:with-param>
-                                    </xsl:call-template>
-                                    <xsl:apply-templates select="dri:field[not(@type='button')]" />
-                                    <span class="input-group-btn">
-                                        <xsl:apply-templates select="dri:field[@type='button']" />
-                                    </span>
-                                </div>
+            <xsl:choose>
+                <xsl:when test="count(dri:field) = 2 and dri:field[@type='button'] and dri:field[not(@type='button')]">
+                    <div class="form-group">
+                        <xsl:apply-templates select="preceding-sibling::*[position()=1]" mode="actionsLabeled" />
+                        <div class="col-sm-6">
+                            <div>
+                                <xsl:call-template name="standardAttributes">
+                                    <xsl:with-param name="class">
+                                        <xsl:text>input-group</xsl:text>
+                                    </xsl:with-param>
+                                </xsl:call-template>
+                                <xsl:apply-templates select="dri:field[not(@type='button')]" />
+                                <span class="input-group-btn">
+                                    <xsl:apply-templates select="dri:field[@type='button']" />
+                                </span>
                             </div>
                         </div>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <!-- <xsl:apply-templates /> -->
-                        <div class="col-sm-12">
-                            <a>
-                                <xsl:if test="./dri:xref/@target">
-                                    <xsl:attribute name="href">
-                                        <xsl:value-of select="./dri:xref/@target" />
-                                    </xsl:attribute>
-                                </xsl:if>
+                    </div>
+                </xsl:when>
+                <xsl:otherwise>
+                    <div class="col-sm-12">
+                        <a>
+                            <xsl:if test="./dri:xref/@target">
+                                <xsl:attribute name="href">
+                                    <xsl:value-of select="./dri:xref/@target" />
+                                </xsl:attribute>
+                            </xsl:if>
 
-                                <xsl:if test="./dri:xref/@rend">
-                                    <xsl:attribute name="class">
-                                        <xsl:value-of select="./dri:xref/@rend" />
-                                    </xsl:attribute>
-                                </xsl:if>
+                            <xsl:if test="./dri:xref/@rend">
+                                <xsl:attribute name="class">
+                                    <xsl:value-of select="./dri:xref/@rend" />
+                                </xsl:attribute>
+                            </xsl:if>
 
-                                <xsl:if test="./dri:xref/@n">
-                                    <xsl:attribute name="name">
-                                        <xsl:value-of select="./dri:xref/@n" />
-                                    </xsl:attribute>
-                                </xsl:if>
+                            <xsl:if test="./dri:xref/@n">
+                                <xsl:attribute name="name">
+                                    <xsl:value-of select="./dri:xref/@n" />
+                                </xsl:attribute>
+                            </xsl:if>
 
-                                <xsl:if test="./dri:xref/@id">
-                                    <xsl:attribute name="id">
-                                        <xsl:value-of select="./dri:xref/@id" />
-                                    </xsl:attribute>
-                                </xsl:if>
+                            <xsl:if test="./dri:xref/@id">
+                                <xsl:attribute name="id">
+                                    <xsl:value-of select="./dri:xref/@id" />
+                                </xsl:attribute>
+                            </xsl:if>
 
-                                <xsl:if test="./dri:xref/@onclick">
-                                    <xsl:attribute name="onclick">
-                                        <xsl:value-of select="./dri:xref/@onclick" />
-                                    </xsl:attribute>
-                                </xsl:if>
-                                <xsl:apply-templates select="preceding-sibling::*[position()=1]" />
-                            </a>
-                        </div>
-                    </xsl:otherwise>
-                </xsl:choose>
-            <!-- </div> -->
+                            <xsl:if test="./dri:xref/@onclick">
+                                <xsl:attribute name="onclick">
+                                    <xsl:value-of select="./dri:xref/@onclick" />
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:apply-templates select="preceding-sibling::*[position()=1]" />
+                        </a>
+                    </div>
+                </xsl:otherwise>
+            </xsl:choose>
         </div>
     </xsl:template>
 
     <xsl:template match="dri:list/dri:label" priority="2" mode="actionsLabeled">
-        <!-- <div>
-            <xsl:call-template name="standardAttributes">
-                <xsl:with-param name="class">
-                    <xsl:text>col-sm-4</xsl:text>
-                </xsl:with-param>
-            </xsl:call-template>
-            <xsl:if test="count(./node())>0">
-                <span>
-                    <xsl:attribute name="class">
-                        <xsl:text>ds-gloss-list-label </xsl:text>
-                        <xsl:value-of select="@rend" />
-                    </xsl:attribute>
-                    <xsl:apply-templates />
-                    <xsl:text>:&#160;</xsl:text>
-                </span>
-            </xsl:if>
-        </div> -->
-        <label class="control-label col-sm-4">
+        <label class="control-label col-sm-3">
             <xsl:attribute name="for">
-                <xsl:value-of select="translate(following-sibling::dri:item/dri:field[1]/@id, '.', '_')"/>
+                <xsl:value-of select="translate(following-sibling::dri:item/dri:field[1]/@id, '.', '_')" />
             </xsl:attribute>
             <xsl:apply-templates />
             <xsl:text>&#160;</xsl:text>
@@ -717,7 +669,7 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="dri:div[@interactive='yes' and @id ='aspect.artifactbrowser.ConfigurableBrowse.div.browse-controls']" priority="1"/>
+    <xsl:template match="dri:div[@interactive='yes' and @id ='aspect.artifactbrowser.ConfigurableBrowse.div.browse-controls']" priority="1" />
 
     <xsl:template match="dri:div[@interactive='yes']" priority="2">
         <xsl:apply-templates select="dri:head" />
@@ -791,27 +743,6 @@
         </div>
     </xsl:template>
 
-    <!-- Original Version -->
-    <!-- <xsl:template name="renderHead">
-        <xsl:param name="class"/>
-        <xsl:variable name="head_count" select="count(ancestor::dri:*[dri:head])"/>
-        <xsl:variable name="is_first_head_on_page" select="(//dri:head)[1] = ."/>
-            <xsl:element name="h{$head_count+1}">
-            <xsl:call-template name="standardAttributes">
-                <xsl:with-param name="class">
-                    <xsl:value-of select="$class"/>
-                    <xsl:if test="$head_count = 1 and not($class='ds-option-set-head')">
-                        <xsl:text> page-header</xsl:text>
-                    </xsl:if>
-                    <xsl:if test="$is_first_head_on_page">
-                        <xsl:text> first-page-header</xsl:text>
-                    </xsl:if>
-                </xsl:with-param>
-            </xsl:call-template>
-            <xsl:apply-templates />
-        </xsl:element>
-    </xsl:template>-->
-
     <!-- Custom Version -->
     <xsl:template name="renderHead">
         <xsl:param name="class" />
@@ -823,15 +754,9 @@
                 <xsl:with-param name="class">
                     <xsl:value-of select="$class" />
                     <xsl:choose>
-                        <!-- <xsl:when test="$head_count = 1 and not($class='ds-option-set-head')">
-                            <xsl:text> page-header</xsl:text>
-                        </xsl:when> -->
                         <xsl:when test="$class='ds-option-set-head'">
                             <xsl:text> h5</xsl:text>
                         </xsl:when>
-                        <!-- <xsl:when test="$is_first_head_on_page">
-                                <xsl:text> first-page-header</xsl:text>
-                        </xsl:when> -->
                         <xsl:otherwise />
                     </xsl:choose>
                 </xsl:with-param>
@@ -958,23 +883,4 @@
         <xsl:apply-templates select="dri:item/dri:field" />
     </xsl:template>
 
-    <!--<xsl:template match="dri:list/dri:label" priority="2" mode="labeled">
-            <div>
-                    <xsl:call-template name="standardAttributes">
-                            <xsl:with-param name="class">
-                                    <xsl:text>col-sm-4</xsl:text>
-                            </xsl:with-param>
-                    </xsl:call-template>
-                    <xsl:if test="count(./node())>0">
-            <span>
-                <xsl:attribute name="class">
-                    <xsl:text>ds-gloss-list-label </xsl:text>
-                    <xsl:value-of select="@rend"/>
-                </xsl:attribute>
-                <xsl:apply-templates />
-                <xsl:text>:&#160;</xsl:text>
-            </span>
-        </xsl:if>
-            </div>
-    </xsl:template> -->
 </xsl:stylesheet>
