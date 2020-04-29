@@ -1491,10 +1491,40 @@ If you would like to associate this submission with your ORCID identifier please
 
     <xsl:template match="dri:help" mode="help">
         <!--Only create the <span> if there is content in the <dri:help> node-->
-        <xsl:if test="./text() or ./node()">
+         <xsl:if test="./text() or ./node()">
             <p class="help-block">
                 <xsl:apply-templates />
             </p>
+            <xsl:if test="parent::dri:field[@n='dc_rights']">
+                <p class="help-block">To learn more about copyrights please visit:
+                    <a>
+                        <xsl:attribute name="href">
+                            <xsl:text>http://www.sherpa.ac.uk/romeo/</xsl:text>
+                        </xsl:attribute>
+                        <xsl:attribute name="title">
+                            <xsl:text>SHERPA/RoMEO</xsl:text>
+                        </xsl:attribute>
+                        <xsl:attribute name="target">
+                            <xsl:text>_blank</xsl:text>
+                        </xsl:attribute>
+                        <xsl:text>SHERPA/RoMEO</xsl:text>
+                    </a>
+                    <xsl:text> or </xsl:text>
+                    <a>
+                        <xsl:attribute name="href">
+                            <xsl:text>http://creativecommons.org/</xsl:text>
+                        </xsl:attribute>
+                        <xsl:attribute name="title">
+                            <xsl:text>Creative Commons website</xsl:text>
+                        </xsl:attribute>
+                        <xsl:attribute name="target">
+                            <xsl:text>_blank</xsl:text>
+                        </xsl:attribute>
+                        <xsl:text>Creative Commons</xsl:text>
+                    </a>
+                    <xsl:text>.</xsl:text>
+                </p>
+            </xsl:if>
         </xsl:if>
     </xsl:template>
 
