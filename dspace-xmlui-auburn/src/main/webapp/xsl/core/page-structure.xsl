@@ -40,6 +40,30 @@
     -->
     <xsl:variable name="request-uri" select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='URI']"/>
     <xsl:variable name="serverName" select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@qualifier='serverName']"/>
+    <xsl:variable name="contextPath" select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element = 'contextPath']"/>
+    <xsl:variable name="repoName">
+        <xsl:choose>
+            <xsl:when test="$serverName = 'etd.auburn.edu' or $contextPath = '/auetd'">
+                <xsl:text>AUETD</xsl:text>
+            </xsl:when>
+            <xsl:when test="$serverName = 'aurora.auburn.edu' or $contextPath = '/aurora'">
+                <xsl:text>AUrora</xsl:text>
+            </xsl:when>
+            <xsl:when test="$serverName = 'deepspace.lib.auburn.edu' or $contextPath = '/deepspace'">
+                <xsl:text>DeepSpace</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="ctxPath">
+        <xsl:choose>
+            <xsl:when test="$contextPath != ''">
+                <xsl:value-of select="$contextPath"/><xsl:text>/</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>/</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
 
     <!--
         The starting point of any XSL processing is matching the root element. In DRI the root element is document,
@@ -397,11 +421,11 @@
                         <img alt="This Is Auburn" class="header_title_image" src="https://cdn.auburn.edu/2016/_assets/images/thisisauburn_wide.svg"/> 
                         <span class="unit_title"><xsl:text>Electronic Theses and Dissertations</xsl:text></span>
                         <span class="unit_subtitle">
-                            <xsl:if test="contains($serverName, 'localhost') or contains($serverName, 'dstest') or contains($serverName, 'aucompbiker')">
+                            <xsl:if test="contains($serverName, 'localhost') or contains($serverName, 'dstest')">
                                 <xsl:text>Development/Testing System</xsl:text>
                             </xsl:if>
                             <xsl:choose>
-                                <xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker')">
+                                <xsl:when test="contains($serverName, 'localhost')">
                                     <xsl:text> (Local)</xsl:text>
                                 </xsl:when>
                                 <xsl:when test="contains($serverName, 'dstest')">
@@ -424,18 +448,69 @@
             <nav class="au_nav_links_container navbar navbar-default clearfix">
                 <div class="collapse navbar-collapse js-navbar-collapse ">
                     <ul class="nav-justified dropdown mega-dropdown clearfix">
-                        <li class="dropdown"><a class="dropdown-toggle">
-                            <xsl:attribute name="href">
-                                <xsl:choose>
-                                    <xsl:when test="contains($serverName, 'localhost') or contains($serverName, 'aucompbiker') or contains($serverName, 'dstest')">
-                                        <xsl:text>/auetd/</xsl:text>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:text>/</xsl:text>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:attribute>AUETD Home</a></li>
-                        <li class="dropdown"><a class="dropdown-toggle" href="http://www.grad.auburn.edu/" title="The Auburn University Graduate School website will open in a new tab." rel="noreferrer noopener" target="_blank">Graduate School</a></li>
+                        <li class="dropdown">
+                            <a>
+                                <xsl:attribute name="class">
+                                    <xsl:text>dropdown-toggle</xsl:text>
+                                </xsl:attribute>
+                                <xsl:attribute name="href">
+                                    <xsl:value-of select="$ctxPath"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="title">
+                                    <xsl:value-of select="$repoName"/><xsl:text> Home</xsl:text>
+                                </xsl:attribute>
+                                <xsl:value-of select="$repoName"/><xsl:text> Home</xsl:text>
+                            </a>
+                        </li>
+                        <xsl:choose>
+                            <xsl:when test="$repoName = 'AUETD'">
+                                <li class="dropdown"><a class="dropdown-toggle" href="http://www.grad.auburn.edu/" title="The Auburn University Graduate School website will open in a new tab." rel="noreferrer noopener" target="_blank">Graduate School</a></li>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <li class="dropdown">
+                                    <a>
+                                        <xsl:attribute name="href">
+                                            <xsl:value-of select="$ctxPath"/><xsl:text>faqs.html</xsl:text>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="class">
+                                            <xsl:text>dropdown-toggle</xsl:text>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="title">
+                                            <xsl:text>FAQs</xsl:text>
+                                        </xsl:attribute>
+                                        <xsl:text>FAQs</xsl:text>
+                                    </a>
+                                </li>
+                                <li class="dropdown">
+                                    <a>
+                                        <xsl:attribute name="class">
+                                            <xsl:text>dropdown-toggle</xsl:text>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="href">
+                                            <xsl:value-of select="$ctxPath"/><xsl:text>liasions.html</xsl:text>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="title">
+                                            <xsl:text>Subject Librarians/Departmental Liaisons</xsl:text>
+                                        </xsl:attribute>
+                                        <xsl:text>Subject Librarians/Departmental Liaisons</xsl:text>
+                                    </a>
+                                </li>
+                                <li class="dropdown">
+                                    <a>
+                                        <xsl:attribute name="class">
+                                            <xsl:text>dropdown-toggle</xsl:text>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="href">
+                                            <xsl:value-of select="$ctxPath"/><xsl:text>contact.html</xsl:text>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="title">
+                                            <xsl:text>Contact</xsl:text>
+                                        </xsl:attribute>
+                                        <xsl:text>Contact</xsl:text>
+                                    </a>
+                                </li>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </ul>
                     <div class="nav nav-justified collapse in visible-xs"></div>
                 </div>
@@ -669,17 +744,19 @@
         <!-- Check for the custom pages -->
         <xsl:choose>
             <xsl:when test="$request-uri=''">
+                <xsl:apply-templates select="*[not(@id='file.news.div.news')][not(@id='aspect.artifactbrowser.CommunityBrowser.div.comunity-browser')][not(@id='aspect.discovery.SiteRecentSubmissions.div.site-home')]" />
                 <xsl:choose>
-                    <xsl:when test="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='dspace'][@qualifier='version'] = 3.3">  
-                        <xsl:apply-templates select="*[not(@id='file.news.div.news')][not(@id='aspect.artifactbrowser.CommunityBrowser.div.comunity-browser')][not(@id='aspect.artifactbrowser.FrontPageSearch.div.front-page-search')][not(@id='aspect.discovery.SiteRecentSubmissions.div.site-home')]" />
+                    <xsl:when test="$serverName = 'etd.auburn.edu' or $contextPath = '/auetd'">
+                        <xsl:call-template name="newsfeed" />
+                        <xsl:call-template name="FrontPageSearch"/>
+                        <xsl:call-template name="specialMessage"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:apply-templates select="*[not(@id='file.news.div.news')][not(@id='aspect.artifactbrowser.CommunityBrowser.div.comunity-browser')][not(@id='aspect.discovery.SiteRecentSubmissions.div.site-home')]" />
+                        <xsl:apply-templates select="dri:div[@id='file.news.div.news']" />
+                        <xsl:call-template name="FrontPageSearch"/>
+                        <xsl:apply-templates select="dri:div[@id='aspect.artifactbrowser.CommunityBrowser.div.comunity-browser']"/>
                     </xsl:otherwise>
                 </xsl:choose>
-                <xsl:call-template name="newsfeed" />
-                <xsl:call-template name="FrontPageSearch"/>
-                <xsl:call-template name="specialMessage"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates />
@@ -690,51 +767,49 @@
     <xsl:template name="specialMessage">
         <div class="row submissionMsgRow">
             <div class="col-lg-12">
-                <h2 class="h3">Submitting Your Thesis or Dissertation</h2>
+                <h1 class="ds-div-head">Submitting Your Thesis or Dissertation</h1>
                 <p>Auburn University students submit their thesis or dissertation through the AUETD system. To start this process, login by clicking on the <b>Login</b> link under the "My Account" section of the navigation menu.  Once you have logged in click the Submit An Electronic Thesis or Dissertation button below, read and accept the Embargo policy, and then follow the upload instructions.  For questions about this process or the status of your thesis or dissertation in AUETD, please contact the Graduate School at <a title="Email the Graduate School" href="mailto:etdhelp@auburn.edu">etdhelp@auburn.edu</a>.</p>
             </div>
         </div>
         <xsl:if test="/dri:document/dri:meta/dri:userMeta/@authenticated = 'yes' and /dri:document/dri:meta/dri:userMeta/dri:metadata[@element='identifier'][@qualifier='authorized-submitter'] = 'yes'">
-        <div class="row submissionBttnRow">
-            <div class="col-lg-12">
-                <xsl:choose>
-                    <xsl:when test="contains($serverName, 'dspace.localhost') or contains($serverName, 'localhost') or contains($serverName, 'aucompbiker') or contains($serverName, 'dstest')">
-                        <p><a class="btn btn-default submissionBttn" href="/auetd/handle/123456789/2/submit">Submit an Electronic Thesis or Dissertation</a></p>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <p><a class="btn btn-default submissionBttn" href="/handle/10415/2/submit">Submit an Electronic Thesis or Dissertation</a></p>
-                    </xsl:otherwise>
-                </xsl:choose>
+            <div class="row submissionBttnRow">
+                <div class="col-lg-12">
+                    <xsl:choose>
+                        <xsl:when test="$serverName = 'etd.auburn.edu'">
+                            <p><a class="btn btn-default submissionBttn" href="/handle/10415/2/submit">Submit an Electronic Thesis or Dissertation</a></p>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <p><a class="btn btn-default submissionBttn" href="/auetd/handle/123456789/2/submit">Submit an Electronic Thesis or Dissertation</a></p>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </div>
             </div>
-        </div>
         </xsl:if>
 
     </xsl:template>
 	
     <xsl:template name="FrontPageSearch">
-        <div class="row">
-            <div id="frontPageSrchBlock" class="col-lg-12 frontPageSrchBlock">
-                <h2 class="frontPageSrchFormLabel">Search AUETD</h2>
-                <form id="aspect_artifactbrowser_FrontPageSearch_div_front-page-search" method="post">
-                    <xsl:attribute name="action">
-                        <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='contextPath']"/>
-                        <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='search'][@qualifier='simpleURL']"/>
-                    </xsl:attribute>
-                    <div class="form-group">
-                        <label class="contorl-label sr-only frontPageSrchFormLabel" for="aspect_artifactbrowser_FrontPageSearch_field_query">Search AUETD</label>
-                        <div class="col-sm-10">
-                            <div class="input-group">
-                                <input id="aspect_artifactbrowser_FrontPageSearch_field_query" class="ds-text-field form-control" name="query" type="text" placeholder="xmlui.general.search.placeholder.AUETD_placeholder" i18n:attr="placeholder" value=""/>
-                                <span class="input-group-btn">
-                                    <button id="aspect_artifactbrowser_FrontPageSearch_field_submit" class="ds-button-field btn btn-default" name="submit" title="Click to submit the search form" type="submit">
-                                        <span>Search</span>
-                                    </button>
-                                </span>
-                            </div>
+        <div id="frontPageSrchBlock" class="row frontPageSrchBlock primary">
+            <h1 class="frontPageSearchHeader">Search <xsl:value-of select="$repoName"/></h1>
+            <form id="aspect_artifactbrowser_FrontPageSearch_div_front-page-search" method="post">
+                <xsl:attribute name="action">
+                    <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='contextPath']"/>
+                    <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='search'][@qualifier='simpleURL']"/>
+                </xsl:attribute>
+                <div class="form-group">
+                    <label class="sr-only" for="aspect_artifactbrowser_FrontPageSearch_field_query">Search <xsl:value-of select="$repoName"/></label>
+                    <div class="col-sm-10 clearPadding">
+                        <div class="input-group">
+                            <input id="aspect_artifactbrowser_FrontPageSearch_field_query" class="ds-text-field form-control" name="query" type="text" placeholder="xmlui.general.search.placeholder.AUETD_placeholder" i18n:attr="placeholder" value=""/>
+                            <span class="input-group-btn">
+                                <button id="aspect_artifactbrowser_FrontPageSearch_field_submit" class="ds-button-field btn btn-default" name="submit" title="Click to submit the search form" type="submit">
+                                    <span>Search</span>
+                                </button>
+                            </span>
                         </div>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </xsl:template>
 	
