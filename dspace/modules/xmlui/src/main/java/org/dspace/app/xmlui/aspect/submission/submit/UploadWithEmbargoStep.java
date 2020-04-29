@@ -8,7 +8,6 @@
 package org.dspace.app.xmlui.aspect.submission.submit;
 
 import org.apache.avalon.framework.parameters.Parameters;
-import org.apache.log4j.Logger;
 import org.apache.cocoon.ProcessingException;
 import org.apache.cocoon.environment.SourceResolver;
 import org.apache.commons.lang3.StringUtils;
@@ -22,8 +21,8 @@ import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.*;
 import org.dspace.content.Collection;
 import org.dspace.content.Item;
+import org.dspace.core.AUETDConstants;
 import org.dspace.core.Constants;
-import org.dspace.core.LogManager;
 import org.dspace.embargo.factory.EmbargoServiceFactory;
 import org.dspace.embargo.service.EmbargoService;
 import org.dspace.services.factory.DSpaceServicesFactory;
@@ -254,7 +253,7 @@ public class UploadWithEmbargoStep extends UploadStep
     	addSubmissionProgressList(div);
 
     	List upload = null;
-    	if (bitstreams.size() <= 0 && !disableFileEditing && errorSize >= 0) {
+    	if (bitstreams.isEmpty() && !disableFileEditing && errorSize >= 0) {
     		// Only add the upload capabilities for new item submissions
 	    	upload = div.addList("submit-upload-new", List.TYPE_FORM);
 	        upload.setHead(T_head);    
@@ -424,11 +423,11 @@ public class UploadWithEmbargoStep extends UploadStep
             }
 
             if(StringUtils.isNotBlank(embargoStatus) && StringUtils.isNotBlank(embargoRights)) {
-                if(embargoStatus.equals(Constants.EMBARGOED)) {
-                    if(embargoRights.equals(Constants.EMBARGO_NOT_AUBURN_STR)) {
+                if(embargoStatus.equals(AUETDConstants.EMBARGOED)) {
+                    if(embargoRights.equals(AUETDConstants.EMBARGO_NOT_AUBURN_STR)) {
                         statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON2;
 
-                    } else if(embargoRights.equals(Constants.EMBARGO_GLOBAL_STR)) {
+                    } else if(embargoRights.equals(AUETDConstants.EMBARGO_GLOBAL_STR)) {
                         statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON3;
                     }
                 } else {
@@ -632,20 +631,20 @@ public class UploadWithEmbargoStep extends UploadStep
             java.util.List<MetadataValue> embargoRightsList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "rights", null, org.dspace.content.Item.ANY);
             java.util.List<MetadataValue> embargoStatusList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "status", org.dspace.content.Item.ANY);
 
-            if (embargoRightsList != null && embargoRightsList.size() > 0) {
+            if (!embargoRightsList.isEmpty()) {
                 embargoRights = embargoRightsList.get(0).getValue();
             }
 
-            if (embargoStatusList != null & embargoStatusList.size() > 0) {
+            if (!embargoStatusList.isEmpty()) {
                 embargoStatus = embargoStatusList.get(0).getValue();
             }
 
             if(StringUtils.isNotBlank(embargoStatus) && StringUtils.isNotBlank(embargoRights)) {
-                if(embargoStatus.equals(Constants.EMBARGOED)) {
-                    if(embargoRights.equals(Constants.EMBARGO_NOT_AUBURN_STR)) {
+                if(embargoStatus.equals(AUETDConstants.EMBARGOED)) {
+                    if(embargoRights.equals(AUETDConstants.EMBARGO_NOT_AUBURN_STR)) {
                         statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON2;
 
-                    } else if(embargoRights.equals(Constants.EMBARGO_GLOBAL_STR)) {
+                    } else if(embargoRights.equals(AUETDConstants.EMBARGO_GLOBAL_STR)) {
                         statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON3;
                     }
                 } else {
@@ -684,7 +683,7 @@ public class UploadWithEmbargoStep extends UploadStep
 
         if (item != null) {
             java.util.List<MetadataValue> embargoLengthList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "length", org.dspace.content.Item.ANY);
-            if (embargoLengthList != null && embargoLengthList.size() > 0) {
+            if (!embargoLengthList.isEmpty()) {
                 ArrayList<String> embargoLengths = new ArrayList<String>();
                 embargoLengths.addAll(Arrays.asList(embargoLengthList.get(0).getValue().split(":")));
                 int lengthNum = Integer.parseInt(embargoLengths.get(1));

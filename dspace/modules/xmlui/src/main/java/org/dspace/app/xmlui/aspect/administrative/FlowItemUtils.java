@@ -35,6 +35,7 @@ import org.dspace.content.factory.ContentServiceFactory;
 import org.dspace.content.service.*;
 import org.dspace.services.factory.DSpaceServicesFactory;
 import org.dspace.services.ConfigurationService;
+import org.dspace.core.AUETDConstants;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.core.I18nUtil;
@@ -123,7 +124,7 @@ public class FlowItemUtils {
     public static final int AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED = 36;
     public static final int AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED = 37;
 
-    private static HashMap<String, String> embargoData = new HashMap<String, String>();
+    private static HashMap<String, String> embargoDataMap = new HashMap<String, String>();
 
     /**
      * Resolve the given identifier to an item. The identifier may be either an
@@ -689,7 +690,6 @@ public class FlowItemUtils {
         Bitstream bitstream = bitstreamService.find(context, bitstreamID);
         BitstreamFormat currentFormat = bitstream.getFormat(context);
 
-        //if (bitstreamName != null) {
         if (StringUtils.isNotBlank(bitstreamName)) {
             bitstream.setName(context, bitstreamName);
         }
@@ -707,16 +707,16 @@ public class FlowItemUtils {
         setPreviousEmbargoData(item);
 
         if (StringUtils.isNotBlank(bitstreamName) && !bitstreamName.equals(bitstream.getName())) {
-            if (embargoData.containsKey(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME)) {
-                embargoData.remove(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME);
+            if (embargoDataMap.containsKey(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME)) {
+                embargoDataMap.remove(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME);
             }
 
-            if (embargoData.containsKey(AUETD_NEW_BITSTREAM_NAME_HASH_KEY_NAME)) {
-                embargoData.remove(AUETD_NEW_BITSTREAM_NAME_HASH_KEY_NAME);
+            if (embargoDataMap.containsKey(AUETD_NEW_BITSTREAM_NAME_HASH_KEY_NAME)) {
+                embargoDataMap.remove(AUETD_NEW_BITSTREAM_NAME_HASH_KEY_NAME);
             }
 
-            embargoData.put(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME, bitstream.getName());
-            embargoData.put(AUETD_NEW_BITSTREAM_NAME_HASH_KEY_NAME, bitstreamName);
+            embargoDataMap.put(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME, bitstream.getName());
+            embargoDataMap.put(AUETD_NEW_BITSTREAM_NAME_HASH_KEY_NAME, bitstreamName);
         }
 
         // Step 2:
@@ -773,11 +773,11 @@ public class FlowItemUtils {
                     return result;
                 }
 
-                if (embargoPeriodHasPassed(item)) {
+                /* if (embargoPeriodHasPassed(item)) {
                     result.setOutcome(false);
                     result.addError(AUETD_EMBARGO_LENGTH_FIELD_NAME_OUT0FDATE_ERROR);
                     return result;
-                }
+                } */
             }
             processAUETDEmbargoAccessFields(context, request, item, bitstream);
         }
@@ -991,18 +991,7 @@ public class FlowItemUtils {
     {
         int embargoCreationAnswer = 0;
 
-        if (embargoData.containsKey(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME)) {
-            embargoData.remove(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME);
-        }
-        if (embargoData.containsKey(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME)) {
-            embargoData.remove(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME);
-        }
-        if (embargoData.containsKey(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME)) {
-            embargoData.remove(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME);
-        }
-        if (embargoData.containsKey(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME)) {
-            embargoData.remove(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME);
-        }
+        clearEmbargoData();
 
         if (StringUtils.isNotBlank(request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME))) {
             embargoCreationAnswer = Integer.parseInt(request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME));
@@ -1010,17 +999,17 @@ public class FlowItemUtils {
             if (embargoCreationAnswer == 2 || embargoCreationAnswer == 3) {
                 String embargoRights = null;
                 if (embargoCreationAnswer == 2) {
-                    embargoRights = Constants.EMBARGO_NOT_AUBURN_STR;
+                    embargoRights = AUETDConstants.EMBARGO_NOT_AUBURN_STR;
                 } else if (embargoCreationAnswer == 3) {
-                    embargoRights = Constants.EMBARGO_GLOBAL_STR;
+                    embargoRights = AUETDConstants.EMBARGO_GLOBAL_STR;
                 }
 
                 if (StringUtils.isNotBlank(embargoRights)) {
                     log.debug(LogManager.getHeader(context, "process_auetd_embargo_access_fields", " embargo rights = "+embargoRights));
                     embargoService.createOrModifyEmbargoMetadataValue(context, item, "rights", null, embargoRights);
 
-                    log.debug(LogManager.getHeader(context, "process_auetd_embargo_access_fields", " embargo status = "+Constants.EMBARGOED));
-                    embargoService.createOrModifyEmbargoMetadataValue(context, item, "embargo", "status", Constants.EMBARGOED);
+                    log.debug(LogManager.getHeader(context, "process_auetd_embargo_access_fields", " embargo status = " + AUETDConstants.EMBARGOED));
+                    embargoService.createOrModifyEmbargoMetadataValue(context, item, "embargo", "status", AUETDConstants.EMBARGOED);
                 }
 
                 if (StringUtils.isNotBlank(request.getParameter(AUETD_EMBARGO_LENGTH_FIELD_NAME))) {
@@ -1035,18 +1024,18 @@ public class FlowItemUtils {
                 }
                 embargoService.generateAUETDEmbargoPolicies(context, bitstream, embargoCreationAnswer, item.getOwningCollection());
                 embargoService.setEmbargo(context, item);
-                setNewEmbargoData(item);
+                setNewEmbargoDataMap(item);
 
             } else if (embargoCreationAnswer == 1 || embargoCreationAnswer == 0) {
-                embargoService.createOrModifyEmbargoMetadataValue(context, item, "embargo", "status", Constants.NOT_EMBARGOED);
+                embargoService.createOrModifyEmbargoMetadataValue(context, item, "embargo", "status", AUETDConstants.NOT_EMBARGOED);
                 itemService.clearMetadata(context, item, MetadataSchema.DC_SCHEMA, "embargo", "enddate", Item.ANY);
                 itemService.clearMetadata(context, item, MetadataSchema.DC_SCHEMA, "embargo", "length", Item.ANY);
                 itemService.clearMetadata(context, item, MetadataSchema.DC_SCHEMA, "rights", null, Item.ANY);
 
-                embargoData.put(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME, "Deleted");
-                embargoData.put(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME, "Deleted");
-                embargoData.put(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME, "Deleted");
-                embargoData.put(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME, "Deleted");
+                embargoDataMap.put(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME, "Deleted");
+                embargoDataMap.put(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME, "Deleted");
+                embargoDataMap.put(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME, "Deleted");
+                embargoDataMap.put(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME, "Deleted");
 
                 authorizeService.generateAutomaticPolicies(context, null, AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME, bitstream, null);
             }
@@ -1067,68 +1056,68 @@ public class FlowItemUtils {
                 email.addArgument(item.getName()); // Item's title
                 email.addArgument(context.getCurrentUser().getFullName()); // Name of user modifying embargo information
 
-                if (embargoData.containsKey(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME)
-                        && StringUtils.isNotBlank(embargoData.get(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME).toString())) {
-                    email.addArgument(embargoData.get(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME).toString());
+                if (embargoDataMap.containsKey(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME)
+                        && StringUtils.isNotBlank(embargoDataMap.get(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME).toString())) {
+                    email.addArgument(embargoDataMap.get(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME).toString());
                 }
 
-                if (embargoData.containsKey(AUETD_NEW_BITSTREAM_NAME_HASH_KEY_NAME)
-                        && StringUtils.isNotBlank(embargoData.get(AUETD_NEW_BITSTREAM_NAME_HASH_KEY_NAME).toString())) {
-                    email.addArgument(embargoData.get(AUETD_NEW_BITSTREAM_NAME_HASH_KEY_NAME).toString());
+                if (embargoDataMap.containsKey(AUETD_NEW_BITSTREAM_NAME_HASH_KEY_NAME)
+                        && StringUtils.isNotBlank(embargoDataMap.get(AUETD_NEW_BITSTREAM_NAME_HASH_KEY_NAME).toString())) {
+                    email.addArgument(embargoDataMap.get(AUETD_NEW_BITSTREAM_NAME_HASH_KEY_NAME).toString());
                 }
 
-                if (embargoData.containsKey(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME)
-                        && StringUtils.isNotBlank(embargoData.get(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME).toString())) {
-                    email.addArgument(embargoData.get(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME).toString());
+                if (embargoDataMap.containsKey(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME)
+                        && StringUtils.isNotBlank(embargoDataMap.get(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME).toString())) {
+                    email.addArgument(embargoDataMap.get(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME).toString());
                 } else {
                     email.addArgument("N/A");
                 }
 
-                if (embargoData.containsKey(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME)
-                        && StringUtils.isNotBlank(embargoData.get(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME).toString())) {
-                    email.addArgument(embargoData.get(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME).toString());
+                if (embargoDataMap.containsKey(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME)
+                        && StringUtils.isNotBlank(embargoDataMap.get(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME).toString())) {
+                    email.addArgument(embargoDataMap.get(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME).toString());
                 } else {
                     email.addArgument("N/A");
                 }
 
-                if (embargoData.containsKey(AUETD_PREVIOUS_EMBARGO_END_DATE_HASH_KEY_NAME)
-                        && StringUtils.isNotBlank(embargoData.get(AUETD_PREVIOUS_EMBARGO_END_DATE_HASH_KEY_NAME).toString())) {
-                    email.addArgument(embargoData.get(AUETD_PREVIOUS_EMBARGO_END_DATE_HASH_KEY_NAME).toString());
+                if (embargoDataMap.containsKey(AUETD_PREVIOUS_EMBARGO_END_DATE_HASH_KEY_NAME)
+                        && StringUtils.isNotBlank(embargoDataMap.get(AUETD_PREVIOUS_EMBARGO_END_DATE_HASH_KEY_NAME).toString())) {
+                    email.addArgument(embargoDataMap.get(AUETD_PREVIOUS_EMBARGO_END_DATE_HASH_KEY_NAME).toString());
                 } else {
                     email.addArgument("N/A");
                 }
 
-                if (embargoData.containsKey(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME)
-                        && StringUtils.isNotBlank(embargoData.get(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME).toString())) {
-                    email.addArgument(embargoData.get(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME).toString());
+                if (embargoDataMap.containsKey(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME)
+                        && StringUtils.isNotBlank(embargoDataMap.get(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME).toString())) {
+                    email.addArgument(embargoDataMap.get(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME).toString());
                 } else {
                     email.addArgument("N/A");
                 }
 
-                if (embargoData.containsKey(AUETD_PREVIOUS_EMBARGO_LENGTH_HASH_KEY_NAME)
-                        && StringUtils.isNotBlank(embargoData.get(AUETD_PREVIOUS_EMBARGO_LENGTH_HASH_KEY_NAME).toString())) {
-                    email.addArgument(embargoData.get(AUETD_PREVIOUS_EMBARGO_LENGTH_HASH_KEY_NAME).toString());
+                if (embargoDataMap.containsKey(AUETD_PREVIOUS_EMBARGO_LENGTH_HASH_KEY_NAME)
+                        && StringUtils.isNotBlank(embargoDataMap.get(AUETD_PREVIOUS_EMBARGO_LENGTH_HASH_KEY_NAME).toString())) {
+                    email.addArgument(embargoDataMap.get(AUETD_PREVIOUS_EMBARGO_LENGTH_HASH_KEY_NAME).toString());
                 } else {
                     email.addArgument("N/A");
                 }
 
-                if (embargoData.containsKey(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME)
-                        && StringUtils.isNotBlank(embargoData.get(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME).toString())) {
-                    email.addArgument(embargoData.get(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME).toString());
+                if (embargoDataMap.containsKey(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME)
+                        && StringUtils.isNotBlank(embargoDataMap.get(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME).toString())) {
+                    email.addArgument(embargoDataMap.get(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME).toString());
                 } else {
                     email.addArgument("N/A");
                 }
 
-                if (embargoData.containsKey(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME)
-                        && StringUtils.isNotBlank(embargoData.get(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME).toString())) {
-                    email.addArgument(embargoData.get(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME));
+                if (embargoDataMap.containsKey(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME)
+                        && StringUtils.isNotBlank(embargoDataMap.get(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME).toString())) {
+                    email.addArgument(embargoDataMap.get(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME));
                 } else {
                     email.addArgument("N/A");
                 }
 
-                if (embargoData.containsKey(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME)
-                        && StringUtils.isNotBlank(embargoData.get(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME).toString())) {
-                    email.addArgument(embargoData.get(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME).toString());
+                if (embargoDataMap.containsKey(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME)
+                        && StringUtils.isNotBlank(embargoDataMap.get(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME).toString())) {
+                    email.addArgument(embargoDataMap.get(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME).toString());
                 } else {
                     email.addArgument("N/A");
                 }
@@ -1160,58 +1149,58 @@ public class FlowItemUtils {
             .append(context.getCurrentUser().getEmail()).append(") on ").append(currentDT).append("\n")
             .append("Changes include: ").append("\n");
 
-        if (embargoData.containsKey(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME)) {
-            embargoEditMessage.append("Bitstream's Name - Previous: ").append(embargoData.get(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME)).append("\n");
+        if (embargoDataMap.containsKey(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME)) {
+            embargoEditMessage.append("Bitstream's Name - Previous: ").append(embargoDataMap.get(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME)).append("\n");
         }
 
-        if (embargoData.containsKey(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME)
-                && StringUtils.isNotBlank(embargoData.get(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME).toString())) {
-            embargoEditMessage.append("Bitstream's Name - Previous: ").append(embargoData.get(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME).toString()).append("\n");
+        if (embargoDataMap.containsKey(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME)
+                && StringUtils.isNotBlank(embargoDataMap.get(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME).toString())) {
+            embargoEditMessage.append("Bitstream's Name - Previous: ").append(embargoDataMap.get(AUETD_PREVIOUS_BITSTREAM_NAME_HASH_KEY_NAME).toString()).append("\n");
         }
 
-        if (embargoData.containsKey(AUETD_NEW_BITSTREAM_NAME_HASH_KEY_NAME)
-                && StringUtils.isNotBlank(embargoData.get(AUETD_NEW_BITSTREAM_NAME_HASH_KEY_NAME).toString())) {
-            embargoEditMessage.append("Bitstream's Name - New: ").append(embargoData.get(AUETD_NEW_BITSTREAM_NAME_HASH_KEY_NAME).toString()).append("\n");
+        if (embargoDataMap.containsKey(AUETD_NEW_BITSTREAM_NAME_HASH_KEY_NAME)
+                && StringUtils.isNotBlank(embargoDataMap.get(AUETD_NEW_BITSTREAM_NAME_HASH_KEY_NAME).toString())) {
+            embargoEditMessage.append("Bitstream's Name - New: ").append(embargoDataMap.get(AUETD_NEW_BITSTREAM_NAME_HASH_KEY_NAME).toString()).append("\n");
         }
 
-        if (embargoData.containsKey(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME)
-                && StringUtils.isNotBlank(embargoData.get(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME).toString())) {
-            embargoEditMessage.append("Embargo Status - Previous: ").append(embargoData.get(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME).toString()).append("\n");
+        if (embargoDataMap.containsKey(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME)
+                && StringUtils.isNotBlank(embargoDataMap.get(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME).toString())) {
+            embargoEditMessage.append("Embargo Status - Previous: ").append(embargoDataMap.get(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME).toString()).append("\n");
         }
 
-        if (embargoData.containsKey(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME)
-                && StringUtils.isNotBlank(embargoData.get(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME).toString())) {
-            embargoEditMessage.append("Embargo Status - New: ").append(embargoData.get(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME).toString()).append("\n");
+        if (embargoDataMap.containsKey(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME)
+                && StringUtils.isNotBlank(embargoDataMap.get(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME).toString())) {
+            embargoEditMessage.append("Embargo Status - New: ").append(embargoDataMap.get(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME).toString()).append("\n");
         }
 
-        if (embargoData.containsKey(AUETD_PREVIOUS_EMBARGO_END_DATE_HASH_KEY_NAME)
-                && StringUtils.isNotBlank(embargoData.get(AUETD_PREVIOUS_EMBARGO_END_DATE_HASH_KEY_NAME).toString())) {
-            embargoEditMessage.append("dc.embargo.enddate - Previous: ").append(embargoData.get(AUETD_PREVIOUS_EMBARGO_END_DATE_HASH_KEY_NAME).toString()).append("\n");
+        if (embargoDataMap.containsKey(AUETD_PREVIOUS_EMBARGO_END_DATE_HASH_KEY_NAME)
+                && StringUtils.isNotBlank(embargoDataMap.get(AUETD_PREVIOUS_EMBARGO_END_DATE_HASH_KEY_NAME).toString())) {
+            embargoEditMessage.append("dc.embargo.enddate - Previous: ").append(embargoDataMap.get(AUETD_PREVIOUS_EMBARGO_END_DATE_HASH_KEY_NAME).toString()).append("\n");
         }
 
-        if (embargoData.containsKey(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME)
-                && StringUtils.isNotBlank(embargoData.get(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME).toString())) {
-            embargoEditMessage.append("dc.embargo.enddate - New: ").append(embargoData.get(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME).toString()).append("\n");
+        if (embargoDataMap.containsKey(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME)
+                && StringUtils.isNotBlank(embargoDataMap.get(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME).toString())) {
+            embargoEditMessage.append("dc.embargo.enddate - New: ").append(embargoDataMap.get(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME).toString()).append("\n");
         }
 
-        if (embargoData.containsKey(AUETD_PREVIOUS_EMBARGO_LENGTH_HASH_KEY_NAME)
-                && StringUtils.isNotBlank(embargoData.get(AUETD_PREVIOUS_EMBARGO_LENGTH_HASH_KEY_NAME).toString())) {
-            embargoEditMessage.append("dc.emabrgo.length - Previous ").append(embargoData.get(AUETD_PREVIOUS_EMBARGO_LENGTH_HASH_KEY_NAME).toString()).append("\n");
+        if (embargoDataMap.containsKey(AUETD_PREVIOUS_EMBARGO_LENGTH_HASH_KEY_NAME)
+                && StringUtils.isNotBlank(embargoDataMap.get(AUETD_PREVIOUS_EMBARGO_LENGTH_HASH_KEY_NAME).toString())) {
+            embargoEditMessage.append("dc.emabrgo.length - Previous ").append(embargoDataMap.get(AUETD_PREVIOUS_EMBARGO_LENGTH_HASH_KEY_NAME).toString()).append("\n");
         }
 
-        if (embargoData.containsKey(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME)
-                && StringUtils.isNotBlank(embargoData.get(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME).toString())) {
-            embargoEditMessage.append("dc.embargo.length - New ").append(embargoData.get(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME).toString()).append("\n");
+        if (embargoDataMap.containsKey(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME)
+                && StringUtils.isNotBlank(embargoDataMap.get(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME).toString())) {
+            embargoEditMessage.append("dc.embargo.length - New ").append(embargoDataMap.get(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME).toString()).append("\n");
         }
 
-        if (embargoData.containsKey(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME)
-                && StringUtils.isNotBlank(embargoData.get(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME).toString())) {
-            embargoEditMessage.append("dc.rights - Previous: ").append(embargoData.get(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME).toString()).append("\n");
+        if (embargoDataMap.containsKey(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME)
+                && StringUtils.isNotBlank(embargoDataMap.get(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME).toString())) {
+            embargoEditMessage.append("dc.rights - Previous: ").append(embargoDataMap.get(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME).toString()).append("\n");
         }
 
-        if (embargoData.containsKey(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME)
-                && StringUtils.isNotBlank(embargoData.get(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME).toString())) {
-            embargoEditMessage.append("dc.rights - New: ").append(embargoData.get(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME).toString()).append("\n");
+        if (embargoDataMap.containsKey(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME)
+                && StringUtils.isNotBlank(embargoDataMap.get(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME).toString())) {
+            embargoEditMessage.append("dc.rights - New: ").append(embargoDataMap.get(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME).toString()).append("\n");
         }
 
         itemService.addMetadata(context, item, MetadataSchema.DC_SCHEMA, "description", "provenance", "en_US", embargoEditMessage.toString());
@@ -1220,135 +1209,84 @@ public class FlowItemUtils {
     private static void setPreviousEmbargoData(Item item)
     {
         if (item != null) {
-            if (embargoData.containsKey(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME)) {
-                embargoData.remove(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME);
-            }
-            if (embargoData.containsKey(AUETD_PREVIOUS_EMBARGO_END_DATE_HASH_KEY_NAME)) {
-                embargoData.remove(AUETD_PREVIOUS_EMBARGO_END_DATE_HASH_KEY_NAME);
-            }
-            if (embargoData.containsKey(AUETD_PREVIOUS_EMBARGO_LENGTH_HASH_KEY_NAME)) {
-                embargoData.remove(AUETD_PREVIOUS_EMBARGO_LENGTH_HASH_KEY_NAME);
-            }
-            if (embargoData.containsKey(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME)) {
-                embargoData.remove(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME);
-            }
-
-            String embargoEndDate = null;
-            String embargoLength = null;
-            String embargoRights = null;
-            String embargoStatus = null;
+            clearEmbargoData();
 
             List<MetadataValue> embargoEndDateList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "enddate", Item.ANY);
             List<MetadataValue> embargoLengthList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "length", Item.ANY);
             List<MetadataValue> embargoRightsList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "rights", null, Item.ANY);
             List<MetadataValue> embargoStatusList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "status", Item.ANY);
 
-            if (embargoEndDateList != null && embargoEndDateList.size() > 0) {
-                embargoEndDate = embargoEndDateList.get(0).getValue();
+            if (!embargoEndDateList.isEmpty()) {
+                embargoDataMap.put(AUETD_PREVIOUS_EMBARGO_END_DATE_HASH_KEY_NAME, embargoEndDateList.get(0).getValue());
             }
 
-            if (embargoLengthList != null && embargoLengthList.size() > 0) {
-                embargoLength = embargoLengthList.get(0).getValue();
+            if (!embargoLengthList.isEmpty()) {
+                embargoDataMap.put(AUETD_PREVIOUS_EMBARGO_LENGTH_HASH_KEY_NAME, embargoLengthList.get(0).getValue());
             }
 
-            if (embargoRightsList != null && embargoRightsList.size() > 0) {
-                embargoRights = embargoRightsList.get(0).getValue();
+            if (!embargoRightsList.isEmpty()) {
+                embargoDataMap.put(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME, embargoRightsList.get(0).getValue());
             }
 
-            if (embargoStatusList != null & embargoStatusList.size() > 0) {
-                embargoStatus = embargoStatusList.get(0).getValue();
-            }
-
-            if (StringUtils.isNotBlank(embargoStatus)) {
-                embargoData.put(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME, embargoStatus);
-            } else {
-                embargoData.put(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME, "");
-            }
-
-            if (StringUtils.isNotBlank(embargoRights)) {
-                embargoData.put(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME, embargoRights);
-            } else {
-                embargoData.put(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME, "");
-            }
-
-            if (StringUtils.isNotBlank(embargoLength)) {
-                embargoData.put(AUETD_PREVIOUS_EMBARGO_LENGTH_HASH_KEY_NAME, embargoLength);
-            } else {
-                embargoData.put(AUETD_PREVIOUS_EMBARGO_LENGTH_HASH_KEY_NAME, "");
-            }
-
-            if (StringUtils.isNotBlank(embargoEndDate)) {
-                embargoData.put(AUETD_PREVIOUS_EMBARGO_END_DATE_HASH_KEY_NAME, embargoEndDate);
-            } else {
-                embargoData.put(AUETD_PREVIOUS_EMBARGO_END_DATE_HASH_KEY_NAME, "");
+            if (!embargoStatusList.isEmpty()) {
+                 embargoDataMap.put(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME, embargoStatusList.get(0).getValue());
             }
         }
     }
 
-    private static void setNewEmbargoData(Item item)
-    {
-        if (embargoData.containsKey(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME)) {
-            embargoData.remove(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME);
+    private static void clearEmbargoData() {
+
+        if (embargoDataMap.containsKey(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME)) {
+            embargoDataMap.remove(AUETD_PREVIOUS_EMBARGO_STATUS_HASH_KEY_NAME);
         }
-        if (embargoData.containsKey(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME)) {
-            embargoData.remove(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME);
+        if (embargoDataMap.containsKey(AUETD_PREVIOUS_EMBARGO_END_DATE_HASH_KEY_NAME)) {
+            embargoDataMap.remove(AUETD_PREVIOUS_EMBARGO_END_DATE_HASH_KEY_NAME);
         }
-        if (embargoData.containsKey(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME)) {
-            embargoData.remove(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME);
+        if (embargoDataMap.containsKey(AUETD_PREVIOUS_EMBARGO_LENGTH_HASH_KEY_NAME)) {
+            embargoDataMap.remove(AUETD_PREVIOUS_EMBARGO_LENGTH_HASH_KEY_NAME);
         }
-        if (embargoData.containsKey(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME)) {
-            embargoData.remove(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME);
+        if (embargoDataMap.containsKey(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME)) {
+            embargoDataMap.remove(AUETD_PREVIOUS_EMBARGO_RIGHTS_HASH_KEY_NAME);
         }
+
+        if (embargoDataMap.containsKey(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME)) {
+            embargoDataMap.remove(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME);
+        }
+        if (embargoDataMap.containsKey(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME)) {
+            embargoDataMap.remove(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME);
+        }
+        if (embargoDataMap.containsKey(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME)) {
+            embargoDataMap.remove(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME);
+        }
+        if (embargoDataMap.containsKey(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME)) {
+            embargoDataMap.remove(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME);
+        }
+    }
+
+    private static void setNewEmbargoDataMap(Item item)
+    {  
+        clearEmbargoData();
 
         if (item != null) {
-            String embargoEndDate = null;
-            String embargoLength = null;
-            String embargoRights = null;
-            String embargoStatus = null;
-
             List<MetadataValue> embargoEndDateList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "enddate", Item.ANY);
             List<MetadataValue> embargoLengthList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "length", Item.ANY);
             List<MetadataValue> embargoRightsList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "rights", null, Item.ANY);
             List<MetadataValue> embargoStatusList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "status", Item.ANY);
 
-            if (embargoEndDateList != null && embargoEndDateList.size() > 0) {
-                embargoEndDate = embargoEndDateList.get(0).getValue();
+            if (!embargoEndDateList.isEmpty()) {
+                embargoDataMap.put(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME, embargoEndDateList.get(0).getValue());
             }
 
-            if (embargoLengthList != null && embargoLengthList.size() > 0) {
-                embargoLength = embargoLengthList.get(0).getValue();
+            if (!embargoLengthList.isEmpty()) {
+                embargoDataMap.put(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME, embargoLengthList.get(0).getValue());
             }
 
-            if (embargoRightsList != null && embargoRightsList.size() > 0) {
-                embargoRights = embargoRightsList.get(0).getValue();
+            if (!embargoRightsList.isEmpty()) {
+                embargoDataMap.put(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME, embargoRightsList.get(0).getValue());
             }
 
-            if (embargoStatusList != null & embargoStatusList.size() > 0) {
-                embargoStatus = embargoStatusList.get(0).getValue();
-            }
-
-            if (StringUtils.isNotBlank(embargoStatus)) {
-                embargoData.put(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME, embargoStatus);
-            } else {
-                embargoData.put(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME, "");
-            }
-
-            if (StringUtils.isNotBlank(embargoRights)) {
-                embargoData.put(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME, embargoRights);
-            } else {
-                embargoData.put(AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME, "");
-            }
-
-            if (StringUtils.isNotBlank(embargoLength)) {
-                embargoData.put(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME, embargoLength);
-            } else {
-                embargoData.put(AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME, "");
-            }
-
-            if (StringUtils.isNotBlank(embargoEndDate)) {
-                embargoData.put(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME, embargoEndDate);
-            } else {
-                embargoData.put(AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME, "");
+            if (!embargoStatusList.isEmpty()) {
+                 embargoDataMap.put(AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME, embargoStatusList.get(0).getValue());
             }
         }
     }
@@ -1359,7 +1297,7 @@ public class FlowItemUtils {
         String accessionedDateMDV = null;
         LocalDateTime accessionedDateLDT = null;
 
-        if (accessionedDateList != null && accessionedDateList.size() > 0) {
+        if (!accessionedDateList.isEmpty()) {
             accessionedDateMDV = accessionedDateList.get(0).getValue();
         }
 
@@ -1369,7 +1307,11 @@ public class FlowItemUtils {
         }
 
         LocalDateTime currentLDT = LocalDateTime.now();
-        LocalDateTime finalEmbargoEndDateLDTYears = accessionedDateLDT.plusYears(configurationService.getLongProperty("auetd.embargo.length.max.years"));
+        LocalDateTime finalEmbargoEndDateLDTYears = null;
+        if (accessionedDateLDT != null) {
+           finalEmbargoEndDateLDTYears = accessionedDateLDT.plusYears(configurationService.getLongProperty("auetd.embargo.length.max.years"));
+        }
+        
 
         return currentLDT.isAfter(finalEmbargoEndDateLDTYears);
     }

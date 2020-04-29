@@ -565,27 +565,21 @@ public class XmlWorkflowServiceImpl implements XmlWorkflowService {
             log.debug(LogManager.getHeader(context, "notify_of_archive ", " embargoEndDateMDV = "+embargoEndDateMDV));
 
             if (StringUtils.isNotBlank(embargoStatus)) {
-                switch(embargoStatus) {
-                    case Constants.EMBARGOED:
-                        if (StringUtils.isNotBlank(embargoRights)) {
-                            switch(embargoRights) {
-                                case Constants.EMBARGO_NOT_AUBURN_STR:
-                                    embargoRightsEmailTxt = "limited to Auburn University users only.";
-                                    break;
-                                case Constants.EMBARGO_GLOBAL_STR:
-                                    embargoRightsEmailTxt = "blocked from everyone.";
-                                    break;
-                            }
+                if (embargoStatus.equals(AUETDConstants.EMBARGOED)) {
+                    if (StringUtils.isNotBlank(embargoRights)) {
+                        if (embargoRights.equals(AUETDConstants.EMBARGO_NOT_AUBURN_STR)) {
+                            embargoRightsEmailTxt = "limited to Auburn University users only.";
+                        } else if (embargoRights.equals(AUETDConstants.EMBARGO_GLOBAL_STR)) {
+                            embargoRightsEmailTxt = "blocked from everyone.";
                         }
-                        embargoInfoEmailStr += "Restricted: Yes, access to my thesis or dissertation is " + embargoRightsEmailTxt;
-                        embargoInfoEmailStr += "\n";
-                        if (StringUtils.isNotBlank(embargoEndDateFinal)) {
-                            embargoInfoEmailStr += "Restriction Lift Date: "+embargoEndDateFinal;
-                        }
-                        break;
-                    case Constants.NOT_EMBARGOED:
+                    }
+                    embargoInfoEmailStr += "Restricted: Yes, access to my thesis or dissertation is " + embargoRightsEmailTxt;
+                    embargoInfoEmailStr += "\n";
+                    if (StringUtils.isNotBlank(embargoEndDateFinal)) {
+                        embargoInfoEmailStr += "Restriction Lift Date: "+embargoEndDateFinal;
+                    }
+                } else if (embargoStatus.equals(AUETDConstants.NOT_EMBARGOED)) {
                         embargoInfoEmailStr += "Restricted: NO, access to my thesis or dissertation is not resticted.";
-                        break;
                 }
             }
 

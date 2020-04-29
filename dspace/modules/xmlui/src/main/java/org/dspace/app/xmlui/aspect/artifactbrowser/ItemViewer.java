@@ -338,13 +338,8 @@ public class ItemViewer extends AbstractDSpaceTransformer implements CacheablePr
          * to display an item's embargo information if it's under embargo.
          */
         long embargoEndDateTs = embargoService.generateEmbargoEndDateTimeStamp(context, item);
-        /*if(embargoService.generateEmbargoEndDateTimeStamp(context, item) > 0) {
-            pageMeta.addMetadata("enddateTs").addContent(String.valueOf(embargoService.generateEmbargoEndDateTimeStamp(context, item)));
-        }*/
-
         pageMeta.addMetadata("enddateTs").addContent(String.valueOf(embargoEndDateTs));
 
-        //long currentTs = Instant.now().toEpochMilli();
         long currentTS = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         pageMeta.addMetadata("currentTs").addContent(String.valueOf(currentTS));
     }

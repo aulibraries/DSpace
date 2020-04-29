@@ -17,6 +17,7 @@ import org.dspace.content.Collection;
 import org.dspace.content.factory.ContentServiceFactory;
 import org.dspace.content.service.BitstreamService;
 import org.dspace.content.service.WorkspaceItemService;
+import org.dspace.core.AUETDConstants;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.core.LogManager;
@@ -775,111 +776,95 @@ public class AuthorizeServiceImpl implements AuthorizeService {
         return false;
     }
 
-    public boolean isAccessRestrictedToNonAdminAuburnUsers(Context c, DSpaceObject o) throws SQLException {
-        if (o != null) {
-            Item item = null;
-            String embargoRights = null;
+    public boolean isAccessRestrictedToNonAdminAuburnUsers(Context c, DSpaceObject dso) throws SQLException {
+        Item item = null;
+        String embargoRights = null;
 
-            if (o instanceof Bitstream) {
-                DSpaceObject parent = serviceFactory.getDSpaceObjectService(o).getParentObject(c, o);
+        if (dso instanceof Bitstream) {
+            DSpaceObject parent = serviceFactory.getDSpaceObjectService(dso).getParentObject(c, dso);
 
-                if (parent != null) {
-                    if (parent instanceof Item) {
-                        item = serviceFactory.getItemService().find(c, parent.getID());
-                    }
-                }
-            } else if (o instanceof Item) {
-                item = (Item) o;
+            if (parent instanceof Item) {
+                item = serviceFactory.getItemService().find(c, parent.getID());
             }
+        } else if (dso instanceof Item) {
+            item = (Item) dso;
+        }
 
-            if (item != null) {
-                List<MetadataValue> embargoRightsList = serviceFactory.getItemService().getMetadata(item,
-                        MetadataSchema.DC_SCHEMA, "rights", null, Item.ANY);
-                log.debug(LogManager.getHeader(c, "authorize_auburn_users ", " Size of embargoRightsList = "+String.valueOf(embargoRightsList.size())));
-                if (embargoRightsList != null && embargoRightsList.size() > 0) {
-                    embargoRights = embargoRightsList.get(0).getValue();
-                }
+        if (item != null) {
+           List<MetadataValue> embargoRightsList = serviceFactory.getItemService().getMetadata(item,
+                    MetadataSchema.DC_SCHEMA, "rights", null, Item.ANY);
+            log.debug(LogManager.getHeader(c, "authorize_auburn_users ", " Size of embargoRightsList = "+String.valueOf(embargoRightsList.size())));
+            if (embargoRightsList.size() > 0) {
+                embargoRights = embargoRightsList.get(0).getValue();
             }
+        }
 
-            if (StringUtils.isNotBlank(embargoRights)) {
-                return embargoRights.equalsIgnoreCase(Constants.EMBARGO_NOT_AUBURN_STR);
-            }
+        if (StringUtils.isNotBlank(embargoRights)) {
+            return embargoRights.equalsIgnoreCase(AUETDConstants.EMBARGO_NOT_AUBURN_STR);
         }
         return false;
     }
 
-    public boolean isAccessRestrictedToAllNonAdminUsers(Context c, DSpaceObject o) throws SQLException {
-        if (o != null) {
+    public boolean isAccessRestrictedToAllNonAdminUsers(Context c, DSpaceObject dso) throws SQLException {
+        if (dso != null) {
             Item item = null;
             String embargoRights = null;
 
-            if (o instanceof Bitstream) {
-                DSpaceObject parent = serviceFactory.getDSpaceObjectService(o).getParentObject(c, o);
+            if (dso instanceof Bitstream) {
+                DSpaceObject parent = serviceFactory.getDSpaceObjectService(dso).getParentObject(c, dso);
 
-                if (parent != null) {
-                    if (parent instanceof Item) {
-                        item = serviceFactory.getItemService().find(c, parent.getID());
-                    }
+                if (parent instanceof Item) {
+                    item = serviceFactory.getItemService().find(c, parent.getID());
                 }
-            } else if (o instanceof Item) {
-                item = (Item) o;
+            } else if (dso instanceof Item) {
+                item = (Item) dso;
             }
 
             if (item != null) {
                 List<MetadataValue> embargoRightsList = serviceFactory.getItemService().getMetadata(item,
                         MetadataSchema.DC_SCHEMA, "rights", null, Item.ANY);
                 log.debug(LogManager.getHeader(c, "authorize_non_admin ", " Size of embargoRightsList = "+String.valueOf(embargoRightsList.size())));
-                if (embargoRightsList != null && embargoRightsList.size() > 0) {
+                if (embargoRightsList.size() > 0) {
                     embargoRights = embargoRightsList.get(0).getValue();
                 }
             }
 
             if (StringUtils.isNotBlank(embargoRights)) {
-                //return embargoRights.equalsIgnoreCase(EmbargoService.EMBARGO_GLOBAL_STR);
-                return embargoRights.equalsIgnoreCase(Constants.EMBARGO_GLOBAL_STR);
+                return embargoRights.equalsIgnoreCase(AUETDConstants.EMBARGO_GLOBAL_STR);
             }
         }
         return false;
     }
 
-    public boolean isAuthorizedByGroup(Context c, DSpaceObject o) throws SQLException
+    public boolean isAuthorizedByGroup(Context c, DSpaceObject dso) throws SQLException
     {
-        if (o != null) {
+        if (dso != null) {
             Item item = null;
             String embargoRights = null;
 
-            if (o instanceof Bitstream) {
-                DSpaceObject parent = serviceFactory.getDSpaceObjectService(o).getParentObject(c, o);
+            if (dso instanceof Bitstream) {
+                DSpaceObject parent = serviceFactory.getDSpaceObjectService(dso).getParentObject(c, dso);
 
-                if (parent != null) {
-                    if (parent instanceof Item) {
-                        item = serviceFactory.getItemService().find(c, parent.getID());
-                    }
+                if (parent instanceof Item) {
+                    item = serviceFactory.getItemService().find(c, parent.getID());
                 }
-            } else if (o instanceof Item) {
-                item = (Item) o;
+            } else if (dso instanceof Item) {
+                item = (Item) dso;
             }
 
             if (item != null) {
-                /*try {
-                    embargoRights = embargoService.getEmbargoMetadataValue(c, item, "rights", null);
-                } catch(AuthorizeException | IOException ex) {
-
-                }*/
-                List<MetadataValue> embargoRightsList = serviceFactory.getItemService().getMetadata(item,
+               List<MetadataValue> embargoRightsList = serviceFactory.getItemService().getMetadata(item,
                         MetadataSchema.DC_SCHEMA, "rights", null, Item.ANY);
                 log.debug(LogManager.getHeader(c, "authorize_by_group ", " Size of embargoRightsList = "+String.valueOf(embargoRightsList.size())));
-                if (embargoRightsList != null && embargoRightsList.size() > 0) {
+                if (embargoRightsList.size() > 0) {
                     embargoRights = embargoRightsList.get(0).getValue();
                 }
             }
 
-            if(StringUtils.isNotBlank(embargoRights)) {
-                if (isAccessRestrictedToNonAdminAuburnUsers(c, o) && 
-                    groupService.isMember(c, groupService.findByName(c, configurationService.getProperty("auetd.authorization.group.2"))))
-                {
-                    return true;
-                }
+            if(StringUtils.isNotBlank(embargoRights) && isAccessRestrictedToNonAdminAuburnUsers(c, dso) && 
+                groupService.isMember(c, groupService.findByName(c, configurationService.getProperty("auetd.authorization.group.2"))))
+            {
+                return true;
             }
         }
         return false;

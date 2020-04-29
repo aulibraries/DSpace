@@ -17,7 +17,6 @@ import java.util.UUID;
 //import org.apache.cocoon.environment.Request;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-//import org.dspace.app.xmlui.aspect.submission.submit.AccessStepUtil;
 import org.dspace.app.xmlui.cocoon.AbstractDSpaceTransformer;
 import org.dspace.app.xmlui.utils.UIException;
 import org.dspace.app.xmlui.wing.Message;
@@ -28,13 +27,12 @@ import org.dspace.app.xmlui.wing.element.Hidden;
 import org.dspace.app.xmlui.wing.element.List;
 import org.dspace.app.xmlui.wing.element.PageMeta;
 import org.dspace.app.xmlui.wing.element.Radio;
-//import org.dspace.app.xmlui.wing.element.Select;
 import org.dspace.app.xmlui.wing.element.Text;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.authorize.factory.AuthorizeServiceFactory;
 import org.dspace.authorize.service.AuthorizeService;
 import org.dspace.content.Bitstream;
-//import org.dspace.content.BitstreamFormat;
+import org.dspace.content.BitstreamFormat;
 import org.dspace.content.Bundle;
 import org.dspace.content.DSpaceObject;
 import org.dspace.content.Item;
@@ -44,11 +42,11 @@ import org.dspace.content.factory.ContentServiceFactory;
 import org.dspace.content.service.BitstreamFormatService;
 import org.dspace.content.service.BitstreamService;
 import org.dspace.content.service.ItemService;
+import org.dspace.core.AUETDConstants;
 import org.dspace.core.Constants;
 import org.dspace.core.LogManager;
 import org.dspace.embargo.factory.EmbargoServiceFactory;
 import org.dspace.embargo.service.EmbargoService;
-//import org.dspace.services.factory.DSpaceServicesFactory;
 import org.xml.sax.SAXException;
 
 /**
@@ -71,7 +69,7 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
 	private static final Message T_trail = message("xmlui.administrative.item.EditBitstreamForm.trail");
 	private static final Message T_head1 = message("xmlui.administrative.item.EditBitstreamForm.head1");
 	private static final Message T_file_label = message("xmlui.administrative.item.EditBitstreamForm.file_label");
-	/*private static final Message T_primary_label = message("xmlui.administrative.item.EditBitstreamForm.primary_label");
+	private static final Message T_primary_label = message("xmlui.administrative.item.EditBitstreamForm.primary_label");
 	private static final Message T_primary_option_yes = message("xmlui.administrative.item.EditBitstreamForm.primary_option_yes");
 	private static final Message T_primary_option_no = message("xmlui.administrative.item.EditBitstreamForm.primary_option_no");
 	private static final Message T_description_label = message("xmlui.administrative.item.EditBitstreamForm.description_label");
@@ -81,7 +79,7 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
 	private static final Message T_format_default = message("xmlui.administrative.item.EditBitstreamForm.format_default");
 	private static final Message T_para2 = message("xmlui.administrative.item.EditBitstreamForm.para2");
 	private static final Message T_user_label = message("xmlui.administrative.item.EditBitstreamForm.user_label");
-	private static final Message T_user_help = message("xmlui.administrative.item.EditBitstreamForm.user_help");*/
+	private static final Message T_user_help = message("xmlui.administrative.item.EditBitstreamForm.user_help");
     private static final Message T_filename_label = message("xmlui.administrative.item.EditBitstreamForm.name_label");
     private static final Message T_filename_help = message("xmlui.administrative.item.EditBitstreamForm.name_help");
 
@@ -138,8 +136,6 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
     protected static final Message AUETD_T_COLUMN_ENDDATE =
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_enddate_column");
 
-    //private boolean isAdvancedFormEnabled=true;
-
 	protected AuthorizeService authorizeService = AuthorizeServiceFactory.getInstance().getAuthorizeService();
 	protected BitstreamService bitstreamService = ContentServiceFactory.getInstance().getBitstreamService();
 	protected BitstreamFormatService bitstreamFormatService = ContentServiceFactory.getInstance().getBitstreamFormatService();
@@ -163,26 +159,12 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
 	public void addBody(Body body) throws SAXException, WingException, UIException,
         SQLException, IOException, AuthorizeException
 	{
-        //isAdvancedFormEnabled= DSpaceServicesFactory.getInstance().getConfigurationService().getBooleanProperty("webui.submission.restrictstep.enableAdvancedForm", false);
-
 		// Get our parameters
 		UUID bitstreamID = UUID.fromString(parameters.getParameter("bitstreamID", null));
 
 		// Get the bitstream and all the various formats
                 // Administrator is allowed to see internal formats too.
 		Bitstream bitstream = bitstreamService.find(context, bitstreamID);
-		//BitstreamFormat currentFormat = bitstream.getFormat(context);
-        /*java.util.List<BitstreamFormat> bitstreamFormats = authorizeService.isAdmin(context) ?
-					bitstreamFormatService.findAll(context) :
-					bitstreamFormatService.findNonInternal(context);*/
-
-		/*boolean primaryBitstream = false;
-		java.util.List<Bundle> bundles = bitstream.getBundles();
-		if (bundles != null && bundles.size() > 0) {
-			if (bitstream.equals(bundles.get(0).getPrimaryBitstream())) {
-				primaryBitstream = true;
-			}
-		}*/
 
         java.util.List<Bundle> bundles = bitstream.getBundles();
         String bundleName = "";
@@ -208,11 +190,9 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
         bitstreamName.setHelp(T_filename_help);
         bitstreamName.setValue(fileName);
 
-        if (bundleName.equals(Constants.CONTENT_BUNDLE_NAME)) {
-            if (!bitstream.getName().equals(Constants.LICENSE_BITSTREAM_NAME)) {
-                // EMBARGO FIELDS
-                addEmbargoFieldSection(bitstream, edit);
-            }
+        if (bundleName.equals(Constants.CONTENT_BUNDLE_NAME) || !bitstream.getName().equals(Constants.LICENSE_BITSTREAM_NAME)) {
+            // EMBARGO FIELDS
+            addEmbargoFieldSection(bitstream, edit);
         }
 
 		// ITEM: form actions
@@ -266,7 +246,7 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
                 embargoLengthFieldDisplayInput.setValue(1);
 
                 if (errors.contains(org.dspace.app.xmlui.aspect.administrative.FlowItemUtils.AUETD_EMBARGO_LENGTH_FIELD_NAME_REQUIRED_ERROR) ||
-                        errors.contains(org.dspace.app.xmlui.aspect.administrative.FlowItemUtils.AUETD_EMBARGO_LENGTH_FIELD_NAME_OUT0FDATE_ERROR)) {
+                    errors.contains(org.dspace.app.xmlui.aspect.administrative.FlowItemUtils.AUETD_EMBARGO_LENGTH_FIELD_NAME_OUT0FDATE_ERROR)) {
 
                     if (errors.contains(org.dspace.app.xmlui.aspect.administrative.FlowItemUtils.AUETD_EMBARGO_LENGTH_FIELD_NAME_REQUIRED_ERROR)) {
                         embargoLengthField.addError(AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED);
@@ -331,22 +311,16 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
             }
 
             if (StringUtils.isNotBlank(embargoStatus)) {
-                switch (embargoStatus) {
-                    case Constants.EMBARGOED:
-                        if (StringUtils.isNotBlank(embargoRights)) {
-                            switch (embargoRights) {
-                                case Constants.EMBARGO_NOT_AUBURN_STR:
-                                    embargoType = 2;
-                                    break;
-                                case Constants.EMBARGO_GLOBAL_STR:
-                                    embargoType = 3;
-                                    break;
-                            }
+                if (embargoStatus.equals(AUETDConstants.EMBARGOED)) {
+                    if (StringUtils.isNotBlank(embargoRights)) {
+                        if (embargoRights.equals(AUETDConstants.EMBARGO_NOT_AUBURN_STR)) {
+                            embargoType = 2;
+                        } else if (embargoRights.equals(AUETDConstants.EMBARGO_GLOBAL_STR)) {
+                            embargoType = 3;
                         }
-                        break;
-                    case Constants.NOT_EMBARGOED:
-                        embargoType = 1;
-                        break;
+                    }
+                } else if (embargoStatus.equals(AUETDConstants.NOT_EMBARGOED)) {
+                    embargoType = 1;
                 }
             }
         }

@@ -31,6 +31,7 @@ import org.dspace.authorize.ResourcePolicy;
 import org.dspace.authorize.factory.AuthorizeServiceFactory;
 import org.dspace.authorize.service.ResourcePolicyService;
 import org.dspace.content.*;
+import org.dspace.core.AUETDConstants;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.core.LogManager;
@@ -278,7 +279,7 @@ public class UploadWithEmbargoStep extends UploadStep {
             // save bitstream to submission info
             subInfo.setBitstream(b);
 
-            subInfo.put(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME, String.valueOf(getSelectedEmbargoType(context, item)));
+            subInfo.put(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME, String.valueOf(getSelectedEmbargoType(item)));
             subInfo.put(AUETD_EMBARGO_LENGTH_FIELD_NAME, String.valueOf(getEmbargoLengthInYears(context, item)));
 
             // return appropriate status flag to say we are now editing the
@@ -500,9 +501,9 @@ public class UploadWithEmbargoStep extends UploadStep {
             if (embargoCreationAnswer == 2 || embargoCreationAnswer == 3) {
                 String embargoRights = null;
                 if (embargoCreationAnswer == 2) {
-                    embargoRights = Constants.EMBARGO_NOT_AUBURN_STR;
+                    embargoRights = AUETDConstants.EMBARGO_NOT_AUBURN_STR;
                 } else if (embargoCreationAnswer == 3) {
-                    embargoRights = Constants.EMBARGO_GLOBAL_STR;
+                    embargoRights = AUETDConstants.EMBARGO_GLOBAL_STR;
                 }
 
                 if (StringUtils.isNotBlank(embargoRights)) {
@@ -511,9 +512,9 @@ public class UploadWithEmbargoStep extends UploadStep {
                     embargoService.createOrModifyEmbargoMetadataValue(context, item, "rights", null, embargoRights);
 
                     log.debug(LogManager.getHeader(context, "Generating ETD Embargo Status MDV",
-                            " embargo status = "+Constants.EMBARGOED));
+                            " embargo status = "+AUETDConstants.EMBARGOED));
                     embargoService.createOrModifyEmbargoMetadataValue(context, item, "embargo", "status",
-                            Constants.EMBARGOED);
+                            AUETDConstants.EMBARGOED);
                 }
 
                 if (StringUtils.isNotBlank(request.getParameter(AUETD_EMBARGO_LENGTH_FIELD_NAME))) {
@@ -534,7 +535,7 @@ public class UploadWithEmbargoStep extends UploadStep {
                         (Collection) handleService.resolveToObject(context, subInfo.getCollectionHandle()));
                 }
             } else if (embargoCreationAnswer == 1 || embargoCreationAnswer == 0) {
-                embargoService.createOrModifyEmbargoMetadataValue(context, item, "embargo", "status", Constants.NOT_EMBARGOED);
+                embargoService.createOrModifyEmbargoMetadataValue(context, item, "embargo", "status", AUETDConstants.NOT_EMBARGOED);
                 itemService.clearMetadata(context, item, MetadataSchema.DC_SCHEMA, "embargo", "enddate", Item.ANY);
                 itemService.clearMetadata(context, item, MetadataSchema.DC_SCHEMA, "embargo", "length", Item.ANY);
                 itemService.clearMetadata(context, item, MetadataSchema.DC_SCHEMA, "rights", null, Item.ANY);
@@ -629,7 +630,7 @@ public class UploadWithEmbargoStep extends UploadStep {
         return -1;
     }
 
-    private int getSelectedEmbargoType(Context context, Item item)
+    private int getSelectedEmbargoType(Item item)
         throws AuthorizeException, IOException, SQLException
     {
         int embargoType = 0;
@@ -648,22 +649,16 @@ public class UploadWithEmbargoStep extends UploadStep {
         }
 
         if (StringUtils.isNotBlank(embargoStatus)) {
-            switch (embargoStatus) {
-                case Constants.EMBARGOED:
-                    if (StringUtils.isNotBlank(embargoRights)) {
-                        switch (embargoRights) {
-                            case Constants.EMBARGO_NOT_AUBURN_STR:
-                                embargoType = 2;
-                                break;
-                            case Constants.EMBARGO_GLOBAL_STR:
-                                embargoType = 3;
-                                break;
-                        }
+            if (embargoStatus.equals(AUETDConstants.EMBARGOED)) {
+                if (StringUtils.isNotBlank(embargoRights)) {
+                    if (embargoRights.equals(AUETDConstants.EMBARGO_NOT_AUBURN_STR)) {
+                        embargoType = 2;
+                    } else if (embargoRights.equals(AUETDConstants.EMBARGO_GLOBAL_STR)) {
+                        embargoType = 3;
                     }
-                    break;
-                case Constants.NOT_EMBARGOED:
-                    embargoType = 1;
-                    break;
+                }
+            } else if (embargoStatus.equals(AUETDConstants.NOT_EMBARGOED)) {
+                embargoType = 1;
             }
         }
 
