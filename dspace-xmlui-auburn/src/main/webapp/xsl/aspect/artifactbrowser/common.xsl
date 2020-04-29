@@ -38,6 +38,9 @@
 
     <xsl:output indent="yes"/>
 
+    <xsl:variable name="serverName" select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@qualifier='serverName']" />
+    <xsl:variable name="contextPath" select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element = 'contextPath']" />
+
     <!-- These templates are devoted to handling the referenceSet and reference elements. Although they are considered
         structural elements, neither of the two contains actual content. Instead, references contain references
         to object metadata under objectMeta, while referenceSets group references together.
@@ -96,12 +99,16 @@
         <xsl:choose>
             <xsl:when test="descendant-or-self::dri:referenceSet/@rend='hierarchy' or ancestor::dri:referenceSet/@rend='hierarchy'">
                 <!--<ul class="ds-artifact-list list-unstyled">-->
-                    <xsl:apply-templates select="*[not(name()='head')]" mode="summaryList"/>
+                    <div class="col-sm-12 col-md-12 col-lg-12 secondary">
+                        <xsl:apply-templates select="*[not(name()='head')]" mode="summaryList"/>
+                    </div>
                 <!--</ul>-->
             </xsl:when>
             <xsl:otherwise>
                 <!-- <ul class="ds-artifact-list list-unstyled">-->
-                    <xsl:apply-templates select="*[not(name()='head')]" mode="summaryList"/>
+                    <div class="col-sm-12 col-md-12 col-lg-12 secondary">
+                        <xsl:apply-templates select="*[not(name()='head')]" mode="summaryList"/>
+                    </div>
                 <!-- </ul> -->
             </xsl:otherwise>
         </xsl:choose>
@@ -133,7 +140,7 @@
         <!-- This comment just displays the full URL in an HTML comment, for easy reference. -->
         <xsl:comment> External Metadata URL: <xsl:value-of select="$externalMetadataURL"/> </xsl:comment>
         <xsl:apply-templates select="document($externalMetadataURL)" mode="summaryView"/>
-        <!-- Commenting out this apply-templates tag prevents the collections section from being rendered in the default way-->
+        <!-- Commenting out this apply-templates tag prevents the collections section from being rendered in the default way -->
         <!-- <xsl:apply-templates /> -->
     </xsl:template>
 
@@ -203,12 +210,12 @@
             <xsl:text>cocoon:/</xsl:text>
             <xsl:value-of select="@url"/>
             <!-- Since this is a summary only grab the descriptive metadata, and the thumbnails -->
-            <!--<xsl:text>?sections=dmdSec,fileSec&amp;fileGrpTypes=THUMBNAIL</xsl:text>-->
+            <xsl:text>?sections=dmdSec,fileSec&amp;fileGrpTypes=THUMBNAIL</xsl:text>
             
             <!--Note: Custom version of the above query string. Our version removes the 
                       constraint of only grabbing the thumbnails file group type. 
             -->
-            <xsl:text>?sections=dmdSec,fileSec</xsl:text>
+            <!-- <xsl:text>?sections=dmdSec,fileSec</xsl:text> -->
             
             <!-- An example of requesting a specific metadata standard (MODS and QDC crosswalks only work for items)->
             <xsl:if test="@type='DSpace Item'">
@@ -260,7 +267,13 @@
         <!-- This comment just displays the full URL in an HTML comment, for easy reference. -->
         <xsl:comment> External Metadata URL: <xsl:value-of select="$externalMetadataURL"/> </xsl:comment>
         <xsl:apply-templates select="document($externalMetadataURL)" mode="summaryView"/>
-		<!-- Commenting out this apply-templates tag prevents the collections section from being rendered in the default way-->
+        <xsl:choose>
+            <xsl:when test="contains($serverName, 'aurora') or contains($serverName, 'deepspace') or $contextPath = '/aurora' or $contextPath = '/deepspace'">
+                <xsl:apply-templates />
+            </xsl:when>
+            <xsl:otherwise></xsl:otherwise>
+        </xsl:choose>
+        <!-- Commenting out this apply-templates tag prevents the collections section from being rendered in the default way -->
         <!-- <xsl:apply-templates /> -->
     </xsl:template>
 	
@@ -275,7 +288,13 @@
         </xsl:variable>
         <xsl:comment> External Metadata URL: <xsl:value-of select="$externalMetadataURL"/> </xsl:comment>
         <xsl:apply-templates select="document($externalMetadataURL)" mode="detailView"/>
-       <!-- Commenting out this apply-templates tag prevents the collections section from being rendered in the default way-->
+        <xsl:choose>
+            <xsl:when test="contains($serverName, 'aurora') or contains($serverName, 'deepspace') or $contextPath = '/aurora' or $contextPath = '/deepspace'">
+                <xsl:apply-templates />
+            </xsl:when>
+            <xsl:otherwise></xsl:otherwise>
+        </xsl:choose>
+        <!-- Commenting out this apply-templates tag prevents the collections section from being rendered in the default way -->
         <!-- <xsl:apply-templates /> -->
     </xsl:template>
 
