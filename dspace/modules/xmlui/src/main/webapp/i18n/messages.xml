@@ -601,7 +601,7 @@
 	<message key="xmlui.Submission.submit.progressbar.verify">Review</message>
 	<message key="xmlui.Submission.submit.progressbar.creative-commons">Creative Commons</message>
 	<message key="xmlui.Submission.submit.progressbar.CClicense">CC License</message>
-	<message key="xmlui.Submission.submit.progressbar.license">License</message>
+	<message key="xmlui.Submission.submit.progressbar.license">Embargo Policy</message>
 	<message key="xmlui.Submission.submit.progressbar.complete">Complete</message>
 	<!-- org.dspace.app.xmlui.Submission.submit.ResumeStep -->
 	<message key="xmlui.Submission.submit.ResumeStep.submit_resume">Resume</message>
@@ -2276,6 +2276,7 @@
                 Custom Submission Form Messages
         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
     <!-- License Form -->
+    <message key="xmlui.Submission.submit.LicenseStep.AUETD_embargo_policy_head">Auburn University EMBARGO POLICY</message>
     <message key="xmlui.Submission.submit.LicenseStep.AUETD_decision_checkbox">I have read and understand the AUETD embargo policy.</message>
     <message key="xmlui.Submission.submit.LicenseStep.AUETD_decision_accepted">You have already read and accepted the AUETD embargo policy. Click the Next button to proceed to the next step.</message>
 

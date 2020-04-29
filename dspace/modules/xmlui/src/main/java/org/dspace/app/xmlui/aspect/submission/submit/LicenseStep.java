@@ -69,9 +69,10 @@ public class LicenseStep extends AbstractSubmissionStep
         message("xmlui.Submission.submit.LicenseStep.submit_complete");
 
     // Custom Message object
+    protected static final Message AUETD_Embargo_Policy_head = 
+        message("xmlui.Submission.submit.LicenseStep.AUETD_embargo_policy_head");
     protected static final Message AUETD_T_accepted =
         message("xmlui.Submission.submit.LicenseStep.AUETD_decision_accepted");
-
     protected static final Message AUETD_T_decision_checkbox =
         message("xmlui.Submission.submit.LicenseStep.AUETD_decision_checkbox");
 
@@ -110,7 +111,7 @@ public class LicenseStep extends AbstractSubmissionStep
         }
 
 		Division div = body.addInteractiveDivision("submit-license",actionURL, Division.METHOD_POST,"primary submission");
-		div.setHead(T_submission_head);
+		div.setHead(AUETD_Embargo_Policy_head);
 		addSubmissionProgressList(div);
 
 		Division inner = div.addDivision("submit-license-inner");
