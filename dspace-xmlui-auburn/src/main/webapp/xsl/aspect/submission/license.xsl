@@ -39,7 +39,7 @@
 		<xsl:apply-templates />
 	</xsl:template>
 	<xsl:template match="dri:div[@id='aspect.submission.StepTransformer.div.submit-license-standard-text']">
-		<p><strong>PLEASE READ: Important information about restricting access to your ETD</strong></p>
+		<p><strong>PLEASE READ: Important information about restricting access to your ETD.</strong></p>
 		<p>AUETD is an online database of electronic theses and dissertations (ETDs) submitted by Auburn University graduate students in partial 
 		fulfillment of the university's graduate degree requirements. Its primary purpose is to make Auburn University ETDs easy to find and read 
 		online. However, the University does offer graduate students the option of restricting access to the <strong>full text</strong> of their ETD <strong>for a limited 
