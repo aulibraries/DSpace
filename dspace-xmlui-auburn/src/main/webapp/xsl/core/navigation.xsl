@@ -96,10 +96,6 @@
     <xsl:template match="dri:list[@id='aspect.browseArtifacts.Navigation.list.context']">
     </xsl:template>
 
-    <!-- Prevent the the context (ie community or collection) menu option items from appearing. -->
-    <!-- <xsl:template match="dri:list[@id='aspect.viewArtifacts.Navigation.list.context']">
-    </xsl:template> -->
-
     <xsl:template match="dri:options/dri:list[not(@n='account')]" priority="3">
         <xsl:if test="count(child::node()) &gt; 0">
             <xsl:apply-templates select="dri:head" mode="optionHead" />
