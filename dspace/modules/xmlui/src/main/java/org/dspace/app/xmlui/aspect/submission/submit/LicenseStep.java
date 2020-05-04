@@ -75,6 +75,8 @@ public class LicenseStep extends AbstractSubmissionStep
         message("xmlui.Submission.submit.LicenseStep.AUETD_decision_accepted");
     protected static final Message AUETD_T_decision_checkbox =
         message("xmlui.Submission.submit.LicenseStep.AUETD_decision_checkbox");
+    protected static final Message AUETD_T_decision_error = 
+        message("xmlui.Submission.submit.LicenseStep.AUETD_decision_error");
 
     protected ItemService itemService = ContentServiceFactory.getInstance().getItemService();
     /**
@@ -136,7 +138,7 @@ public class LicenseStep extends AbstractSubmissionStep
             {
                 log.info(LogManager.getHeader(context, "reject_license", submissionInfo.getSubmissionLogInfo()));
 
-                decision.addError(T_decision_error);
+                decision.addError(AUETD_T_decision_error);
             }
         } else {
             controls.addItem().addHidden("decision").setValue("accept");

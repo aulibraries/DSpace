@@ -39,19 +39,28 @@
 		<xsl:apply-templates />
 	</xsl:template>
 	<xsl:template match="dri:div[@id='aspect.submission.StepTransformer.div.submit-license-standard-text']">
-		<p><strong>PLEASE READ: Important information about restricting access to your ETD.</strong></p>
-		<p>AUETD is an online database of electronic theses and dissertations (ETDs) submitted by Auburn University graduate students in partial 
-		fulfillment of the university's graduate degree requirements. Its primary purpose is to make Auburn University ETDs easy to find and read 
-		online. However, the University does offer graduate students the option of restricting access to the <strong>full text</strong> of their ETD <strong>for a limited 
-		period of time</strong> (this is also known as an "embargo"). Graduate students who wish to restrict access temporarily to the <strong>full text</strong> of their 
-		ETD may do so by selecting one of the embargo options <strong>during the ETD submission process</strong>. Students who choose to exercise this option should 
-		be aware that basic bibliographic information about their ETD will appear in the AUETD database and that the full text of their ETD will 
-		become publicly available after the embargo period they selected has expired. They should also be aware that basic bibliographic information 
-		about all the ETDs in the AUETD database is indexed by Google and other Internet search engines and may appear in search results for those 
-		search engines.</p>
-		<p>Students who have questions or concerns about this policy are encouraged to contact the Graduate School at <a href="mailto:etdhelp@auburn.edu">etdhelp@auburn.edu</a> 
-        or 334-844-2124 before submitting their ETD to AUETD. The Graduate School will not retroactively place embargoes on ETDs, so it is important to select the correct option during the 
-		submission process.</p>
+		<p><strong>PLEASE READ: Important information about restricting access to your ETD and the ProQuest dissemination agreement.  The Graduate School is 
+            unable to retroactively place embargoes on ETDs.</strong></p>
+        <h2 class="h3">EMBARGO OPTIONS</h2>
+		<p>AUETD is an online database of electronic theses and dissertations (ETDs) submitted by Auburn University graduate students in partial fulfillment 
+            of the graduate degree requirements.  Graduate students can request an embargo, or delayed release, which restricts access to the full text of 
+            their ETD for a limited period of time.  Graduate students who wish to restrict access temporarily of their ETD full text may do so by selecting 
+            one of the embargo options during the ETD submission process. Students who choose to exercise this option should be aware that basic bibliographic 
+            information about their ETD will appear in the AUETD database and that the full text of their ETD will become publicly available after the embargo 
+            period has expired.  Basic bibliographic information about all ETDs in the AUETD database is indexed by Google and other Internet search engines 
+            and may appear in search results for those search engines.  <strong>Please select the correct embargo option during the submission process as the 
+            Graduate School is unable to retroactively place embargoes on ETDs.</strong></p>
+        <h2 class="h3">DISSEMINATION AGREEMENT</h2>
+        <p>Auburn University disseminates its scholarly output of master’s theses and dissertations through ProQuest Dissertation and Theses Global in order 
+            to promote and preserve the intellectual output of its master’s and doctoral degree candidates.  Embargo options are recognized and enforced.  
+            ProQuest&#169; Dissertation &amp; Theses Global reaches 3,000 universities with over 200 million searches annually and supports discovery of 
+            scholarly output through all major subject and discipline indexes, such as SciFinder, MathSciNet, PsycINFO, and ERIC.  ProQuest provides these 
+            services at no charge and facilitates the nonexclusive distribution of master's thesis' or doctoral dissertations.  Royalties could be received 
+            based on sales and usage of the thesis or dissertation through ProQuest.</p>
+        <h2 class="h3">QUESTIONS?</h2>
+		<p>If there are questions or concerns about the embargo options, please contact the Graduate School at etdhelp@auburn.edu.  If there are questions 
+            about the ProQuest dissemination agreement, please contact <a href="mailto:disspub@proquest.com">disspub@proquest.com</a> or see link for 
+            ProQuest FAQ: <a href="https://www.proquest.com/products-services/dissertations/proquest-dissertations-faq.html" alt="Find answers to your questions about ProQuest at ProQuest FAQ" rel="noreferrer noopener" target="_blank">https://www.proquest.com/products-services/dissertations/proquest-dissertations-faq.html</a></p>
 	</xsl:template>
 	
 </xsl:stylesheet>
