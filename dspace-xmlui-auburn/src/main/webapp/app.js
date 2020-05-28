@@ -7,13 +7,12 @@
  */
 
 import './styles/main.scss';
-/*import "./scripts/bootstrap-filestyle";*/
-import "./scripts/application";
+import $ from "jquery";
+import "select2";
 import "./scripts/browse";
 import "./scripts/choice-support";
 import "./scripts/community-list";
-import "./scripts/person-lookup";/**/
 import "./scripts/search-controls";
-import "./scripts/templates";/**/
+import "./scripts/templates";
 import "./scripts/utils";
-import "./scripts/vocabulary-support";/**/
+import "./scripts/application";
