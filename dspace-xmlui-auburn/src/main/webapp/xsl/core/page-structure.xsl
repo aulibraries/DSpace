@@ -106,14 +106,14 @@
                     <xsl:call-template name="buildHeader"/>
                     <div class="page_content_spacer"></div>
                     <div id="page_content" class="page_content">
-                        <div class="content_row">
+                        <div class="content_row sidebarToggle" style="display: none;">
                             <div class="content_container">
                                 <button id="sidebarToggle" class="btn btn-default hidden-print hidden-md hidden-lg" type="button" data-toggle="offcanvas">View Nav &gt;</button>
                             </div>
                         </div>
                         <div class="content_row row-offcanvas row-offcanvas-left">
                             <div class="content_container">
-                                <div id="sidebar" class="col-xs-6 col-sm-3 sidebar-offcanvas">
+                                <div id="sidebar" class="hidden-print col-xs-6 col-sm-3 sidebar-offcanvas">
                                     <xsl:apply-templates select="dri:options"/>
                                 </div>
                                 <div id="main-content" class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
@@ -175,15 +175,14 @@
 
             <!-- Add stylesheets -->
             <!-- BOOTSTRAP -->
-            <link rel="stylesheet" href="https://cdn.auburn.edu/assets/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous"/>
             <!-- FONT AWESOME -->
             <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous"/>
+            <!-- JQuery UI -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css" integrity="sha256-sEGfrwMkIjbgTBwGLVK38BG/XwIiNC/EAG9Rzsfda6A=" crossorigin="anonymous" />
             <!-- AUBURN UNIVERSITY -->
             <link rel="stylesheet" href="https://cdn.auburn.edu/2016/_assets/css/global.min.css" integrity="sha384-DthvczyZCLEYneoTqIn/y5qcCXy0bnwLeJgEfAXQLoDQJnmY7PFy5t271cHWqAxc" crossorigin="anonymous"/>
 
-            <link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css" integrity="sha384-1UXhfqyOyO+W+XsGhiIFwwD3hsaHRz2XDGMle3b8bXPH5+cMsXVShDoHA3AH/y/p" crossorigin="anonymous"/>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" integrity="sha384-KZO2FRYNmIHerhfYMjCIUaJeGBRXP7CN24SiNSG+wdDzgwvxWbl16wMVtWiJTcMt" crossorigin="anonymous"/>
-            <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" integrity="sha384-xewr6kSkq3dBbEtB6Z/3oFZmknWn7nHqhLVLrYgzEFRbU/DHSxW7K3B44yWUN60D" crossorigin="anonymous"/>
             <link rel="stylesheet" href="{concat($theme-path, 'styles/main.css')}"/>
 
 
@@ -419,7 +418,7 @@
                     <div class="col-md-2 col-sm-1"></div>
                     <div class="header_secondary col-xs-12 col-sm-6 col-md-6 hidden-print">
                         <img alt="This Is Auburn" class="header_title_image" src="https://cdn.auburn.edu/2016/_assets/images/thisisauburn_wide.svg"/> 
-                        <span class="unit_title"><xsl:text>Electronic Theses and Dissertations</xsl:text></span>
+                        <span class="unit_title"><xsl:value-of select="$repoName"/></span>
                         <span class="unit_subtitle">
                             <xsl:if test="contains($serverName, 'localhost') or contains($serverName, 'dstest')">
                                 <xsl:text>Development/Testing System</xsl:text>
@@ -747,7 +746,7 @@
                 <xsl:apply-templates select="*[not(@id='file.news.div.news')][not(@id='aspect.artifactbrowser.CommunityBrowser.div.comunity-browser')][not(@id='aspect.discovery.SiteRecentSubmissions.div.site-home')]" />
                 <xsl:choose>
                     <xsl:when test="$serverName = 'etd.auburn.edu' or $contextPath = '/auetd'">
-                        <xsl:call-template name="newsfeed" />
+                        <xsl:call-template name="AUETDNewsFeed" />
                         <xsl:call-template name="FrontPageSearch"/>
                         <xsl:call-template name="specialMessage"/>
                     </xsl:when>
@@ -763,7 +762,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    
+
     <xsl:template name="specialMessage">
         <div class="row submissionMsgRow">
             <div class="col-lg-12">
@@ -785,7 +784,6 @@
                 </div>
             </div>
         </xsl:if>
-
     </xsl:template>
 	
     <xsl:template name="FrontPageSearch">
@@ -800,7 +798,17 @@
                     <label class="sr-only" for="aspect_artifactbrowser_FrontPageSearch_field_query">Search <xsl:value-of select="$repoName"/></label>
                     <div class="col-sm-10 clearPadding">
                         <div class="input-group">
-                            <input id="aspect_artifactbrowser_FrontPageSearch_field_query" class="ds-text-field form-control" name="query" type="text" placeholder="xmlui.general.search.placeholder.AUETD_placeholder" i18n:attr="placeholder" value=""/>
+                            <xsl:choose>
+                                <xsl:when test="$serverName = 'etd.auburn.edu' or $contextPath = '/auetd'">
+                                    <input id="aspect_artifactbrowser_FrontPageSearch_field_query" class="ds-text-field form-control" name="query" type="text" placeholder="xmlui.general.search.placeholder.AUETD_placeholder" i18n:attr="placeholder" value=""/>
+                                </xsl:when>
+                                <xsl:when test="$serverName = 'aurora.auburn.edu' or $contextPath = '/aurora'">
+                                    <input id="aspect_artifactbrowser_FrontPageSearch_field_query" class="ds-text-field form-control" name="query" type="text" placeholder="xmlui.general.search.placeholder.aurora_placeholder" i18n:attr="placeholder" value=""/>
+                                </xsl:when>
+                                <xsl:when test="$serverName = 'deepspace.lib.auburn.edu' or $contextPath = '/deepspace'">
+                                    <input id="aspect_artifactbrowser_FrontPageSearch_field_query" class="ds-text-field form-control" name="query" type="text" placeholder="xmlui.general.search.placeholder.deepspace_placeholder" i18n:attr="placeholder" value=""/>
+                                </xsl:when>
+                            </xsl:choose>
                             <span class="input-group-btn">
                                 <button id="aspect_artifactbrowser_FrontPageSearch_field_submit" class="ds-button-field btn btn-default" name="submit" title="Click to submit the search form" type="submit">
                                     <span>Search</span>
@@ -812,13 +820,23 @@
             </form>
         </div>
     </xsl:template>
-	
-    <xsl:template name="newsfeed">
+
+    <xsl:template name="AUETDNewsFeed">
         <h1>Welcome to AUETD</h1>
         <div class="row">
             <div id="file_news_div_news" class="col-lg-12">
                 <p>Welcome to AUETD, Auburn University's database of Master's theses and Ph.D. dissertations. The database contains a PDF version of every thesis or dissertation successfully defended at Auburn since the Fall 2005 semester.</p>
                 <p>Auburn University librarians are available to answer questions about searching the AUETD database via <a href="https://askalibrarian.auburn.edu/" alt="Ask a Librarian" target="_blank">Ask a Librarian</a>.</p>
+            </div>
+        </div>
+    </xsl:template>
+
+    <xsl:template match="dri:div[@id='file.news.div.news']">
+        <xsl:apply-templates select="dri:head" />
+        <div class="row">
+            <div>
+                <xsl:call-template name="standardAttributes" />
+                <xsl:apply-templates select="*[not(name()='head')]" />
             </div>
         </div>
     </xsl:template>
@@ -858,14 +876,12 @@
             <script src="{$theme-path}{@src}" type="text/javascript">&#160;</script>
         </xsl:for-each> -->
         
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
-        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" integrity="sha384-rgWRqC0OFPisxlUvl332tiM/qmaNxnlY46eksSZD84t+s2vZlqGeHrncwIRX7CGp" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.6/holder.min.js" integrity="sha384-bSAO0//FZ+kEkMUA+BQwV9+DKxRuFoPhjdZJZmjmoc3M66CVZE/uRacR/B8tBVl+" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/handlebars@4.5.1/dist/handlebars.js" integrity="sha256-RX33SPSioT0KIh0u3Z1Di8j8SnTKWWjWeFmC9DLvlNw=" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js" integrity="sha384-KjsJwMB03GQH/gvsBTpEONeOUBnRY/Dpp+iDzeS4BMQi2Ayl2emKLGuLr3gChQhv" crossorigin="anonymous"></script>
-        <script src="{concat($theme-path, 'scripts/theme.js')}" type="text/javascript">&#160;</script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+        <!-- <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script> -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha256-KM512VNnjElC30ehFwehXjx1YCHPiQkOPmqnrWtpccM=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.6/holder.min.js" integrity="sha384-bSAO0//FZ+kEkMUA+BQwV9+DKxRuFoPhjdZJZmjmoc3M66CVZE/uRacR/B8tBVl+" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js" integrity="sha256-usTqAE1ywvdMtksWzdeWzD75MsfJN0h0U7y2NtZL3N0=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="{concat($theme-path, 'scripts/theme.js')}">&#160;</script>
         
 
         <!-- Add javascipt specified in DRI -->
