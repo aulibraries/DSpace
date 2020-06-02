@@ -31,6 +31,9 @@
 
     <xsl:output indent="yes" />
 
+    <xsl:variable name="serverName" select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@qualifier='serverName']"/>
+    <xsl:variable name="contextPath" select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element = 'contextPath']"/>
+
     <!--
         The template to handle dri:options. Since it contains only dri:list tags (which carry the actual
         information), the only things than need to be done is creating the ds-options div and applying
@@ -94,6 +97,14 @@
 
     <!-- Prevent the the current context (ie community or collection) menu option items from appearing. -->
     <xsl:template match="dri:list[@id='aspect.browseArtifacts.Navigation.list.context']">
+        <xsl:choose>
+            <xsl:when test="$serverName !='etd.auburn.edu' or $contextPath != '/auetd'">
+                <xsl:apply-templates select="dri:head" mode="groupItemHeading" />
+                <xsl:apply-templates select="dri:item" />
+                <xsl:apply-templates select="dri:list" />
+            </xsl:when>
+            <xsl:otherwise />
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="dri:options/dri:list[not(@n='account')]" priority="3">
@@ -167,21 +178,40 @@
     </xsl:template>
 
     <xsl:template match="dri:options//dri:item[dri:xref]">
-        <xsl:if test="not(contains(dri:xref/@target, 'community-list'))">
-            <a href="{dri:xref/@target}">
-                <xsl:call-template name="standardAttributes">
-                    <xsl:with-param name="class">list-group-item ds-option</xsl:with-param>
-                </xsl:call-template>
-                <xsl:choose>
-                    <xsl:when test="dri:xref/node()">
-                        <xsl:apply-templates select="dri:xref/node()" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="dri:xref" />
-                    </xsl:otherwise>
-                </xsl:choose>
-            </a>
-        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="$serverName = 'etd.auburn.edu' or $contextPath = '/auetd'">
+                <xsl:if test="not(contains(dri:xref/@target, 'community-list'))">
+                    <a href="{dri:xref/@target}">
+                        <xsl:call-template name="standardAttributes">
+                            <xsl:with-param name="class">list-group-item ds-option</xsl:with-param>
+                        </xsl:call-template>
+                        <xsl:choose>
+                            <xsl:when test="dri:xref/node()">
+                                <xsl:apply-templates select="dri:xref/node()" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="dri:xref" />
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </a>
+                </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+                <a href="{dri:xref/@target}">
+                    <xsl:call-template name="standardAttributes">
+                        <xsl:with-param name="class">list-group-item ds-option</xsl:with-param>
+                    </xsl:call-template>
+                    <xsl:choose>
+                        <xsl:when test="dri:xref/node()">
+                            <xsl:apply-templates select="dri:xref/node()" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="dri:xref" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </a>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="dri:options/dri:list/dri:head" mode="optionHead" priority="1">
