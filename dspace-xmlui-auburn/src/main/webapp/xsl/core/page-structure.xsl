@@ -822,7 +822,7 @@
     </xsl:template>
 
     <xsl:template name="AUETDNewsFeed">
-        <h1>Welcome to AUETD</h1>
+        <h1 class="page-header">Welcome to AUETD</h1>
         <div class="row">
             <div id="file_news_div_news" class="col-lg-12">
                 <p>Welcome to AUETD, Auburn University's database of Master's theses and Ph.D. dissertations. The database contains a PDF version of every thesis or dissertation successfully defended at Auburn since the Fall 2005 semester.</p>
