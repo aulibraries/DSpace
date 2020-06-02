@@ -23,16 +23,21 @@
 }
 
 @include selection {
-    color: white;
-    background: #F68026;
+    color: $color_white;
+    background: $color_orange;
 }
 
 /** Auburn University CSS */
 /** @import "auburn_auetd_styles";*/
 
-.page_content {
-    position: relative;
-    overflow-x: hidden;
+a {
+    >i {
+        padding-right: 4px;
+    }
+}
+
+.clearPadding {
+    padding: 0;
 }
 
 ul.ds-simple-list.vocabulary ul {
@@ -119,17 +124,10 @@ p.pre {
 }
 
 
-h2.page-header {
-    padding: 9px 0;
-    margin: 0 0 10px 0;
-    border-bottom: 1px solid #eee;
-    font-weight: normal;
-}
-
-h3.page-header {
-    padding: 9px 0;
-    margin: 0;
+.page-header {
     border: none;
+    padding: 0 0 10px 0;
+    margin: 0;
     font-weight: normal;
 }
 
@@ -142,7 +140,7 @@ h3.page-header {
     color: #6c757d;
     pointer-events: none;
     cursor: auto;
-    background-color: #fff;
+    background-color: $color_white;
     border-color: #dee2e6;
 }
 
@@ -184,8 +182,8 @@ a.list-group-item {
     padding-right: 0;
 
     &.active {
-        background-color: #496e9c;
-        border-color: #496e9c;
+        background-color: $color_blue;
+        border-color: $color_blue;
         color: $color_white;
     }
 }
@@ -211,19 +209,19 @@ div.list-group-item {
 
 .btn-default.active {
     color: $color_white;
-    background-color: #f68026;
-    border-color: #f68026;
+    background-color: $color_orange;
+    border-color: $color_orange;
 
     &:focus {
         color: $color_white;
-        background-color: #f68026;
-        border-color: #f68026;
+        background-color: $color_orange;
+        border-color: $color_orange;
     }
 
     &:hover {
         color: $color_white;
-        background-color: #f68026;
-        border-color: #f68026;
+        background-color: $color_orange;
+        border-color: $color_orange;
     }
 }
 
@@ -356,8 +354,8 @@ div.list-group-item {
     &.active,
     .open>&.dropdown-toggle {
         color: $color;
-        background-color: #496e9c;
-        border-color: #eee;
+        background-color: $color_blue;
+        border-color: $color_lightGrey;
     }
 
     &:active,
@@ -478,7 +476,7 @@ span {
 
         &:nth-child(odd) {
             border: 1px solid #ddd;
-            background-color: #f9f9f9;
+            background-color: $color_mediumLightGrey;
         }
     }
 
@@ -523,6 +521,19 @@ span {
 /*********** End Forms *****************/
 
 /* **************** Browse and Search Results Lists *************************/
+.community-browser-row {
+    padding-bottom: 10px;
+
+    a {
+        line-height: 30px;
+        font-size: 18px;
+        i {
+            border: 1px solid $color_red;
+            padding-right: 0;
+        }
+    }
+}
+
 .ds-simple-list,
 dropdown-menu,
 .ds-artifact-list,
@@ -542,8 +553,8 @@ dropdown-menu,
         padding-right: 8px;
 
         &:nth-child(even) {
-            border: 1px solid #eee;
-            background-color: #f9f9f9;
+            border: 1px solid $color_lightGrey;
+            background-color: $color_mediumLightGrey;
         }
     }
 }
@@ -557,7 +568,7 @@ dropdown-menu,
 
             &:nth-child(even) {
                 border: 1px solid #ddd;
-                background-color: #f9f9f9;
+                background-color: $color_mediumLightGrey;
             }
 
             >div {
@@ -584,8 +595,8 @@ dropdown-menu,
             margin-bottom: 0;
 
             &:nth-child(even) {
-                border: 1px solid #eee;
-                background-color: #f9f9f9;
+                border: 1px solid $color_lightGrey;
+                background-color: $color_mediumLightGrey;
             }
         }
 
@@ -614,8 +625,8 @@ dropdown-menu,
         padding-right: 8px;
 
         &.even {
-            border: 1px solid #eee;
-            background-color: #f9f9f9;
+            border: 1px solid $color_lightGrey;
+            background-color: $color_mediumLightGrey;
         }
 
         >div {
@@ -665,12 +676,12 @@ dropdown-menu,
 .file-wrapper {
     margin-bottom: 10px;
 
-    &.fa-file-pdf-o {
-        color: #496e9c;
+    &.fa-file-pdf {
+        color: $color_blue;
     }
 
-    &.fa-file-text-o {
-        color: #496e9c;
+    &.fa-file-text {
+        color: $color_blue;
     }
 
     &.pdf-icon {
@@ -678,7 +689,15 @@ dropdown-menu,
     }
 }
 
-.fa-lock {
+.fa-file-text {
+    color: $color_blue;
+}
+
+.fa-file-pdf {
+    color: $color_blue;
+}
+
+.fa-lock, .pdf-icon {
     color: $color_red;
 }
 
@@ -703,8 +722,8 @@ dt {
 
 /** *********** Control Panel Styles *************** */
 .control-panel-list {
-    border: 1px solid #eee;
-    background-color: #f9f9f9;
+    border: 1px solid $color_lightGrey;
+    background-color: $color_mediumLightGrey;
     padding-bottom: 10px;
     margin-bottom: 20px;
 
@@ -717,6 +736,13 @@ dt {
     dt {
         margin-bottom: 3px;
     }
+}
+
+.well {
+    background-color: $color_white;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
 }
 
 /** ************* Select 2 Customizations **************** */
