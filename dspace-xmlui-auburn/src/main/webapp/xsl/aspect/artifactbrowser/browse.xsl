@@ -61,6 +61,15 @@
                             or dri:field/@id='aspect.administrative.PrivateItems.field.starts_with']">
         <div class="row">
             <div class="col-xs-12 col-sm-6">
+                <label>
+                    <xsl:attribute name="class">
+                        <xsl:text>control-label sr-only</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="for">
+                        <xsl:value-of select="translate(dri:field/@id,'.','_')"/>
+                    </xsl:attribute>
+                    <xsl:apply-templates select="*[not(name()='field')]"/>
+                </label>
                 <p class="input-group">
                     <xsl:apply-templates select="dri:field[@id='aspect.artifactbrowser.ConfigurableBrowse.field.starts_with'
                                                         or @id='aspect.discovery.SearchFacetFilter.field.starts_with'
