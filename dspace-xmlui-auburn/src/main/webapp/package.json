@@ -4,6 +4,7 @@
     "description": "",
     "main": "app.js",
     "scripts": {
+        "grunt": "grunt",
         "build-prod": "webpack --config webpack.prod.js --colors --progress",
         "build-dev": "webpack --config webpack.dev.js --colors --progress",
         "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,6 +13,7 @@
     "author": "Auburn University Libraries",
     "license": "MIT",
     "devDependencies": {
+        "bootstrap-sass": "^3.4.1",
         "clean-webpack-plugin": "^3.0.0",
         "css-loader": "^3.5.3",
         "eslint": "^6.8.0",
