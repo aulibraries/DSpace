@@ -83,10 +83,12 @@
         </div>
     </xsl:template>
 
+
     <!-- Next come the three structural elements that divs that contain: table, p, and list. These are
         responsible for display of static content, forms, and option lists. The fourth element under
         body, referenceSet, is used to reference blocks of metadata and will be discussed further down.
     -->
+
 
     <!-- Header row, most likely filled with header cells -->
     <xsl:template match="dri:row[@role='header']" priority="2">
@@ -120,6 +122,7 @@
             <xsl:apply-templates />
         </th>
     </xsl:template>
+
 
     <!-- Normal row, most likely filled with data cells -->
     <xsl:template match="dri:row" priority="1">
@@ -165,9 +168,6 @@
         <xsl:choose>
             <xsl:when test="child::node()">
                 <p>
-                    <xsl:call-template name="standardAttributes">
-                        <xsl:with-param name="class">ds-paragraph</xsl:with-param>
-                    </xsl:call-template>
                     <xsl:for-each select="child::node()">
                         <xsl:choose>
                             <xsl:when test="local-name() = 'text' and following-sibling::*[local-name() = 'field']">
@@ -346,6 +346,7 @@
                     </div>
                 </xsl:when>
                 <xsl:otherwise>
+                    <!-- <xsl:apply-templates /> -->
                     <div class="col-sm-12">
                         <a>
                             <xsl:if test="./dri:xref/@target">
@@ -669,14 +670,13 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="dri:div[@interactive='yes' and @id ='aspect.artifactbrowser.ConfigurableBrowse.div.browse-controls']" priority="1" />
+    <xsl:template match="dri:div[@interactive = 'yes' and @id = 'aspect.artifactbrowser.ConfigurableBrowse.div.browse-controls']" priority="1" />
 
     <xsl:template match="dri:div[@interactive='yes']" priority="2">
         <xsl:apply-templates select="dri:head" />
         <xsl:apply-templates select="@pagination">
             <xsl:with-param name="position">top</xsl:with-param>
         </xsl:apply-templates>
-        <!-- <xsl:if test="not(contains(@n, 'browse-controls'))"> -->
         <form>
             <xsl:call-template name="standardAttributes">
                 <xsl:with-param name="class">ds-interactive-div</xsl:with-param>
@@ -726,7 +726,6 @@
                 </xsl:text>
             </script>
         </xsl:if>
-        <!-- </xsl:if> -->
         <xsl:apply-templates select="@pagination">
             <xsl:with-param name="position">bottom</xsl:with-param>
         </xsl:apply-templates>
@@ -754,6 +753,9 @@
                 <xsl:with-param name="class">
                     <xsl:value-of select="$class" />
                     <xsl:choose>
+                        <xsl:when test="$head_count = 1 and not($class='ds-option-set-head')">
+                            <xsl:text> page-header</xsl:text>
+                        </xsl:when>
                         <xsl:when test="$class='ds-option-set-head'">
                             <xsl:text> h5</xsl:text>
                         </xsl:when>
@@ -882,5 +884,4 @@
     <xsl:template match="dri:list[@n='sublist']" mode="selectlist" priority="1">
         <xsl:apply-templates select="dri:item/dri:field" />
     </xsl:template>
-
 </xsl:stylesheet>
