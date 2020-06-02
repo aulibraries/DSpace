@@ -59,6 +59,11 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: "./styles/main.css"            
         }),
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+            'window.jQuery': 'jquery'
+        }),
         /* new CleanWebpackPlugin(["scripts/theme.js", "styles/main.css"], { 
             verbose: true, 
             dry: false 
