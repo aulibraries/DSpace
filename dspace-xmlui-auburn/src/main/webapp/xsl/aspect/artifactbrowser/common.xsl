@@ -40,6 +40,19 @@
 
     <xsl:variable name="serverName" select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@qualifier='serverName']" />
     <xsl:variable name="contextPath" select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element = 'contextPath']" />
+    <xsl:variable name="repoName">
+        <xsl:choose>
+            <xsl:when test="$serverName = 'etd.auburn.edu' or $contextPath = '/auetd'">
+                <xsl:text>AUETD</xsl:text>
+            </xsl:when>
+            <xsl:when test="$serverName = 'aurora.auburn.edu' or $contextPath = '/aurora'">
+                <xsl:text>AUrora</xsl:text>
+            </xsl:when>
+            <xsl:when test="$serverName = 'deepspace.lib.auburn.edu' or $contextPath = '/deepspace'">
+                <xsl:text>DeepSpace</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
 
     <!-- These templates are devoted to handling the referenceSet and reference elements. Although they are considered
         structural elements, neither of the two contains actual content. Instead, references contain references
@@ -268,7 +281,7 @@
         <xsl:comment> External Metadata URL: <xsl:value-of select="$externalMetadataURL"/> </xsl:comment>
         <xsl:apply-templates select="document($externalMetadataURL)" mode="summaryView"/>
         <xsl:choose>
-            <xsl:when test="contains($serverName, 'aurora') or contains($serverName, 'deepspace') or $contextPath = '/aurora' or $contextPath = '/deepspace'">
+            <xsl:when test="$repoName = 'AUrora' or $repoName = 'DeepSpace'">
                 <xsl:apply-templates />
             </xsl:when>
             <xsl:otherwise></xsl:otherwise>
@@ -289,7 +302,7 @@
         <xsl:comment> External Metadata URL: <xsl:value-of select="$externalMetadataURL"/> </xsl:comment>
         <xsl:apply-templates select="document($externalMetadataURL)" mode="detailView"/>
         <xsl:choose>
-            <xsl:when test="contains($serverName, 'aurora') or contains($serverName, 'deepspace') or $contextPath = '/aurora' or $contextPath = '/deepspace'">
+            <xsl:when test="$repoName = 'AUrora' or $repoName = 'DeepSpace'">
                 <xsl:apply-templates />
             </xsl:when>
             <xsl:otherwise></xsl:otherwise>

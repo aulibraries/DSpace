@@ -41,6 +41,19 @@
     <xsl:variable name="contextPath" select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element = 'contextPath']" />
     <xsl:variable name="requestURI" select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='URI']"></xsl:variable>
     <xsl:variable name="referenceSetID" select="/dri:document/dri:body/dri:div/dri:referenceSet/@id" />
+    <xsl:variable name="repoName">
+        <xsl:choose>
+            <xsl:when test="$serverName = 'etd.auburn.edu' or $contextPath = '/auetd'">
+                <xsl:text>AUETD</xsl:text>
+            </xsl:when>
+            <xsl:when test="$serverName = 'aurora.auburn.edu' or $contextPath = '/aurora'">
+                <xsl:text>AUrora</xsl:text>
+            </xsl:when>
+            <xsl:when test="$serverName = 'deepspace.lib.auburn.edu' or $contextPath = '/deepspace'">
+                <xsl:text>DeepSpace</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
 
     <xsl:template name="itemSummaryView-DIM">
         <!-- Generate the info about the item from the metadata section -->
@@ -129,7 +142,7 @@
                 <xsl:call-template name="itemSummaryView-DIM-date" />
                 <xsl:call-template name="itemSummaryView-DIM-authors" />
                 <xsl:choose>
-                    <xsl:when test="$serverName = 'etd.auburn.edu' or $contextPath = '/auetd'">
+                    <xsl:when test="$repoName = 'AUETD'">
                         <xsl:call-template name="itemSummaryView-DIM-type" />
                         <xsl:call-template name="itemSummaryView-DIM-subject" />
                         <xsl:choose>
@@ -157,7 +170,7 @@
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:when>
-                    <xsl:when test="$serverName = 'aurora.auburn.edu' or $contextPath = '/aurora'">
+                    <xsl:when test="$repoName = 'AUrora'">
                         <xsl:variable name="collectionID">
                             <xsl:copy-of select="substring-after($document//dri:meta/dri:pageMeta/dri:metadata[@element='focus'][@qualifier='container']/node(), ':')" />
                         </xsl:variable>
@@ -172,7 +185,7 @@
             </div>
             <div class="col-sm-8">
                 <xsl:call-template name="itemSummaryView-DIM-abstract" />
-                <xsl:if test="$serverName = 'etd.auburn.edu' or $contextPath = '/auetd'">
+                <xsl:if test="$repoName = 'AUETD'">
                     <div class="item-page-field-wrapper">
                         <h2 class="h5">Files</h2>
                         <xsl:apply-templates select="../../../../mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL' or @USE='LICENSE' or @USE='CC-LICENSE' or @USE='TEXT']">
@@ -183,22 +196,22 @@
                 </xsl:if>
                 <xsl:call-template name="itemSummaryView-DIM-URI" />
                 <xsl:choose>
-                    <xsl:when test="$serverName = 'auetd.auburn.edu'">
+                    <xsl:when test="$repoName = 'AUETD'">
                         <xsl:if test="$document//dri:meta/dri:userMeta/dri:metadata[@qualifier='admin'] = 'yes'">
                             <xsl:call-template name="itemSummaryView-collections" />
                         </xsl:if>
                     </xsl:when>
-                    <xsl:when test="$serverName = 'aurora.auburn.edu' or $serverName = 'deepspace.lib.auburn.edu'">
+                    <xsl:when test="$repoName = 'AUrora'">
                         <xsl:call-template name="itemSummaryView-collections" />
                     </xsl:when>
                     <xsl:when test="$serverName = 'dstest.lib.auburn.edu' or $serverName = 'dspace.localhost'">
                         <xsl:choose>
-                            <xsl:when test="$contextPath = '/auetd'">
+                            <xsl:when test="$repoName = 'AUETD'">
                                 <xsl:if test="$document//dri:meta/dri:userMeta/dri:metadata[@qualifier='admin'] = 'yes'">
                                     <xsl:call-template name="itemSummaryView-collections" />
                                 </xsl:if>
                             </xsl:when>
-                            <xsl:when test="$contextPath = '/aurora' or $serverName = '/deepspace'">
+                            <xsl:when test="$repoName = 'AUrora' or $repoName = 'DeepSpace'">
                                 <xsl:call-template name="itemSummaryView-collections" />
                             </xsl:when>
                         </xsl:choose>
@@ -493,7 +506,7 @@
                 <xsl:attribute name="href">
                     <xsl:value-of select="$href" />
                 </xsl:attribute>
-                <xsl:if test="$serverName = 'etd.auburn.edu' or $contextPath = '/auetd'">
+                <xsl:if test="$repoName = 'AUETD'">
                     <xsl:attribute name="class">
                         <xsl:text>pdf_file</xsl:text>
                     </xsl:attribute>
@@ -625,7 +638,7 @@
     <xsl:template name="itemSummaryView-DIM-subject">
         <xsl:variable name="header">
             <xsl:choose>
-                <xsl:when test="$serverName = 'etd.auburn.edu' or $contextPath = '/auetd'">
+                <xsl:when test="$repoName = 'AUETD'">
                     <xsl:text>Department</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
@@ -874,7 +887,7 @@
                     the Bitstream Registry, but we are constrained by the capabilities of METS
                     and can't really pass that info through.
                     -->
-                    <xsl:if test="$serverName = 'aurora.lib.auburn.edu' or $contextPath = '/aurora' or $serverName = 'deepspace.lib.auburn.edu' or $contextPath = '/deepspace'">
+                    <xsl:if test="$repoName = 'AUrora' or $repoName = 'DeepSpace'">
                         <dt>
                             <i18n:text>xmlui.dri2xhtml.METS-1.0.item-files-format</i18n:text>
                             <xsl:text>:</xsl:text>

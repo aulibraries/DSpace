@@ -33,6 +33,19 @@
 
     <xsl:variable name="serverName" select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@qualifier='serverName']"/>
     <xsl:variable name="contextPath" select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element = 'contextPath']"/>
+    <xsl:variable name="repoName">
+        <xsl:choose>
+            <xsl:when test="$serverName = 'etd.auburn.edu' or $contextPath = '/auetd'">
+                <xsl:text>AUETD</xsl:text>
+            </xsl:when>
+            <xsl:when test="$serverName = 'aurora.auburn.edu' or $contextPath = '/aurora'">
+                <xsl:text>AUrora</xsl:text>
+            </xsl:when>
+            <xsl:when test="$serverName = 'deepspace.lib.auburn.edu' or $contextPath = '/deepspace'">
+                <xsl:text>DeepSpace</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
 
     <!--
         The template to handle dri:options. Since it contains only dri:list tags (which carry the actual
@@ -98,7 +111,7 @@
     <!-- Prevent the the current context (ie community or collection) menu option items from appearing. -->
     <xsl:template match="dri:list[@id='aspect.browseArtifacts.Navigation.list.context']">
         <xsl:choose>
-            <xsl:when test="$serverName !='etd.auburn.edu' or $contextPath != '/auetd'">
+            <xsl:when test="$repoName = 'AUrora' or $repoName = 'DeepSpace'">
                 <xsl:apply-templates select="dri:head" mode="groupItemHeading" />
                 <xsl:apply-templates select="dri:item" />
                 <xsl:apply-templates select="dri:list" />
@@ -179,7 +192,7 @@
 
     <xsl:template match="dri:options//dri:item[dri:xref]">
         <xsl:choose>
-            <xsl:when test="$serverName = 'etd.auburn.edu' or $contextPath = '/auetd'">
+            <xsl:when test="$repoName = 'AUETD'">
                 <xsl:if test="not(contains(dri:xref/@target, 'community-list'))">
                     <a href="{dri:xref/@target}">
                         <xsl:call-template name="standardAttributes">
