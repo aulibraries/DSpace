@@ -8,11 +8,14 @@
 
 import './styles/main.scss';
 import $ from "jquery";
-import "select2";
+import 'bootstrap-sass/assets/javascripts/bootstrap';
+import "./scripts/access-form-util";
 import "./scripts/browse";
 import "./scripts/choice-support";
 import "./scripts/community-list";
 import "./scripts/search-controls";
 import "./scripts/templates";
 import "./scripts/utils";
+import "select2";
 import "./scripts/application";
+import "./scripts/embargodate";
