@@ -201,20 +201,8 @@
                             <xsl:call-template name="itemSummaryView-collections" />
                         </xsl:if>
                     </xsl:when>
-                    <xsl:when test="$repoName = 'AUrora'">
+                    <xsl:when test="$repoName = 'AUrora' or $repoName = 'DeepSpace'">
                         <xsl:call-template name="itemSummaryView-collections" />
-                    </xsl:when>
-                    <xsl:when test="$serverName = 'dstest.lib.auburn.edu' or $serverName = 'dspace.localhost'">
-                        <xsl:choose>
-                            <xsl:when test="$repoName = 'AUETD'">
-                                <xsl:if test="$document//dri:meta/dri:userMeta/dri:metadata[@qualifier='admin'] = 'yes'">
-                                    <xsl:call-template name="itemSummaryView-collections" />
-                                </xsl:if>
-                            </xsl:when>
-                            <xsl:when test="$repoName = 'AUrora' or $repoName = 'DeepSpace'">
-                                <xsl:call-template name="itemSummaryView-collections" />
-                            </xsl:when>
-                        </xsl:choose>
                     </xsl:when>
                 </xsl:choose>
             </div>
