@@ -110,20 +110,12 @@
         <xsl:apply-templates select="dri:head"/>
         <!-- Here we decide whether we have a hierarchical list or a flat one -->
         <xsl:choose>
-            <xsl:when test="descendant-or-self::dri:referenceSet/@rend='hierarchy' or ancestor::dri:referenceSet/@rend='hierarchy'">
-                <!--<ul class="ds-artifact-list list-unstyled">-->
-                    <div class="col-sm-12 col-md-12 col-lg-12 secondary">
-                        <xsl:apply-templates select="*[not(name()='head')]" mode="summaryList"/>
-                    </div>
-                <!--</ul>-->
+            <xsl:when test="child::node()">
+                <div class="col-sm-12 col-md-12 col-lg-12 secondary">
+                    <xsl:apply-templates select="*[not(name()='head')]" mode="summaryList"/>
+                </div>
             </xsl:when>
-            <xsl:otherwise>
-                <!-- <ul class="ds-artifact-list list-unstyled">-->
-                    <div class="col-sm-12 col-md-12 col-lg-12 secondary">
-                        <xsl:apply-templates select="*[not(name()='head')]" mode="summaryList"/>
-                    </div>
-                <!-- </ul> -->
-            </xsl:otherwise>
+            <xsl:otherwise />
         </xsl:choose>
     </xsl:template>
 
@@ -224,19 +216,12 @@
             <xsl:value-of select="@url"/>
             <!-- Since this is a summary only grab the descriptive metadata, and the thumbnails -->
             <xsl:text>?sections=dmdSec,fileSec&amp;fileGrpTypes=THUMBNAIL</xsl:text>
-            
-            <!--Note: Custom version of the above query string. Our version removes the 
-                      constraint of only grabbing the thumbnails file group type. 
-            -->
-            <!-- <xsl:text>?sections=dmdSec,fileSec</xsl:text> -->
-            
             <!-- An example of requesting a specific metadata standard (MODS and QDC crosswalks only work for items)->
             <xsl:if test="@type='DSpace Item'">
                 <xsl:text>&amp;dmdTypes=DC</xsl:text>
             </xsl:if>-->
         </xsl:variable>
         <xsl:comment> External Metadata URL: <xsl:value-of select="$externalMetadataURL"/> </xsl:comment>
-        <!-- <li> -->
 		<div>
             <xsl:attribute name="class">
                 <xsl:text>row ds-artifact-item </xsl:text>
@@ -248,7 +233,6 @@
             <xsl:apply-templates select="document($externalMetadataURL)" mode="summaryList"/>
             <xsl:apply-templates />
 		</div>
-        <!--</li>-->
     </xsl:template>
 
     <xsl:template match="dri:reference" mode="detailList">
@@ -284,7 +268,7 @@
             <xsl:when test="$repoName = 'AUrora' or $repoName = 'DeepSpace'">
                 <xsl:apply-templates />
             </xsl:when>
-            <xsl:otherwise></xsl:otherwise>
+            <xsl:otherwise/>
         </xsl:choose>
         <!-- Commenting out this apply-templates tag prevents the collections section from being rendered in the default way -->
         <!-- <xsl:apply-templates /> -->
@@ -305,7 +289,7 @@
             <xsl:when test="$repoName = 'AUrora' or $repoName = 'DeepSpace'">
                 <xsl:apply-templates />
             </xsl:when>
-            <xsl:otherwise></xsl:otherwise>
+            <xsl:otherwise/>
         </xsl:choose>
         <!-- Commenting out this apply-templates tag prevents the collections section from being rendered in the default way -->
         <!-- <xsl:apply-templates /> -->
