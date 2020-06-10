@@ -670,8 +670,6 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="dri:div[@interactive = 'yes' and @id = 'aspect.artifactbrowser.ConfigurableBrowse.div.browse-controls']" priority="1" />
-
     <xsl:template match="dri:div[@interactive='yes']" priority="2">
         <xsl:apply-templates select="dri:head" />
         <xsl:apply-templates select="@pagination">
@@ -679,7 +677,7 @@
         </xsl:apply-templates>
         <form>
             <xsl:call-template name="standardAttributes">
-                <xsl:with-param name="class">ds-interactive-div</xsl:with-param>
+                <!-- <xsl:with-param name="class">ds-interactive-div</xsl:with-param> -->
             </xsl:call-template>
             <xsl:attribute name="action">
                 <xsl:value-of select="@action" />
