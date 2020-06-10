@@ -438,7 +438,7 @@
     </xsl:template>
 
     <xsl:template match="dri:option" mode="browseControl-Option">
-        <li>
+        <li role="menuitem">
             <a href="#" data-returnvalue="{@returnValue}" data-name="{../@n}">
                 <span aria-hidden="true">
                     <xsl:attribute name="class">
