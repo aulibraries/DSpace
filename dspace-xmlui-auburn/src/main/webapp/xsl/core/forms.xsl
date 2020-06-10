@@ -626,17 +626,6 @@
         <xsl:choose>
             <!-- TODO: this has changed dramatically (see form3.xml) -->
             <xsl:when test="@type= 'select'">
-                <label>
-                    <xsl:attribute name="class">
-                        <xsl:text>control-label</xsl:text>
-                        <xsl:if test="contains(ancestor::dri:div/@rend, 'hidden')">
-                            <xsl:text> sr-only</xsl:text>
-                        </xsl:if>
-                    </xsl:attribute>
-                    <xsl:attribute name="for">
-                        <xsl:value-of select="translate(@id,'.','_')" />
-                    </xsl:attribute>
-                </label>
                 <select>
                     <xsl:call-template name="fieldAttributes" />
                     <xsl:apply-templates />
@@ -793,18 +782,6 @@
                 </button>
             </xsl:when>
             <xsl:otherwise>
-                <!-- <label>
-                    <xsl:attribute name="class">
-                        <xsl:text>control-label</xsl:text>
-                        <xsl:if test="@required = 'yes'">
-                            <xsl:text> required</xsl:text>
-                        </xsl:if>
-                    </xsl:attribute>
-                    <xsl:attribute name="for">
-                        <xsl:value-of select="translate(@id,'.','_')"/>
-                    </xsl:attribute>
-                    <xsl:apply-templates select="dri:label" mode="compositeComponent"/>
-                </label> -->
                 <input>
                     <xsl:call-template name="fieldAttributes" />
                     <!--
@@ -935,18 +912,6 @@
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:attribute>
-                    <!-- <xsl:if test="dri:field/dri:label">
-                            <label>
-                                <xsl:attribute name="class">
-                                    <xsl:text>control-label</xsl:text>
-                                    <xsl:if test="dri:field/@required = 'yes'">
-                                        <xsl:text> required</xsl:text>
-                                    </xsl:if>
-                                </xsl:attribute>
-                                <xsl:text>&#160;</xsl:text>
-                            </label>
-                        </xsl:if> -->
-                    <!-- <div class="clearfix"> -->
                     <xsl:if test="contains(dri:params/@operations,'add')">
                         <button type="submit" name="{concat('submit_',@n,'_add')}" class="ds-button-field btn btn-default pull-right ds-add-button">
                             <xsl:if test="dri:params/@choicesPresentation = 'lookup'">
@@ -979,7 +944,6 @@
                             </xsl:call-template>
                         </xsl:when>
                     </xsl:choose>
-                    <!-- </div> -->
                 </div>
             </xsl:if>
             <!-- place to store authority value -->
@@ -1298,9 +1262,6 @@
     </xsl:template>
 
     <xsl:template match="dri:p[count(dri:field) = 2 and dri:field[@type='button'] and dri:field[not(@type='button')]]" priority="4">
-        <!-- <p>
-            <xsl:apply-templates select="*[not(name()='field')]"/>
-        </p> -->
         <div class="row">
             <div>
                 <xsl:call-template name="standardAttributes">
@@ -1379,7 +1340,6 @@
     <xsl:template name="pick-label">
         <xsl:choose>
             <xsl:when test="dri:field/dri:label">
-                <!--<label class="control-label col-sm-2">-->
                 <label>
                     <xsl:attribute name="class">
                         <xsl:text>control-label</xsl:text>
@@ -1437,7 +1397,6 @@
 
     <xsl:template match="dri:field/dri:label" mode="compositeLabel">
         <div class="col-sm-12">
-            <!-- <label> -->
             <span>
                 <xsl:attribute name="class">
                     <xsl:text>control-label</xsl:text>
@@ -1445,12 +1404,8 @@
                         <xsl:text> required</xsl:text>
                     </xsl:if>
                 </xsl:attribute>
-                <xsl:attribute name="for">
-                    <xsl:value-of select="translate(../@id, '.', '_')" />
-                </xsl:attribute>
                 <xsl:apply-templates />
                 <xsl:text>:&#160;</xsl:text>
-                <!-- </label> -->
             </span>
         </div>
     </xsl:template>
