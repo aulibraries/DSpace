@@ -63,7 +63,7 @@
             <div class="col-xs-12 col-sm-6">
                 <label>
                     <xsl:attribute name="class">
-                        <xsl:text>control-label sr-only</xsl:text>
+                        <xsl:text>sr-only</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="for">
                         <xsl:value-of select="translate(dri:field/@id,'.','_')"/>
@@ -111,28 +111,30 @@
 
     <xsl:template match="dri:p[dri:field/@id='aspect.artifactbrowser.ConfigurableBrowse.field.year' or dri:field/@id='aspect.administrative.WithdrawnItems.field.year' or dri:field/@id='aspect.administrative.PrivateItems.field.year']">
         <div class="form-group">
-            <label class="ds-form-label browse-form-label">
-                <xsl:attribute name="for">
-                    <xsl:value-of select="translate(@id,'.','_')"/>
-                </xsl:attribute>
-                <xsl:apply-templates select="i18n:text[1]"/>
-            </label>
             <div class="row">
                 <div class="col-xs-5 col-sm-3">
                     <label>
                         <xsl:attribute name="class">
-                            <xsl:text>control-label sr-only</xsl:text>
+                            <xsl:text>sr-only</xsl:text>
                         </xsl:attribute>
                         <xsl:attribute name="for">
-                            <xsl:value-of select="translate('aspect.artifactbrowser.ConfigurableBrowse.field.year', '.','_')"/>
+                            <xsl:value-of select="translate(./dri:field[2]/@id, '.','_')"/>
                         </xsl:attribute>
-                        <xsl:text>Select a year.</xsl:text>
+                        <xsl:text>Select a year</xsl:text>
                     </label>
                     <xsl:apply-templates select="dri:field[@id='aspect.artifactbrowser.ConfigurableBrowse.field.year' or @id='aspect.administrative.WithdrawnItems.field.year' or @id='aspect.administrative.PrivateItems.field.year' ]" mode="normalField"/>
                 </div>
                 <div class="col-xs-7 col-sm-6">
                     <div class="input-group">
-                        <label class="sr-only" for="aspect_artifactbrowser_ConfigurableBrowse_field_starts_with">Enter a value to search for</label>
+                        <label>
+                            <xsl:attribute name="class">
+                                <xsl:text>sr-only</xsl:text>
+                            </xsl:attribute>
+                            <xsl:attribute name="for">
+                                <xsl:value-of select="translate(following-sibling::dri:p/dri:field/@id, '.','_')"/>
+                            </xsl:attribute>
+                            <xsl:text>Enter a value to search for</xsl:text>
+                        </label>
                         <xsl:apply-templates select="../dri:p/dri:field[@id='aspect.artifactbrowser.ConfigurableBrowse.field.starts_with' or @id='aspect.administrative.WithdrawnItems.field.starts_with' or @id='aspect.administrative.PrivateItems.field.starts_with']" />
                         <span class="input-group-btn">
                             <xsl:apply-templates select="../dri:p/dri:field[@id='aspect.artifactbrowser.ConfigurableBrowse.field.submit' or @id='aspect.administrative.WithdrawnItems.field.submit' or @id='aspect.administrative.PrivateItems.field.submit']"/>
