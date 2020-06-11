@@ -99,7 +99,7 @@
                         <xsl:attribute name="title">
                             <xsl:call-template name="renderCOinS" />
                         </xsl:attribute>
-                        &#xFEFF;                         <!-- non-breaking space to force separating the end tag -->
+                        &#xFEFF;                                                 <!-- non-breaking space to force separating the end tag -->
                     </span>
                 </span>
             </a>
@@ -142,26 +142,23 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </span>
-                <xsl:text></xsl:text>
                 <span class="publisher-date">
-                    <xsl:text>(</xsl:text>
-                    <span class="date">
-                        <xsl:choose>
-                            <xsl:when test="dim:field[@element='date' and @qualifier='issued']/node() != ''">
-                                <xsl:value-of select="substring(dim:field[@element='date' and @qualifier='issued']/node(),1,10)" />
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of select="substring(dim:field[@element='date' and @qualifier='accessioned']/node(),1,10)" />
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </span>
+                    <xsl:text>&#160;(</xsl:text>
+                    <xsl:choose>
+                        <xsl:when test="dim:field[@element='date' and @qualifier='issued']/node() != ''">
+                            <xsl:value-of select="substring(dim:field[@element='date' and @qualifier='issued']/node(),1,10)" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="substring(dim:field[@element='date' and @qualifier='accessioned']/node(),1,10)" />
+                        </xsl:otherwise>
+                    </xsl:choose>
                     <xsl:text>)</xsl:text>
                 </span>
                 <xsl:choose>
                     <xsl:when test="contains(//mets:fileSec/mets:fileGrp[@USE='CONTENT']/mets:file/mets:FLocat[@LOCTYPE='URL']/@xlink:href, 'isAllowed=n')">
                         <span class="embargo-info">
                             <i aria-hidden="true" class="fas fa-lock hidden-print"></i>
-                            &#160; ETD File Embargoed
+                            <xsl:text>&#160; ETD File Embargoed</xsl:text>
                         </span>
                     </xsl:when>
                 </xsl:choose>
@@ -246,7 +243,7 @@
                 <xsl:attribute name="title">
                     <xsl:call-template name="renderCOinS" />
                 </xsl:attribute>
-                &#xFEFF;                 <!-- non-breaking space to force separating the end tag -->
+                &#xFEFF;                                 <!-- non-breaking space to force separating the end tag -->
             </span>
             <div class="artifact-info">
                 <span class="author">
