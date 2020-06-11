@@ -247,18 +247,16 @@
                     <xsl:text></xsl:text>
                     <xsl:if test="dri:list[@n=(concat($handle, ':dc.date.accessioned'))]">
                         <span class="publisher-date h5">
-                                <xsl:text> (</xsl:text>
-                                <span class="date">
-                                    <xsl:value-of select="substring(dri:list[@n=(concat($handle, ':dc.date.accessioned'))]/dri:item,1,10)" />
-                                </span>
-                                <xsl:text>)</xsl:text>
+                            <xsl:text>&#160;(</xsl:text>
+                            <xsl:value-of select="substring(dri:list[@n=(concat($handle, ':dc.date.accessioned'))]/dri:item,1,10)" />
+                            <xsl:text>)</xsl:text>
                         </span>
                     </xsl:if>
                     <xsl:choose>
                         <xsl:when test="contains($metsDoc/mets:METS/mets:fileSec/mets:fileGrp[@USE='CONTENT']/mets:file/mets:FLocat[@LOCTYPE='URL']/@xlink:href, 'isAllowed=n')">
                             <span class="embargo-info">
                                 <span aria-hidden="true" class="fa fa-lock hidden-print"></span>
-                                &#160; ETD File Embargoed
+                                <xsl:text>&#160; ETD File Embargoed</xsl:text>
                             </span>
                         </xsl:when>
                     </xsl:choose>
