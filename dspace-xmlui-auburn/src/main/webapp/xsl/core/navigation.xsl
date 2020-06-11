@@ -141,13 +141,6 @@
             <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='URI']" />
         </xsl:variable>
 
-        <!--<div>
-            <xsl:call-template name="standardAttributes">
-                <xsl:with-param name="class">list-group-item ds-option</xsl:with-param>
-            </xsl:call-template>
-            <a href="#" class="list-group-item ds-option"><xsl:value-of select="$viewAccountNav"/></a>
-        </div> -->
-
         <xsl:choose>
             <xsl:when test="not(contains($pageURI,'login')) and not(contains($pageURI, 'restricted-resource'))">
                 <xsl:if test="count(child::node()) &gt; 0">
