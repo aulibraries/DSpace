@@ -671,6 +671,11 @@
         <xsl:call-template name="itemSummaryView-DIM-title" />
         <div class="ds-table-responsive">
             <table class="ds-includeSet-table detailtable table table-striped table-hover">
+                <tr>
+                    <th>Metadata Field</th>
+                    <th>Value</th>
+                    <th>Language</th>
+                </tr>
                 <xsl:apply-templates mode="itemDetailView-DIM" />
             </table>
         </div>
