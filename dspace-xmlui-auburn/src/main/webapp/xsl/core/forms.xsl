@@ -881,7 +881,16 @@
                         <xsl:attribute name="disabled">disabled</xsl:attribute>
                     </xsl:if>
                 </input>
-                <xsl:apply-templates />
+                <xsl:choose>
+                    <xsl:when test="parent::dri:field/@n = 'select_group' or parent::dri:field/@n = 'select_eperson'">
+                        <span class="sr-only">
+                            <xsl:value-of select="../dri:label" />
+                        </span>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="../dri:label" />
+                    </xsl:otherwise>
+                </xsl:choose>
             </label>
         </div>
     </xsl:template>
