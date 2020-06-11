@@ -119,7 +119,16 @@
                     <xsl:value-of select="@cols" />
                 </xsl:attribute>
             </xsl:if>
-            <xsl:apply-templates />
+            <xsl:choose>
+                <xsl:when test="contains(ancestor::dri:table/@n, 'search-table') and position() = 1">
+                    <span class="sr-only">
+                        <xsl:apply-templates />
+                    </span>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates />
+                </xsl:otherwise>
+            </xsl:choose>
         </th>
     </xsl:template>
 
@@ -346,7 +355,6 @@
                     </div>
                 </xsl:when>
                 <xsl:otherwise>
-                    <!-- <xsl:apply-templates /> -->
                     <div class="col-sm-12">
                         <a>
                             <xsl:if test="./dri:xref/@target">
