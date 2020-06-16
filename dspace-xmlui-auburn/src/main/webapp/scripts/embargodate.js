@@ -24,10 +24,8 @@ $(function() {
         }
 
         if (checkedVal == 2 || checkedVal == 3) {
-            //elements.dateListItem.show();
             elements.embargoLengthItem.show();
         } else if (checkedVal == 1) {
-            //elements.dateListItem.hide();
             elements.embargoLengthItem.hide();
         }
     });
@@ -63,27 +61,16 @@ $(function() {
              * This action would only occur if the user submitted the form
              * before selecting an embargo choice radio button.
              */
-            if ($(this).parent('label').parent('div').parent('fieldset').hasClass('error') && $(this).parent('label').parent('div').parent('fieldset').parent('div').hasClass('has-error')) {
-                $(this).parent('label').parent('div').parent('fieldset').removeClass('error');
+            if ($(this).parent('label').parent('div').parent('fieldset').parent('div').hasClass('has-error')) {
                 $(this).parent('label').parent('div').parent('fieldset').parent('div').removeClass('has-error');
-                $(this).parent('label').parent('div').parent('fieldset').parent('div').find('.alert').remove();
+                $(this).parent('label').parent('div').parent('fieldset').parent('div').find('p.alert').hide();
             }
         });
 
-        /*elements.embargoUntilDate.on("change", function()
-        {
-            if($(this).parent('div').hasClass('has-error'))
-            {
-                $(this).parent('div').removeClass('has-error');
-                $(this).parent('div').find('.alert').remove();
-            }
-        });*/
-
         elements.embargoLength.on("click", function () {
-            if ($(this).parent('label').parent('div').parent('fieldset').hasClass('error') && $(this).parent('label').parent('div').parent('fieldset').parent('div').hasClass('has-error')) {
-                $(this).parent('label').parent('div').parent('fieldset').removeClass('error');
+            if ($(this).parent('label').parent('div').parent('fieldset').parent('div').hasClass('has-error')) {
                 $(this).parent('label').parent('div').parent('fieldset').parent('div').removeClass('has-error');
-                $(this).parent('label').parent('div').parent('fieldset').parent('div').find('.alert').remove();
+                $(this).parent('label').parent('div').parent('fieldset').parent('div').find('p.alert').hide();
             }
         });
     }
