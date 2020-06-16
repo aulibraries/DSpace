@@ -38,7 +38,7 @@
             <xsl:when test="$serverName = 'etd.auburn.edu' or $contextPath = '/auetd'">
                 <xsl:text>AUETD</xsl:text>
             </xsl:when>
-            <xsl:when test="$serverName = 'aurora.auburn.edu' or $contextPath = '/aurora'">
+            <xsl:when test="$serverName = 'aurora.auburn.edu' or contains($contextPath, 'aurora')">
                 <xsl:text>AUrora</xsl:text>
             </xsl:when>
             <xsl:when test="$serverName = 'deepspace.lib.auburn.edu' or $contextPath = '/deepspace'">
