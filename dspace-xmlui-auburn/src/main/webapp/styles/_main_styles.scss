@@ -496,6 +496,16 @@ span {
     color: $color_black;
 }
 
+input[type="file"] {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555555;
+}
+
 /*********** End Forms *****************/
 
 /* **************** Browse and Search Results Lists *************************/
