@@ -93,9 +93,9 @@
     <!-- Header row, most likely filled with header cells -->
     <xsl:template match="dri:row[@role='header']" priority="2">
         <tr>
-            <xsl:call-template name="standardAttributes">
-                <!-- <xsl:with-param name="class">ds-table-header-row</xsl:with-param> -->
-            </xsl:call-template>
+            <!-- <xsl:call-template name="standardAttributes">
+                <xsl:with-param name="class">ds-table-header-row</xsl:with-param>
+            </xsl:call-template> -->
             <xsl:apply-templates />
         </tr>
     </xsl:template>
@@ -103,12 +103,12 @@
     <!-- Header cell, assumed to be one since it is contained in a header row -->
     <xsl:template match="dri:row[@role='header']/dri:cell | dri:cell[@role='header']" priority="2">
         <th>
-            <xsl:call-template name="standardAttributes">
-                <!-- <xsl:with-param name="class">ds-table-header-cell
+            <!-- <xsl:call-template name="standardAttributes">
+                <xsl:with-param name="class">ds-table-header-cell
                     <xsl:if test="(position() mod 2 = 0)">even</xsl:if>
                     <xsl:if test="(position() mod 2 = 1)">odd</xsl:if>
-                </xsl:with-param> -->
-            </xsl:call-template>
+                </xsl:with-param>
+            </xsl:call-template> -->
             <xsl:if test="@rows">
                 <xsl:attribute name="rowspan">
                     <xsl:value-of select="@rows" />
@@ -120,7 +120,9 @@
                 </xsl:attribute>
             </xsl:if>
             <xsl:choose>
-                <xsl:when test="contains(ancestor::dri:table/@n, 'search-table') and position() = 1">
+                <xsl:when test="(contains(ancestor::dri:table/@n, 'search-table') and position() = 1) or (contains(ancestor::dri:table/@n, 'unfinished-submissions') and position() = 1)
+                or (contains(ancestor::dri:table/@n, 'pooled-workflow-tasks') and position() = 1) or (contains(ancestor::dri:table/@n, 'owned-workflow-tasks') and position() = 1)
+                or (contains(ancestor::dri:table/@n, 'container-policy-list') and position() = 1)">
                     <span class="sr-only">
                         <xsl:apply-templates />
                     </span>
@@ -136,12 +138,12 @@
     <!-- Normal row, most likely filled with data cells -->
     <xsl:template match="dri:row" priority="1">
         <tr>
-            <xsl:call-template name="standardAttributes">
+            <!-- <xsl:call-template name="standardAttributes">
                 <xsl:with-param name="class">ds-table-row
                     <xsl:if test="(position() mod 2 = 0)">even</xsl:if>
                     <xsl:if test="(position() mod 2 = 1)">odd</xsl:if>
                 </xsl:with-param>
-            </xsl:call-template>
+            </xsl:call-template> -->
             <xsl:apply-templates />
         </tr>
     </xsl:template>
@@ -149,12 +151,12 @@
     <!-- Just a plain old table cell -->
     <xsl:template match="dri:cell" priority="1">
         <td>
-            <xsl:call-template name="standardAttributes">
+            <!-- <xsl:call-template name="standardAttributes">
                 <xsl:with-param name="class">ds-table-cell
                     <xsl:if test="(position() mod 2 = 0)">even</xsl:if>
                     <xsl:if test="(position() mod 2 = 1)">odd</xsl:if>
                 </xsl:with-param>
-            </xsl:call-template>
+            </xsl:call-template> -->
             <xsl:if test="@rows">
                 <xsl:attribute name="rowspan">
                     <xsl:value-of select="@rows" />
@@ -579,7 +581,7 @@
         respectively. -->
 
     <xsl:template match="dri:hi">
-        <span>
+        <p>
             <xsl:attribute name="class">emphasis</xsl:attribute>
             <xsl:if test="@rend">
                 <xsl:attribute name="class">
@@ -587,7 +589,7 @@
                 </xsl:attribute>
             </xsl:if>
             <xsl:apply-templates />
-        </span>
+        </p>
     </xsl:template>
 
     <xsl:template match="dri:hi[@rend='highlight']">
