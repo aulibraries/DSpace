@@ -511,7 +511,17 @@
                 <xsl:otherwise>
                     <xsl:call-template name="standardAttributes">
                         <xsl:with-param name="class">
-                            <xsl:text>form-group </xsl:text>
+                            <xsl:choose>
+                                <xsl:when test="child::dri:hi">
+                                    <xsl:text>row col-sm-12 </xsl:text>
+                                    <xsl:if test="child::dri:hi/@rend = 'error'">
+                                        <xsl:text>alert bg-danger</xsl:text>
+                                    </xsl:if>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>form-group </xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
                             <xsl:if test="dri:field/dri:error">
                                 <xsl:text> has-error</xsl:text>
                             </xsl:if>
@@ -522,104 +532,16 @@
                             <xsl:apply-templates mode="formComposite" />
                         </xsl:when>
                         <xsl:otherwise>
-                            <!-- <div class="col-sm-12"> -->
                             <xsl:if test="not(./dri:field/@type='radio' or ./dri:field/@type='checkbox')">
                                 <xsl:call-template name="pick-label" />
                             </xsl:if>
                             <xsl:apply-templates />
-                            <!-- </div> -->
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:otherwise>
             </xsl:choose>
         </div>
-        <!-- <div>
-            <xsl:choose>
-                <xsl:when test="dri:field[@type='composite']">
-                    <xsl:call-template name="standardAttributes">
-                        <xsl:with-param name="class">
-                            <xsl:text>ds-form-item row </xsl:text>
-                            <xsl:if test="contains(@id, 'aspect.submission.StepTransformer')">
-                                <xsl:text>table </xsl:text>
-                            </xsl:if>
-                        </xsl:with-param>
-                    </xsl:call-template>
-                    <div>
-                        <xsl:attribute name="class">
-                            <xsl:text>form-group</xsl:text>
-                            <xsl:if test="dri:field/dri:error">
-                                <xsl:text> has-error</xsl:text>
-                            </xsl:if>
-                        </xsl:attribute>
-                        <xsl:apply-templates mode="formComposite"/>
-                    </div>
-                </xsl:when>
-                <xsl:when test="dri:list[@type='form']">
-                    <xsl:call-template name="standardAttributes">
-                        <xsl:with-param name="class">
-                            <xsl:text>ds-form-item row </xsl:text>
-                            <xsl:if test="contains(@id, 'aspect.submission.StepTransformer')">
-                                <xsl:text>table </xsl:text>
-                            </xsl:if>
-                        </xsl:with-param>
-                    </xsl:call-template>
-                    <xsl:apply-templates />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:call-template name="standardAttributes">
-                        <xsl:with-param name="class">
-                            <xsl:text>ds-form-item row </xsl:text>
-                            <xsl:if test="contains(@id, 'aspect.submission.StepTransformer')">
-                                <xsl:text>table </xsl:text>
-                            </xsl:if>
-                        </xsl:with-param>
-                    </xsl:call-template>
-                    <div>
-                        <xsl:attribute name="class">
-                            <xsl:text>form-group col-sm-12</xsl:text>
-                            <xsl:if test="dri:field/dri:error">
-                                <xsl:text> has-error</xsl:text>
-                            </xsl:if>
-                        </xsl:attribute>
-                        <xsl:if test="not(./dri:field/@type='radio' or ./dri:field/@type='checkbox')">
-                        <xsl:call-template name="pick-label"/>
-                        </xsl:if>
-                        <xsl:apply-templates /> -->
-        <!-- special name used in submission UI review page -->
-        <!-- <xsl:if test="@n = 'submit-review-field-with-authority'">
-                            <xsl:call-template name="authorityConfidenceIcon">
-                                <xsl:with-param name="confidence" select="substring-after(./@rend, 'cf-')"/>
-                            </xsl:call-template>
-                        </xsl:if>
-                    </div>
-                </xsl:otherwise>
-            </xsl:choose>
-        </div> -->
-
     </xsl:template>
-
-    <!-- <xsl:template match="dri:list[@type='form']//dri:item" priority="3">
-        <div>
-            <xsl:attribute name="class">
-                <xsl:choose>
-                    <xsl:when test="dri:list[@type='form']">
-                        <xsl:text>row </xsl:text>
-                        <xsl:if test="contains(@id, 'aspect.submission.StepTransformer')">
-                            <xsl:text>table </xsl:text>
-                        </xsl:if>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text>form-group</xsl:text>
-                        <xsl:if test="dri:field/dri:error">
-                            <xsl:text> has-error</xsl:text>
-                        </xsl:if>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:attribute>
-            <xsl:call-template name="pick-label"/>
-            <xsl:apply-templates />
-        </div>
-    </xsl:template> -->
 
     <xsl:template match="dri:field" mode="normalField">
         <xsl:variable name="confidenceIndicatorID" select="concat(translate(@id,'.','_'),'_confidence_indicator')" />
@@ -784,17 +706,6 @@
             <xsl:otherwise>
                 <input>
                     <xsl:call-template name="fieldAttributes" />
-                    <!--
-                        Adds the data-buttonText attribute to the input form field if the field's type
-                        property is set to file. The data-buttonText attribute's value is a simple space.
-                        Adding this attribute and value combination removes the bootstrap-filestyle default
-                        button text, Choose File, from the action button.
-                    -->
-                    <xsl:if test="@type='file'">
-                        <xsl:attribute name="data-buttonText">
-                            <xsl:text></xsl:text>
-                        </xsl:attribute>
-                    </xsl:if>
                     <xsl:attribute name="value">
                         <xsl:choose>
                             <xsl:when test="./dri:value[@type='raw']">
@@ -882,13 +793,14 @@
                     </xsl:if>
                 </input>
                 <xsl:choose>
-                    <xsl:when test="parent::dri:field/@n = 'select_group' or parent::dri:field/@n = 'select_eperson'">
+                    <xsl:when test="parent::dri:field/@n = 'select_group' or parent::dri:field/@n = 'select_eperson'
+                        or parent::dri:field/@n = 'workspaceID' or parent::dri:field/@n = 'select_policy'">
                         <span class="sr-only">
                             <xsl:value-of select="../dri:label" />
                         </span>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="../dri:label" />
+                        <xsl:apply-templates select="node()" />
                     </xsl:otherwise>
                 </xsl:choose>
             </label>
@@ -1434,7 +1346,7 @@
                         </xsl:if>
                     </xsl:when>
                     <xsl:when test="@type='file'">
-                        <xsl:text> filestyle </xsl:text>
+                        <xsl:text></xsl:text>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:text>form-control </xsl:text>
