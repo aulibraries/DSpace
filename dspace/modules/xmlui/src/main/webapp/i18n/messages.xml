@@ -2270,7 +2270,18 @@
                    AUETD Custom Messages
         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 	<message key="xmlui.general.search.placeholder.AUETD_placeholder">Search AUETD</message>
-	<message key="xmlui.Submission.submit.SelectCollection.AUETD_seleted_collection_head">Selected Collection</message>
+    <message key="xmlui.Submission.submit.SelectCollection.AUETD_seleted_collection_head">Selected Collection</message>
+    <message key="xmlui.administrative.authorization.EditContainerPolicies.AUETD_head_action">Select</message>
+    <message key="xmlui.administrative.authorization.EditContainerPolicies.main_add_link">Add a new policy.</message>
+    <message key="xmlui.administrative.eperson.ManageEPeopleMain.search_column1">Select</message>
+    <message key="xmlui.administrative.group.EditGroupForm.epeople_column4">Action</message>
+    <message key="xmlui.administrative.group.EditGroupForm.groups_column5">Action</message>
+    <message key="xmlui.administrative.group.EditGroupForm.members_column4">Action</message>
+    <message key="xmlui.administrative.group.ManageGroupsMain.search_column1">Select</message>
+    <message key="xmlui.administrative.registries.EditMetadataSchema.column1">Select</message>
+    <message key="xmlui.Submission.Submissions.submit_column1">Select</message>
+    <message key="xmlui.Submission.Submissions.workflow_column1">Select</message>
+    
 
     <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 Custom Submission Form Messages
@@ -2279,7 +2290,7 @@
     <message key="xmlui.Submission.submit.LicenseStep.AUETD_embargo_policy_head">EMBARGO OPTIONS AND DISSEMINATION AGREEMENT</message>
     <message key="xmlui.Submission.submit.LicenseStep.AUETD_decision_checkbox">I have read and understand the AUETD embargo options and dissemination agreement.</message>
     <message key="xmlui.Submission.submit.LicenseStep.AUETD_decision_accepted">You have already read and accepted the AUETD embargo options and dissemination agreement. Click the Next button to proceed to the next step.</message>
-    <message key="xmlui.Submission.submit.LicenseStep.AUETD_decision_error">You must accept the AUETD embargo options and dissemination agreement before to complete your submission. If you are unable to accept the AUETD embargo policy and dissemination agreement at this time you may save your work and return later or remove the submission by clicking the 'Save &amp; Exit' button below.</message>
+    <message key="xmlui.Submission.submit.LicenseStep.AUETD_decision_error">You must accept the AUETD embargo options and dissemination agreement before continuing your submission. If you are unable to accept the AUETD embargo policy and dissemination agreement at this time you may save your work and return later or remove the submission by clicking the 'Save &amp; Exit' button below.</message>
 
     <!-- File Upload Field -->
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_file_upload_form_head">Upload File</message>
