@@ -26,6 +26,12 @@ import org.dspace.core.Constants;
 import org.dspace.embargo.factory.EmbargoServiceFactory;
 import org.dspace.embargo.service.EmbargoService;
 import org.dspace.services.factory.DSpaceServicesFactory;
+import static org.dspace.submit.step.UploadWithEmbargoStep.STATUS_EDIT_BITSTREAM;
+import static org.dspace.submit.step.UploadWithEmbargoStep.STATUS_NO_FILES_ERROR;
+import static org.dspace.submit.step.UploadWithEmbargoStep.STATUS_UPLOAD_ERROR;
+import static org.dspace.submit.step.UploadWithEmbargoStep.STATUS_VIRUS_CHECKER_UNAVAILABLE;
+import static org.dspace.submit.step.UploadWithEmbargoStep.STATUS_CONTAINS_VIRUS;
+import static org.dspace.submit.step.UploadWithEmbargoStep.AUETD_STATUS_UNACCEPTABLE_FORMAT;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
@@ -199,7 +205,7 @@ public class UploadWithEmbargoStep extends UploadStep
     { 
         super.setup(resolver,objectModel,src,parameters);
 
-        if(this.errorFlag == org.dspace.submit.step.UploadWithEmbargoStep.STATUS_EDIT_BITSTREAM)
+        if(this.errorFlag == STATUS_EDIT_BITSTREAM)
         {
             this.editFile = new EditFileStep();
             this.editFile.setup(resolver, objectModel, src, parameters);
@@ -264,26 +270,26 @@ public class UploadWithEmbargoStep extends UploadStep
 	        file.setRequired();
 
 	        // if no files found error was thrown by processing class, display it!
-	        if (this.errorFlag==org.dspace.submit.step.UploadWithEmbargoStep.STATUS_NO_FILES_ERROR) {
+	        if (this.errorFlag == STATUS_NO_FILES_ERROR) {
                 file.addError(T_file_error);
             }
 
             // if an upload error was thrown by processing class, display it!
-            if (this.errorFlag == org.dspace.submit.step.UploadWithEmbargoStep.STATUS_UPLOAD_ERROR) {
+            if (this.errorFlag == STATUS_UPLOAD_ERROR) {
                 file.addError(T_upload_error);
             }
 
-            if(this.errorFlag == org.dspace.submit.step.UploadWithEmbargoStep.AUETD_STATUS_UNACCEPTABLE_FORMAT) {
+            if(this.errorFlag == AUETD_STATUS_UNACCEPTABLE_FORMAT) {
                 file.addError(AUETD_INVALID_FILE_FORMAT_ERROR);
             }
 
             // if virus checking was attempted and failed in error then let the user know
-            if (this.errorFlag == org.dspace.submit.step.UploadWithEmbargoStep.STATUS_VIRUS_CHECKER_UNAVAILABLE) {
+            if (this.errorFlag == STATUS_VIRUS_CHECKER_UNAVAILABLE) {
                 file.addError(T_virus_checker_error);
             }
 
              // if virus checking was attempted and a virus found then let the user know
-            if (this.errorFlag == org.dspace.submit.step.UploadWithEmbargoStep.STATUS_CONTAINS_VIRUS) {
+            if (this.errorFlag == STATUS_CONTAINS_VIRUS) {
                 file.addError(T_virus_error);
             }
 
@@ -418,7 +424,7 @@ public class UploadWithEmbargoStep extends UploadStep
                 embargoRights = embargoRightsList.get(0).getValue();
             }
 
-            if (embargoStatusList != null & embargoStatusList.size() > 0) {
+            if (embargoStatusList != null && embargoStatusList.size() > 0) {
                 embargoStatus = embargoStatusList.get(0).getValue();
             }
 
