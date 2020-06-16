@@ -8,6 +8,7 @@
 
 $(function () {
     var elements = {
+        licenseDisseminationAccept: $('input[id="decision-accept"]'),
         file: $(':file'),
         errorStack: $("#errorstack"),
         errorStackLink: $('#errorStackLink'),
@@ -57,10 +58,17 @@ $(function () {
             }
         });
 
+        elements.licenseDisseminationAccept.on("change", function() {
+            if ($(this).parent('label').parent('div').parent('div').hasClass('has-error')) {
+                $(this).parent('label').parent('div').parent('div').removeClass('has-error');
+                $(this).parent('label').parent('div').parent('div').find('p.alert').hide();
+            }
+        });
+
         elements.file.on("change", function () {
             if ($(this).parent('div').hasClass('has-error')) {
                 $(this).parent('div').removeClass('has-error');
-                $(this).parent('div').find('.alert').remove();
+                $(this).parent('div').find('.alert').hide();
             }
         });
         
