@@ -486,7 +486,7 @@
                                             <xsl:text>dropdown-toggle</xsl:text>
                                         </xsl:attribute>
                                         <xsl:attribute name="href">
-                                            <xsl:value-of select="$ctxPath"/><xsl:text>liasions.html</xsl:text>
+                                            <xsl:value-of select="$ctxPath"/><xsl:text>liaisons.html</xsl:text>
                                         </xsl:attribute>
                                         <xsl:attribute name="title">
                                             <xsl:text>Subject Librarians/Departmental Liaisons</xsl:text>
