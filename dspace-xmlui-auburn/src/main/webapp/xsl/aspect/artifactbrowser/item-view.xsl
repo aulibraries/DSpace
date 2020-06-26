@@ -56,8 +56,11 @@
     </xsl:variable>
 
     <xsl:template name="itemSummaryView-DIM">
+        <xsl:param name="itemParentCollectionHandleID" />
         <!-- Generate the info about the item from the metadata section -->
-        <xsl:apply-templates select="./mets:dmdSec/mets:mdWrap[@OTHERMDTYPE='DIM']/mets:xmlData/dim:dim" mode="itemSummaryView-DIM" />
+        <xsl:apply-templates select="./mets:dmdSec/mets:mdWrap[@OTHERMDTYPE='DIM']/mets:xmlData/dim:dim" mode="itemSummaryView-DIM">
+            <xsl:with-param name="itemParentCollectionHandleId" select="$itemParentCollectionHandleId" />
+        </xsl:apply-templates>
 
         <xsl:copy-of select="$SFXLink" />
 
@@ -128,6 +131,7 @@
     </xsl:template>
 
     <xsl:template match="dim:dim" mode="itemSummaryView-DIM">
+        <xsl:param name="itemParentCollectionHandleId" />
         <xsl:variable name="endDateTs">
             <xsl:copy-of select="$document//dri:meta/dri:pageMeta/dri:metadata[@element='enddateTs']/node()" />
         </xsl:variable>
@@ -152,9 +156,9 @@
                                         <xsl:choose>
                                             <xsl:when test="$endDateTs != ''">
                                                 <xsl:if test="$endDateTs &gt; $currentTs">
-                                                    <xsl:call-template name="itemSummaryView-DIM-embargostatus" />
-                                                    <xsl:call-template name="itemSummaryView-DIM-rights" />
-                                                    <xsl:call-template name="itemSummaryView-DIM-enddate" />
+                                                    <xsl:call-template name="itemSummaryView-DIM-embargo-status" />
+                                                    <xsl:call-template name="itemSummaryView-DIM-embargo-rights" />
+                                                    <xsl:call-template name="itemSummaryView-DIM-embargo-enddate" />
                                                 </xsl:if>
                                             </xsl:when>
                                             <xsl:otherwise />
@@ -164,9 +168,9 @@
                                 </xsl:choose>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:call-template name="itemSummaryView-DIM-embargostatus" />
-                                <xsl:call-template name="itemSummaryView-DIM-rights" />
-                                <xsl:call-template name="itemSummaryView-DIM-enddate" />
+                                <xsl:call-template name="itemSummaryView-DIM-embargo-status" />
+                                <xsl:call-template name="itemSummaryView-DIM-embargo-rights" />
+                                <xsl:call-template name="itemSummaryView-DIM-embargo-enddate" />
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:when>
@@ -184,17 +188,26 @@
                 </xsl:if>
             </div>
             <div class="col-sm-8">
-                <xsl:call-template name="itemSummaryView-DIM-abstract" />
-                <xsl:if test="$repoName = 'AUETD'">
-                    <div class="item-page-field-wrapper">
-                        <h2 class="h5">Files</h2>
-                        <xsl:apply-templates select="../../../../mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL' or @USE='LICENSE' or @USE='CC-LICENSE' or @USE='TEXT']">
-                            <xsl:with-param name="context" select="/mets:METS" />
-                            <xsl:with-param name="primaryBitstream" select="../../../../mets:structMap[@TYPE='LOGICAL']/mets:div[@TYPE='DSpace Item']/mets:fptr/@FILEID" />
-                        </xsl:apply-templates>
-                    </div>
+                <xsl:choose>
+                    <xsl:when test="$repoName != 'DeepSpace'">
+                        <xsl:call-template name="itemSummaryView-DIM-abstract" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="itemSummaryView-DIM-description"/>
+                        <xsl:if test="not($itemParentCollectionHandleId = '123456789/4')">
+                            <h2 class="h3"><i18n:text>xmlui.dri2xhtml.METS-1.0.item-files-head</i18n:text></h2>
+                            <div class="file-list">
+                                <xsl:apply-templates select="//mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL' or @USE='LICENSE' or @USE='CC-LICENSE']">
+                                    <xsl:with-param name="context" select="/mets:METS"/>
+                                    <xsl:with-param name="primaryBitstream" select="//mets:structMap[@TYPE='LOGICAL']/mets:div[@TYPE='DSpace Item']/mets:fptr/@FILEID"/>
+                                </xsl:apply-templates>
+                            </div>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:if test="not($repoName = 'DeepSpace')">
+                    <xsl:call-template name="itemSummaryView-DIM-URI" />
                 </xsl:if>
-                <xsl:call-template name="itemSummaryView-DIM-URI" />
                 <xsl:choose>
                     <xsl:when test="$repoName = 'AUETD'">
                         <xsl:if test="$document//dri:meta/dri:userMeta/dri:metadata[@qualifier='admin'] = 'yes'">
@@ -565,7 +578,23 @@
         </div>
     </xsl:template>
 
-    <xsl:template name="itemSummaryView-DIM-embargostatus">
+    <xsl:template name="itemSummaryView-DIM-description">
+        <xsl:if test="dim:field[@element='description'][not(@qualifier)]">
+            <div class="simple-item-view-description item-page-field-wrapper table">
+                <h5 class="visible-xs"><i18n:text>xmlui.dri2xhtml.METS-1.0.item-description</i18n:text></h5>
+                <xsl:choose>
+                    <xsl:when test="dim:field[@element='description'][not(@qualifier)]/node() != ''">
+                        <xsl:copy-of select="dim:field[@element='description'][not(@qualifier)]/node()" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        &#160;
+                    </xsl:otherwise>
+                </xsl:choose>
+            </div>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="itemSummaryView-DIM-embargo-status">
         <xsl:if test="dim:field[@element='embargo' and @qualifier='status' and descendant::text()]">
             <div class="simple-item-view word-break item-page-field-wrapper">
                 <h2 class="h5">Restriction Status</h2>
@@ -581,7 +610,7 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template name="itemSummaryView-DIM-enddate">
+    <xsl:template name="itemSummaryView-DIM-embargo-enddate">
         <xsl:if test="dim:field[@element='embargo' and @qualifier='enddate' and descendant::text()]">
             <div class="simple-item-view-date word-break item-page-field-wrapper">
                 <h2 class="h5">Date Available</h2>
@@ -599,7 +628,7 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template name="itemSummaryView-DIM-rights">
+    <xsl:template name="itemSummaryView-DIM-embargo-rights">
         <xsl:if test="dim:field[@element='rights' and descendant::text()]">
             <div class="simple-item-view word-break item-page-field-wrapper">
                 <h2 class="h5">Restriction Type</h2>
@@ -765,7 +794,7 @@
         <xsl:variable name="contentBlockClasses">
             <xsl:choose>
                 <xsl:when test="$context/mets:fileSec/mets:fileGrp[@USE='THUMBNAIL']/mets:file[@GROUPID=current()/@GROUPID]">
-                    <xsl:text>col-xs-6 col-sm-7</xsl:text>
+                    <xsl:text>col-xs-6 col-sm-7 col-sm-pull-1</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>col-sm-10 col-sm-pull-2</xsl:text>

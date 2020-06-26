@@ -53,6 +53,9 @@
             </xsl:when>
         </xsl:choose>
     </xsl:variable>
+    <xsl:variable name="itemParentCollectionHandleId">
+		<xsl:value-of select="substring-after(//dri:meta/dri:pageMeta/dri:metadata[@qualifier='container' and @element='focus'], ':')"/>
+	</xsl:variable>
 
     <!-- These templates are devoted to handling the referenceSet and reference elements. Although they are considered
         structural elements, neither of the two contains actual content. Instead, references contain references
@@ -345,7 +348,9 @@
     <xsl:template match="mets:METS[mets:dmdSec/mets:mdWrap[@OTHERMDTYPE='DIM']]" mode="summaryView">
         <xsl:choose>
             <xsl:when test="@LABEL='DSpace Item'">
-                <xsl:call-template name="itemSummaryView-DIM"/>
+                <xsl:call-template name="itemSummaryView-DIM">
+                    <xsl:with-param name="itemParentCollectionHandleId" select="$itemParentCollectionHandleId"/>
+                </xsl:call-template>
             </xsl:when>
             <xsl:when test="@LABEL='DSpace Collection'">
                 <xsl:call-template name="collectionSummaryView-DIM"/>
