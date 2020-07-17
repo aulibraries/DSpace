@@ -142,7 +142,19 @@
         <xsl:call-template name="itemSummaryView-DIM-title" />
         <div class="row">
             <div class="col-sm-4">
-                <xsl:call-template name="itemSummaryView-DIM-file-section" />
+                <xsl:choose>
+                    <xsl:when test="$repoName = 'DeepSpace'">
+                        <xsl:choose>
+                            <xsl:when test="$itemParentCollectionHandleId != '123456789/2679'">
+                                <xsl:call-template name="itemSummaryView-DIM-file-section" />
+                            </xsl:when>
+                            <xsl:otherwise />
+                        </xsl:choose>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="itemSummaryView-DIM-file-section" />
+                    </xsl:otherwise>
+                </xsl:choose>
                 <xsl:call-template name="itemSummaryView-DIM-date" />
                 <xsl:call-template name="itemSummaryView-DIM-authors" />
                 <xsl:choose>
