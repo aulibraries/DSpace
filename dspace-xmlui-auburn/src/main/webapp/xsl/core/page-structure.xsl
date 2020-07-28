@@ -46,7 +46,7 @@
             <xsl:when test="$serverName = 'etd.auburn.edu' or $contextPath = '/auetd'">
                 <xsl:text>AUETD</xsl:text>
             </xsl:when>
-            <xsl:when test="$serverName = 'aurora.auburn.edu' or contains($contextPath, 'aurora')">
+            <xsl:when test="$serverName = 'aurora.auburn.edu' or $serverName = 'mrads.lib.auburn.edu' or contains($contextPath, 'aurora')">
                 <xsl:text>AUrora</xsl:text>
             </xsl:when>
             <xsl:when test="$serverName = 'deepspace.lib.auburn.edu' or $contextPath = '/deepspace'">
@@ -808,6 +808,9 @@
                                 <xsl:when test="$repoName = 'DeepSpace'">
                                     <input id="aspect_artifactbrowser_FrontPageSearch_field_query" class="ds-text-field form-control" name="query" type="text" placeholder="xmlui.general.search.placeholder.deepspace_placeholder" i18n:attr="placeholder" value=""/>
                                 </xsl:when>
+                                <xsl:otherwise>
+                                    <input id="aspect_artifactbrowser_FrontPageSearch_field_query" class="ds-text-field form-control" name="query" type="text" value=""/>
+                                </xsl:otherwise>
                             </xsl:choose>
                             <span class="input-group-btn">
                                 <button id="aspect_artifactbrowser_FrontPageSearch_field_submit" class="ds-button-field btn btn-default" name="submit" title="Click to submit the search form" type="submit">
