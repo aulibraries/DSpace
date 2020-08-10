@@ -9,8 +9,6 @@
 
 const path = require("path");
 const webpack = require("webpack");
-//const {CleanWebpackPlugin} = require("clean-webpack-plugin");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
@@ -43,17 +41,10 @@ module.exports = {
                     test: /\.css$/i,
                     chunks: "all",
                     enforce: true
+                    
                 }
             }
-        },
-        minimizer: [
-            new UglifyJsPlugin({
-                cache: false,
-                parallel: true,
-                sourceMap: true
-            }),
-            new OptimizeCSSAssetsPlugin({})
-        ]
+        }
     },
     plugins: [
         new MiniCssExtractPlugin({

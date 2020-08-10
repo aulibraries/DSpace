@@ -34,7 +34,6 @@
         "select2": "^4.0.13",
         "source-map-loader": "^1.0.0",
         "style-loader": "^1.2.1",
-        "uglifyjs-webpack-plugin": "^2.2.0",
         "webpack": "^4.43.0",
         "webpack-cli": "^3.3.11",
         "webpack-merge": "^4.2.2"
