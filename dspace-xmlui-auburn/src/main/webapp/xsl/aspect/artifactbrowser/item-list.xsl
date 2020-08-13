@@ -81,11 +81,11 @@
     <xsl:template match="dim:dim" mode="itemSummaryList-DIM-metadata">
         <xsl:param name="href" />
         <div class="col-sm-12 artifact-description">
-            <a>
-                <xsl:attribute name="href">
-                    <xsl:value-of select="$href" />
-                </xsl:attribute>
-                <span class="block h4">
+            <h3 class="h4">
+                <a>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$href" />
+                    </xsl:attribute>
                     <xsl:choose>
                         <xsl:when test="dim:field[@element='title']">
                             <xsl:value-of select="dim:field[@element='title'][1]/node()" />
@@ -101,8 +101,8 @@
                         </xsl:attribute>
                         &#xFEFF;                                                 <!-- non-breaking space to force separating the end tag -->
                     </span>
-                </span>
-            </a>
+                </a>
+            </h3>
             <div class="artifact-info">
                 <span class="author">
                     <xsl:choose>

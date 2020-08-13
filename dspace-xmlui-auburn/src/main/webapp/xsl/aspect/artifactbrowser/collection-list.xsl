@@ -42,7 +42,7 @@
     <xsl:template name="collectionSummaryList-DIM">
         <xsl:variable name="data" select="./mets:dmdSec/mets:mdWrap/mets:xmlData/dim:dim"/>
         <div class="artifact-description">
-            <h4 class="artifact-title">
+            <h3 class="artifact-title h4">
                 <a href="{@OBJID}">
                     <span class="Z3988">
                         <xsl:choose>
@@ -61,7 +61,7 @@
                     <xsl:value-of select="$data/dim:field[@element='format'][@qualifier='extent'][1]"/>
                     <xsl:text>]</xsl:text>
                 </xsl:if>
-            </h4>
+            </h3>
             <xsl:variable name="abstract" select="$data/dim:field[@element = 'description' and @qualifier='abstract']/node()"/>
             <xsl:if test="$abstract and string-length($abstract[1]) &gt; 0">
                 <div class="artifact-info">
@@ -93,7 +93,6 @@
             <xsl:value-of select="$data/dim:field[@element='format'][@qualifier='extent'][1]"/>
             <xsl:text>]</xsl:text>
         </xsl:if>
-        <br/>
         <xsl:choose>
             <xsl:when test="$data/dim:field[@element='description' and @qualifier='abstract']">
                 <xsl:copy-of select="$data/dim:field[@element='description' and @qualifier='abstract']/node()"/>

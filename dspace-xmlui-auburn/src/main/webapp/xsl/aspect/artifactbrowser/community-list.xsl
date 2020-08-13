@@ -94,7 +94,6 @@
                 <xsl:value-of select="$data/dim:field[@element='format'][@qualifier='extent'][1]"/>
                 <xsl:text>]</xsl:text>
             </xsl:if>
-            <br/>
             <xsl:choose>
                 <xsl:when test="$data/dim:field[@element='description' and @qualifier='abstract']">
                     <xsl:copy-of select="$data/dim:field[@element='description' and @qualifier='abstract']/node()"/>
