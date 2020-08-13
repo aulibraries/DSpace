@@ -55,9 +55,9 @@
     <!-- Generate the info about the community from the metadata section -->
     <xsl:template match="dim:dim" mode="communityDetailView-DIM">
         <xsl:if test="string-length(dim:field[@element='description'][not(@qualifier)])&gt;0">
-            <p class="intro-text">
+            <div class="intro-text">
                 <xsl:copy-of select="dim:field[@element='description'][not(@qualifier)]/node()"/>
-            </p>
+            </div>
         </xsl:if>
 
         <xsl:if test="string-length(dim:field[@element='description'][@qualifier='tableofcontents'])&gt;0">
