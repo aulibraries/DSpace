@@ -532,9 +532,16 @@
                             <xsl:apply-templates mode="formComposite" />
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:if test="not(./dri:field/@type='radio' or ./dri:field/@type='checkbox')">
-                                <xsl:call-template name="pick-label" />
-                            </xsl:if>
+                            <xsl:choose>
+                                <xsl:when test="not(./dri:field/@type='radio' or ./dri:field/@type='checkbox')">
+                                    <xsl:call-template name="pick-label" />
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <span class="control-label">
+                                        <xsl:apply-templates select="./dri:field/dri:label/node()"/>
+                                    </span>
+                                </xsl:otherwise>
+                            </xsl:choose>
                             <xsl:apply-templates />
                         </xsl:otherwise>
                     </xsl:choose>
@@ -798,6 +805,9 @@
                         <span class="sr-only">
                             <xsl:value-of select="../dri:label" />
                         </span>
+                    </xsl:when>
+                    <xsl:when test="../@n = 'can_log_in' or ../@n = 'certificate'">
+                        <xsl:apply-templates select="../dri:label/node()" />
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:apply-templates select="node()" />
@@ -1072,32 +1082,30 @@
                     <xsl:text> needs-xs-spacing</xsl:text>
                 </xsl:if>
             </xsl:attribute>
-            <p>
-                <xsl:choose>
-                    <xsl:when test="@type = 'checkbox'  or @type='radio'">
-                        <xsl:apply-templates select="." mode="normalField" />
-                        <xsl:if test="dri:label">
-                            <br />
-                            <xsl:apply-templates select="dri:label" mode="compositeComponent" />
-                        </xsl:if>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:if test="../dri:field/dri:label">
-                            <label class="ds-composite-component control-label" for="{translate(@id, '.', '_')}">
-                                <xsl:choose>
-                                    <xsl:when test="dri:label">
-                                        <xsl:apply-templates select="dri:label" mode="compositeComponent" />
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:text>&#160;</xsl:text>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </label>
-                        </xsl:if>
-                        <xsl:apply-templates select="." mode="normalField" />
-                    </xsl:otherwise>
-                </xsl:choose>
-            </p>
+            <xsl:choose>
+                <xsl:when test="@type = 'checkbox'  or @type='radio'">
+                    <xsl:apply-templates select="." mode="normalField" />
+                    <xsl:if test="dri:label">
+                        <br />
+                        <xsl:apply-templates select="dri:label" mode="compositeComponent" />
+                    </xsl:if>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:if test="../dri:field/dri:label">
+                        <label class="ds-composite-component control-label" for="{translate(@id, '.', '_')}">
+                            <xsl:choose>
+                                <xsl:when test="dri:label">
+                                    <xsl:apply-templates select="dri:label" mode="compositeComponent" />
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>&#160;</xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </label>
+                    </xsl:if>
+                    <xsl:apply-templates select="." mode="normalField" />
+                </xsl:otherwise>
+            </xsl:choose>
         </div>
     </xsl:template>
 
