@@ -581,15 +581,13 @@
         respectively. -->
 
     <xsl:template match="dri:hi">
-        <p>
-            <xsl:attribute name="class">emphasis</xsl:attribute>
-            <xsl:if test="@rend">
-                <xsl:attribute name="class">
-                    <xsl:value-of select="@rend" />
-                </xsl:attribute>
-            </xsl:if>
-            <xsl:apply-templates />
-        </p>
+        <xsl:attribute name="class">emphasis</xsl:attribute>
+        <xsl:if test="@rend">
+            <xsl:attribute name="class">
+                <xsl:value-of select="@rend" />
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates />
     </xsl:template>
 
     <xsl:template match="dri:hi[@rend='highlight']">
@@ -778,7 +776,12 @@
     <xsl:template match="dri:div/dri:head" priority="3">
         <xsl:if test="not(parent::dri:div[@n='workflow-terms'])">
             <xsl:call-template name="renderHead">
-                <xsl:with-param name="class">ds-div-head</xsl:with-param>
+                <xsl:with-param name="class">
+                    <xsl:text>ds-div-head</xsl:text>
+                    <xsl:if test="contains(parent::dri:div/@n, 'browse') or contains(parent::dri:div/@n, 'recent-submission')">
+                        <xsl:text> h3</xsl:text>
+                    </xsl:if>
+                </xsl:with-param>
             </xsl:call-template>
         </xsl:if>
     </xsl:template>
@@ -804,7 +807,7 @@
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="dri:referenceSet/dri:head" priority="2">
+    <xsl:template match="dri:referenceSet/dri:head" priority="3">
         <xsl:call-template name="renderHead">
             <xsl:with-param name="class">ds-list-head</xsl:with-param>
         </xsl:call-template>

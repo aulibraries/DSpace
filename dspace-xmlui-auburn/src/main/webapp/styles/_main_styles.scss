@@ -669,7 +669,6 @@ input[type="file"] {
 
 .file-wrapper {
     padding-top: 10px;
-    margin-bottom: 10px;
 
     &.fa-file-pdf {
         color: $color_blue;
@@ -696,6 +695,10 @@ input[type="file"] {
     color: $color_red;
 }
 
+.detailViewCollectionListWrapper {
+    padding-bottom: 15px;
+}
+
 dd,
 dt {
     margin-bottom: 3px;
@@ -713,6 +716,10 @@ dt {
             }
         }
     }
+}
+
+div.ds-logo-wrapper {
+    margin-bottom: 15px;
 }
 
 /** *********** Control Panel Styles *************** */

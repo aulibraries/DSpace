@@ -698,6 +698,13 @@
 
     <xsl:template match="dim:dim" mode="itemDetailView-DIM">
         <xsl:call-template name="itemSummaryView-DIM-title" />
+        <span class="Z3988">
+            <xsl:attribute name="title">
+                <xsl:call-template name="renderCOinS" />
+            </xsl:attribute>
+            &#xFEFF;                         <!-- non-breaking space to force separating the end tag -->
+        </span>
+        <xsl:copy-of select="$SFXLink" />
         <div class="ds-table-responsive">
             <table class="ds-includeSet-table detailtable table table-striped table-hover">
                 <tr>
@@ -708,13 +715,6 @@
                 <xsl:apply-templates mode="itemDetailView-DIM" />
             </table>
         </div>
-        <span class="Z3988">
-            <xsl:attribute name="title">
-                <xsl:call-template name="renderCOinS" />
-            </xsl:attribute>
-            &#xFEFF;                         <!-- non-breaking space to force separating the end tag -->
-        </span>
-        <xsl:copy-of select="$SFXLink" />
     </xsl:template>
 
     <xsl:template match="dim:field" mode="itemDetailView-DIM">

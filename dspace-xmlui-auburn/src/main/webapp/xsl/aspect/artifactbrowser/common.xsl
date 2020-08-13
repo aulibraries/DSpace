@@ -153,7 +153,7 @@
     </xsl:template>
 
     <xsl:template match="dri:referenceSet[@type = 'itemPageSummaryList']" priority="2">
-        <ul class="ds-referenceSet-list">
+        <ul>
             <xsl:apply-templates mode="itemPageSummaryList"/>
         </ul>
     </xsl:template>
@@ -273,8 +273,6 @@
             </xsl:when>
             <xsl:otherwise/>
         </xsl:choose>
-        <!-- Commenting out this apply-templates tag prevents the collections section from being rendered in the default way -->
-        <!-- <xsl:apply-templates /> -->
     </xsl:template>
 	
 	<xsl:template match="dri:referenceSet[@id='aspect.artifactbrowser.ItemViewer.referenceSet.collection-viewer']/dri:reference/dri:referenceSet">
@@ -290,12 +288,12 @@
         <xsl:apply-templates select="document($externalMetadataURL)" mode="detailView"/>
         <xsl:choose>
             <xsl:when test="$repoName = 'AUrora' or $repoName = 'DeepSpace'">
-                <xsl:apply-templates />
+                <div class="detailViewCollectionListWrapper">
+                    <xsl:apply-templates />
+                </div>
             </xsl:when>
             <xsl:otherwise/>
         </xsl:choose>
-        <!-- Commenting out this apply-templates tag prevents the collections section from being rendered in the default way -->
-        <!-- <xsl:apply-templates /> -->
     </xsl:template>
 
     <!--
