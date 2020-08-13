@@ -54,11 +54,7 @@ module.exports = {
             $: 'jquery',
             jQuery: 'jquery',
             'window.jQuery': 'jquery'
-        }),
-        /* new CleanWebpackPlugin(["scripts/theme.js", "styles/main.css"], { 
-            verbose: true, 
-            dry: false 
-        }) */
+        })
     ],
     module: {
         rules: [
