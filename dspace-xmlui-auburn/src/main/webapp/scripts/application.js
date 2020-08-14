@@ -95,8 +95,8 @@ $(function () {
     }
 
     function convertMultiSelect() {
-        if ($(window).width() < 768) {
-            $("select").each(function () {
+        $("select").each(function () {
+            if ($(window).width() < 768) {
                 var multiple = $(this).attr("multiple");
                 var id = $(this).attr("id");
                 var $props = {
@@ -113,14 +113,12 @@ $(function () {
 
                     $(this).select2($props);
                 }
-            });
-        } else {
-            $("select").each(function () {
-                if ($(this).select2("destroy")) {
+            } else {
+                if ($(this).select2()) {
                     $(this).select2("destroy");
                 }
-            });
-        }
+            }
+        });
     }
 
     function toggleSidebarNavButton() {
