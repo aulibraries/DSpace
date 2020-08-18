@@ -975,19 +975,24 @@
     </xsl:template>
 
     <xsl:template name="addGoogleAnalytics">
+        <xsl:variable name="analyticsCode" select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='google'][@qualifier='analytics']" />
         <script>
             <xsl:text>
                 function GATC() {
-                     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-                     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+                    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-                     ga('create', 'UA-2228003-3', 'auto');  // AU Tracker
-                     ga('send', 'pageview');
+                    ga('create', 'UA-2228003-3', 'auto');  // AU Tracker
+                    ga('create', '</xsl:text><xsl:value-of select="$analyticsCode"/><xsl:text>', 'auto', '</xsl:text><xsl:value-of select="$repoName"/><xsl:text>'{
+                       'cookieExpires': 60 * 60 * 24 * 28  // Time in seconds.
+                       'cookieUpdate': 'false',
+                       'cookieFlags': 'SameSite=Lax'
+                    });  // Your Tracker Code
 
-                     ga('create', '</xsl:text><xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='google'][@qualifier='analytics']"/><xsl:text>', 'auto', '</xsl:text><xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='serverName']"/><xsl:text>');  // Your Tracker Code
-                     ga('</xsl:text><xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='serverName']"/><xsl:text>.send', 'pageview');
+                    ga('send', 'pageview');
+                    ga('</xsl:text><xsl:value-of select="$repoName"/><xsl:text>.send', 'pageview');
                  };
             </xsl:text>
         </script>
