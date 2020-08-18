@@ -985,11 +985,7 @@
                     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
                     ga('create', 'UA-2228003-3', 'auto');  // AU Tracker
-                    ga('create', '</xsl:text><xsl:value-of select="$analyticsCode"/><xsl:text>', 'auto', '</xsl:text><xsl:value-of select="$repoName"/><xsl:text>'{
-                       'cookieExpires': 60 * 60 * 24 * 28  // Time in seconds.
-                       'cookieUpdate': 'false',
-                       'cookieFlags': 'SameSite=Lax'
-                    });  // Your Tracker Code
+                    ga('create', '</xsl:text><xsl:value-of select="$analyticsCode"/><xsl:text>', 'auto', '</xsl:text><xsl:value-of select="$repoName"/><xsl:text>');  // Your Tracker Code
 
                     ga('send', 'pageview');
                     ga('</xsl:text><xsl:value-of select="$repoName"/><xsl:text>.send', 'pageview');
