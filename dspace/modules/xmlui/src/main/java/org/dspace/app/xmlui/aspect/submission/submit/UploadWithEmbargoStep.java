@@ -181,12 +181,6 @@ public class UploadWithEmbargoStep extends UploadStep
      **/
     private EditFileStep editFile = null;
 
-    /*private EditBitstreamPolicies editBitstreamPolicies = null;
-
-    private EditPolicyStep editPolicy = null;
-
-    private boolean isAdvancedFormEnabled=true;*/
-
     protected EmbargoService embargoService = EmbargoServiceFactory.getInstance().getEmbargoService();
 
     /**
@@ -240,7 +234,7 @@ public class UploadWithEmbargoStep extends UploadStep
 		boolean disableFileEditing = (submissionInfo.isInWorkflow()) && !DSpaceServicesFactory.getInstance().getConfigurationService().getBooleanProperty("workflow.reviewer.file-edit");
         java.util.List<Bundle> bundles = itemService.getBundles(item, "ORIGINAL");
         java.util.List<Bitstream> bitstreams = new ArrayList<>();
-		if (bundles.size() > 0) {
+		if (!bundles.isEmpty()) {
 			bitstreams = bundles.get(0).getBitstreams();
 		}
 
@@ -372,7 +366,7 @@ public class UploadWithEmbargoStep extends UploadStep
         Item item = submission.getItem();
         java.util.List<Bundle> bundles = itemService.getBundles(item, "ORIGINAL");
         java.util.List<Bitstream> bitstreams = new ArrayList<>();
-        if (bundles.size() > 0)
+        if (!bundles.isEmpty())
         {
             bitstreams = bundles.get(0).getBitstreams();
         }
@@ -426,11 +420,11 @@ public class UploadWithEmbargoStep extends UploadStep
             java.util.List<MetadataValue> embargoRightsList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "rights", null, org.dspace.content.Item.ANY);
             java.util.List<MetadataValue> embargoStatusList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "status", org.dspace.content.Item.ANY);
 
-            if (embargoRightsList != null && embargoRightsList.size() > 0) {
+            if (embargoRightsList != null && !embargoRightsList.isEmpty()) {
                 embargoRights = embargoRightsList.get(0).getValue();
             }
 
-            if (embargoStatusList != null && embargoStatusList.size() > 0) {
+            if (embargoStatusList != null && !embargoStatusList.isEmpty()) {
                 embargoStatus = embargoStatusList.get(0).getValue();
             }
 
@@ -696,7 +690,7 @@ public class UploadWithEmbargoStep extends UploadStep
         if (item != null) {
             java.util.List<MetadataValue> embargoLengthList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "length", org.dspace.content.Item.ANY);
             if (!embargoLengthList.isEmpty()) {
-                ArrayList<String> embargoLengths = new ArrayList<String>();
+                ArrayList<String> embargoLengths = new ArrayList<>();
                 embargoLengths.addAll(Arrays.asList(embargoLengthList.get(0).getValue().split(":")));
                 int lengthNum = Integer.parseInt(embargoLengths.get(1));
                 if (lengthNum > 0) {
