@@ -32,6 +32,8 @@ import static org.dspace.submit.step.UploadWithEmbargoStep.STATUS_UPLOAD_ERROR;
 import static org.dspace.submit.step.UploadWithEmbargoStep.STATUS_VIRUS_CHECKER_UNAVAILABLE;
 import static org.dspace.submit.step.UploadWithEmbargoStep.STATUS_CONTAINS_VIRUS;
 import static org.dspace.submit.step.UploadWithEmbargoStep.AUETD_STATUS_UNACCEPTABLE_FORMAT;
+import static org.dspace.submit.step.UploadWithEmbargoStep.AUETD_FILE_UPLOAD_ERROR_KEY;
+
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
@@ -245,7 +247,7 @@ public class UploadWithEmbargoStep extends UploadStep
         int errorSize = 0;
         // if there were errors then stop execution here
         @SuppressWarnings("unchecked")
-        java.util.List<String> subInfoKeyList = new ArrayList<String>(submissionInfo.keySet());
+        java.util.List<String> subInfoKeyList = new ArrayList<>(submissionInfo.keySet());
         for(String key : subInfoKeyList) {
             if(key.contains("ERROR")) {
                 errorSize++;
@@ -267,7 +269,11 @@ public class UploadWithEmbargoStep extends UploadStep
 	        File file = upload.addItem().addFile("file");
 	        file.setLabel(T_file);
 	        file.setHelp(T_file_help);
-	        file.setRequired();
+            file.setRequired();
+            
+            if (submissionInfo.containsKey(AUETD_FILE_UPLOAD_ERROR_KEY) && StringUtils.isNotBlank(submissionInfo.get(AUETD_FILE_UPLOAD_ERROR_KEY).toString())) {
+                this.errorFlag = (int) submissionInfo.get(AUETD_FILE_UPLOAD_ERROR_KEY);
+            }
 
 	        // if no files found error was thrown by processing class, display it!
 	        if (this.errorFlag == STATUS_NO_FILES_ERROR) {

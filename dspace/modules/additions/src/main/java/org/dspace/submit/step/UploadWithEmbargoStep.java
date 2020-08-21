@@ -9,6 +9,7 @@ package org.dspace.submit.step;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -80,7 +81,6 @@ public class UploadWithEmbargoStep extends UploadStep {
     protected ResourcePolicyService resourcePolicyService = AuthorizeServiceFactory.getInstance()
             .getResourcePolicyService();
     protected EmbargoService embargoService = EmbargoServiceFactory.getInstance().getEmbargoService();
-    protected ConfigurationService configurationService = DSpaceServicesFactory.getInstance().getConfigurationService();
 
     /**
      * Custom constants
@@ -91,7 +91,7 @@ public class UploadWithEmbargoStep extends UploadStep {
     public static final String AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME = "create_embargo_radio";
     public static final String AUETD_EMBARGO_LENGTH_FIELD_NAME = "embargo_length";
     public static final String AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME_ERROR = AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME+ "_ERROR";
-    public static final String AUETD_FILE_ERROR_NAME = "file_error";
+    public static final String AUETD_FILE_UPLOAD_ERROR_KEY = "FILE_UPLOAD_ERROR";
     public static final String AUETD_EMBARGO_LENGTH_FIELD_NAME_ERROR = AUETD_EMBARGO_LENGTH_FIELD_NAME + "_ERROR";
 
     public static final int AUETD_STATUS_UNACCEPTABLE_FORMAT = 11;
@@ -132,15 +132,33 @@ public class UploadWithEmbargoStep extends UploadStep {
         // -----------------------------------
         String contentType = request.getContentType();
 
+        log.debug(LogManager.getHeader(context, "File Upload", "Content Type " + contentType));
+
         int embargoCreationAnswer = 0;
 
         if (buttonPressed.equalsIgnoreCase(SUBMIT_UPLOAD_BUTTON) || buttonPressed.equalsIgnoreCase("submit_save")) {
+
+            if ((contentType != null) && (contentType.indexOf("multipart/form-data") != -1)) {
+                // This is a multipart request, so it's a file upload
+                // (return any status messages or errors reported)
+                int status = processUploadFile(context, request, response, subInfo);
+
+                log.debug(LogManager.getHeader(context, "File Upload Status", " " + Integer.toString(status)));
+
+                // if error occurred, return immediately
+                if (status != STATUS_COMPLETE) {
+                    log.error(LogManager.getHeader(context, "File Upload Error",
+                            " Error Flag = " + String.valueOf(status)));
+
+                    subInfo.putIfAbsent(AUETD_FILE_UPLOAD_ERROR_KEY, status);
+                }
+            }
 
             if (StringUtils.isNotBlank(request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME))) {
                 embargoCreationAnswer = Integer
                         .parseInt(request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME));
             } else {
-                log.error(LogManager.getHeader(context, "Submission Error Thrown",
+                log.error(LogManager.getHeader(context, "Embargo Creation Error",
                         " Error Flag = " + String.valueOf(AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED)));
                 subInfo.putIfAbsent(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME_ERROR,
                         AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED);
@@ -153,18 +171,18 @@ public class UploadWithEmbargoStep extends UploadStep {
              * date.
              */
             if (embargoCreationAnswer == 2 || embargoCreationAnswer == 3) {
-                log.debug(LogManager.getHeader(context, "Upload Request Param",
+                log.debug(LogManager.getHeader(context, "Embargo Creation Request Param",
                         " request.getParameter(\"" + AUETD_EMBARGO_LENGTH_FIELD_NAME + "\") = "
                                 + String.valueOf(request.getParameter(AUETD_EMBARGO_LENGTH_FIELD_NAME))));
 
-                log.debug(LogManager.getHeader(context, "Upload Request Param",
+                log.debug(LogManager.getHeader(context, "Embargo Creation Request Param",
                         " StringUtils.isBlank(request.getParameter(\"" + AUETD_EMBARGO_LENGTH_FIELD_NAME + ")) = "
                                 + String.valueOf(
                                         StringUtils.isBlank(request.getParameter(AUETD_EMBARGO_LENGTH_FIELD_NAME)))));
 
                 // if the requested parameter is empty then throw an error
                 if (StringUtils.isBlank(request.getParameter(AUETD_EMBARGO_LENGTH_FIELD_NAME))) {
-                    log.error(LogManager.getHeader(context, "Submission Error Thrown",
+                    log.error(LogManager.getHeader(context, "Embargo Creation Error",
                             " Error Flag = " + String.valueOf(AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED)));
 
                     subInfo.putIfAbsent(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME,
@@ -184,44 +202,11 @@ public class UploadWithEmbargoStep extends UploadStep {
 
             // if there were errors then stop execution here
             @SuppressWarnings("unchecked")
-            List<String> subInfoKeyList = new ArrayList<String>(subInfo.keySet());
+            List<String> subInfoKeyList = new ArrayList<>(subInfo.keySet());
             for (String key : subInfoKeyList) {
-                log.debug(LogManager.getHeader(context, "Submission Error Key", " Key Name = " + key));
-
-                log.debug(LogManager.getHeader(context, "Submission Error Key",
-                        " key.contains(\"ERROR\") = " + String.valueOf(key.contains("ERROR"))));
+                log.debug(LogManager.getHeader(context, "File Upload Processing Error Key", " " + key));
 
                 if (key.contains("ERROR")) {
-                    return AUETD_STATUS_ERROR;
-                }
-            }
-
-            if (buttonPressed.equalsIgnoreCase(SUBMIT_UPLOAD_BUTTON) && !itemService.hasUploadedFiles(item)) {
-                if ((contentType != null) && (contentType.indexOf("multipart/form-data") != -1)) {
-                    // This is a multipart request, so it's a file upload
-                    // (return any status messages or errors reported)
-                    int status = processUploadFile(context, request, response, subInfo);
-
-                    // if error occurred, return immediately
-                    if (status != STATUS_COMPLETE) {
-                        log.error(LogManager.getHeader(context, "Submission Error Thrown",
-                                " Error Flag = " + String.valueOf(status)));
-
-                        subInfo.put("file_ERROR", status);
-                    }
-                }
-            }
-
-            // if there were errors then stop execution here
-            @SuppressWarnings("unchecked")
-            List<String> subInfoKeyList2 = new ArrayList<String>(subInfo.keySet());
-            for (String key2 : subInfoKeyList2) {
-                log.debug(LogManager.getHeader(context, "Submission Error Key", " Key Name = " + key2));
-
-                log.debug(LogManager.getHeader(context, "Submission Error Key",
-                        " key.contains(\"ERROR\") = " + String.valueOf(key2.contains("ERROR"))));
-
-                if (key2.contains("ERROR")) {
                     return AUETD_STATUS_ERROR;
                 }
             }
@@ -314,6 +299,160 @@ public class UploadWithEmbargoStep extends UploadStep {
         return STATUS_COMPLETE;
     }
 
+    @Override
+    public int processUploadFile(Context context, HttpServletRequest request, HttpServletResponse response, SubmissionInfo subInfo)
+        throws AuthorizeException, IOException, ServletException, SQLException
+    {
+        BitstreamFormat bf = null;
+        Bitstream bitstream = null;
+        String fileAttributeName = null;
+        String pathStr = "-path";
+
+        if (subInfo == null) {
+            // In any event, if we don't have the submission info, the request
+            // was malformed
+            return STATUS_INTEGRITY_ERROR;
+        }
+
+        @SuppressWarnings("unchecked")
+        Enumeration<String> requestAttributeNames = request.getAttributeNames();
+
+        fileAttributeName = getFileRequestAttributeName(requestAttributeNames);
+
+        if (StringUtils.isBlank(fileAttributeName)) {
+            log.error(LogManager.getHeader(context, "Upload Request Param", " No file path provided."));
+
+            log.error(LogManager.getHeader(context, "Submission Error Thrown",
+                    " Error Flag = " + Integer.toString(STATUS_NO_FILES_ERROR)));
+
+            subInfo.put("file_ERROR", STATUS_NO_FILES_ERROR);
+
+            return STATUS_NO_FILES_ERROR;
+        }
+
+        // Load the file's path and input stream and description
+        String filePath = (String) request.getAttribute(fileAttributeName + pathStr);
+        InputStream fileInputStream = (InputStream) request.getAttribute(fileAttributeName + "-inputstream");
+        
+        // Create the bitstream
+        Item item = subInfo.getSubmissionItem().getItem();
+
+        // do we already have a bundle?
+        List<Bundle> bundles = itemService.getBundles(item, "ORIGINAL");
+
+        if (bundles.isEmpty()) {
+            // set bundle's name to ORIGINAL
+            bitstream = itemService.createSingleBitstream(context, fileInputStream, item, "ORIGINAL");
+        } else {
+            // we have a bundle already, just add bitstream
+            bitstream = bitstreamService.create(context, bundles.get(0), fileInputStream);
+        }
+
+        // Strip all but the last filename. It would be nice
+        // to know which OS the file came from.
+        String uploadedFileName = getUploadedFileName(filePath);
+
+        bitstream.setName(context, uploadedFileName);
+        bitstream.setSource(context, filePath);
+
+        // Identify format
+        bf = bitstreamFormatService.guessFormat(context, bitstream);
+
+        if (bf != null) {
+
+            /**
+             * Limit the type of file that can be uploaded to PDFs. Note: Probably not the
+             * best method of limiting the type of file that can be accepted, but it's the
+             * only way that doesn't require a lot of customization to other parts of
+             * DSpace's native source code.
+             */
+            if (!bf.getMIMEType().equalsIgnoreCase("application/pdf")) {
+                log.error(LogManager.getHeader(context, "File Upload",
+                        "ERROR - Attempting to upload file with a bad file format. File " + uploadedFileName));
+                log.error(LogManager.getHeader(context, "Submission Error Thrown",
+                        " Error Flag = " + Integer.toString(AUETD_STATUS_UNACCEPTABLE_FORMAT)));
+                
+                backoutBitstream(context, subInfo, bitstream, item);
+
+                return AUETD_STATUS_UNACCEPTABLE_FORMAT;
+            }
+
+            if (bf.isInternal()) {
+                log.warn("Attempt to upload file format marked as internal system use only");
+
+                backoutBitstream(context, subInfo, bitstream, item);
+
+                return STATUS_UPLOAD_ERROR;
+            }
+        } else {
+            return AUETD_STATUS_UNACCEPTABLE_FORMAT;
+        }
+
+        // Set bitstream's format
+        bitstream.setFormat(context, bf);
+
+        // Check for virus
+        if (configurationService.getBooleanProperty("submission-curation.virus-scan")) {
+            Curator curator = new Curator();
+            curator.addTask("vscan").curate(item);
+            int status = curator.getStatus("vscan");
+            if (status == Curator.CURATE_ERROR) {
+                backoutBitstream(context, subInfo, bitstream, item);
+                return STATUS_VIRUS_CHECKER_UNAVAILABLE;
+            } else if (status == Curator.CURATE_FAIL) {
+                backoutBitstream(context, subInfo, bitstream, item);
+                return STATUS_CONTAINS_VIRUS;
+            }
+        }
+
+        // Update to DB
+        bitstreamService.update(context, bitstream);
+        itemService.update(context, item);
+
+        // If we got this far then everything is more or less ok.
+
+        // Comment - not sure if this is the right place for a commit here
+        // but I'm not brave enough to remove it - Robin.
+        context.dispatchEvents();
+
+        // save this bitstream to the submission info, as the
+        // bitstream we're currently working with
+        subInfo.setBitstream(bitstream);
+        
+        return STATUS_COMPLETE;
+    }
+
+    private String getFileRequestAttributeName(Enumeration<String> requestAttributes)
+    {
+        StringBuilder fileAttributeNameSB = new StringBuilder();
+        String pathStr = "-path";
+
+        while(requestAttributes.hasMoreElements()) {
+            String attributeName = requestAttributes.nextElement();
+
+            if (attributeName.endsWith(pathStr)) {
+                fileAttributeNameSB.append(attributeName.replace(pathStr, ""));
+            }
+        }
+
+        return fileAttributeNameSB.toString();
+    }
+
+    private String getUploadedFileName(String filePath)
+    {
+        StringBuilder noPath = new StringBuilder();
+
+        while (filePath.indexOf('/') > -1) {
+            noPath.append(filePath.substring(filePath.indexOf('/') + 1));
+        }
+
+        while (filePath.indexOf('\\') > -1) {
+            noPath.append(filePath.substring(filePath.indexOf('\\') + 1));
+        }
+
+        return noPath.toString();
+    }
+
     /**
      * Process the upload of a new file!
      *
@@ -325,8 +464,8 @@ public class UploadWithEmbargoStep extends UploadStep {
      * @return Status or error flag which will be processed by UI-related code! (if
      *         STATUS_COMPLETE or 0 is returned, no errors occurred!)
      */
-    @Override
-    public int processUploadFile(Context context, HttpServletRequest request, HttpServletResponse response, SubmissionInfo subInfo)
+    /*@Override
+     public int processUploadFile(Context context, HttpServletRequest request, HttpServletResponse response, SubmissionInfo subInfo)
         throws ServletException, IOException, SQLException, AuthorizeException
     {
         //boolean formatKnown = true;
@@ -363,7 +502,7 @@ public class UploadWithEmbargoStep extends UploadStep {
 
                 // if information wasn't passed by User Interface, we had a problem
                 // with the upload
-                // if (filePath == null || fileInputStream == null)
+                //if (filePath == null || fileInputStream == null) {
                 if (StringUtils.isBlank(filePath) || fileInputStream == null) {
                     log.error(LogManager.getHeader(context, "Upload Request Param", " File = NULL"));
 
@@ -405,7 +544,7 @@ public class UploadWithEmbargoStep extends UploadStep {
                 b.setSource(context, filePath);
 
                 // Identify the format
-                bf = bitstreamFormatService.guessFormat(context, b);
+                bf = bitstreamFormatService.guessFormat(context, b); */
 
                 /**
                  * Limit the type of file that can be uploaded to PDFs. Note: Probably not the
@@ -414,7 +553,7 @@ public class UploadWithEmbargoStep extends UploadStep {
                  * DSpace's native source code.
                  */
                 // Only PDF type files are acceptable.
-                if (bf == null || !bf.getMIMEType().equalsIgnoreCase("application/pdf")) {
+                /* if (bf == null || !bf.getMIMEType().equalsIgnoreCase("application/pdf")) {
                     log.error(LogManager.getHeader(context, "File Upload",
                             "ERROR - Attempting to upload file with a bad file format. File " + noPath));
                     backoutBitstream(context, subInfo, b, item);
@@ -463,7 +602,7 @@ public class UploadWithEmbargoStep extends UploadStep {
         } // end while
 
         return STATUS_COMPLETE;
-    }
+    } */
 
     private void processAccessFields(Context context, HttpServletRequest request, SubmissionInfo subInfo, Bitstream b)
         throws SQLException, AuthorizeException
