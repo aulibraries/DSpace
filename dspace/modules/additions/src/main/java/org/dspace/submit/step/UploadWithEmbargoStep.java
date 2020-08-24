@@ -269,21 +269,19 @@ public class UploadWithEmbargoStep extends UploadStep {
         }
 
         if (buttonPressed.startsWith(AUETD_SUBMIT_REMOVE_PREFIX)) {
-            UUID id = null;
             int status = 0;
 
-            // A single file "remove" button must have been pressed
-            if (StringUtils.isNotBlank(request.getParameter("remove"))) {
-                id = UUID.fromString(request.getParameter("remove"));
-            }
+            // Get all previously uploaded files.
+            String[] ids = request.getParameterValues("remove");
 
-            if (id != null) {
-                status = processRemoveFile(context, item, id);
-            }
+            // Remove all previously uploaded files
+            for (String id : ids) {
+                status = processRemoveFile(context, item, UUID.fromString(id));
 
-            // if error occurred, return immediately
-            if (status != STATUS_COMPLETE) {
-                return status;
+                // if error occurred, return immediately
+                if (status != STATUS_COMPLETE) {
+                    return status;
+                }
             }
 
             // remove current bitstream from Submission Info
