@@ -536,11 +536,7 @@
                                 <xsl:when test="not(./dri:field/@type='radio' or ./dri:field/@type='checkbox')">
                                     <xsl:call-template name="pick-label" />
                                 </xsl:when>
-                                <xsl:otherwise>
-                                    <span class="control-label">
-                                        <xsl:apply-templates select="./dri:field/dri:label/node()"/>
-                                    </span>
-                                </xsl:otherwise>
+                                <xsl:otherwise />
                             </xsl:choose>
                             <xsl:apply-templates />
                         </xsl:otherwise>
