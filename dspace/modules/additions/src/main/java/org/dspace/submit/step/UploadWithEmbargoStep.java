@@ -201,6 +201,8 @@ public class UploadWithEmbargoStep extends UploadStep {
                 log.debug(LogManager.getHeader(context, "File Upload Processing Error Key", " " + key));
 
                 if (key.contains("ERROR")) {
+                    log.error(LogManager.getHeader(context, "File Upload Processing Error", " Throwing error " + key.toUpperCase()));
+                    log.error(LogManager.getHeader(context, "File Upload Processing Error", " Returning AUETD_STATUS_ERROR (" + Integer.toString(AUETD_STATUS_ERROR) + ")"));
                     return AUETD_STATUS_ERROR;
                 }
             }
