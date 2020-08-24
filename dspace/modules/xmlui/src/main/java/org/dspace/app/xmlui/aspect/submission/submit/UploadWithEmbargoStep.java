@@ -255,7 +255,7 @@ public class UploadWithEmbargoStep extends UploadStep
     	addSubmissionProgressList(div);
 
     	List upload = null;
-    	if (bitstreams.isEmpty() && !disableFileEditing && errorSize >= 0) {
+    	if ((bitstreams.isEmpty() && !disableFileEditing) || errorSize > 0) {
     		// Only add the upload capabilities for new item submissions
 	    	upload = div.addList("submit-upload-new", List.TYPE_FORM);
 	        upload.setHead(T_head);    
