@@ -203,15 +203,36 @@ public class AddBitstreamForm extends AbstractDSpaceTransformer
         embargoLengthFieldDisplayInput.setValue(0);
 
         //Embargo Question Radio Button Group
-        Radio embargoTypeRadio = form.addItem().addRadio(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME);
-        embargoTypeRadio.setLabel(AUETD_CREATE_EMBARGO_QUESTION_LABEL);
-        embargoTypeRadio.setRequired();
-        embargoTypeRadio.addOption("1", AUETD_CREATE_EMBARGO_RADIO_BUTTON1);
-        embargoTypeRadio.addOption("2", AUETD_CREATE_EMBARGO_RADIO_BUTTON2);
-        embargoTypeRadio.addOption("3", AUETD_CREATE_EMBARGO_RADIO_BUTTON3);
+        Radio embargoTypeField = form.addItem().addRadio(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME);
+        addEmbargoTypeRadioFields(embargoTypeField);
 
         // Embargo Length Radio Button Group
         Radio embargoLengthField = form.addItem().addRadio(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME);
+        addEmbargoLengthRadioFields(embargoLengthField);
+
+        if (errors.contains(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME)) {
+            embargoTypeField.addError(AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED);
+        }
+
+        if (errors.contains(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME)) {
+            embargoLengthFieldDisplayInput.setValue(1);
+            embargoLengthField.addError(AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED);
+        }
+    }
+
+    private void addEmbargoTypeRadioFields(Radio embargoTypeField)
+        throws WingException
+    {
+        embargoTypeField.setLabel(AUETD_CREATE_EMBARGO_QUESTION_LABEL);
+        embargoTypeField.setRequired();
+        embargoTypeField.addOption("1", AUETD_CREATE_EMBARGO_RADIO_BUTTON1);
+        embargoTypeField.addOption("2", AUETD_CREATE_EMBARGO_RADIO_BUTTON2);
+        embargoTypeField.addOption("3", AUETD_CREATE_EMBARGO_RADIO_BUTTON3);
+    }
+
+    private void addEmbargoLengthRadioFields(Radio embargoLengthField)
+        throws WingException
+    {
         embargoLengthField.setLabel(AUETD_EMBARGO_LENGTH_LABEL);
         embargoLengthField.setHelp(AUETD_EMBARGO_LENGTH_HELP);
         embargoLengthField.addOption("1", AUETD_EMBARGO_LENGTH_RADIO_OPTION1);
@@ -219,14 +240,5 @@ public class AddBitstreamForm extends AbstractDSpaceTransformer
         embargoLengthField.addOption("3", AUETD_EMBARGO_LENGTH_RADIO_OPTION3);
         embargoLengthField.addOption("4", AUETD_EMBARGO_LENGTH_RADIO_OPTION4);
         embargoLengthField.addOption("5", AUETD_EMBARGO_LENGTH_RADIO_OPTION5);
-
-        if (errors.contains(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME)) {
-            embargoTypeRadio.addError(AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED);
-        }
-
-        if (errors.contains(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME)) {
-            embargoLengthFieldDisplayInput.setValue(1);
-            embargoLengthField.addError(AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED);
-        }
     }
 }

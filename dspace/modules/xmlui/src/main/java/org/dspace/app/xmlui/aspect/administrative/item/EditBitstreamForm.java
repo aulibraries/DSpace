@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
-//import org.apache.cocoon.environment.ObjectModelHelper;
-//import org.apache.cocoon.environment.Request;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dspace.app.xmlui.cocoon.AbstractDSpaceTransformer;
@@ -32,7 +30,6 @@ import org.dspace.authorize.AuthorizeException;
 import org.dspace.authorize.factory.AuthorizeServiceFactory;
 import org.dspace.authorize.service.AuthorizeService;
 import org.dspace.content.Bitstream;
-import org.dspace.content.BitstreamFormat;
 import org.dspace.content.Bundle;
 import org.dspace.content.DSpaceObject;
 import org.dspace.content.Item;
@@ -212,35 +209,25 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
         embargoLengthFieldDisplayInput.setValue(0);
 
         String errorString = parameters.getParameter("errors",null);
-        ArrayList<String> errors = new ArrayList<String>();
+        ArrayList<String> errors = new ArrayList<>();
 
         if (errorString != null) {
             errors.addAll(Arrays.asList(errorString.split(",")));
         }
 
         //Embargo Question Radio Button Group
-        Radio embargoTypeRadio = form.addItem().addRadio(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME);
-        embargoTypeRadio.setLabel(AUETD_CREATE_EMBARGO_QUESTION_LABEL);
-        embargoTypeRadio.setRequired();
-        embargoTypeRadio.addOption("1", AUETD_CREATE_EMBARGO_RADIO_BUTTON1);
-        embargoTypeRadio.addOption("2", AUETD_CREATE_EMBARGO_RADIO_BUTTON2);
-        embargoTypeRadio.addOption("3", AUETD_CREATE_EMBARGO_RADIO_BUTTON3);
+        Radio embargoTypeField = form.addItem().addRadio(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME);
+        addEmbargoTypeRadioFields(embargoTypeField);
 
         // Embargo Length Radio Button Group
         Radio embargoLengthField = form.addItem().addRadio(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME);
-        embargoLengthField.setLabel(AUETD_EMBARGO_LENGTH_LABEL);
-        embargoLengthField.setHelp(AUETD_EMBARGO_LENGTH_HELP);
-        embargoLengthField.addOption("1", AUETD_EMBARGO_LENGTH_RADIO_OPTION1);
-        embargoLengthField.addOption("2", AUETD_EMBARGO_LENGTH_RADIO_OPTION2);
-        embargoLengthField.addOption("3", AUETD_EMBARGO_LENGTH_RADIO_OPTION3);
-        embargoLengthField.addOption("4", AUETD_EMBARGO_LENGTH_RADIO_OPTION4);
-        embargoLengthField.addOption("5", AUETD_EMBARGO_LENGTH_RADIO_OPTION5);
+        addEmbargoLengthRadioFields(embargoLengthField);
 
         int embargoType = getSelectedEmbargoType(bitstream);
         int embargoLength = getEmbargoLengthInYears(bitstream);
 
         if (embargoType >= 1 && embargoType <=3) {
-            embargoTypeRadio.setOptionSelected(String.valueOf(embargoType));
+            embargoTypeField.setOptionSelected(String.valueOf(embargoType));
 
             if (embargoType == 2 || embargoType == 3) {
                 embargoLengthFieldDisplayInput.setValue(1);
@@ -253,12 +240,12 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
                     } else if (errors.contains(org.dspace.app.xmlui.aspect.administrative.FlowItemUtils.AUETD_EMBARGO_LENGTH_FIELD_NAME_OUT0FDATE_ERROR)) {
                         embargoLengthField.addError(AUETD_STATUS_ERROR_EMBARGO_LENGTH_OUTOFDATE);
                         if (embargoLength >= 1 && embargoLength <= 5) {
-                            embargoLengthField.setOptionSelected(String.valueOf(embargoLength));
+                            embargoLengthField.setOptionSelected(Integer.toString(embargoLength));
                         }
                     }
                 } else {
                     if (embargoLength >= 1 && embargoLength <= 5) {
-                        embargoLengthField.setOptionSelected(String.valueOf(embargoLength));
+                        embargoLengthField.setOptionSelected(Integer.toString(embargoLength));
                     }
                 }
             }
@@ -280,21 +267,35 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
         }*/
     }
 
+    private void addEmbargoTypeRadioFields(Radio embargoTypeField)
+        throws WingException
+    {
+        embargoTypeField.setLabel(AUETD_CREATE_EMBARGO_QUESTION_LABEL);
+        embargoTypeField.setRequired();
+        embargoTypeField.addOption("1", AUETD_CREATE_EMBARGO_RADIO_BUTTON1);
+        embargoTypeField.addOption("2", AUETD_CREATE_EMBARGO_RADIO_BUTTON2);
+        embargoTypeField.addOption("3", AUETD_CREATE_EMBARGO_RADIO_BUTTON3);
+    }
+
+    private void addEmbargoLengthRadioFields(Radio embargoLengthField)
+        throws WingException
+    {
+        embargoLengthField.setLabel(AUETD_EMBARGO_LENGTH_LABEL);
+        embargoLengthField.setHelp(AUETD_EMBARGO_LENGTH_HELP);
+        embargoLengthField.addOption("1", AUETD_EMBARGO_LENGTH_RADIO_OPTION1);
+        embargoLengthField.addOption("2", AUETD_EMBARGO_LENGTH_RADIO_OPTION2);
+        embargoLengthField.addOption("3", AUETD_EMBARGO_LENGTH_RADIO_OPTION3);
+        embargoLengthField.addOption("4", AUETD_EMBARGO_LENGTH_RADIO_OPTION4);
+        embargoLengthField.addOption("5", AUETD_EMBARGO_LENGTH_RADIO_OPTION5);
+    }
+
     private int getSelectedEmbargoType(DSpaceObject dso)
-        throws AuthorizeException, IOException, SQLException
+        throws SQLException
     {
         Item item = null;
-        Bitstream bitstream;
         int embargoType = 0;
 
-        if (dso instanceof Bitstream) {
-            bitstream = bitstreamService.find(context, dso.getID());
-            DSpaceObject parent = bitstreamService.getParentObject(context, bitstream);
-
-            if (parent != null) {
-                item = itemService.find(context, parent.getID());
-            }
-        }
+        item = getBitstreamParentItem(dso);
 
         String embargoRights = null;
         String embargoStatus = null;
@@ -302,11 +303,11 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
             java.util.List<MetadataValue> embargoRightsList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "rights", null, Item.ANY);
             java.util.List<MetadataValue> embargoStatusList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "status", Item.ANY);
 
-            if (embargoRightsList != null && embargoRightsList.size() > 0) {
+            if (embargoRightsList != null && !embargoRightsList.isEmpty()) {
                 embargoRights = embargoRightsList.get(0).getValue();
             }
 
-            if (embargoStatusList != null & embargoStatusList.size() > 0) {
+            if (embargoStatusList != null && !embargoStatusList.isEmpty()) {
                 embargoStatus = embargoStatusList.get(0).getValue();
             }
 
@@ -329,7 +330,7 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
     }
 
     private int getEmbargoLengthInYears(DSpaceObject dso)
-        throws AuthorizeException, IOException, SQLException
+        throws SQLException
     {
         Item item = null;
         Bitstream bitstream;
@@ -346,10 +347,10 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
 
         if (item != null) {
             java.util.List<MetadataValue> embargoLengthList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "length", Item.ANY);
-            if (embargoLengthList != null && embargoLengthList.size() > 0) {
-                ArrayList<String> embargoLengths = new ArrayList<String>();
+            if (embargoLengthList != null && !embargoLengthList.isEmpty()) {
+                ArrayList<String> embargoLengths = new ArrayList<>();
                 embargoLengths.addAll(Arrays.asList(embargoLengthList.get(0).getValue().split(":")));
-                log.debug(LogManager.getHeader(context, "getting_embargo_length ", " Size of embargoLengths = "+String.valueOf(embargoLengths.size())));
+                log.debug(LogManager.getHeader(context, "getting_embargo_length ", " Size of embargoLengths = " + Integer.toString(embargoLengths.size())));
                 if (embargoLengths.size() > 1) {
                     int lengthNum = Integer.parseInt(embargoLengths.get(1));
                     if (lengthNum > 0) {
@@ -360,5 +361,23 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
         }
 
         return embargoLength;
+    }
+
+    private Item getBitstreamParentItem(DSpaceObject dso)
+        throws SQLException
+    {
+        Item item = null;
+        Bitstream bitstream;
+
+        if (dso instanceof Bitstream) {
+            bitstream = bitstreamService.find(context, dso.getID());
+            DSpaceObject parent = bitstreamService.getParentObject(context, bitstream);
+
+            if (parent != null) {
+                item = itemService.find(context, parent.getID());
+            }
+        }
+
+        return item;
     }
 }
