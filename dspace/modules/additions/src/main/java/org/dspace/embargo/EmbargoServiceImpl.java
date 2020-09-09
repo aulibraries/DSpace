@@ -473,7 +473,7 @@ public class EmbargoServiceImpl implements EmbargoService
         }
 
         if (bitstream != null) {
-            authorizeService.removeAllPolicies(context, bitstream);
+            authorizeService.removeAllPoliciesByDSOAndType(context, bitstream, ResourcePolicy.TYPE_CUSTOM);
         }
 
         if (owningCollection != null) {
