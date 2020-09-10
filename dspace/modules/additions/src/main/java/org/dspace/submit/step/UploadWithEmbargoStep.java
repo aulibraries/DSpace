@@ -476,6 +476,10 @@ public class UploadWithEmbargoStep extends UploadStep {
                     }
                 }
 
+                if (StringUtils.isNotBlank(embargoService.getEmbargoMetadataValue(context, item, "embargo", "enddate"))) {
+                    itemService.clearMetadata(context, item, MetadataSchema.DC_SCHEMA, "embargo", "enddate", Item.ANY);
+                }
+
                 if (subInfo.getBitstream() != null) {
                     embargoService.generateAUETDEmbargoPolicies(context, subInfo.getBitstream(), embargoCreationAnswer, 
                         (Collection) handleService.resolveToObject(context, subInfo.getCollectionHandle()));
