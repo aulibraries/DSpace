@@ -58,7 +58,7 @@
             services at no charge and facilitates the nonexclusive distribution of master's thesis' or doctoral dissertations.  Royalties could be received 
             based on sales and usage of the thesis or dissertation through ProQuest.</p>
         <h2 class="h3">QUESTIONS?</h2>
-		<p>If there are questions or concerns about the embargo options, please contact the Graduate School at etdhelp@auburn.edu.  If there are questions 
+		<p>If there are questions or concerns about the embargo options, please contact the Graduate School at <a href="mailto:etdhelp@auburn.edu">etdhelp@auburn.edu</a>.  If there are questions 
             about the ProQuest dissemination agreement, please contact <a href="mailto:disspub@proquest.com">disspub@proquest.com</a> or see link for 
             ProQuest FAQ: <a href="https://www.proquest.com/products-services/dissertations/proquest-dissertations-faq.html" alt="Find answers to your questions about ProQuest at ProQuest FAQ" rel="noreferrer noopener" target="_blank">https://www.proquest.com/products-services/dissertations/proquest-dissertations-faq.html</a></p>
 	</xsl:template>
