@@ -470,6 +470,7 @@
                         <xsl:choose>
                             <xsl:when test="$repoName = 'AUETD'">
                                 <li class="dropdown"><a class="dropdown-toggle" href="http://www.grad.auburn.edu/" title="The Auburn University Graduate School website will open in a new tab." rel="noreferrer noopener" target="_blank">Graduate School</a></li>
+                                <li class="dropdown"><a class="dropdown-toggle" href="http://graduate.auburn.edu/current-students/auetd-info/" title="Read information on AU ETD from the Auburn University Graduate School" rel="noreferrer noopener" target="_blank">FAQs</a></li>
                             </xsl:when>
                             <xsl:otherwise>
                                 <li class="dropdown">
