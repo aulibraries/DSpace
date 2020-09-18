@@ -163,13 +163,6 @@ public class UploadStep extends AbstractProcessingStep {
                     return status;
                 }
             }
-
-            // check if a file is required to be uploaded
-            /* if (fileRequired && !itemService.hasUploadedFiles(item)) {
-                return STATUS_NO_FILES_ERROR;
-            } else {
-                return STATUS_COMPLETE;
-            } */
         }
 
         // ---------------------------------------------
@@ -246,90 +239,6 @@ public class UploadStep extends AbstractProcessingStep {
             // remove current bitstream from Submission Info
             subInfo.setBitstream(null);
         }
-
-        /* // -------------------------------------------------
-        // Step #3: Check for a change in file description
-        // -------------------------------------------------
-        // We have to check for descriptions from users using the resumable upload
-        // and from users using the simple upload.
-        // Beginning with the resumable ones.
-        Enumeration<String> parameterNames = request.getParameterNames();
-        Map<String, String> descriptions = new HashMap<>();
-        while (parameterNames.hasMoreElements()) {
-            String name = parameterNames.nextElement();
-            if (StringUtils.startsWithIgnoreCase(name, "description[")) {
-                descriptions.put(name.substring("description[".length(), name.length() - 1),
-                        request.getParameter(name));
-            }
-        }
-        if (!descriptions.isEmpty()) {
-            // we got descriptions from the resumable upload
-            if (item != null) {
-                List<Bundle> bundles = itemService.getBundles(item, Constants.CONTENT_BUNDLE_NAME);
-                for (Bundle bundle : bundles) {
-                    List<Bitstream> bitstreams = bundle.getBitstreams();
-                    for (Bitstream bitstream : bitstreams) {
-                        if (descriptions.containsKey(bitstream.getName())) {
-                            bitstream.setDescription(context, descriptions.get(bitstream.getName()));
-                            bitstreamService.update(context, bitstream);
-                        }
-                    }
-                }
-            }
-            return STATUS_COMPLETE;
-        }
-
-        // Going on with descriptions from the simple upload
-        String fileDescription = request.getParameter("description");
-
-        if (fileDescription != null && fileDescription.length() > 0) {
-            // save this file description
-            int status = processSaveFileDescription(context, request, response, subInfo);
-
-            // if error occurred, return immediately
-            if (status != STATUS_COMPLETE) {
-                return status;
-            }
-        } */
-
-        /* // ------------------------------------------
-        // Step #4: Check for a file format change
-        // (if user had to manually specify format)
-        // ------------------------------------------
-        int formatTypeID = Util.getIntParameter(request, "format");
-        String formatDesc = request.getParameter("format_description");
-
-        // if a format id or description was found, then save this format!
-        if (formatTypeID >= 0 || (formatDesc != null && formatDesc.length() > 0)) {
-            // save this specified format
-            int status = processSaveFileFormat(context, request, response, subInfo);
-
-            // if error occurred, return immediately
-            if (status != STATUS_COMPLETE) {
-                return status;
-            }
-        } */
-
-        /* // ---------------------------------------------------
-        // Step #5: Check if primary bitstream has changed
-        // -------------------------------------------------
-        if (request.getParameter("primary_bitstream_id") != null) {
-            List<Bundle> bundles = itemService.getBundles(item, "ORIGINAL");
-            if (bundles.size() > 0) {
-                bundles.get(0).setPrimaryBitstreamID(
-                        bitstreamService.find(context, Util.getUUIDParameter(request, "primary_bitstream_id")));
-                bundleService.update(context, bundles.get(0));
-            }
-        } */
-
-        // ---------------------------------------------------
-        // Step #6: Determine if there is an error because no
-        // files have been uploaded.
-        // ---------------------------------------------------
-        // check if a file is required to be uploaded
-        /* if (fileRequired && !itemService.hasUploadedFiles(item) && !buttonPressed.equals(SUBMIT_MORE_BUTTON)) {
-            return STATUS_NO_FILES_ERROR;
-        } */
 
         context.dispatchEvents();
 
