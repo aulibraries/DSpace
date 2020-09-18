@@ -10,6 +10,7 @@ package org.dspace.app.xmlui.aspect.submission.submit;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.*;
 
 import org.apache.avalon.framework.parameters.Parameters;
@@ -28,7 +29,6 @@ import org.dspace.app.xmlui.wing.WingException;
 import org.dspace.app.xmlui.wing.element.Body;
 import org.dspace.app.xmlui.wing.element.Button;
 import org.dspace.app.xmlui.wing.element.Cell;
-import org.dspace.app.xmlui.wing.element.CheckBox;
 import org.dspace.app.xmlui.wing.element.Division;
 import org.dspace.app.xmlui.wing.element.File;
 import org.dspace.app.xmlui.wing.element.List;
@@ -222,9 +222,6 @@ public class UploadStep extends AbstractSubmissionStep {
             if (this.errorFlag == AUETDConstants.AUETD_STATUS_UNACCEPTABLE_FORMAT) {
                 file.addError(AUETD_INVALID_FILE_FORMAT_ERROR);
             }
-
-            /* Button uploadSubmit = upload.addItem().addButton("submit_upload");
-            uploadSubmit.setValue(T_submit_upload); */
 
             org.dspace.app.xmlui.wing.element.Item uploadActions = upload.addItem();
 
@@ -420,7 +417,7 @@ public class UploadStep extends AbstractSubmissionStep {
             Row row = summary.addRow();
 
             row.addCell(null, null, "break-all").addXref(url, name);
-            row.addCellContent(bytes + " bytes");
+            row.addCellContent(formatFileSize(bytes));
 
             BitstreamFormat format = bitstream.getFormat(context);
             Cell cell = row.addCell();
@@ -429,5 +426,33 @@ public class UploadStep extends AbstractSubmissionStep {
             Button remove = row.addCell().addButton("submit_remove_"+id);
             remove.setValue(AUETD_SUBMIT_REMOVE_BUTTON_NAME);
         }
+    }
+
+    private String formatFileSize(long size) {
+        String hrSize = null;
+
+        double b = size;
+        double k = size/1024.0;
+        double m = ((size/1024.0)/1024.0);
+        double g = (((size/1024.0)/1024.0)/1024.0);
+        double t = ((((size/1024.0)/1024.0)/1024.0)/1024.0);
+
+        DecimalFormat dec1 = new DecimalFormat("0.00");
+
+        Math.pow(2.0, 30.0);
+
+        if (t>1) {
+            hrSize = dec1.format(t).concat(" TB");
+        } else if (g>1) {
+            hrSize = dec1.format(g).concat(" GB");
+        } else if (m>1) {
+            hrSize = dec1.format(m).concat(" MB");
+        } else if (k>1) {
+            hrSize = dec1.format(k).concat(" KB");
+        } else {
+            hrSize = dec1.format(b).concat(" B");
+        }
+
+        return hrSize;
     }
 }
