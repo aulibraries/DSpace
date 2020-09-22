@@ -2293,14 +2293,15 @@
     <message key="xmlui.Submission.submit.LicenseStep.AUETD_decision_error">You must accept the AUETD embargo options and dissemination agreement before continuing your submission. If you are unable to accept the AUETD embargo policy and dissemination agreement at this time you may save your work and return later or remove the submission by clicking the 'Save &amp; Exit' button below.</message>
 
     <!-- File Upload Field -->
-	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_file_upload_form_head">Upload File</message>
-	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_file_upload_field_help">Clicking the folder icon will open a new window allowing you to select the file from your computer. Please upload only a PDF formatted version of your electronic thesis or dissertation.  If you encounter problems uploading your thesis or dissertation, please check for and remove all special characters (e.g. &#38; ; : ' , % * ^ $ # @ ( ) ! + = …) in the file's name.  If you continue to experience problems uploading your file, please contact the Graduate School at <a href="mailto: etdhelp@auburn.edu">etdhelp@auburn.edu</a>.</message>
-	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_file_upload_invalid_file_format_error">The file you're attempting to upload is not a PDF. Please
+	<message key="xmlui.Submission.submit.UploadStep.AUETD_file_upload_form_head">Upload File</message>
+	<message key="xmlui.Submission.submit.UploadStep.AUETD_file_upload_field_help">Clicking the folder icon will open a new window allowing you to select the file from your computer. Please upload only a PDF formatted version of your electronic thesis or dissertation.  If you encounter problems uploading your thesis or dissertation, please check for and remove all special characters (e.g. &#38; ; : ' , % * ^ $ # @ ( ) ! + = …) in the file's name.  If you continue to experience problems uploading your file, please contact the Graduate School at <a href="mailto: etdhelp@auburn.edu">etdhelp@auburn.edu</a>.</message>
+	<message key="xmlui.Submission.submit.UploadStep.AUETD_file_upload_invalid_file_format_error">The file you're attempting to upload is not a PDF. Please
     upload a PDF version of your electronic thesis or dissertation.</message>
-	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_file_upload_submit_button_name">Upload File</message>
+    <message key="xmlui.Submission.submit.UploadStep.AUETD_file_upload_submit_button_name">Upload File</message>
+    <message key="xmlui.Submission.submit.UploadStep.AUETD_submit_remove_button_name">Remove File</message>
     
     <!-- Embargo Creation Question Submission Field -->
-	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_label">Should access to your electronic thesis or dissertation be restricted?</message>
+	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_label">Would you like to restrict access to your electronic thesis or dissertation (PDF) file?</message>
 	
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_radio_button1_text">No, don't restrict access to my thesis or dissertation</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_radio_button2_text">Yes, limit access to my thesis or dissertation to Auburn University users only</message>
