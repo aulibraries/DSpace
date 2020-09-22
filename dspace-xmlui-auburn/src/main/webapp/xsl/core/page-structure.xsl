@@ -142,7 +142,6 @@
     references to stylesheets pulled directly from the pageMeta element. -->
     <xsl:template name="buildHead">
         <head>
-            <meta charset="utf-8"/>
             <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -181,7 +180,7 @@
             <!-- JQuery UI -->
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css" integrity="sha256-sEGfrwMkIjbgTBwGLVK38BG/XwIiNC/EAG9Rzsfda6A=" crossorigin="anonymous" />
             <!-- AUBURN UNIVERSITY -->
-            <link rel="stylesheet" href="https://cdn.auburn.edu/2016/_assets/css/global.min.css" integrity="sha384-DthvczyZCLEYneoTqIn/y5qcCXy0bnwLeJgEfAXQLoDQJnmY7PFy5t271cHWqAxc" crossorigin="anonymous"/>
+            <link rel="stylesheet" href="https://cdn.auburn.edu/2016/_assets/css/global.min.css" crossorigin="anonymous"/>
 
             <link rel="stylesheet" href="{concat($theme-path, 'styles/main.css')}"/>
 
