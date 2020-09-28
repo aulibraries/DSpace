@@ -94,12 +94,15 @@ public class AccessStep extends AbstractSubmissionStep
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_summary_head");
     protected static final Message AUETD_T_COLUMN_STATUS =
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_status_column");
-    protected static final Message AUETD_T_COLUMN_ENDDATE =
-        message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_enddate_column");
     protected static final Message AUETD_EMBARGO_LENGTH_COLUMN = 
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_column");
     protected static final Message AUETD_SUBMIT_EDIT_RESTRICTIONS_BUTTON_NAME =
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_submit_edit_restrictions_button_name");
+
+    public static final String AUETD_ACCESS_SAVE_BUTTON_ID = "submit_access";
+    protected static final Message AUETD_ACCESS_SAVE_BUTTON_NAME = 
+        message("xmlui.Submission.submit.AccessStep.AUETD_access_restriction_button_name");
+
 
     protected ItemService itemService = ContentServiceFactory.getInstance().getItemService();
 
@@ -130,7 +133,7 @@ public class AccessStep extends AbstractSubmissionStep
 
     public void addPageMeta(PageMeta pageMeta) throws WingException, SAXException, SQLException, AuthorizeException, IOException {
 	    super.addPageMeta(pageMeta);
-        pageMeta.addMetadata("javascript", "static").addContent("static/js/accessFormUtil.js");
+        // pageMeta.addMetadata("javascript", "static").addContent("static/js/accessFormUtil.js");
     }
 
 
@@ -155,11 +158,21 @@ public class AccessStep extends AbstractSubmissionStep
 
         if (StringUtils.isBlank(getEmbargoRights(item)) || StringUtils.isBlank(getEmbargoStatus(item))) {
             addEmbargoFieldSection(form, item);
-        } else {
-            addReviewSection(form);
 
-            Para p1 = div.addPara();
-            Button b1 = p1.addButton("submit_edit_"+item.getID());
+            form.addItem().addButton(org.dspace.submit.AbstractProcessingStep.PREVIOUS_BUTTON).setValue(T_previous);
+            form.addItem().addButton(org.dspace.submit.AbstractProcessingStep.CANCEL_BUTTON).setValue(T_save);
+            form.addItem().addButton(AUETD_ACCESS_SAVE_BUTTON_ID).setValue(AUETD_ACCESS_SAVE_BUTTON_NAME);
+        } else {
+            form.addLabel(AUETD_T_COLUMN_STATUS);
+            form.addItem().addContent(setAccessStatusText(item));
+
+            int embargoLengthNum = getEmbargoLengthInYears(item);
+            if (embargoLengthNum > 0) {
+                form.addLabel(AUETD_EMBARGO_LENGTH_COLUMN);
+                form.addItem().addContent(setEmbargoLengthText(Integer.toString(embargoLengthNum)));
+            }
+
+            Button b1 = form.addItem().addButton("submit_edit_access");
             b1.setValue(AUETD_SUBMIT_EDIT_RESTRICTIONS_BUTTON_NAME);
         }
 
@@ -218,6 +231,19 @@ public class AccessStep extends AbstractSubmissionStep
         
         accessSection.addLabel(AUETD_T_COLUMN_STATUS);
 
+        accessSection.addItem().addContent(setAccessStatusText(item));
+
+        int embargoLengthNum = getEmbargoLengthInYears(item);
+        if (embargoLengthNum > 0) {
+            accessSection.addLabel(AUETD_EMBARGO_LENGTH_COLUMN);
+            accessSection.addItem().addContent(setEmbargoLengthText(Integer.toString(embargoLengthNum)));
+        }
+
+	    return accessSection;
+    }
+
+    private String setEmbargoLengthText(String embargoLengthNumber)
+    {
         Map<String, String> embargoLengthMap = new HashMap<>();
         embargoLengthMap.put("1", "One year");
         embargoLengthMap.put("2", "Two years");
@@ -225,15 +251,7 @@ public class AccessStep extends AbstractSubmissionStep
         embargoLengthMap.put("4", "Four years");
         embargoLengthMap.put("5", "Five years");
 
-        accessSection.addItem().addContent(setAccessStatusText(item));
-
-        int embargoLengthNum = getEmbargoLengthInYears(item);
-        if (embargoLengthNum > 0) {
-            accessSection.addLabel(AUETD_EMBARGO_LENGTH_COLUMN);
-            accessSection.addItem().addContent(embargoLengthMap.get(String.valueOf(embargoLengthNum)));
-        }
-
-	    return accessSection;
+        return embargoLengthMap.get(embargoLengthNumber);
     }
 
     private Message setAccessStatusText(Item item) {
