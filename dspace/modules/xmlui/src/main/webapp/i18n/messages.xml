@@ -2319,6 +2319,8 @@
     <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_required_error">This field requires an answer. Please answer this question by selecting one of the options above.</message>
     <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_outofdate_error">This item is more than 5 years old, and thus has passed the maximum time an item can be embargoed.</message>
 
+    <message key="xmlui.Submission.submit.AccessStep.AUETD_access_restriction_button_name">Save Access Settings</message>
+
     <!-- Header for Custom Edit Policy Step Form -->
     <message key="xmlui.Submission.submit.EditPolicyStep.AUETD_head">Edit Access</message>
 
