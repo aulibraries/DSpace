@@ -91,6 +91,7 @@ public class AccessStep extends AbstractProcessingStep {
     public static final String AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME_ERROR = AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME+ "_ERROR";
     public static final String AUETD_FILE_UPLOAD_ERROR_KEY = "FILE_UPLOAD_ERROR";
     public static final String AUETD_EMBARGO_LENGTH_FIELD_NAME_ERROR = AUETD_EMBARGO_LENGTH_FIELD_NAME + "_ERROR";
+    public static final String AUETD_ACCESS_SAVE_BUTTON_ID = "submit_access";
     protected static final String BITSTREAM_ID_NAME = "bitstream_id";
     protected static final String AUETD_ERROR_FLAG_LOG_MESSAGE = " Error Flag = ";
 
@@ -128,157 +129,19 @@ public class AccessStep extends AbstractProcessingStep {
         // get reference to item
         Item item = subInfo.getSubmissionItem().getItem();
 
-        int embargoCreationAnswer = 0;
-
-        if (StringUtils.isNotBlank(request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME))) {
-            embargoCreationAnswer = Integer
-                    .parseInt(request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME));
-        } else {
-            log.error(LogManager.getHeader(context, "Embargo Creation Error",
-                    AUETD_ERROR_FLAG_LOG_MESSAGE + String.valueOf(AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED)));
-            subInfo.putIfAbsent(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME_ERROR,
-                    AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED);
+        if (buttonPressed.equalsIgnoreCase("submit_edit_access")) {
+            return STATUS_EDIT_POLICY;
         }
 
-        /**
-         * If the user has chosen to create an embargo, but forgot to set a lift date
-         * then return an error code. Adding this check here will prevent the file the
-         * user has selected from being uploaded until they've filled out an embargo
-         * date.
-         */
-        if (embargoCreationAnswer == 2 || embargoCreationAnswer == 3) {
-            log.debug(LogManager.getHeader(context, "Embargo Creation Request Param",
-                    " request.getParameter(\"" + AUETD_EMBARGO_LENGTH_FIELD_NAME + "\") = "
-                            + request.getParameter(AUETD_EMBARGO_LENGTH_FIELD_NAME)));
-
-            log.debug(LogManager.getHeader(context, "Embargo Creation Request Param",
-                    " StringUtils.isBlank(request.getParameter(\"" + AUETD_EMBARGO_LENGTH_FIELD_NAME + ")) = "
-                            + Boolean.toString(
-                                    StringUtils.isBlank(request.getParameter(AUETD_EMBARGO_LENGTH_FIELD_NAME)))));
-
-            // if the requested parameter is empty then throw an error
-            if (StringUtils.isBlank(request.getParameter(AUETD_EMBARGO_LENGTH_FIELD_NAME))) {
-                log.error(LogManager.getHeader(context, "Embargo Creation Error",
-                        AUETD_ERROR_FLAG_LOG_MESSAGE + String.valueOf(AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED)));
-
-                subInfo.putIfAbsent(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME,
-                        request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME));
-                subInfo.putIfAbsent(AUETD_EMBARGO_LENGTH_FIELD_NAME_ERROR,
-                        AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED);
-            } else {
-                subInfo.putIfAbsent(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME,
-                        request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME));
-                subInfo.putIfAbsent(AUETD_EMBARGO_LENGTH_FIELD_NAME,
-                        request.getParameter(AUETD_EMBARGO_LENGTH_FIELD_NAME));
-            }
-        } else if (embargoCreationAnswer == 1) {
-            subInfo.putIfAbsent(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME,
-                    request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME));
-        }
-
-        // if there were errors then stop execution here
-        @SuppressWarnings("unchecked")
-        List<String> subInfoKeyList = new ArrayList<>(subInfo.keySet());
-        for (String key : subInfoKeyList) {
-            log.debug(LogManager.getHeader(context, "Access Embargo Processing Error Key", " " + key));
-
-            if (key.contains("ERROR")) {
-                log.error(LogManager.getHeader(context, "Access Embargo Processing Error", " Throwing error " + key.toUpperCase()));
-                log.error(LogManager.getHeader(context, "Access Embargo Processing Error", " Returning AUETD_STATUS_ERROR (" + Integer.toString(AUETD_STATUS_ERROR) + ")"));
+        if (buttonPressed.equalsIgnoreCase(AUETD_ACCESS_SAVE_BUTTON_ID) || buttonPressed.equalsIgnoreCase(FORM_EDIT_BUTTON_SAVE)) {
+            if (isFormValid(context, request, subInfo) > 0) {
                 return AUETD_STATUS_ERROR;
             }
+
+            processAUETDEmbargoAccessFields(context, request, subInfo); 
+            itemService.update(context, item);
+            context.dispatchEvents();
         }
-
-        /**
-         * If the user has chosen to create an embargo then call the method
-         * processAccessFields otherwise call the ETDEmbargoSetter method
-         * setEmbargoStatusMDV. The processAccessFields method is designed to generate
-         * the correct resource policies and add specific values to an item's metadata
-         * field list. If the user has chosen not to create an embargo then we will
-         * create and populate the item's embargo status metadata field.
-         */
-        processAUETDEmbargoAccessFields(context, request, subInfo);
-
-        /* Group group = null;
-        if (request.getParameter("group_id") != null) {
-            try {
-                group = groupService.find(context, UUID.fromString(request.getParameter("group_id")));
-            } catch (NumberFormatException nfe) {
-                return STATUS_ERROR_SELECT_GROUP;
-            }
-        } */
-
-        /* String name = request.getParameter("name");
-        String reason = request.getParameter("reason"); */
-
-        // SELECTED OPERATION: go to EditPolicyForm
-        /* if (wasEditPolicyPressed(context, buttonPressed, subInfo))
-            return STATUS_EDIT_POLICY; */
-
-        // SELECTED OPERATION: Remove Policies
-        /* if (wasRemovePolicyPressed(buttonPressed)) {
-            removePolicy(context, buttonPressed);
-            context.dispatchEvents();
-            return STATUS_COMPLETE;
-        } */
-
-        // SELECTED OPERATION: Save or Cancel EditPolicy.
-        /* if (comeFromEditPolicy(request)) {
-            return saveOrCancelEditPolicy(context, request, subInfo, buttonPressed, item, name, group, reason);
-        } */
-
-        // SELECTED OPERATION: ADD Policy
-        /* if (wasAddPolicyPressed(buttonPressed)) {
-
-            int result = -1;
-            if ((result = checkForm(request)) != 0) {
-                return result;
-            }
-
-            // handle private checkbox
-            item.setDiscoverable(true);
-            if (request.getParameter("private_option") != null) {
-                item.setDiscoverable(false);
-            }
-
-            Date dateStartDate = getEmbargoUntil(request);
-            ResourcePolicy rp = null;
-            if ((rp = authorizeService.createOrModifyPolicy(null, context, name, group, null, dateStartDate,
-                    org.dspace.core.Constants.READ, reason, item)) == null) {
-                return STATUS_DUPLICATED_POLICY;
-            }
-            resourcePolicyService.update(context, rp);
-            context.dispatchEvents();
-            return STATUS_COMPLETE;
-        } */
-
-        // if arrive here Next, Previous or Save has been pressed
-        /* boolean isAdvancedFormEnabled = configurationService
-                .getBooleanProperty("webui.submission.restrictstep.enableAdvancedForm", false); */
-
-        // if it is a simple form we should create the policy for Anonymous
-        // if Anonymous does not have right on this collection, create policies for any
-        // other groups with
-        // DEFAULT_ITEM_READ specified.
-        /* if (!isAdvancedFormEnabled) {
-            int result = checkForm(request);
-            if (result != 0) {
-                return result;
-            }
-            authorizeService.generateAutomaticPolicies(context, getEmbargoUntilDate(request), reason, item,
-                    (Collection) handleService.resolveToObject(context, subInfo.getCollectionHandle()));
-        } */
-        // else{
-        // Date dateStartDate = getEmbargoUntil(request);
-        // createOrModifyPolicy(null, context, name, groupID, null, dateStartDate,
-        // org.dspace.core.Constants.READ, reason, item);
-        // }
-        /* item.setDiscoverable(true);
-        if (request.getParameter("private_option") != null) {
-            item.setDiscoverable(false);
-        } */
-        itemService.update(context, item);
-        context.dispatchEvents();
 
         return STATUS_COMPLETE;
     }
@@ -291,8 +154,10 @@ public class AccessStep extends AbstractProcessingStep {
             subInfo.put(SUB_INFO_SELECTED_RP, rp);
             return true;
         }
+
         return false;
     }
+    
 
     public boolean wasAddPolicyPressed(String buttonPressed) throws SQLException {
         return (buttonPressed.equalsIgnoreCase(FORM_ACCESS_BUTTON_ADD));
@@ -401,6 +266,73 @@ public class AccessStep extends AbstractProcessingStep {
     public int getNumberOfPages(HttpServletRequest request, SubmissionInfo subInfo) throws ServletException {
         return 1;
 
+    }
+
+    private static int isFormValid(Context context, HttpServletRequest request, SubmissionInfo subInfo) throws ServletException 
+    {
+        int returnErrorCode = 0;
+        int embargoCreationAnswer = 0;
+
+        if (StringUtils.isNotBlank(request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME))) {
+            embargoCreationAnswer = Integer
+                    .parseInt(request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME));
+        } else {
+            log.error(LogManager.getHeader(context, "Embargo Creation Error",
+                    AUETD_ERROR_FLAG_LOG_MESSAGE + String.valueOf(AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED)));
+            subInfo.putIfAbsent(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME_ERROR,
+                    AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED);
+        }
+
+        /**
+         * If the user has chosen to create an embargo, but forgot to set a lift date
+         * then return an error code. Adding this check here will prevent the file the
+         * user has selected from being uploaded until they've filled out an embargo
+         * date.
+         */
+        if (embargoCreationAnswer == 2 || embargoCreationAnswer == 3) {
+            log.debug(LogManager.getHeader(context, "Embargo Creation Request Param",
+                    " request.getParameter(\"" + AUETD_EMBARGO_LENGTH_FIELD_NAME + "\") = "
+                            + request.getParameter(AUETD_EMBARGO_LENGTH_FIELD_NAME)));
+
+            log.debug(LogManager.getHeader(context, "Embargo Creation Request Param",
+                    " StringUtils.isBlank(request.getParameter(\"" + AUETD_EMBARGO_LENGTH_FIELD_NAME + ")) = "
+                            + Boolean.toString(
+                                    StringUtils.isBlank(request.getParameter(AUETD_EMBARGO_LENGTH_FIELD_NAME)))));
+
+            // if the requested parameter is empty then throw an error
+            if (StringUtils.isBlank(request.getParameter(AUETD_EMBARGO_LENGTH_FIELD_NAME))) {
+                log.error(LogManager.getHeader(context, "Embargo Creation Error",
+                        AUETD_ERROR_FLAG_LOG_MESSAGE + String.valueOf(AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED)));
+
+                subInfo.putIfAbsent(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME,
+                        request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME));
+                subInfo.putIfAbsent(AUETD_EMBARGO_LENGTH_FIELD_NAME_ERROR,
+                        AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED);
+            } else {
+                subInfo.putIfAbsent(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME,
+                        request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME));
+                subInfo.putIfAbsent(AUETD_EMBARGO_LENGTH_FIELD_NAME,
+                        request.getParameter(AUETD_EMBARGO_LENGTH_FIELD_NAME));
+            }
+        } else if (embargoCreationAnswer == 1) {
+            subInfo.putIfAbsent(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME,
+                    request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME));
+        }
+
+        // if there were errors then stop execution here
+        @SuppressWarnings("unchecked")
+        List<String> subInfoKeyList = new ArrayList<>(subInfo.keySet());
+        for (String key : subInfoKeyList) {
+            log.debug(LogManager.getHeader(context, "Access Embargo Processing Error Key", " " + key));
+
+            if (key.contains("ERROR")) {
+                log.error(LogManager.getHeader(context, "Access Embargo Processing Error", " Throwing error " + key.toUpperCase()));
+                log.error(LogManager.getHeader(context, "Access Embargo Processing Error", " Returning AUETD_STATUS_ERROR (" + Integer.toString(AUETD_STATUS_ERROR) + ")"));
+                returnErrorCode = AUETD_STATUS_ERROR;
+            }
+        }
+
+        return returnErrorCode;
     }
 
     private void processAUETDEmbargoAccessFields(Context context, HttpServletRequest request, SubmissionInfo subInfo)
