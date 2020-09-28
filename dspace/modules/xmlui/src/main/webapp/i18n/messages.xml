@@ -2319,6 +2319,9 @@
     <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_required_error">This field requires an answer. Please answer this question by selecting one of the options above.</message>
     <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_outofdate_error">This item is more than 5 years old, and thus has passed the maximum time an item can be embargoed.</message>
 
+    <!-- Header for Custom Edit Policy Step Form -->
+    <message key="xmlui.Submission.submit.EditPolicyStep.AUETD_head">Edit Access</message>
+
 	<!--<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_label">Specify a date to end the restriction</message>
 	<message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_help">Click in the field above to open a calendar widget and then select a date. Leaving this field blank will cause an error.</message>
     <message key="xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_date_required_error">This field is required. Please enter a date into this field.</message>
