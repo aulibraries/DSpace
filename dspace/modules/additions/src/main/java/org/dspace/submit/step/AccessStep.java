@@ -263,7 +263,7 @@ public class AccessStep extends AbstractProcessingStep {
         } else {
             log.error(LogManager.getHeader(context, "Embargo Creation Error",
                     AUETDConstants.AUETD_ERROR_FLAG_LOG_MESSAGE + String.valueOf(AUETDConstants.AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED)));
-            subInfo.putIfAbsent(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME_ERROR,
+            subInfo.putIfAbsent(AUETDConstants.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME_ERROR,
                     AUETDConstants.AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED);
         }
 
