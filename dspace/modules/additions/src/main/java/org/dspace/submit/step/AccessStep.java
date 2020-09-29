@@ -86,9 +86,9 @@ public class AccessStep extends AbstractProcessingStep {
     public static final String AUETD_SUBMIT_REMOVE_SELECTED = "submit_remove_selected";
     public static final String AUETD_SUBMIT_EDIT_PREFIX = "submit_edit_";
     public static final String AUETD_SUBMIT_REMOVE_PREFIX = "submit_remove_";
-    public static final String AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME = "create_embargo_radio";
+    public static final String AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME = "create_embargo_radio";
     public static final String AUETD_EMBARGO_LENGTH_FIELD_NAME = "embargo_length";
-    public static final String AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME_ERROR = AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME+ "_ERROR";
+    public static final String AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME_ERROR = AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME+ "_ERROR";
     public static final String AUETD_FILE_UPLOAD_ERROR_KEY = "FILE_UPLOAD_ERROR";
     public static final String AUETD_EMBARGO_LENGTH_FIELD_NAME_ERROR = AUETD_EMBARGO_LENGTH_FIELD_NAME + "_ERROR";
     public static final String AUETD_ACCESS_SAVE_BUTTON_ID = "submit_access";
@@ -273,13 +273,12 @@ public class AccessStep extends AbstractProcessingStep {
         int returnErrorCode = 0;
         int embargoCreationAnswer = 0;
 
-        if (StringUtils.isNotBlank(request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME))) {
-            embargoCreationAnswer = Integer
-                    .parseInt(request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME));
+        if (StringUtils.isNotBlank(request.getParameter(AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME))) {
+            embargoCreationAnswer = Integer.parseInt(request.getParameter(AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME));
         } else {
             log.error(LogManager.getHeader(context, "Embargo Creation Error",
                     AUETD_ERROR_FLAG_LOG_MESSAGE + String.valueOf(AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED)));
-            subInfo.putIfAbsent(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME_ERROR,
+            subInfo.putIfAbsent(AUETD_EMBARGO_LENGTH_FIELD_NAME_ERROR,
                     AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED);
         }
 
@@ -295,28 +294,26 @@ public class AccessStep extends AbstractProcessingStep {
                             + request.getParameter(AUETD_EMBARGO_LENGTH_FIELD_NAME)));
 
             log.debug(LogManager.getHeader(context, "Embargo Creation Request Param",
-                    " StringUtils.isBlank(request.getParameter(\"" + AUETD_EMBARGO_LENGTH_FIELD_NAME + ")) = "
-                            + Boolean.toString(
-                                    StringUtils.isBlank(request.getParameter(AUETD_EMBARGO_LENGTH_FIELD_NAME)))));
+                    " StringUtils.isBlank(request.getParameter(\"" + AUETD_EMBARGO_LENGTH_FIELD_NAME + ")) = " + Boolean
+                            .toString(StringUtils.isBlank(request.getParameter(AUETD_EMBARGO_LENGTH_FIELD_NAME)))));
 
             // if the requested parameter is empty then throw an error
             if (StringUtils.isBlank(request.getParameter(AUETD_EMBARGO_LENGTH_FIELD_NAME))) {
                 log.error(LogManager.getHeader(context, "Embargo Creation Error",
                         AUETD_ERROR_FLAG_LOG_MESSAGE + String.valueOf(AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED)));
 
-                subInfo.putIfAbsent(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME,
-                        request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME));
-                subInfo.putIfAbsent(AUETD_EMBARGO_LENGTH_FIELD_NAME_ERROR,
-                        AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED);
+                subInfo.putIfAbsent(AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME,
+                        request.getParameter(AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME));
+                subInfo.putIfAbsent(AUETD_EMBARGO_LENGTH_FIELD_NAME_ERROR, AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED);
             } else {
-                subInfo.putIfAbsent(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME,
-                        request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME));
+                subInfo.putIfAbsent(AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME,
+                        request.getParameter(AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME));
                 subInfo.putIfAbsent(AUETD_EMBARGO_LENGTH_FIELD_NAME,
                         request.getParameter(AUETD_EMBARGO_LENGTH_FIELD_NAME));
             }
         } else if (embargoCreationAnswer == 1) {
-            subInfo.putIfAbsent(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME,
-                    request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME));
+            subInfo.putIfAbsent(AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME,
+                    request.getParameter(AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME));
         }
 
         // if there were errors then stop execution here
@@ -326,8 +323,10 @@ public class AccessStep extends AbstractProcessingStep {
             log.debug(LogManager.getHeader(context, "Access Embargo Processing Error Key", " " + key));
 
             if (key.contains("ERROR")) {
-                log.error(LogManager.getHeader(context, "Access Embargo Processing Error", " Throwing error " + key.toUpperCase()));
-                log.error(LogManager.getHeader(context, "Access Embargo Processing Error", " Returning AUETD_STATUS_ERROR (" + Integer.toString(AUETD_STATUS_ERROR) + ")"));
+                log.error(LogManager.getHeader(context, "Access Embargo Processing Error",
+                        " Throwing error " + key.toUpperCase()));
+                log.error(LogManager.getHeader(context, "Access Embargo Processing Error",
+                        " Returning AUETD_STATUS_ERROR (" + Integer.toString(AUETD_STATUS_ERROR) + ")"));
                 returnErrorCode = AUETD_STATUS_ERROR;
             }
         }
@@ -336,13 +335,12 @@ public class AccessStep extends AbstractProcessingStep {
     }
 
     private void processAUETDEmbargoAccessFields(Context context, HttpServletRequest request, SubmissionInfo subInfo)
-        throws AuthorizeException, IOException, SQLException
-    {
+            throws AuthorizeException, IOException, SQLException {
         Item item = subInfo.getSubmissionItem().getItem();
         int embargoCreationAnswer = 0;
 
-        if (StringUtils.isNotBlank(request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME))) {
-            embargoCreationAnswer = Integer.parseInt(request.getParameter(AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME));
+        if (StringUtils.isNotBlank(request.getParameter(AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME))) {
+            embargoCreationAnswer = Integer.parseInt(request.getParameter(AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME));
 
             if (embargoCreationAnswer == 2 || embargoCreationAnswer == 3) {
                 String embargoRights = null;
