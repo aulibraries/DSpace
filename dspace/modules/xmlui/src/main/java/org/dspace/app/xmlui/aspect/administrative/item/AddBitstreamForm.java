@@ -34,6 +34,7 @@ import org.dspace.authorize.service.AuthorizeService;
 import org.dspace.content.Bundle;
 import org.dspace.content.factory.ContentServiceFactory;
 import org.dspace.content.service.ItemService;
+import org.dspace.core.AUETDConstants;
 import org.dspace.core.Constants;
 import org.xml.sax.SAXException;
 
@@ -89,7 +90,7 @@ public class AddBitstreamForm extends AbstractDSpaceTransformer
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_radio_button2_text");
     protected static final Message AUETD_CREATE_EMBARGO_RADIO_BUTTON3 =
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_radio_button3_text");
-    protected static final Message AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED =
+    protected static final Message AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED_MESSAGE =
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_required_error");
 
     // Date messages
@@ -107,7 +108,7 @@ public class AddBitstreamForm extends AbstractDSpaceTransformer
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_radio_option4_text");
     protected static final Message AUETD_EMBARGO_LENGTH_RADIO_OPTION5 = 
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_radio_option5_text");
-    protected static final Message AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED =
+    protected static final Message AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED_MESSAGE =
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_required_error");
 
     protected AuthorizeService authorizeService = AuthorizeServiceFactory.getInstance().getAuthorizeService();
@@ -203,20 +204,20 @@ public class AddBitstreamForm extends AbstractDSpaceTransformer
         embargoLengthFieldDisplayInput.setValue(0);
 
         //Embargo Question Radio Button Group
-        Radio embargoTypeField = form.addItem().addRadio(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME);
+        Radio embargoTypeField = form.addItem().addRadio(AUETDConstants.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME);
         addEmbargoTypeRadioFields(embargoTypeField);
 
         // Embargo Length Radio Button Group
-        Radio embargoLengthField = form.addItem().addRadio(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME);
+        Radio embargoLengthField = form.addItem().addRadio(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME);
         addEmbargoLengthRadioFields(embargoLengthField);
 
-        if (errors.contains(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME)) {
-            embargoTypeField.addError(AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED);
+        if (errors.contains(AUETDConstants.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME)) {
+            embargoTypeField.addError(AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED_MESSAGE);
         }
 
-        if (errors.contains(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME)) {
+        if (errors.contains(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME)) {
             embargoLengthFieldDisplayInput.setValue(1);
-            embargoLengthField.addError(AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED);
+            embargoLengthField.addError(AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED_MESSAGE);
         }
     }
 

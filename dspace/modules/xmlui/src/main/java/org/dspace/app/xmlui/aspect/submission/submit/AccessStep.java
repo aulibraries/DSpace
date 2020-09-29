@@ -28,10 +28,6 @@ import org.dspace.content.MetadataValue;
 import org.dspace.content.factory.ContentServiceFactory;
 import org.dspace.content.service.ItemService;
 import org.dspace.core.AUETDConstants;
-import static org.dspace.submit.step.AccessStep.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME;
-import static org.dspace.submit.step.AccessStep.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME_ERROR;
-import static org.dspace.submit.step.AccessStep.AUETD_EMBARGO_LENGTH_FIELD_NAME;
-import static org.dspace.submit.step.AccessStep.AUETD_EMBARGO_LENGTH_FIELD_NAME_ERROR;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
@@ -70,7 +66,7 @@ public class AccessStep extends AbstractSubmissionStep
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_radio_button2_text");
     protected static final Message AUETD_CREATE_EMBARGO_RADIO_BUTTON3 =
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_radio_button3_text");
-    protected static final Message AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED =
+    protected static final Message AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED_MESSAGE =
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_required_error");
 
     // Date messages
@@ -88,7 +84,7 @@ public class AccessStep extends AbstractSubmissionStep
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_radio_option4_text");
     protected static final Message AUETD_EMBARGO_LENGTH_RADIO_OPTION5 = 
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_radio_option5_text");
-    protected static final Message AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED =
+    protected static final Message AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED_MESSAGE =
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_required_error");
 
 
@@ -102,7 +98,6 @@ public class AccessStep extends AbstractSubmissionStep
     protected static final Message AUETD_SUBMIT_EDIT_RESTRICTIONS_BUTTON_NAME =
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_submit_edit_restrictions_button_name");
 
-    public static final String AUETD_ACCESS_SAVE_BUTTON_ID = "submit_access";
     protected static final Message AUETD_ACCESS_SAVE_BUTTON_NAME = 
         message("xmlui.Submission.submit.AccessStep.AUETD_access_restriction_button_name");
 
@@ -164,7 +159,7 @@ public class AccessStep extends AbstractSubmissionStep
 
             form.addItem().addButton(org.dspace.submit.AbstractProcessingStep.PREVIOUS_BUTTON).setValue(T_previous);
             form.addItem().addButton(org.dspace.submit.AbstractProcessingStep.CANCEL_BUTTON).setValue(T_save);
-            form.addItem().addButton(AUETD_ACCESS_SAVE_BUTTON_ID).setValue(AUETD_ACCESS_SAVE_BUTTON_NAME);
+            form.addItem().addButton(AUETDConstants.AUETD_ACCESS_SAVE_BUTTON_ID).setValue(AUETD_ACCESS_SAVE_BUTTON_NAME);
         } else {
             form.addLabel(AUETD_T_COLUMN_STATUS);
             form.addItem().addContent(setAccessStatusText(item));
@@ -260,8 +255,8 @@ public class AccessStep extends AbstractSubmissionStep
     private Message setAccessStatusText(Item item) {
         Message statusTxt = null;
 
-        if (submissionInfo.containsKey(AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME) &&
-                StringUtils.isNotBlank(submissionInfo.get(AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME).toString())) {
+        if (submissionInfo.containsKey(AUETDConstants.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME) &&
+                StringUtils.isNotBlank(submissionInfo.get(AUETDConstants.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME).toString())) {
             statusTxt = setAccessStatusTextFromSubmissionKey();
         } else {
             statusTxt = setAccessStatusTextFromMetadata(item);
@@ -273,7 +268,7 @@ public class AccessStep extends AbstractSubmissionStep
     private Message setAccessStatusTextFromSubmissionKey() {
         Message statusTxt = null;
         int embargoCreationAnswer = 0;
-        embargoCreationAnswer = Integer.parseInt(submissionInfo.get(AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME).toString());
+        embargoCreationAnswer = Integer.parseInt(submissionInfo.get(AUETDConstants.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME).toString());
 
         if (embargoCreationAnswer == 1) {
             statusTxt = AUETD_CREATE_EMBARGO_RADIO_BUTTON1;
@@ -346,33 +341,33 @@ public class AccessStep extends AbstractSubmissionStep
         embargoLengthFieldDisplayInput.setValue(0);
 
         //Embargo Question Radio Button Group
-        Radio embargoTypeField = form.addItem().addRadio(AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME);
+        Radio embargoTypeField = form.addItem().addRadio(AUETDConstants.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME);
         addEmbargoTypeRadioFields(embargoTypeField);
 
         // Embargo Length Radio Button Group
-        Radio embargoLengthField = form.addItem().addRadio(AUETD_EMBARGO_LENGTH_FIELD_NAME);
+        Radio embargoLengthField = form.addItem().addRadio(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME);
         addEmbargoLengthRadioFields(embargoLengthField);
 
         /**
          * Populate input field values and/or add error messages
          */
-        if(submissionInfo.containsKey(AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME_ERROR)) {
-            embargoTypeField.addError(AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED);
+        if(submissionInfo.containsKey(AUETDConstants.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME_ERROR)) {
+            embargoTypeField.addError(AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED_MESSAGE);
         }
 
-        if(submissionInfo.containsKey(AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME)) {
-            embargoTypeField.setOptionSelected(submissionInfo.get(AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME).toString());
+        if(submissionInfo.containsKey(AUETDConstants.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME)) {
+            embargoTypeField.setOptionSelected(submissionInfo.get(AUETDConstants.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME).toString());
         } else if (getSelectedEmbargoType(item) > 0) {
             embargoTypeField.setOptionSelected(Integer.toString(getSelectedEmbargoType(item)));
         }
 
-        if(submissionInfo.containsKey(AUETD_EMBARGO_LENGTH_FIELD_NAME_ERROR)) {
-            embargoLengthField.addError(AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED);
+        if(submissionInfo.containsKey(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME_ERROR)) {
+            embargoLengthField.addError(AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED_MESSAGE);
             embargoLengthFieldDisplayInput.setValue(1);
         }
 
-        if(submissionInfo.containsKey(AUETD_EMBARGO_LENGTH_FIELD_NAME)) {
-            embargoLengthField.setOptionSelected(submissionInfo.get(AUETD_EMBARGO_LENGTH_FIELD_NAME).toString());
+        if(submissionInfo.containsKey(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME)) {
+            embargoLengthField.setOptionSelected(submissionInfo.get(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME).toString());
             embargoLengthFieldDisplayInput.setValue(1);
         } else if (getEmbargoLengthInYears(item) > 0) {
             embargoLengthField.setOptionSelected(Integer.toString(getEmbargoLengthInYears(item)));

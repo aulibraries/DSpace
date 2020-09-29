@@ -104,7 +104,7 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_radio_button2_text");
     protected static final Message AUETD_CREATE_EMBARGO_RADIO_BUTTON3 =
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_radio_button3_text");
-    protected static final Message AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED =
+    protected static final Message AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED_MESSAGE =
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_required_error");
 
     // Date messages
@@ -122,9 +122,9 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_radio_option4_text");
     protected static final Message AUETD_EMBARGO_LENGTH_RADIO_OPTION5 = 
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_radio_option5_text");
-    protected static final Message AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED =
+    protected static final Message AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED_MESSAGE =
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_required_error");
-    protected static final Message AUETD_STATUS_ERROR_EMBARGO_LENGTH_OUTOFDATE = 
+    protected static final Message AUETD_STATUS_ERROR_EMBARGO_LENGTH_OUTOFDATE_MESSAGE = 
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_outofdate_error");
 
     // Embargo Info Table Column Headers
@@ -216,11 +216,11 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
         }
 
         //Embargo Question Radio Button Group
-        Radio embargoTypeField = form.addItem().addRadio(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME);
+        Radio embargoTypeField = form.addItem().addRadio(AUETDConstants.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME);
         addEmbargoTypeRadioFields(embargoTypeField);
 
         // Embargo Length Radio Button Group
-        Radio embargoLengthField = form.addItem().addRadio(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME);
+        Radio embargoLengthField = form.addItem().addRadio(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME);
         addEmbargoLengthRadioFields(embargoLengthField);
 
         int embargoType = getSelectedEmbargoType(bitstream);
@@ -232,13 +232,13 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
             if (embargoType == 2 || embargoType == 3) {
                 embargoLengthFieldDisplayInput.setValue(1);
 
-                if (errors.contains(org.dspace.app.xmlui.aspect.administrative.FlowItemUtils.AUETD_EMBARGO_LENGTH_FIELD_NAME_REQUIRED_ERROR) ||
-                    errors.contains(org.dspace.app.xmlui.aspect.administrative.FlowItemUtils.AUETD_EMBARGO_LENGTH_FIELD_NAME_OUT0FDATE_ERROR)) {
+                if (errors.contains(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME_REQUIRED_ERROR) ||
+                    errors.contains(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME_OUT0FDATE_ERROR)) {
 
-                    if (errors.contains(org.dspace.app.xmlui.aspect.administrative.FlowItemUtils.AUETD_EMBARGO_LENGTH_FIELD_NAME_REQUIRED_ERROR)) {
-                        embargoLengthField.addError(AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED);
-                    } else if (errors.contains(org.dspace.app.xmlui.aspect.administrative.FlowItemUtils.AUETD_EMBARGO_LENGTH_FIELD_NAME_OUT0FDATE_ERROR)) {
-                        embargoLengthField.addError(AUETD_STATUS_ERROR_EMBARGO_LENGTH_OUTOFDATE);
+                    if (errors.contains(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME_REQUIRED_ERROR)) {
+                        embargoLengthField.addError(AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED_MESSAGE);
+                    } else if (errors.contains(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME_OUT0FDATE_ERROR)) {
+                        embargoLengthField.addError(AUETD_STATUS_ERROR_EMBARGO_LENGTH_OUTOFDATE_MESSAGE);
                         if (embargoLength >= 1 && embargoLength <= 5) {
                             embargoLengthField.setOptionSelected(Integer.toString(embargoLength));
                         }

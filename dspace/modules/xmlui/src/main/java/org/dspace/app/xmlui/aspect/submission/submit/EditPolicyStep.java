@@ -45,7 +45,6 @@ public class EditPolicyStep extends AbstractStep
 
 
     // Custom Constants Section
-
     protected static final Message AUETD_EDIT_ACCESS_HEAD = 
         message("xmlui.Submission.submit.EditPolicyStep.AUETD_head");
     
@@ -58,7 +57,7 @@ public class EditPolicyStep extends AbstractStep
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_radio_button2_text");
     protected static final Message AUETD_CREATE_EMBARGO_RADIO_BUTTON3 =
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_radio_button3_text");
-    protected static final Message AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED =
+    protected static final Message AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED_MESSAGE =
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_create_embargo_required_error");
 
     // Embargo Length field messages
@@ -76,7 +75,7 @@ public class EditPolicyStep extends AbstractStep
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_radio_option4_text");
     protected static final Message AUETD_EMBARGO_LENGTH_RADIO_OPTION5 = 
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_radio_option5_text");
-    protected static final Message AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED =
+    protected static final Message AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED_MESSAGE =
         message("xmlui.Submission.submit.UploadWithEmbargoStep.AUETD_embargo_length_required_error");
 
     protected ItemService itemService = ContentServiceFactory.getInstance().getItemService();
@@ -149,33 +148,33 @@ public class EditPolicyStep extends AbstractStep
         embargoLengthFieldDisplayInput.setValue(0);
 
         //Embargo Question Radio Button Group
-        Radio embargoTypeField = form.addItem().addRadio(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME);
+        Radio embargoTypeField = form.addItem().addRadio(AUETDConstants.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME);
         addEmbargoTypeRadioFields(embargoTypeField);
 
         // Embargo Length Radio Button Group
-        Radio embargoLengthField = form.addItem().addRadio(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME);
+        Radio embargoLengthField = form.addItem().addRadio(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME);
         addEmbargoLengthRadioFields(embargoLengthField);
 
         /**
          * Populate input field values and/or add error messages
          */
-        if(submissionInfo.containsKey(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME_ERROR)) {
-            embargoTypeField.addError(AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED);
+        if(submissionInfo.containsKey(AUETDConstants.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME_ERROR)) {
+            embargoTypeField.addError(AUETD_STATUS_ERROR_EMBARGO_CREATION_REQUIRED_MESSAGE);
         }
 
-        if(submissionInfo.containsKey(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME)) {
-            embargoTypeField.setOptionSelected(submissionInfo.get(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_CREATE_QUESTION_FIELD_NAME).toString());
+        if(submissionInfo.containsKey(AUETDConstants.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME)) {
+            embargoTypeField.setOptionSelected(submissionInfo.get(AUETDConstants.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME).toString());
         } else if (getSelectedEmbargoType(item) > 0) {
             embargoTypeField.setOptionSelected(Integer.toString(getSelectedEmbargoType(item)));
         }
 
-        if(submissionInfo.containsKey(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME_ERROR)) {
-            embargoLengthField.addError(AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED);
+        if(submissionInfo.containsKey(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME_ERROR)) {
+            embargoLengthField.addError(AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED_MESSAGE);
             embargoLengthFieldDisplayInput.setValue(1);
         }
 
-        if(submissionInfo.containsKey(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME)) {
-            embargoLengthField.setOptionSelected(submissionInfo.get(org.dspace.submit.step.UploadWithEmbargoStep.AUETD_EMBARGO_LENGTH_FIELD_NAME).toString());
+        if(submissionInfo.containsKey(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME)) {
+            embargoLengthField.setOptionSelected(submissionInfo.get(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME).toString());
             embargoLengthFieldDisplayInput.setValue(1);
         } else if (getEmbargoLengthInYears(item) > 0) {
             embargoLengthField.setOptionSelected(Integer.toString(getEmbargoLengthInYears(item)));
