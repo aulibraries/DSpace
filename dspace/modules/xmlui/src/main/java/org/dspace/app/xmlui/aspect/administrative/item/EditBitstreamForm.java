@@ -224,6 +224,35 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
         Radio embargoLengthField = form.addItem().addRadio(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME);
         addEmbargoLengthRadioFields(embargoLengthField);
 
+        populateEmbargoFields(item, errors, embargoTypeField, embargoLengthField, embargoLengthFieldDisplayInput);
+    }
+
+    private void addEmbargoTypeRadioFields(Radio embargoTypeField)
+        throws WingException
+    {
+        embargoTypeField.setLabel(AUETD_CREATE_EMBARGO_QUESTION_LABEL);
+        embargoTypeField.setRequired();
+        embargoTypeField.addOption("1", AUETD_CREATE_EMBARGO_RADIO_BUTTON1);
+        embargoTypeField.addOption("2", AUETD_CREATE_EMBARGO_RADIO_BUTTON2);
+        embargoTypeField.addOption("3", AUETD_CREATE_EMBARGO_RADIO_BUTTON3);
+    }
+
+    private void addEmbargoLengthRadioFields(Radio embargoLengthField)
+        throws WingException
+    {
+        embargoLengthField.setLabel(AUETD_EMBARGO_LENGTH_LABEL);
+        embargoLengthField.setHelp(AUETD_EMBARGO_LENGTH_HELP);
+        embargoLengthField.addOption("1", AUETD_EMBARGO_LENGTH_RADIO_OPTION1);
+        embargoLengthField.addOption("2", AUETD_EMBARGO_LENGTH_RADIO_OPTION2);
+        embargoLengthField.addOption("3", AUETD_EMBARGO_LENGTH_RADIO_OPTION3);
+        embargoLengthField.addOption("4", AUETD_EMBARGO_LENGTH_RADIO_OPTION4);
+        embargoLengthField.addOption("5", AUETD_EMBARGO_LENGTH_RADIO_OPTION5);
+    }
+
+    private void populateEmbargoFields(Item item, ArrayList<String> errors, Radio embargoTypeField, 
+        Radio embargoLengthField, Hidden embargoLengthFieldDisplayInput)
+        throws AuthorizeException, IOException, SQLException, WingException
+    {
         int embargoType = getSelectedEmbargoType(item);
         int embargoLength = getEmbargoLengthInYears(item);
 
@@ -251,28 +280,6 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
                 }
             }
         }
-    }
-
-    private void addEmbargoTypeRadioFields(Radio embargoTypeField)
-        throws WingException
-    {
-        embargoTypeField.setLabel(AUETD_CREATE_EMBARGO_QUESTION_LABEL);
-        embargoTypeField.setRequired();
-        embargoTypeField.addOption("1", AUETD_CREATE_EMBARGO_RADIO_BUTTON1);
-        embargoTypeField.addOption("2", AUETD_CREATE_EMBARGO_RADIO_BUTTON2);
-        embargoTypeField.addOption("3", AUETD_CREATE_EMBARGO_RADIO_BUTTON3);
-    }
-
-    private void addEmbargoLengthRadioFields(Radio embargoLengthField)
-        throws WingException
-    {
-        embargoLengthField.setLabel(AUETD_EMBARGO_LENGTH_LABEL);
-        embargoLengthField.setHelp(AUETD_EMBARGO_LENGTH_HELP);
-        embargoLengthField.addOption("1", AUETD_EMBARGO_LENGTH_RADIO_OPTION1);
-        embargoLengthField.addOption("2", AUETD_EMBARGO_LENGTH_RADIO_OPTION2);
-        embargoLengthField.addOption("3", AUETD_EMBARGO_LENGTH_RADIO_OPTION3);
-        embargoLengthField.addOption("4", AUETD_EMBARGO_LENGTH_RADIO_OPTION4);
-        embargoLengthField.addOption("5", AUETD_EMBARGO_LENGTH_RADIO_OPTION5);
     }
 
     private int getSelectedEmbargoType(Item item) {
@@ -322,7 +329,6 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
     }
 
     private int getEmbargoLengthInYears(Item item)
-        throws SQLException
     {
         int embargoLength = 0;
 
