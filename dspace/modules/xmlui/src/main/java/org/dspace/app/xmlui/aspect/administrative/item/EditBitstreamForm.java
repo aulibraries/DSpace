@@ -160,8 +160,9 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
 		UUID bitstreamID = UUID.fromString(parameters.getParameter("bitstreamID", null));
 
 		// Get the bitstream and all the various formats
-                // Administrator is allowed to see internal formats too.
-		Bitstream bitstream = bitstreamService.find(context, bitstreamID);
+        // Administrator is allowed to see internal formats too.
+        Bitstream bitstream = bitstreamService.find(context, bitstreamID);
+        Item item = getBitstreamParentItem(bitstream);
 
         java.util.List<Bundle> bundles = bitstream.getBundles();
         String bundleName = "";
@@ -189,7 +190,7 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
 
         if (bundleName.equals(Constants.CONTENT_BUNDLE_NAME) || !bitstream.getName().equals(Constants.LICENSE_BITSTREAM_NAME)) {
             // EMBARGO FIELDS
-            addEmbargoFieldSection(bitstream, edit);
+            addEmbargoFieldSection(item, edit);
         }
 
 		// ITEM: form actions
@@ -200,7 +201,7 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
 		div.addHidden("administrative-continue").setValue(knot.getId()); 
 	}
 
-    private void addEmbargoFieldSection(Bitstream bitstream, List form)
+    private void addEmbargoFieldSection(Item item, List form)
         throws AuthorizeException, IOException, SQLException, WingException
     {
         // The value of this hidden input field is used
@@ -223,11 +224,11 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
         Radio embargoLengthField = form.addItem().addRadio(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME);
         addEmbargoLengthRadioFields(embargoLengthField);
 
-        int embargoType = getSelectedEmbargoType(bitstream);
-        int embargoLength = getEmbargoLengthInYears(bitstream);
+        int embargoType = getSelectedEmbargoType(item);
+        int embargoLength = getEmbargoLengthInYears(item);
 
-        if (embargoType >= 1 && embargoType <=3) {
-            embargoTypeField.setOptionSelected(String.valueOf(embargoType));
+        if (embargoType >= 1 && embargoType <= 3) {
+            embargoTypeField.setOptionSelected(Integer.toString(embargoType));
 
             if (embargoType == 2 || embargoType == 3) {
                 embargoLengthFieldDisplayInput.setValue(1);
@@ -250,21 +251,6 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
                 }
             }
         }
-
-        /*if (embargoType >= 1 && embargoType <= 3) {
-            embargoTypeRadio.setOptionSelected(String.valueOf(embargoType));
-
-            if (embargoType == 2 || embargoType == 3) {
-                embargoLengthFieldDisplayInput.setValue(1);
-            }
-        }
-
-        if (embargoLength >= 1 && embargoLength <= 5) {
-            embargoLengthField.setOptionSelected(String.valueOf(embargoLength));
-        } else {
-            embargoLengthFieldDisplayInput.setValue(1);
-            embargoLengthField.addError(AUETD_STATUS_ERROR_EMBARGO_LENGTH_REQUIRED);
-        }*/
     }
 
     private void addEmbargoTypeRadioFields(Radio embargoTypeField)
@@ -289,61 +275,56 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
         embargoLengthField.addOption("5", AUETD_EMBARGO_LENGTH_RADIO_OPTION5);
     }
 
-    private int getSelectedEmbargoType(DSpaceObject dso)
-        throws SQLException
-    {
-        Item item = null;
+    private int getSelectedEmbargoType(Item item) {
         int embargoType = 0;
+        String embargoRights = getEmbargoRights(item);
+        String embargoStatus = getEmbargoStatus(item);
 
-        item = getBitstreamParentItem(dso);
-
-        String embargoRights = null;
-        String embargoStatus = null;
-        if (item != null) {
-            java.util.List<MetadataValue> embargoRightsList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "rights", null, Item.ANY);
-            java.util.List<MetadataValue> embargoStatusList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "status", Item.ANY);
-
-            if (embargoRightsList != null && !embargoRightsList.isEmpty()) {
-                embargoRights = embargoRightsList.get(0).getValue();
-            }
-
-            if (embargoStatusList != null && !embargoStatusList.isEmpty()) {
-                embargoStatus = embargoStatusList.get(0).getValue();
-            }
-
-            if (StringUtils.isNotBlank(embargoStatus)) {
-                if (embargoStatus.equals(AUETDConstants.EMBARGOED)) {
-                    if (StringUtils.isNotBlank(embargoRights)) {
-                        if (embargoRights.equals(AUETDConstants.EMBARGO_NOT_AUBURN_STR)) {
-                            embargoType = 2;
-                        } else if (embargoRights.equals(AUETDConstants.EMBARGO_GLOBAL_STR)) {
-                            embargoType = 3;
-                        }
+        if (StringUtils.isNotBlank(embargoStatus)) {
+            if (embargoStatus.equals(AUETDConstants.EMBARGOED)) {
+                if (StringUtils.isNotBlank(embargoRights)) {
+                    if (embargoRights.equals(AUETDConstants.EMBARGO_NOT_AUBURN_STR)) {
+                        embargoType = 2;
+                    } else if (embargoRights.equals(AUETDConstants.EMBARGO_GLOBAL_STR)) {
+                        embargoType = 3;
                     }
-                } else if (embargoStatus.equals(AUETDConstants.NOT_EMBARGOED)) {
-                    embargoType = 1;
                 }
+            } else if (embargoStatus.equals(AUETDConstants.NOT_EMBARGOED)) {
+                embargoType = 1;
             }
         }
 
         return embargoType;
     }
 
-    private int getEmbargoLengthInYears(DSpaceObject dso)
+    private String getEmbargoRights(Item item) {
+        String embargoRights = null;
+
+        java.util.List<MetadataValue> embargoRightsList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "rights", null, Item.ANY);
+
+        if (embargoRightsList != null && !embargoRightsList.isEmpty()) {
+            embargoRights = embargoRightsList.get(0).getValue();
+        }
+
+        return embargoRights;
+    }
+
+    private String getEmbargoStatus(Item item) {
+        String embargoStatus = null;
+
+        java.util.List<MetadataValue> embargoStatusList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "status", Item.ANY);
+
+        if (embargoStatusList != null && !embargoStatusList.isEmpty()) {
+            embargoStatus = embargoStatusList.get(0).getValue();
+        }
+
+        return embargoStatus;
+    }
+
+    private int getEmbargoLengthInYears(Item item)
         throws SQLException
     {
-        Item item = null;
-        Bitstream bitstream;
         int embargoLength = 0;
-
-        if (dso instanceof Bitstream) {
-            bitstream = bitstreamService.find(context, dso.getID());
-            DSpaceObject parent = bitstreamService.getParentObject(context, bitstream);
-
-            if (parent != null) {
-                item = itemService.find(context, parent.getID());
-            }
-        }
 
         if (item != null) {
             java.util.List<MetadataValue> embargoLengthList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "embargo", "length", Item.ANY);
@@ -363,19 +344,14 @@ public class EditBitstreamForm extends AbstractDSpaceTransformer
         return embargoLength;
     }
 
-    private Item getBitstreamParentItem(DSpaceObject dso)
+    private Item getBitstreamParentItem(Bitstream bitstream)
         throws SQLException
     {
         Item item = null;
-        Bitstream bitstream;
+        DSpaceObject parent = bitstreamService.getParentObject(context, bitstream);
 
-        if (dso instanceof Bitstream) {
-            bitstream = bitstreamService.find(context, dso.getID());
-            DSpaceObject parent = bitstreamService.getParentObject(context, bitstream);
-
-            if (parent != null) {
-                item = itemService.find(context, parent.getID());
-            }
+        if (parent != null) {
+            item = itemService.find(context, parent.getID());
         }
 
         return item;
