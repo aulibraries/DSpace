@@ -973,55 +973,67 @@ public class FlowItemUtils {
     private static void processAUETDEmbargoAccessFields(Context context, HttpServletRequest request, Item item, Bitstream bitstream) 
         throws AuthorizeException, IOException, SQLException
     {
-        int embargoCreationAnswer = 0;
-
         if (StringUtils.isNotBlank(request.getParameter(AUETDConstants.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME))) {
-            embargoCreationAnswer = Integer.parseInt(request.getParameter(AUETDConstants.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME));
+            int embargoCreationAnswer = Integer.parseInt(request.getParameter(AUETDConstants.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME));
 
             if (embargoCreationAnswer == 2 || embargoCreationAnswer == 3) {
-                String embargoRights = null;
-                if (embargoCreationAnswer == 2) {
-                    embargoRights = AUETDConstants.EMBARGO_NOT_AUBURN_STR;
-                } else if (embargoCreationAnswer == 3) {
-                    embargoRights = AUETDConstants.EMBARGO_GLOBAL_STR;
-                }
+                setEmbargoRightsAndStatusMDV(context, item, embargoCreationAnswer);
 
-                if (StringUtils.isNotBlank(embargoRights)) {
-                    log.debug(LogManager.getHeader(context, "process_auetd_embargo_access_fields", " embargo rights = "+embargoRights));
-                    embargoService.createOrModifyEmbargoMetadataValue(context, item, "rights", null, embargoRights);
-
-                    log.debug(LogManager.getHeader(context, "process_auetd_embargo_access_fields", " embargo status = " + AUETDConstants.EMBARGOED));
-                    embargoService.createOrModifyEmbargoMetadataValue(context, item, "embargo", "status", AUETDConstants.EMBARGOED);
-                }
-
-                if (StringUtils.isNotBlank(request.getParameter(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME))) {
-                    String selectedEmbargoLengthValue = request.getParameter(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME);
-                    if (StringUtils.isNotBlank(selectedEmbargoLengthValue)) {
-                        String embargoLength = embargoService.generateEmbargoLength(context, item, selectedEmbargoLengthValue);
-                        log.debug(LogManager.getHeader(context, "process_auetd_embargo_access_fields", " embargo length = " + embargoLength));
-                        if (StringUtils.isNotBlank(embargoLength)) {
-                            embargoService.createOrModifyEmbargoMetadataValue(context, item, "embargo", "length", embargoLength);
-                        }
-                    }
-                }
+                setEmbargoLengthMDV(context, item, request.getParameter(AUETDConstants.AUETD_EMBARGO_LENGTH_FIELD_NAME));
                 embargoService.generateAUETDEmbargoPolicies(context, bitstream, embargoCreationAnswer, item.getOwningCollection());
                 embargoService.setEmbargo(context, item);
                 setNewEmbargoDataMap(item);
 
             } else if (embargoCreationAnswer == 1 || embargoCreationAnswer == 0) {
-                embargoService.createOrModifyEmbargoMetadataValue(context, item, "embargo", "status", AUETDConstants.NOT_EMBARGOED);
-                itemService.clearMetadata(context, item, MetadataSchema.DC_SCHEMA, "embargo", "enddate", Item.ANY);
-                itemService.clearMetadata(context, item, MetadataSchema.DC_SCHEMA, "embargo", "length", Item.ANY);
-                itemService.clearMetadata(context, item, MetadataSchema.DC_SCHEMA, "rights", null, Item.ANY);
-
-                embargoDataMap.put(AUETDConstants.AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME, "Deleted");
-                embargoDataMap.put(AUETDConstants.AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME, "Deleted");
-                embargoDataMap.put(AUETDConstants.AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME, "Deleted");
-                embargoDataMap.put(AUETDConstants.AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME, "Deleted");
+                clearEmbargoMetadata(context, item);
+                setDeletedEmbargoDataMap();
 
                 authorizeService.generateAutomaticPolicies(context, null, AUETDConstants.AUETD_CREATE_EMBARGO_QUESTION_FIELD_NAME, bitstream, null);
             }
         }
+    }
+
+    private static void setEmbargoRightsAndStatusMDV(Context context, Item item, int embargoCreationAnswer)
+        throws AuthorizeException, IOException, SQLException
+    {
+        String embargoRights = null;
+        if (embargoCreationAnswer == 2) {
+            embargoRights = AUETDConstants.EMBARGO_NOT_AUBURN_STR;
+        } else if (embargoCreationAnswer == 3) {
+            embargoRights = AUETDConstants.EMBARGO_GLOBAL_STR;
+        }
+
+        if (StringUtils.isNotBlank(embargoRights)) {
+            log.debug(LogManager.getHeader(context, "Generating ETD Embargo Rights MDV",
+                    " embargo rights = " + embargoRights));
+            embargoService.createOrModifyEmbargoMetadataValue(context, item, "rights", null, embargoRights);
+
+            log.debug(LogManager.getHeader(context, "Generating ETD Embargo Status MDV",
+                    " embargo status = "+AUETDConstants.EMBARGOED));
+            embargoService.createOrModifyEmbargoMetadataValue(context, item, "embargo", "status",
+                    AUETDConstants.EMBARGOED);
+        }
+    }
+
+    private static void setEmbargoLengthMDV(Context context, Item item, String embargoLengthValue)
+        throws AuthorizeException, IOException, SQLException
+    {
+        String embargoLength = embargoService.generateEmbargoLength(context, item, embargoLengthValue);
+        log.debug(LogManager.getHeader(context, "Generating ETD Embargo Length MDV",
+                " embargo length = " + embargoLength));
+        if (StringUtils.isNotBlank(embargoLength)) {
+            embargoService.createOrModifyEmbargoMetadataValue(context, item, "embargo", "length",
+                    embargoLength);
+        }
+    }
+
+    private static void clearEmbargoMetadata(Context context, Item item)
+        throws AuthorizeException, IOException, SQLException
+    {
+        embargoService.createOrModifyEmbargoMetadataValue(context, item, "embargo", "status", AUETDConstants.NOT_EMBARGOED);
+        itemService.clearMetadata(context, item, MetadataSchema.DC_SCHEMA, "embargo", "enddate", Item.ANY);
+        itemService.clearMetadata(context, item, MetadataSchema.DC_SCHEMA, "embargo", "length", Item.ANY);
+        itemService.clearMetadata(context, item, MetadataSchema.DC_SCHEMA, "rights", null, Item.ANY);
     }
 
     private static void notifyEmabargoAdminGroup(Context context, Item item)
@@ -1269,7 +1281,15 @@ public class FlowItemUtils {
         }
     }
 
-    public static boolean embargoPeriodHasPassed(Item item) throws AuthorizeException, IOException, SQLException
+    private static void setDeletedEmbargoDataMap()
+    {
+        embargoDataMap.put(AUETDConstants.AUETD_NEW_EMBARGO_LENGTH_HASH_KEY_NAME, "Deleted");
+        embargoDataMap.put(AUETDConstants.AUETD_NEW_EMBARGO_RIGHTS_HASH_KEY_NAME, "Deleted");
+        embargoDataMap.put(AUETDConstants.AUETD_NEW_EMBARGO_STATUS_HASH_KEY_NAME, "Deleted");
+        embargoDataMap.put(AUETDConstants.AUETD_NEW_EMBARGO_END_DATE_HASH_KEY_NAME, "Deleted");
+    }
+
+    private static boolean embargoPeriodHasPassed(Item item) 
     {
         List<MetadataValue> accessionedDateList = itemService.getMetadata(item, MetadataSchema.DC_SCHEMA, "date", "accessioned", Item.ANY);
         String accessionedDateMDV = null;
