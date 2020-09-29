@@ -9,7 +9,6 @@ package org.dspace.app.xmlui.aspect.submission.submit;
 
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.cocoon.ProcessingException;
-import org.apache.cocoon.environment.ObjectModelHelper;
 import org.apache.cocoon.environment.Request;
 import org.apache.cocoon.environment.SourceResolver;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +18,6 @@ import org.dspace.app.xmlui.utils.UIException;
 import org.dspace.app.xmlui.wing.Message;
 import org.dspace.app.xmlui.wing.WingException;
 import org.dspace.app.xmlui.wing.element.*;
-import org.dspace.app.xmlui.wing.element.List;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.Collection;
 import org.dspace.content.Item;
@@ -157,9 +155,11 @@ public class AccessStep extends AbstractSubmissionStep
         if (StringUtils.isBlank(getEmbargoRights(item)) || StringUtils.isBlank(getEmbargoStatus(item))) {
             addEmbargoFieldSection(form, item);
 
-            form.addItem().addButton(org.dspace.submit.AbstractProcessingStep.PREVIOUS_BUTTON).setValue(T_previous);
-            form.addItem().addButton(org.dspace.submit.AbstractProcessingStep.CANCEL_BUTTON).setValue(T_save);
-            form.addItem().addButton(AUETDConstants.AUETD_ACCESS_SAVE_BUTTON_ID).setValue(AUETD_ACCESS_SAVE_BUTTON_NAME);
+            org.dspace.app.xmlui.wing.element.Item actionButtonItem = form.addItem();
+
+            actionButtonItem.addButton(org.dspace.submit.AbstractProcessingStep.PREVIOUS_BUTTON).setValue(T_previous);
+            actionButtonItem.addButton(org.dspace.submit.AbstractProcessingStep.CANCEL_BUTTON).setValue(T_save);
+            actionButtonItem.addButton(AUETDConstants.AUETD_ACCESS_SAVE_BUTTON_ID).setValue(AUETD_ACCESS_SAVE_BUTTON_NAME);
         } else {
             form.addLabel(AUETD_T_COLUMN_STATUS);
             form.addItem().addContent(setAccessStatusText(item));
@@ -172,10 +172,10 @@ public class AccessStep extends AbstractSubmissionStep
 
             Button b1 = form.addItem().addButton("submit_edit_access");
             b1.setValue(AUETD_SUBMIT_EDIT_RESTRICTIONS_BUTTON_NAME);
-        }
 
-        // add standard control/paging buttons
-        addControlButtons(form);
+            // add standard control/paging buttons
+            addControlButtons(form);
+        }
     }
 
     private void addPrivateCheckBox(Request request, List form, Item item) throws WingException {
